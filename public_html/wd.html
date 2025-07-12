@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قائمة المفردات العربية - ويكي بيانات</title>
+    <title>المخطط الشجري - ويكي بيانات</title>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
@@ -55,8 +55,25 @@
         <div class="d-flex align-items-center justify-content-center">
             <div class="row col-md-9">
                 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-2xl font-bold text-center m-6 p-3"> قائمة المفردات العربية <span id="total"></span>
+                    <h3 class="text-2xl font-bold text-center m-6 p-3">المخطط الشجري للكلمات <span id="total"></span>
                     </h3>
+                    <form method="GET" class="mb-0">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="group_by" class="form-label fw-bold">جمع بـ:</label>
+                                <select name="group_by" id="group_by" class="form-select w-auto d-inline-block"
+                                    onchange="this.form.submit()">
+                                    <option value="P31Label">P31Label</option>
+                                    <option value="categoryLabel">categoryLabel</option>
+                                    <option value="P31Label">P31Label</option>
+                                    <option value="P6771">P6771</option>
+                                    <option value="P11038">P11038</option>
+                                    <option value="P11757">P11757</option>
+                                    <option value="P12451">P12451</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                     <div class="mb-3">
                         <input type="text" id="searchInput" placeholder="ابحث عن كلمة..." class="form-control" />
                     </div>
@@ -70,24 +87,13 @@
                     </div>
 
                     <ul id="tree" class="list-unstyled space-y-2"></ul>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <!-- <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-                                data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
-                                aria-selected="true">Home</button>
-                        </li> -->
-                    </ul>
-                    <div class="tab-content row list-group mt-3" id="myTabContent">
-                        <!-- <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel"
-                            aria-labelledby="home-tab" tabindex="0">...</div> -->
-                    </div>
+
                     <p id="noResults" class="hidden text-center text-muted">لا توجد نتائج مطابقة للبحث.</p>
                 </div>
             </div>
         </div>
     </div>
-    <script src="/js/wd_result.js"></script>
-    <script src="/js/wd2.js"></script>
+    <script src="/js/wd.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => fetchData());
     </script>
