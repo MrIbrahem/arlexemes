@@ -159,14 +159,15 @@ function filterTreeData(term) {
     }));
 }
 
-function get_param_from_window_location(key, defaultvalue) {
+function get_param_from_window_location1(key, defaultvalue) {
     // ---
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(key) || defaultvalue;
 }
+
 async function fetchData() {
     showLoading();
-    let group_by = get_param_from_window_location("group_by", "P31Label")
+    let group_by = get_param_from_window_location1("group_by", "P31Label")
 
     document.getElementById('group_by').value = group_by;
 
