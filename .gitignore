@@ -1,2 +1,3 @@
 *.lnk
 /public_html/cache
+/python

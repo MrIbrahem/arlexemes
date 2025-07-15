@@ -79,11 +79,11 @@ async function get_wdresult(to_group_by = "categoryLabel") {
 
 async function load_duplicate() {
     let wdresult = await get_wdresult();
-    let treeData = Object.values(wdresult);
+    let treeData1 = Object.values(wdresult);
     // ---
     let data = [];
     // ---
-    treeData.forEach(category => {
+    treeData1.forEach(category => {
         category.items.forEach(wditem => {
             if (data[wditem.lemma]) {
                 let old = data[wditem.lemma][0];

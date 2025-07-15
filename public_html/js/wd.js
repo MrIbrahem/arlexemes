@@ -1,12 +1,12 @@
 
 const treeContainer = document.getElementById("tree");
-const searchInput = document.getElementById("searchInput");
-const loadingEl = document.getElementById("loading");
-const errorEl = document.getElementById("error");
-const errorMessageEl = document.getElementById("errorMessage");
-const noResultsEl = document.getElementById("noResults");
+const search_Input = document.getElementById("searchInput");
+const loadingDiv = document.getElementById("loading");
+const errorDiv = document.getElementById("error");
+const errorMessageDiv = document.getElementById("errorMessage");
+const noResultsDiv = document.getElementById("noResults");
 
-let treeData = [];
+let treeDataWD = [];
 
 async function loadsparqlQuery(sparqlQuery) {
 
@@ -86,21 +86,21 @@ async function get_wd_result(to_group_by = "categoryLabel") {
 
 function showLoading() {
     treeContainer.innerHTML = "";
-    loadingEl.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
-    errorEl.classList.add("d-none");     // Bootstrap 5: use d-none for hidden
-    noResultsEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+    loadingDiv.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
+    errorDiv.classList.add("d-none");     // Bootstrap 5: use d-none for hidden
+    noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
 }
 
 function renderTree(data) {
-    loadingEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+    loadingDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
     treeContainer.innerHTML = "";
 
     if (!data.length) {
-        noResultsEl.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
+        noResultsDiv.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
         return;
     }
 
-    noResultsEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+    noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
 
     data.forEach(category => {
         const li = document.createElement("li");
@@ -151,7 +151,7 @@ function renderTree(data) {
 }
 
 function filterTreeData(term) {
-    return treeData.map(cat => ({
+    return treeDataWD.map(cat => ({
         ...cat,
         items: cat.items.filter(item =>
             item.lemma.toLowerCase().includes(term.toLowerCase())
@@ -179,11 +179,11 @@ async function fetchData() {
     // add total to the page
     document.getElementById("total").textContent = `(${count})`;
 
-    treeData = Object.values(treeMap);
-    renderTree(treeData);
+    treeDataWD = Object.values(treeMap);
+    renderTree(treeDataWD);
 }
 
-searchInput.addEventListener("input", e => {
+search_Input.addEventListener("input", e => {
     const term = e.target.value;
     const filtered = filterTreeData(term);
     renderTree(filtered);
