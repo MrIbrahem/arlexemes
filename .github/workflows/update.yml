@@ -18,6 +18,4 @@ jobs:
           script_stop: true
           key: ${{ secrets.KEY }}
           script: |
-            become arlexemes sh -c "
-              ~/sh/update.sh ${{ secrets.GF_TOKEN }} &&
-            "
+            become arlexemes sh -c "~/sh/update.sh"
