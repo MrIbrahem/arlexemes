@@ -76,6 +76,7 @@ function wdlink_2(id) {
     let label = keyLabels[id] ? keyLabels[id] : id;
     return `<a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary">${label}</a>`
 }
+
 function make_tableData(numberKeys, rowKeys, colKeys, genderKeys) {
     const tableData = {};
     for (const num of numberKeys) {
@@ -121,40 +122,48 @@ function entryFormatter(form) {
     // ---
     const feats = form.grammaticalFeatures || [];
     let attr = feats.map(attrFormatter).join("\n");
-    let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">${value} <small>(${formId_number})</small></a>`;
+    let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
     // ---
     return link;
 }
 
 // Function to generate the HTML table from structured data
-function _generateHtmlTable(tableData, numberKeys, rowKeys, colKeys, genderKeys, title_header) {
+function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header) {
 
     let html = `
-        <table id="main_table" class="table table-bordered table-striped table-sm table-hover text-center">
+        <table id="main_table" class="table display table-bordered table-striped table-sm table-hover text-center">
             <thead class="table-light">
                 <tr>
                     <th rowspan="2" class="align-middle"></th> <!-- Top-left empty cell, spans two rows -->
                     <th rowspan="2" class="align-middle">الحالة</th> <!-- Case header (الحالة), spans two rows -->
-                    <!-- Gender headers (مذكر, مؤنث) or a general "النوع" header, each spanning across its respective column types -->`;
+        `;
     // ---
-    html += genderKeys.map(gender => {
-        // If there's only one "gender" key and it's our NO_GENDER_PLACEHOLDER,
-        // then the text for the header should be "النوع" (as per Q1084's original header)
-        // Otherwise, use wdlink for the actual gender QID
-        const headerText = (genderKeys.length === 1 && gender === "NO_GENDER_PLACEHOLDER") ? "النوع" :
+    let first_person = "Q21714344";
+    let second_person = "Q51929049";
+    let dual = "Q110022";
+    let singular = "Q110786";
+    let plural = "Q146786";
+    // ---
+    let number_Keys = first_collumn;
+    let gender_Keys = first_rows;
+    let col_Keys = second_rows;
+    let row_Keys = second_collumn;
+    // ---
+    html += gender_Keys.map(gender => {
+        const headerText = (gender_Keys.length === 1 && gender === "NO_GENDER_PLACEHOLDER") ? "النوع" :
             wdlink_2(gender);
-        let colspan = colKeys.length;
-        if (colKeys.includes("Q21714344") && gender === "Q110022") colspan = colspan - 1;
+        let colspan = col_Keys.length;
+        if (col_Keys.includes(first_person) && gender === dual) colspan = colspan - 1;
         return `<th colspan="${colspan}">${headerText}</th>`;
     }).join("")
     // ---
     html += `
-                </tr>
-                <tr>
-                    <!-- Column type headers (معرفة, نكرة, الصيغة السياقية / مركب) repeated for each gender group -->`;
+        </tr>
+        <tr>
+        `;
     // ---
-    html += genderKeys.map(gender =>
-        colKeys.map(col => (col === "Q21714344" && gender === "Q110022") ? "" : `<th>${wdlink_2(col)}</th>`).join("")
+    html += gender_Keys.map(gender =>
+        col_Keys.map(col => (col === first_person && gender === dual) ? "" : `<th>${wdlink_2(col)}</th>`).join("")
     ).join("")
     // ---
     html += `
@@ -165,43 +174,63 @@ function _generateHtmlTable(tableData, numberKeys, rowKeys, colKeys, genderKeys,
     let tbody = "";
 
     // Iterate through number categories (مفرد, جمع)
-    for (const number of numberKeys) {
+    for (const number of number_Keys) {
         // Check if there is any data for this number category to avoid empty sections
-        const hasNumberData = rowKeys.some(row =>
-            genderKeys.some(gender =>
-                colKeys.some(col => (tableData[number][row][col][gender] || []).length > 0)
+        const hasNumberData = row_Keys.some(row =>
+            gender_Keys.some(gender =>
+                col_Keys.some(col => (tableData[number][row][col][gender] || []).length > 0)
             )
         );
 
         if (!hasNumberData) continue; // Skip displaying this number category if no data
 
+        let singular_fixed = [];
         // Iterate through case rows (وقف, رفع, نصب, إضافة) for each number category
-        for (let i = 0; i < rowKeys.length; i++) {
-            const row = rowKeys[i];
+        for (let i = 0; i < row_Keys.length; i++) {
+            const row = row_Keys[i];
             tbody += "<tr>";
 
             // Add the number header (مفرد or جمع) in the first column, spanning all case rows
             if (i === 0) {
-                tbody += `<th rowspan="${rowKeys.length}" class="table-light align-middle">${wdlink_2(number)}</th>`;
+                tbody += `<th rowspan="${row_Keys.length}" class="table-light align-middle">${wdlink_2(number)}</th>`;
             }
 
             // Add the case header (e.g., رفع) in the second column
             tbody += `<th class="table-light">${wdlink_2(row)}</th>`;
 
             // Add the data cells for each gender and column type
-            for (const gender of genderKeys) {
-                for (const col of colKeys) {
-                    let entries = tableData[number][row][col][gender] || [];
-                    // Display forms or a hyphen if no forms are found for this cell
+            for (const gender of gender_Keys) {
+                let gender_tds = "";
+                for (const col of col_Keys) {
+
+                    if (col === first_person && gender === dual) continue;
 
                     let td = `<td>`;
+                    let entries = tableData[number][row][col][gender] || [];
+                    // ---
+                    let check_1 = col === first_person && (gender === singular || gender === plural);
+                    let check_2 = col === second_person && gender === dual;
+                    // ---
+
+                    if (check_1 || check_2) {
+                        if (singular_fixed[gender]) continue;
+                        let fem_entries = tableData[number]["Q1775415"][col][gender] || [];
+                        let third_entries = tableData[number][""][col][gender] || [];
+                        if (row === "Q499327" && third_entries.length > 0 && entries.length == 0 && fem_entries.length == 0) {
+                            entries = third_entries;
+                            singular_fixed[gender] = true;
+                            td = `<td rowspan="3" class="table-light align-middle">`;
+                        }
+                    };
+                    // ---
                     td += entries.map(entryFormatter).join("<br>") || "";
                     td += `</td>`;
 
-                    if (col === "Q21714344" && gender === "Q110022") continue;
-                    tbody += td
+                    gender_tds += td
                 }
+                tbody += gender_tds;
             }
+
             tbody += "</tr>";
         }
     }
