@@ -49,5 +49,12 @@
     </form>
 </div>
 <script src="{{ url_for('static', filename='random.js') }}"></script>
-
+<script>
+    function setLabel(lexeme) {
+        document.getElementById('Lid').val = lexeme;
+    }
+    $(function () {
+        load_search(setLabel);
+    });
+</script>
 {% endblock %}

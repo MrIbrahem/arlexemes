@@ -74,9 +74,13 @@ def search(args):
         item_uri = row['item']['value']
         item_id = item_uri.split('/entity/')[-1]
         lemma = row['lemma']['value']
-        count = row.get('count', {}).get('value', '')
+        categoryLabel = row['categoryLabel']['value']
+        count = row.get('count', {}).get('value', 0)
+        count = int(count)
 
-        label = f"{lemma} - {count}" if count else lemma
+        label = f"{lemma} - {categoryLabel}"
+        if count and count > 1:
+            label += f" - ({count} كلمة)"
 
         items['search'].append({
             "label": label,

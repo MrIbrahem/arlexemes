@@ -21,25 +21,26 @@ def autocomplete():
 
 @app.route("/list", methods=["GET"])
 def list_lexemes():
-    # ---
     return render_template("list_lexemes.html")
+
+
+@app.route("/wd", methods=["GET"])
+def wd():
+    return render_template("wd.html")
 
 
 @app.route("/duplicate_lemmas", methods=["GET"])
 def duplicate_lemmas():
-    # ---
     return render_template("duplicate_lemmas.html")
 
 
 @app.route("/chart", methods=["GET"])
 def chart():
-    # ---
     return render_template("chart.html")
 
 
 @app.route("/lex", methods=["GET"])
 def lex():
-    # ---
     return render_template("lex.html")
 
 
