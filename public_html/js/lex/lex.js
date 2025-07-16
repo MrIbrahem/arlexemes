@@ -43,9 +43,6 @@ let keyLabels = {
     "Q499327": "مذكر", // Masculine
     "Q1775415": "مؤنث", // Feminine
 
-    // مفتاح بديل للجنس عندما لا يكون هناك فصل حسب الجنس
-    "NO_GENDER_PLACEHOLDER": "", // يمكن تركها فارغة أو وضع "عام"
-
     "Q111029": "جذر",
     "Q1084": "اسم",
     "Q24905": "فعل",
@@ -150,7 +147,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     let row_Keys = second_collumn;
     // ---
     html += gender_Keys.map(gender => {
-        const headerText = (gender_Keys.length === 1 && gender === "NO_GENDER_PLACEHOLDER") ? "النوع" :
+        const headerText = (gender_Keys.length === 1 && gender === "") ? "النوع" :
             wdlink_2(gender);
         let colspan = col_Keys.length;
         if (col_Keys.includes(first_person) && gender === dual) colspan = colspan - 1;
@@ -332,31 +329,27 @@ async function Q24905(entity) {
 
 }
 
-/*
 
-Q34698 الصفات
-
-*/
-async function Q34698(entity) {
-
-    let genderKeys = gender_Keys_global;
-
-    // Number (العدد: مفرد، جمع) keys based on the provided image
-    let numberKeys = singular_plural_dual;
-
-    // Case (الحالة الإعرابية) keys (الحالة)
-    let rowKeys = Pausal_Forms; // الوقف، رفع، النصب، إضافة
+async function adj_and_nouns(entity_type, entity) {
 
     const forms = entity.forms || [];
 
-    // Type (النوع: معرفة، نكرة، الصيغة السياقية) keys
-    let colKeys = ["Q53997857", "Q53997851", "Q118465097", ""]; // معرفة، نكرة، الصيغة السياقية (for adjectives)
+    let numberKeys = singular_plural_dual;
 
-    // find Q118465097 in the grammatical features
+    let rowKeys = Pausal_Forms;
+    let genderKeys, colKeys;
 
-    colKeys = removeKeyIfNotFound([...colKeys], forms, "Q118465097");
+    if (entity_type === "Q1084") {
+        genderKeys = [""];
+        colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
 
-    // Initialize tableData structure: tableData[number][row][col][gender]
+    } else if (entity_type === "Q34698") {
+        genderKeys = gender_Keys_global;
+        colKeys = ["Q53997857", "Q53997851", "Q118465097", ""];
+
+        // find Q118465097 in the grammatical features
+        colKeys = removeKeyIfNotFound([...colKeys], forms, "Q118465097");
+    }
 
     const tableData = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
 
@@ -364,17 +357,26 @@ async function Q34698(entity) {
     for (const form of forms) {
         const feats = form.grammaticalFeatures || [];
 
+        // البحث عن المطابقة، إذا لم يتم العثور عليها، استخدم المفتاح الفارغ ""
         const number = numberKeys.find(n => feats.includes(n)) || "";
         const row = rowKeys.find(r => feats.includes(r)) || "";
         const col = colKeys.find(c => feats.includes(c)) || "";
         const gender = genderKeys.find(g => feats.includes(g)) || "";
 
         tableData[number][row][col][gender].push(form);
-        // }
     }
 
     // Call the shared HTML generation function
     return _generateHtmlTable(tableData, numberKeys, rowKeys, colKeys, genderKeys);
+}
+
+/*
+
+Q34698 الصفات
+
+*/
+async function Q34698(entity) {
+    return adj_and_nouns("Q34698", entity);
 }
 
 /*
@@ -383,43 +385,7 @@ Q1084: الاسماء
 
 */
 async function Q1084(entity) {
-    // This key will be used as a placeholder for the "gender" dimension
-    // when the table structure doesn't explicitly separate by gender.
-    const NO_GENDER_PLACEHOLDER = "NO_GENDER_PLACEHOLDER";
-    const genderKeys = [NO_GENDER_PLACEHOLDER]; // Array with one placeholder for consistency
-
-    // مفرد، مثنى، جمع (Assuming مثنى Q110022 might be present in noun forms)
-    let numberKeys = singular_plural_dual;
-
-    // صفوف: الحالة الإعرابية
-    let rowKeys = Pausal_Forms;
-
-    // أعمدة: النوع (معرفة، نكرة، مركب) - Note: Q1641446 is "compound" (مركب)
-    let colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
-
-
-    // تحضير الهيكل مع تضمين مفتاح "" (غير محدد)
-    const tableData = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
-
-    const forms = entity.forms || [];
-
-    // ملء البيانات
-    for (const form of forms) {
-        const feats = form.grammaticalFeatures || [];
-
-        // البحث عن المطابقة، إذا لم يتم العثور عليها، استخدم المفتاح الفارغ ""
-        const number = numberKeys.find(n => feats.includes(n)) || "";
-        const row = rowKeys.find(r => feats.includes(r)) || "";
-        const col = colKeys.find(c => feats.includes(c)) || "";
-
-        // For Q1084, we don't have explicit gender columns, so we assign to the placeholder
-        const gender = NO_GENDER_PLACEHOLDER;
-
-        tableData[number][row][col][gender].push(form);
-    }
-
-    // Call the shared HTML generation function
-    return _generateHtmlTable(tableData, numberKeys, rowKeys, colKeys, genderKeys);
+    return adj_and_nouns("Q1084", entity);
 }
 
 /*
@@ -427,4 +393,6 @@ async function Q1084(entity) {
 Q111029 الجذور
 
 */
-async function Q111029(entity) { }
+async function Q111029(entity) {
+    return adj_and_nouns("Q111029", entity);
+}
