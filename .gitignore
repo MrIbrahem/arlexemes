@@ -1,3 +1,7 @@
 *.lnk
+*.pyc
 /public_html/cache
-/python
+/python/html
+python/auth.txt
+**/old/**
+/python/src/logs_db
