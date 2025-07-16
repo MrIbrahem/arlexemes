@@ -29,7 +29,7 @@ async function loadsparqlQuery(sparqlQuery) {
     }
 }
 
-async function get_wd_result(to_group_by = "categoryLabel") {
+async function find_wd_result(to_group_by = "categoryLabel") {
     const sparqlQuery = `
         SELECT ?item ?lemma ?category ?categoryLabel ?P31Label ?P6771 ?P11038 ?P11757 ?P12451 WHERE {
         ?item rdf:type ontolex:LexicalEntry;
@@ -171,7 +171,7 @@ async function fetchData() {
 
     document.getElementById('group_by').value = group_by;
 
-    const treeMap = await get_wd_result(group_by);
+    const treeMap = await find_wd_result(group_by);
 
     // count all items.length in wd_result
     let count = Object.values(treeMap).reduce((sum, obj) => sum + obj.items.length, 0);

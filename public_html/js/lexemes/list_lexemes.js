@@ -146,10 +146,11 @@ function get_param_from_window_location(key, defaultvalue) {
 
 async function fetchData() {
     showLoading();
-    let group_by = get_param_from_window_location("group_by", "P31Label")
 
+    let limit = get_param_from_window_location("limit", 100);
+    $("#limit").val(limit);
     // Assuming get_wd_result is defined elsewhere and returns the data
-    let treeMap = await get_wd_result(group_by);
+    let treeMap = await get_wd_result(limit);
 
     treeMap = slice_data(treeMap);
 
