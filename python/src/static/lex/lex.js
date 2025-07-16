@@ -322,14 +322,18 @@ async function Q34698(entity) {
     // Case (الحالة الإعرابية) keys (الحالة)
     let rowKeys = Pausal_Forms; // الوقف، رفع، النصب، إضافة
 
-    // Type (النوع: معرفة، نكرة، الصيغة السياقية) keys
-    let colKeys = ["Q53997857", "Q53997851", "Q118465097"]; // معرفة، نكرة، الصيغة السياقية (for adjectives)
+    const forms = entity.forms || [];
 
+    // Type (النوع: معرفة، نكرة، الصيغة السياقية) keys
+    let colKeys = ["Q53997857", "Q53997851", "Q118465097", ""]; // معرفة، نكرة، الصيغة السياقية (for adjectives)
+
+    // find Q118465097 in the grammatical features
+    for (const form of forms) {
+        const feats = form.grammaticalFeatures || [];
+    }
     // Initialize tableData structure: tableData[number][row][col][gender]
 
     const tableData = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
-
-    const forms = entity.forms || [];
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {

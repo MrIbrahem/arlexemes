@@ -248,6 +248,31 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     `
     return card;
 }
+function removeKeyIfNotFound(colKeys, forms, keyToRemove) {
+    let found = false;
+
+    // Iterate through each form
+    for (const form of forms) {
+        // Check if grammaticalFeatures exist and is an array
+        const feats = form.grammaticalFeatures || [];
+
+        // Check if the keyToRemove exists in the current form's grammaticalFeatures
+        if (feats.includes(keyToRemove)) {
+            found = true;
+            break; // No need to continue searching once found
+        }
+    }
+
+    // If the keyToRemove was not found in any grammaticalFeatures, remove it from colKeys
+    if (!found) {
+        const index = colKeys.indexOf(keyToRemove);
+        if (index > -1) {
+            colKeys.splice(index, 1);
+        }
+    }
+
+    return colKeys;
+}
 
 /*
 
@@ -322,14 +347,18 @@ async function Q34698(entity) {
     // Case (الحالة الإعرابية) keys (الحالة)
     let rowKeys = Pausal_Forms; // الوقف، رفع، النصب، إضافة
 
+    const forms = entity.forms || [];
+
     // Type (النوع: معرفة، نكرة، الصيغة السياقية) keys
-    let colKeys = ["Q53997857", "Q53997851", "Q118465097"]; // معرفة، نكرة، الصيغة السياقية (for adjectives)
+    let colKeys = ["Q53997857", "Q53997851", "Q118465097", ""]; // معرفة، نكرة، الصيغة السياقية (for adjectives)
+
+    // find Q118465097 in the grammatical features
+
+    colKeys = removeKeyIfNotFound([...colKeys], forms, "Q118465097");
 
     // Initialize tableData structure: tableData[number][row][col][gender]
 
     const tableData = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
-
-    const forms = entity.forms || [];
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
