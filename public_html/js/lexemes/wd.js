@@ -29,7 +29,7 @@ async function loadsparqlQuery(sparqlQuery) {
     }
 }
 
-async function find_wd_result(to_group_by = "categoryLabel") {
+async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
     const sparqlQuery = `
         SELECT ?item ?lemma ?category ?categoryLabel ?P31Label ?P6771 ?P11038 ?P11757 ?P12451 WHERE {
         ?item rdf:type ontolex:LexicalEntry;
@@ -43,7 +43,7 @@ async function find_wd_result(to_group_by = "categoryLabel") {
         OPTIONAL { ?item wdt:P11757 ?P11757. }
         OPTIONAL { ?item wdt:P12451 ?P12451. }
         }
-        limit 100
+        limit ${limit}
     `;
 
     let result = await loadsparqlQuery(sparqlQuery);
@@ -168,10 +168,12 @@ function get_param_from_window_location1(key, defaultvalue) {
 async function fetchData() {
     showLoading();
     let group_by = get_param_from_window_location1("group_by", "P31Label")
+    let limit = get_param_from_window_location1("limit", 100)
 
     document.getElementById('group_by').value = group_by;
+    $("#limit").val(limit);
 
-    const treeMap = await find_wd_result(group_by);
+    const treeMap = await find_wd_result(group_by, limit);
 
     // count all items.length in wd_result
     let count = Object.values(treeMap).reduce((sum, obj) => sum + obj.items.length, 0);

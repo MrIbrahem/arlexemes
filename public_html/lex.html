@@ -148,19 +148,18 @@
         <div id="output"></div>
 
     </div>
-    <script src="js/search.js"></script>
+    <script src="js/autocomplete.js"></script>
     <script src="js/lex/lex.js"></script>
     <script src="js/lex/lex_page.js"></script>
     <script>
         $(document).ready(function () {
-            load_search();
-
             // if ?lex=324 in url then load it setExample
             const urlParams = new URLSearchParams(window.location.search);
             const lex = urlParams.get('lex');
             if (lex) {
                 setExample(lex);
             }
+            load_search(setExample);
 
         });
     </script>

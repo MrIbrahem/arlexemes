@@ -1,11 +1,11 @@
 
 // هنا سيأتي كود JavaScript
-const searchInput = document.getElementById('Lid');
+const searchInput = document.getElementById('wikidatasearch');
 const resultsContainer = document.getElementById('autocomplete-results');
 let debounceTimeout;
 
 async function fetchWikidataSuggestions(query, callback) {
-    const loader = $('#autocomplete_loading');
+    const loader = $('#autocomplete-loader');
 
     if (!query) {
         resultsContainer.innerHTML = '';
@@ -22,7 +22,7 @@ async function fetchWikidataSuggestions(query, callback) {
     let data_source = document.getElementById("data_source");
     data_source = data_source ? data_source.value.trim() : "";
     // ---
-    apiUrl = `/autocomplete?data_source=${data_source}&term=${encodeURIComponent(query)}`;
+    apiUrl = `/autocomplete.php?data_source=${data_source}&term=${encodeURIComponent(query)}`;
 
     try {
         const response = await fetch(apiUrl);
