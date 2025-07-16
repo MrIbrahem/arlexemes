@@ -9,6 +9,8 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 _cache = {}
 CACHE_TTL = 60 * 5  # 5 دقائق
 
+endpoint_url = 'https://query.wikidata.org/sparql'
+
 
 def make_cache_key(term, data_source):
     return f"{term.strip()}|{data_source.strip()}"
@@ -20,7 +22,29 @@ def get_results(endpoint_url, query):
     sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
-    return sparql.query().convert()
+    # ---
+    data = sparql.query().convert()
+    # ---
+    # تنسيق النتائج
+    result = []
+
+    items = data.get("results", {}).get("bindings", [])
+    vars_list = data.get("head", {}).get("vars", [])
+
+    for row in items:
+        new_row = {}
+        # ---
+        for var in vars_list:
+            value = row.get(var, {}).get("value", "")
+            # ---
+            if value.find("/entity/") != -1:
+                value = value.split("/").pop()
+            # ---
+            new_row[var] = value
+        # ---
+        result.append(new_row)
+
+    return result
 
 
 def search(args):
@@ -38,8 +62,6 @@ def search(args):
         if now - timestamp < CACHE_TTL:
             return cached_result  # إرجاع النسخة المخبأة
 
-    endpoint_url = 'https://query.wikidata.org/sparql'
-
     # تأمين السلسلة للاستخدام في SPARQL
     escaped_term = term.replace('"', '\\"')
 
@@ -48,47 +70,66 @@ def search(args):
         values = f"VALUES ?category {{ wd:{data_source} }} . "
 
     sparql_query = f"""
-        SELECT DISTINCT ?lemma ?item ?categoryLabel (count(*) as ?count) WHERE {{
+        SELECT DISTINCT ?lemma ?item ?categoryLabel (count(?form) as ?count) WHERE {{
             {values}
             ?item a ontolex:LexicalEntry ;
                 wikibase:lexicalCategory ?category ;
-                ontolex:lexicalForm ?form ;
                 dct:language wd:Q13955 ;
                 wikibase:lemma ?lemma .
+            optional {{ ?item ontolex:lexicalForm ?form }}
             FILTER(CONTAINS(STR(?lemma), "{escaped_term}")) .
-            SERVICE wikibase:label {{ bd:serviceParam wikibase:language "ar". }}
+            SERVICE wikibase:label {{ bd:serviceParam wikibase:language "ar, en". }}
         }}
         GROUP BY ?lemma ?item ?categoryLabel
         ORDER BY DESC(?count)
         LIMIT 50
     """
 
-    results = get_results(endpoint_url, sparql_query)
+    data = get_results(endpoint_url, sparql_query)
 
     # تنسيق النتائج
-    items = {
+    result = {
         "search": []
     }
 
-    for row in results.get('results', {}).get('bindings', []):
-        item_uri = row['item']['value']
-        item_id = item_uri.split('/entity/')[-1]
-        lemma = row['lemma']['value']
-        categoryLabel = row['categoryLabel']['value']
-        count = row.get('count', {}).get('value', 0)
+    for row in data:
+        item_id = row['item']
+        lemma = row['lemma']
+        categoryLabel = row['categoryLabel']
+        count = row.get('count', 0)
         count = int(count)
 
         label = f"{lemma} - {categoryLabel}"
         if count and count > 1:
             label += f" - ({count} كلمة)"
 
-        items['search'].append({
+        result['search'].append({
             "label": label,
             "value": lemma,
             "id": item_id
         })
 
     # تخزين النتيجة في الكاش
-    _cache[key] = (items, now)
+    _cache[key] = (result, now)
 
-    return items
+    return result
+
+
+def all_arabic(limit):
+
+    sparql_query = """
+        SELECT DISTINCT ?lemma ?item ?category ?categoryLabel ?P11038 WHERE {
+        ?item a ontolex:LexicalEntry ;
+                wikibase:lexicalCategory ?category ;
+                dct:language wd:Q13955 ;
+                wikibase:lemma ?lemma .
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
+        optional { ?item wdt:P11038 ?P11038 }
+        }
+
+    """
+    sparql_query += f" limit {limit}"
+
+    data = get_results(endpoint_url, sparql_query)
+
+    return data

@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
 
-from bots import auto_complete
+from bots import sparql_bot
 
 
 def jsonify(data : dict) -> str:
@@ -16,12 +16,33 @@ def jsonify(data : dict) -> str:
 
 @app.route("/autocomplete", methods=["GET"])
 def autocomplete():
-    return auto_complete.search(request.args)
+    return sparql_bot.search(request.args)
 
 
 @app.route("/list", methods=["GET"])
 def list_lexemes():
     return render_template("list_lexemes.html")
+
+
+@app.route("/P11038", methods=["GET"])
+def P11038():
+    limit = request.args.get('limit', 100)
+
+    result = sparql_bot.all_arabic(limit)
+    split_by_category = {}
+    for item in result:
+        category = item['category']
+        # ---
+        if category not in split_by_category:
+            split_by_category[category] = {
+                'category': category,
+                'categoryLabel': item['categoryLabel'],
+                'members': []
+            }
+        # ---
+        split_by_category[category]['members'].append(item)
+
+    return render_template("P11038.html", limit=limit, result=split_by_category)
 
 
 @app.route("/wd", methods=["GET"])
