@@ -95,8 +95,6 @@ def view_logs(request):
     # ---
     order_by = "lemma_id" if args.order_by not in order_by_types else args.order_by
     # ---
-    # status_table = logs_db.get_response_status(table_name=args.table_name)
-    # ---
     status = "All"
     # ---
     logs = logs_db.get_all(args.per_page, args.offset, args.order, order_by=order_by, status=args.status, table_name=args.table_name)

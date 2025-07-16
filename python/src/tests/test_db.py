@@ -8,7 +8,5 @@ def test():
     # ---
     print("count_all", count_all(status="no_result"))
     # ---
-    # print("get_response_status", get_response_status())
-    # ---
     print("get_logs", get_logs(status=""))
     print("get_logs", get_logs(status="no_result"))

@@ -22,47 +22,23 @@ def change_db_path(file):
     return _change_db_path(file)
 
 
-def add_status(query, params, status="", like="", day=""):
+def add_order_limit_offset(query, params, order_by, order, limit, offset):
     # ---
-    if not isinstance(params, list):
-        params = list(params)
+    if order not in ["ASC", "DESC"]:
+        order = "DESC"
     # ---
-    added = []
+    if order_by:
+        query += f"ORDER BY {order_by} {order}"
     # ---
-    if status:
-        if status == "Category":
-            added.append("response_status like 'تصنيف%'")
-        else:
-            added.append("response_status = ?")
-            params.append(status)
-    elif like:
-        added.append("response_status like ?")
-        params.append(like)
+    if limit > 0:
+        query += " LIMIT ?"
+        params.extend([limit])
     # ---
-    # 2025-04-23
-    pattern = r"\d{4}-\d{2}-\d{2}"
-    # ---
-    if day and re.match(pattern, day):
-        added.append("date_only = ?")
-        params.append(day)
-    # ---
-    if added:
-        query += " WHERE " + " AND ".join(added)
-    # ---
-    # params = tuple(params)
+    if offset > 0:
+        query += " OFFSET ?"
+        params.extend([offset])
     # ---
     return query, params
-
-
-def get_response_status(table_name="P11038_lemmas"):
-    # ---
-    query = f"select response_status, count(response_status) as numbers from {table_name} group by response_status having count(*) > 2"
-    # ---
-    result = fetch_all(query, ())
-    # ---
-    result = [row['response_status'] for row in result]
-    # ---
-    return result
 
 
 def count_all(status="", table_name="P11038_lemmas", like=""):
@@ -70,8 +46,6 @@ def count_all(status="", table_name="P11038_lemmas", like=""):
     query = f"SELECT COUNT(*) FROM {table_name}"
     # ---
     params = []
-    # ---
-    query, params = add_status(query, params, status=status, like=like)
     # ---
     result = fetch_all(query, params, fetch_one=True)
     # ---
@@ -95,11 +69,7 @@ def get_logs(per_page=10, offset=0, order="DESC", order_by="timestamp", status="
     # ---
     params = []
     # ---
-    query, params = add_status(query, params, status=status, like=like, day=day)
-    # ---
-    query += f"ORDER BY {order_by} {order} LIMIT ? OFFSET ?"
-    # ---
-    # {'id': 1, 'endpoint': 'api', 'request_data': 'Category:1934-35 in Bulgarian football', 'response_status': 'true', 'response_time': 123123.0, 'response_count': 6, 'timestamp': '2025-04-10 01:08:58'}
+    query, params = add_order_limit_offset(query, params, order_by, order, per_page, offset)
     # ---
     params.extend([per_page, offset])
     # ---
@@ -117,15 +87,21 @@ def get_all(per_page=10, offset=0, order="DESC", order_by="id", status="", table
     # ---
     params = []
     # ---
-    # query, params = add_status(query, params, status=status)
-    # ---
-    query += f"ORDER BY {order_by} {order} LIMIT ? OFFSET ?"
-    # ---
-    params.extend([per_page, offset])
+    query, params = add_order_limit_offset(query, params, order_by, order, per_page, offset)
     # ---
     logs = fetch_all(query, params)
     # ---
-    if not logs:
-        insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="صفة", pos_cat="اسم", Lid="L13303", sama_lemma_id=390010035, sama_lemma="آخَر")
+    return logs
+
+
+def select(table_name="P11038_lemmas", limit=0, offset=0, order="DESC", order_by="id", **kwargs):
+    # ---
+    query = f"SELECT * FROM {table_name} "
+    # ---
+    params = []
+    # ---
+    query, params = add_order_limit_offset(query, params, order_by, order, limit, offset)
+    # ---
+    logs = fetch_all(query, params)
     # ---
     return logs

@@ -54,7 +54,7 @@ def start():
     for n, (x, y) in tqdm.tqdm(enumerate(to_add.items(), start=1), total=len(to_add)):
         # { "lemma_id": 2023254709, "lemma": "سَلَاقِيٌّ", "pos_cat": "اسم", "pos": "اسم", "sama_lemma_id": 390039226, "sama_lemma": "سَلاقِيّ 1" }
         # ---
-        if n == 5000:
+        if n == 50:
             break
         # ---
         sama_lemma = y.get("sama_lemma", "")

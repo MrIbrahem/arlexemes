@@ -19,6 +19,18 @@ def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", Lid="", sama_lemma_id
         ON CONFLICT(lemma_id, lemma) DO UPDATE SET pos = excluded.pos, Lid = excluded.Lid
     """
     # ---
+    query = """
+        INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, Lid)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(lemma_id, lemma) DO UPDATE SET
+            pos = COALESCE(NULLIF(excluded.pos, ''), P11038_lemmas.pos),
+            pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), P11038_lemmas.pos_cat),
+            sama_lemma_id = COALESCE(NULLIF(excluded.sama_lemma_id, ''), P11038_lemmas.sama_lemma_id),
+            sama_lemma = COALESCE(NULLIF(excluded.sama_lemma, ''), P11038_lemmas.sama_lemma),
+            Lid = COALESCE(NULLIF(excluded.Lid, ''), P11038_lemmas.Lid)
+    """
+    # ---
+    # ---
     params = (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, Lid)
     # ---
     result = db_commit(query, params)
@@ -37,11 +49,11 @@ def insert_multi_lemmas(data):
         INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, Lid)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(lemma_id, lemma) DO UPDATE SET
-            pos = excluded.pos,
-            pos_cat = excluded.pos_cat,
-            sama_lemma_id = excluded.sama_lemma_id,
-            sama_lemma = excluded.sama_lemma,
-            Lid = excluded.Lid
+            pos = COALESCE(NULLIF(excluded.pos, ''), P11038_lemmas.pos),
+            pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), P11038_lemmas.pos_cat),
+            sama_lemma_id = COALESCE(NULLIF(excluded.sama_lemma_id, ''), P11038_lemmas.sama_lemma_id),
+            sama_lemma = COALESCE(NULLIF(excluded.sama_lemma, ''), P11038_lemmas.sama_lemma),
+            Lid = COALESCE(NULLIF(excluded.Lid, ''), P11038_lemmas.Lid)
     """
     # ---
     params = [(x['lemma_id'], x['lemma'], x['pos'], x['pos_cat'], x['sama_lemma_id'], x['sama_lemma'], x['Lid']) for x in data]

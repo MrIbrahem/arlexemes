@@ -8,7 +8,6 @@ from .bot import (
     fetch_all,
     count_all,
     get_logs,
-    get_response_status,
     change_db_path,
     get_all,
 )
@@ -24,7 +23,6 @@ __all__ = [
     "fetch_all",
     "get_logs",
     "count_all",
-    "get_response_status",
     "insert_lemma",
     "insert_multi_lemmas",
     "get_all",
