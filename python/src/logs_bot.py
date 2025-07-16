@@ -2,7 +2,14 @@
 
 import logs_db  # logs_db.change_db_path(file)
 from types import SimpleNamespace
+
 db_tables = ["P11038_lemmas"]
+
+pos_cat_data = {
+    "اسم": 45168,
+    "فعل": 12815,
+    "كلمة وظيفية": 483
+}
 
 
 def get_args(request):
@@ -80,31 +87,22 @@ def view_logs(request):
         "lemma_id",
         "lemma",
         "pos",
-        "qid",
+        "pos_cat",
+        "Lid",
+        "sama_lemma_id",
+        "sama_lemma",
     ]
     # ---
     order_by = "lemma_id" if args.order_by not in order_by_types else args.order_by
     # ---
-    status_table = logs_db.get_response_status(table_name=args.table_name)
+    # status_table = logs_db.get_response_status(table_name=args.table_name)
     # ---
-    status = args.status if (args.status in status_table or args.status == "Category") else ""
+    status = "All"
     # ---
     logs = logs_db.get_all(args.per_page, args.offset, args.order, order_by=order_by, status=args.status, table_name=args.table_name)
     # ---
     # Convert to list of dicts
-    log_list = []
-    # ---
-    for log in logs:
-        # ---
-        log_list.append(
-            {
-                "id": log["id"],
-                "lemma_id": log["lemma_id"],
-                "lemma": log["lemma"],
-                "pos": log["pos"],
-                "qid": log["qid"]
-            }
-        )
+    log_list = logs
     # ---
     total_logs = logs_db.count_all(status=args.status, table_name=args.table_name, like=args.like)
     # ---
@@ -129,18 +127,16 @@ def view_logs(request):
     # ---
     table_new.update(Pagination)
     # ---
-    if "All" not in status_table:
-        status_table.append("All")
+    # if "All" not in status_table: status_table.append("All")
     # ---
-    if "Category" not in status_table:
-        status_table.append("Category")
+    # if "Category" not in status_table: status_table.append("Category")
     # ---
     result = {
         "dbs": args.dbs,
         "logs": log_list,
         "order_by_types": order_by_types,
         "tab": table_new,
-        "status_table": status_table,
+        "status_table": [],
     }
     # ---
     return result

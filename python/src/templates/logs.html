@@ -161,21 +161,40 @@
 
                 <!-- Page info -->
                 <div class="col-12 text-center text-muted">
-                    <small>Page {{ result.tab.page }} of {{ result.tab.total_pages }}
-                        ({{ result.tab.start_log }} - {{ result.tab.end_log }} out of {{ result.tab.total_logs }}
-                        records)</small>
+                    <small>الصفحة {{ result.tab.page }} من {{ result.tab.total_pages }}
+                        ({{ result.tab.start_log }} - {{ result.tab.end_log }} من أصل {{ result.tab.total_logs }}
+                        عنصر)</small>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <table class="table table-striped table-hover table-bordered soro">
                         <thead>
+                            <tr data-dt-order="disable">
+                                <th></th>
+                                <th colspan="2">lemma</th>
+                                <th colspan="2">
+                                    قسم الكلام
+                                </th>
+                                <th colspan="2">sama_lemma</th>
+                                <th></th>
+                            </tr>
                             <tr>
                                 <th>#</th>
-                                <th>المُعرّف الفريد</th>
+                                <th>المُعرّف</th>
                                 <th>المدخل المعجمي</th>
-                                <th>فئة قسم الكلام</th>
-                                <th>وسم قسم الكلام</th>
+                                <th>
+                                    <span title="(اسم، فعل، كلمة وظيفية)">
+                                        الفئة
+                                    </span>
+                                </th>
+                                <th>
+                                    <span title="(اسم، فعل ماضي، صفة، ظرف، ضمير، ... الخ)">
+                                        الوسم
+                                    </span>
+                                </th>
+                                <th>المُعرّف</th>
+                                <th>المدخل المعجمي</th>
                                 <th>معرف ويكي بيانات</th>
                             </tr>
                         </thead>
@@ -198,10 +217,21 @@
                                 <td class="ltr_right">
                                     {{ log.pos }}
                                 </td>
+                                <td class="ltr_left">
+                                    {%if log.sama_lemma_id %}
+                                    <a href="https://ontology.birzeit.edu/lemma/{{ log.sama_lemma_id }}"
+                                        target="_blank">
+                                        {{ log.sama_lemma_id }}
+                                    </a>
+                                    {%endif%}
+                                </td>
                                 <td>
-                                    {%if log.qid %}
-                                    <a href="https://www.wikidata.org/entity/{{log.qid}}" target="_blank">
-                                        {{log.qid}}
+                                    {{ log.sama_lemma }}
+                                </td>
+                                <td>
+                                    {%if log.Lid %}
+                                    <a href="https://www.wikidata.org/entity/{{log.Lid}}#P11038" target="_blank">
+                                        {{log.Lid}}
                                     </a>
                                     {%endif%}
                                 </td>
