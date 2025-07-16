@@ -63,13 +63,13 @@ let keyLabels = {
 };
 
 // مفرد مثنى جمع
-const singular_plural_dual = ["Q110786", "Q110022", "Q146786"];
+const singular_plural_dual = ["Q110786", "Q110022", "Q146786", ""];
 
-const first_second_third_person = ["Q21714344", "Q51929049", "Q51929074"];
+const first_second_third_person = ["Q21714344", "Q51929049", "Q51929074", ""];
 
-const gender_Keys_global = ["Q499327", "Q1775415"];
+const gender_Keys_global = ["Q499327", "Q1775415", ""];
 
-const Pausal_Forms = ["Q117262361", "Q131105", "Q146078", "Q146233"];
+const Pausal_Forms = ["Q117262361", "Q131105", "Q146078", "Q146233", ""];
 
 function wdlink_2(id) {
     if (!id || id === "") return "";
@@ -261,17 +261,13 @@ async function Q24905(entity) {
 
     let verbs_main = ["Q1317831", "Q1194697", ""];
 
-    let numberKeys = ["Q23663136", "Q56649265", "Q462367", "Q473746", "Q12230930", "Q22716", "Q124351233"];
-    if (!numberKeys.includes("")) numberKeys.push("");
+    let numberKeys = ["Q23663136", "Q56649265", "Q462367", "Q473746", "Q12230930", "Q22716", "Q124351233", ""];
 
     let rowKeys = gender_Keys_global;
-    if (!rowKeys.includes("")) rowKeys.push("");
 
     let colKeys = first_second_third_person; // Q21714344
-    if (!colKeys.includes("")) colKeys.push("");
 
     let genderKeys = singular_plural_dual; // Q110022
-    if (!genderKeys.includes("")) genderKeys.push("");
 
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
@@ -319,19 +315,15 @@ Q34698 الصفات
 async function Q34698(entity) {
 
     let genderKeys = gender_Keys_global;
-    if (!genderKeys.includes("")) genderKeys.push("");
 
     // Number (العدد: مفرد، جمع) keys based on the provided image
     let numberKeys = singular_plural_dual;
-    if (!numberKeys.includes("")) numberKeys.push("");
 
     // Case (الحالة الإعرابية) keys (الحالة)
     let rowKeys = Pausal_Forms; // الوقف، رفع، النصب، إضافة
-    if (!rowKeys.includes("")) rowKeys.push("");
 
     // Type (النوع: معرفة، نكرة، الصيغة السياقية) keys
     let colKeys = ["Q53997857", "Q53997851", "Q118465097"]; // معرفة، نكرة، الصيغة السياقية (for adjectives)
-    if (!colKeys.includes("")) colKeys.push("");
 
     // Initialize tableData structure: tableData[number][row][col][gender]
 
@@ -369,15 +361,12 @@ async function Q1084(entity) {
 
     // مفرد، مثنى، جمع (Assuming مثنى Q110022 might be present in noun forms)
     let numberKeys = singular_plural_dual;
-    if (!numberKeys.includes("")) numberKeys.push("");
 
     // صفوف: الحالة الإعرابية
     let rowKeys = Pausal_Forms;
-    if (!rowKeys.includes("")) rowKeys.push("");
 
     // أعمدة: النوع (معرفة، نكرة، مركب) - Note: Q1641446 is "compound" (مركب)
-    let colKeys = ["Q53997857", "Q53997851", "Q1641446"];
-    if (!colKeys.includes("")) colKeys.push("");
+    let colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
 
 
     // تحضير الهيكل مع تضمين مفتاح "" (غير محدد)
