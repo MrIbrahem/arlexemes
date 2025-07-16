@@ -7,6 +7,23 @@ app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
 
 from bots import sparql_bot
+import logs_bot
+
+
+@app.route("/api/logs", methods=["GET"])
+def logs_api():
+    # ---
+    result = logs_bot.view_logs(request)
+    # ---
+    return jsonify(result)
+
+
+@app.route("/logs1", methods=["GET"])
+def view_logs():
+    # ---
+    result = logs_bot.view_logs(request)
+    # ---
+    return render_template("logs.html", result=result)
 
 
 def jsonify(data : dict) -> str:
@@ -84,5 +101,10 @@ def internal_server_error(e):
 if __name__ == "__main__":
     # ---
     debug = "debug" in sys.argv
+    # ---
+    if debug:
+        url = "http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=P11038_lemmas"
+        # ---
+        print(url)
     # ---
     app.run(debug=debug)
