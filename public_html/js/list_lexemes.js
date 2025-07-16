@@ -1,5 +1,4 @@
 
-const searchInput = document.getElementById("searchInput");
 const loadingEl = document.getElementById("loading");
 const errorEl = document.getElementById("error");
 const errorMessageEl = document.getElementById("errorMessage");
@@ -109,15 +108,6 @@ function renderTree(data) {
     });
 }
 
-function filterTreeData(term) {
-    return treeData.map(cat => ({
-        ...cat,
-        items: cat.items.filter(item =>
-            item.lemma.toLowerCase().includes(term.toLowerCase())
-        )
-    }));
-}
-
 function slice_data(wd_result) {
 
     // تحويل الكائن إلى مصفوفة وترتيبها حسب عدد العناصر في كل مجموعة
@@ -172,9 +162,3 @@ async function fetchData() {
     treeData = Object.values(treeMap);
     renderTree(treeData);
 }
-
-searchInput.addEventListener("input", e => {
-    const term = e.target.value;
-    const filtered = filterTreeData(term);
-    renderTree(filtered);
-});

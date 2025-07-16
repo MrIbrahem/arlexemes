@@ -57,10 +57,7 @@
                 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
                     <h3 class="text-2xl font-bold text-center m-6 p-3"> قائمة المفردات العربية <span id="total"></span>
                     </h3>
-                    <div class="mb-3">
-                        <input type="text" id="searchInput" placeholder="ابحث عن كلمة..." class="form-control" />
-                    </div>
-
+                    <hr>
                     <div id="loading" class="text-center text-primary hidden">جارٍ التحميل...</div>
 
                     <div id="error" class="hidden alert alert-danger p-4 rounded text-center">
@@ -87,7 +84,7 @@
         </div>
     </div>
     <script src="/js/wd_result.js"></script>
-    <script src="/js/wd2.js"></script>
+    <script src="/js/list_lexemes.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => fetchData());
     </script>
