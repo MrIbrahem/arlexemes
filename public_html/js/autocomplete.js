@@ -87,7 +87,7 @@ function load_search(callback) {
                 // هنا يمكنك استخدام selectedId (الـ QID) للقيام بشيء آخر، مثل حفظه أو تحميل بيانات إضافية.
                 console.log('Selected Wikidata ID:', selectedId);
 
-                if (callback.isInstanceOf(Function)) {
+                if (typeof callback === 'function') {
                     callback(selectedId);
                 }
             }

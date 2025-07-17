@@ -38,7 +38,7 @@ function make_to_display(formsToProcess, to_dis) {
 
 function setExample(lexeme) {
     document.getElementById('lexemeId').value = lexeme;
-    fetchLexeme();
+    start_exeme(lexeme);
 }
 
 async function getentity(id) {
@@ -76,14 +76,7 @@ function fix_it2(lemma) {
     return new_lemma;
 }
 
-async function fetchLexeme() {
-    const id = document.getElementById("lexemeId").value.trim();
-    if (!id) return;
-
-    const output = document.getElementById("output");
-    output.innerHTML = "<div class='alert alert-info'>جاري تحميل البيانات...</div>";
-
-    let entity = await getentity(id);
+async function fetchLexeme(id, entity) {
 
     const Category = entity.lexicalCategory ?? "";
 
@@ -116,26 +109,40 @@ async function fetchLexeme() {
     });
 
     let html = `
-                <div class="row mb-4">
-                    <div class="col">
-                        <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
-                    </div>
-                    <div class="col">
-                        <strong>اللغة:</strong> ${language}
-                    </div>
-                    ${to_display}
-                </div>
-                `;
+        <div class="row mb-4">
+            <div class="col">
+                <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
+            </div>
+            <div class="col">
+                <strong>اللغة:</strong> ${language}
+            </div>
+            ${to_display}
+        </div>
+    `;
 
 
     if (typeof window[Category] === "function") {
         html += await window[Category](entity);
-        output.innerHTML = html;
         // $("#main_table").DataTable({ searching: false });
     } else {
-        output.innerHTML = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
+        html = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
     }
-    // ---
+    return html;
+}
+
+async function start_exeme(id) {
+    // const id = document.getElementById("lexemeId").value.trim();
+    // if (!id) return;
+
+    const output = document.getElementById("output");
+    output.innerHTML = "<div class='alert alert-info'>جاري تحميل البيانات...</div>";
+
+    let entity = await getentity(id);
+
+    let html = await fetchLexeme(id, entity);
+
+    output.innerHTML = html;
+
     table_filter();
 }
 
