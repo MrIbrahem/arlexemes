@@ -6,7 +6,51 @@ import json
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
 
-from bots import auto_complete
+import logs_bot
+from bots import sparql_bot
+from bots.match_sparql import get_wd_not_in_sql
+
+
+@app.route("/api/logs", methods=["GET"])
+def logs_api():
+    # ---
+    result = logs_bot.find_logs(request)
+    # ---
+    return jsonify(result)
+
+
+@app.route("/api/wd_not_in_sql", methods=["GET"])
+def api_wd_not_in_sql():
+    # ---
+    result = get_wd_not_in_sql()
+    # ---
+    return jsonify(result)
+
+
+@app.route("/not_in_sql", methods=["GET"])
+def not_in_sql():
+    # ---
+    limit = request.args.get('limit', 100, type=int)
+    # ---
+    result = get_wd_not_in_sql()
+    # ---
+    # sort result by len of P11038_list
+    result = sorted(result, key=lambda x: len(x['P11038_list']), reverse=True)
+    # ---
+    if limit > 0:
+        result = result[:limit]
+    # ---
+    len_of_ids = max([len(x['P11038_list']) for x in result if x['P11038_list']])
+    # ---
+    return render_template("not_in_sql.html", data=result, len_of_ids=len_of_ids, limit=limit)
+
+
+@app.route("/logs1", methods=["GET"])
+def view_logs():
+    # ---
+    result = logs_bot.find_logs(request)
+    # ---
+    return render_template("logs.html", result=result)
 
 
 def jsonify(data : dict) -> str:
@@ -16,30 +60,52 @@ def jsonify(data : dict) -> str:
 
 @app.route("/autocomplete", methods=["GET"])
 def autocomplete():
-    return auto_complete.search(request.args)
+    return sparql_bot.search(request.args)
 
 
 @app.route("/list", methods=["GET"])
 def list_lexemes():
-    # ---
     return render_template("list_lexemes.html")
+
+
+@app.route("/P11038", methods=["GET"])
+def P11038():
+    limit = request.args.get('limit', 100)
+
+    result = sparql_bot.all_arabic(limit)
+    split_by_category = {}
+    for item in result:
+        category = item['category']
+        # ---
+        if category not in split_by_category:
+            split_by_category[category] = {
+                'category': category,
+                'categoryLabel': item['categoryLabel'],
+                'members': []
+            }
+        # ---
+        split_by_category[category]['members'].append(item)
+
+    return render_template("P11038.html", limit=limit, result=split_by_category)
+
+
+@app.route("/wd", methods=["GET"])
+def wd():
+    return render_template("wd.html")
 
 
 @app.route("/duplicate_lemmas", methods=["GET"])
 def duplicate_lemmas():
-    # ---
     return render_template("duplicate_lemmas.html")
 
 
 @app.route("/chart", methods=["GET"])
 def chart():
-    # ---
     return render_template("chart.html")
 
 
 @app.route("/lex", methods=["GET"])
 def lex():
-    # ---
     return render_template("lex.html")
 
 
@@ -62,5 +128,10 @@ def internal_server_error(e):
 if __name__ == "__main__":
     # ---
     debug = "debug" in sys.argv
+    # ---
+    if debug:
+        url = "http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=P11038_lemmas"
+        # ---
+        print(url)
     # ---
     app.run(debug=debug)

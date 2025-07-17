@@ -58,7 +58,7 @@ async function loadsparqlQuery(sparqlQuery) {
     }
 }
 
-async function load_wd() {
+async function load_wd(limit) {
     const sparqlQuery1 = `
         VALUES ?category {
             wd:Q111029	# جذر
@@ -67,7 +67,7 @@ async function load_wd() {
             wd:Q34698	# صفة
         }
     `;
-    const sparqlQuery = `
+    let sparqlQuery = `
         SELECT DISTINCT ?item ?lemma ?category ?categoryLabel ?P31 ?P31Label (count(?form) as ?count) WHERE {
 
         ?item rdf:type ontolex:LexicalEntry;
@@ -82,7 +82,9 @@ async function load_wd() {
         group by ?item ?lemma ?category ?categoryLabel ?P31 ?P31Label
         ORDER BY DESC(?count)
     `;
-
+    if (limit && isFinite(limit)) {
+        sparqlQuery += ` LIMIT ${limit}`;
+    }
     let result = await loadsparqlQuery(sparqlQuery);
     let vars = result.head.vars;
 
@@ -120,8 +122,8 @@ async function load_wd() {
     return wd_result;
 }
 
-async function get_wd_result(group_by) {
-    let wd_result = await load_wd();
+async function find_wd_result(limit) {
+    let wd_result = await load_wd(limit);
     // ---
     return wd_result;
 }

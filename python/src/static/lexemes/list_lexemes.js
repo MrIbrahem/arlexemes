@@ -1,5 +1,4 @@
 
-const search_input = document.getElementById("search_input");
 const loadingEl = document.getElementById("loading");
 const errorEl = document.getElementById("error");
 const errorMessageEl = document.getElementById("errorMessage");
@@ -84,7 +83,7 @@ function renderTree(data) {
         }
         // ---
         category.items.forEach(item => {
-            let href = `lex.html?lex=${item.item}`;
+            let href = `lex?wd_id=${item.item}`;
             let lemma = `${item.lemma} (${item.count})`;
             // ---
             if (!to_lex.includes(item.category)) {
@@ -107,15 +106,6 @@ function renderTree(data) {
 
         });
     });
-}
-
-function filterTreeData(term) {
-    return treeData.map(cat => ({
-        ...cat,
-        items: cat.items.filter(item =>
-            item.lemma.toLowerCase().includes(term.toLowerCase())
-        )
-    }));
 }
 
 function slice_data(wd_result) {
@@ -156,10 +146,11 @@ function get_param_from_window_location(key, defaultvalue) {
 
 async function fetchData() {
     showLoading();
-    let group_by = get_param_from_window_location("group_by", "P31Label")
 
-    // Assuming get_wd_result is defined elsewhere and returns the data
-    let treeMap = await get_wd_result(group_by);
+    let limit = get_param_from_window_location("limit", 100);
+    $("#limit").val(limit);
+    // Assuming find_wd_result is defined elsewhere and returns the data
+    let treeMap = await find_wd_result(limit);
 
     treeMap = slice_data(treeMap);
 
@@ -172,9 +163,3 @@ async function fetchData() {
     treeData = Object.values(treeMap);
     renderTree(treeData);
 }
-
-search_input.addEventListener("input", e => {
-    const term = e.target.value;
-    const filtered = filterTreeData(term);
-    renderTree(filtered);
-});

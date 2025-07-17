@@ -1,6 +1,6 @@
 
 // هنا سيأتي كود JavaScript
-const searchInput = document.getElementById('Lid');
+const searchInput = document.getElementById('wd_id');
 const resultsContainer = document.getElementById('autocomplete-results');
 let debounceTimeout;
 
@@ -61,7 +61,7 @@ function displaySuggestions(suggestions) {
     }
 }
 
-function load_search() {
+function load_search(callback) {
     // الاستماع لأحداث الكتابة في مربع الإدخال مع Debounce
     if (searchInput) {
 
@@ -82,11 +82,14 @@ function load_search() {
                 const selectedId = clickedItem.dataset.id;
                 const selectedLabel = clickedItem.dataset.label;
 
-                searchInput.value = selectedLabel; // وضع التسمية المختارة في مربع الإدخال
+                searchInput.value = selectedId || selectedLabel; // وضع التسمية المختارة في مربع الإدخال
                 resultsContainer.innerHTML = ''; // مسح قائمة الاقتراحات
                 // هنا يمكنك استخدام selectedId (الـ QID) للقيام بشيء آخر، مثل حفظه أو تحميل بيانات إضافية.
                 console.log('Selected Wikidata ID:', selectedId);
-                setExample(selectedId);
+
+                if (callback.isInstanceOf(Function)) {
+                    callback(selectedId);
+                }
             }
         });
 
@@ -98,7 +101,3 @@ function load_search() {
         });
     }
 }
-
-$(function () {
-    load_search();
-});

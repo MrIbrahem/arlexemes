@@ -27,7 +27,15 @@
     <script src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
+
     <style>
+        :root[data-bs-theme="light"] {
+            body {
+                background-color: rgb(243, 244, 246);
+                /* Ensure the iframe has a white background */
+            }
+        }
+
         .table_text_right,
         .table_text_right>thead>tr>th {
             text-align: right
@@ -48,7 +56,7 @@
         .autocomplete-results {
             position: absolute;
             z-index: 1000;
-            width: 100%;
+            width: 80%;
             border: 1px solid #ced4da;
             border-top: none;
             background-color: white;
@@ -106,6 +114,16 @@
                     <li class="nav-item col-6 col-lg-auto">
                         <a class="nav-link" href="/chart"><i class="bi bi-journal-text ms-1"></i>
                             مخطط بياني
+                        </a>
+                    </li>
+                    <li class="nav-item col-6 col-lg-auto">
+                        <a class="nav-link" href="/wd"><i class="bi bi-tree ms-1"></i>
+                            مخطط شجري
+                        </a>
+                    </li>
+                    <li class="nav-item col-6 col-lg-auto">
+                        <a class="nav-link" href="/P11038"><i class="bi bi-journal-text ms-1"></i>
+                            الأنطولوجيا العربية
                         </a>
                     </li>
                 </ul>
