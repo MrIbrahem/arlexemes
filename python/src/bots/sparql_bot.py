@@ -16,7 +16,7 @@ def make_cache_key(term, data_source):
     return f"{term.strip()}|{data_source.strip()}"
 
 
-def get_results(endpoint_url, query):
+def get_results(query):
     user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
     # TODO adjust user agent; see https://w.wiki/CX6
     sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
@@ -85,7 +85,7 @@ def search(args):
         LIMIT 50
     """
 
-    data = get_results(endpoint_url, sparql_query)
+    data = get_results(sparql_query)
 
     # تنسيق النتائج
     result = {
@@ -128,8 +128,30 @@ def all_arabic(limit):
         }
 
     """
-    sparql_query += f" limit {limit}"
+    if limit > 0:
+        sparql_query += f" limit {limit}"
 
-    data = get_results(endpoint_url, sparql_query)
+    data = get_results(sparql_query)
+
+    return data
+
+
+def all_arabic_with_P11038(limit):
+
+    sparql_query = """
+        SELECT DISTINCT ?lemma ?item ?category ?categoryLabel ?P11038 WHERE {
+        ?item a ontolex:LexicalEntry ;
+                wikibase:lexicalCategory ?category ;
+                dct:language wd:Q13955 ;
+                wikibase:lemma ?lemma .
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
+        ?item wdt:P11038 ?P11038
+        }
+
+    """
+    if limit > 0:
+        sparql_query += f" limit {limit}"
+
+    data = get_results(sparql_query)
 
     return data

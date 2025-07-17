@@ -17,13 +17,13 @@ def get_args(request):
     # ---
     page = request.args.get("page", 1, type=int)
     # ---
-    per_page = request.args.get("per_page", 10, type=int)
+    per_page = request.args.get("per_page", 200, type=int)
     order = request.args.get("order", "desc").upper()
-    order_by = request.args.get("order_by", "response_count")
+    order_by = request.args.get("order_by", "response_count", type=str)
     # ---
-    filter_data = request.args.get("filter_data", "")
+    filter_data = request.args.get("filter_data", "all", type=str)
     # ---
-    table_name = request.args.get("table_name", "")
+    table_name = request.args.get("table_name", "", type=str)
     # ---
     if table_name not in db_tables:
         table_name = "P11038_lemmas"
@@ -57,12 +57,23 @@ def get_args(request):
 
 
 def make_Pagination(args, total_logs):
+    # ---
+    number_of_pages = 10
+    # ---
+    number_start = number_of_pages - 2
+    number_end = number_start // 2
+    # ---
     total_pages = (total_logs + args.per_page - 1) // args.per_page
     start_log = (args.page - 1) * args.per_page + 1
     end_log = min(args.page * args.per_page, total_logs)
-    start_page = max(1, args.page - 2)
-    end_page = min(start_page + 4, total_pages)
-    start_page = max(1, end_page - 4)
+    # ---
+    # start_page = max(1, args.page - 4)
+    # end_page = min(start_page + 8, total_pages)
+    # start_page = max(1, end_page - 8)
+    # ---
+    start_page = max(1, args.page - number_end)
+    end_page = min(start_page + number_start, total_pages)
+    start_page = max(1, end_page - number_start)
 
     return {
         "total_pages": total_pages,
@@ -83,24 +94,29 @@ def find_logs(request):
         "lemma",
         "pos",
         "pos_cat",
-        "Lid",
+        "wd_id",
         "sama_lemma_id",
         "sama_lemma",
     ]
     # ---
     order_by = "lemma_id" if args.order_by not in order_by_types else args.order_by
     # ---
-    logs = logs_db.get_all(args.per_page, args.offset, args.order, order_by=order_by, table_name=args.table_name)
+    logs = logs_db.get_all(args.per_page, args.offset, args.order, order_by=order_by, table_name=args.table_name, filter_data=args.filter_data)
     # ---
     # Convert to list of dicts
     log_list = logs
     # ---
-    total_logs = logs_db.count_all(table_name=args.table_name)
+    total_logs_data = logs_db.count_all(table_name=args.table_name)
+    # ---
+    all_logs = total_logs_data.get("all", 0)
+    # ---
+    if args.filter_data in total_logs_data:
+        all_logs = total_logs_data[args.filter_data]
     # ---
     table_new = {
         "db_path": args.db_path,
         "table_name": args.table_name,
-        "total_logs": f"{total_logs:,}",
+        "total_logs": f"{all_logs:,}",
         "order": args.order,
         "order_by": order_by,
         "per_page": args.per_page,
@@ -109,7 +125,7 @@ def find_logs(request):
     }
     # ---
     # Pagination calculations
-    Pagination = make_Pagination(args, total_logs)
+    Pagination = make_Pagination(args, all_logs)
     # ---
     table_new.update(Pagination)
     # ---
@@ -117,11 +133,14 @@ def find_logs(request):
     # ---
     # if "Category" not in status_table: status_table.append("Category")
     # ---
+    total_logs_data_formated = {key: f"{value:,}" for key, value in total_logs_data.items()}
+    # ---
     result = {
         "dbs": args.dbs,
         "logs": log_list,
         "order_by_types": order_by_types,
         "tab": table_new,
+        "total_logs_data": total_logs_data_formated,
         "status_table": [],
     }
     # ---

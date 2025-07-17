@@ -11,13 +11,13 @@ function show_random(data) {
         const item = data[randomIndex];
         if (item && item.id) {
             $("#wikidatasearch_label").text(item.label);
-            $("#Lid").val(item.id);
+            $("#wd_id").val(item.id);
         }
     }
 }
 
 function randomCategory() {
-    $("#Lid").removeClass("alert-danger");
+    $("#wd_id").removeClass("alert-danger");
 
     // اختيار حرف عربي عشوائي
     const query = getRandomArabicLetter();

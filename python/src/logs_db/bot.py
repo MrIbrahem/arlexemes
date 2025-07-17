@@ -41,11 +41,15 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
 
 def count_all(table_name="P11038_lemmas"):
     # ---
-    query = f"SELECT COUNT(*) FROM {table_name}"
+    query = f"""
+    SELECT
+        COUNT(*) AS total,
+        COUNT(CASE WHEN wd_id IS NOT NULL AND wd_id != '' THEN 1 END) AS with_lid,
+        COUNT(CASE WHEN wd_id IS NULL OR wd_id = '' THEN 1 END) AS without_lid
+    FROM {table_name}
+    """
     # ---
-    params = []
-    # ---
-    result = fetch_all(query, params, fetch_one=True)
+    result = fetch_all(query, [], fetch_one=True)
     # ---
     if not result:
         return 0
@@ -53,15 +57,16 @@ def count_all(table_name="P11038_lemmas"):
     if isinstance(result, list):
         result = result[0]
     # ---
-    total_logs = result["COUNT(*)"]
+    data = {
+        "all": result["total"],
+        "with": result["with_lid"],
+        "without": result["without_lid"],
+    }
     # ---
-    return total_logs
+    return data
 
 
-def get_logs(per_page=10, offset=0, order="DESC", order_by="timestamp", table_name="P11038_lemmas"):
-    # ---
-    if order not in ["ASC", "DESC"]:
-        order = "DESC"
+def get_logs(per_page=0, offset=0, order="DESC", order_by="timestamp", table_name="P11038_lemmas"):
     # ---
     query = f"SELECT * FROM {table_name} "
     # ---
@@ -76,12 +81,14 @@ def get_logs(per_page=10, offset=0, order="DESC", order_by="timestamp", table_na
     return logs
 
 
-def get_all(per_page=10, offset=0, order="DESC", order_by="id", table_name="P11038_lemmas"):
-    # ---
-    if order not in ["ASC", "DESC"]:
-        order = "DESC"
+def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="P11038_lemmas", filter_data="all"):
     # ---
     query = f"SELECT * FROM {table_name} "
+    # ---
+    if filter_data == "with":
+        query += " WHERE (wd_id IS NOT NULL AND wd_id != '') "
+    elif filter_data == "without":
+        query += " WHERE (wd_id IS NULL OR wd_id = '') "
     # ---
     params = []
     # ---
@@ -102,7 +109,7 @@ def select(data={}, table_name="P11038_lemmas", limit=0, offset=0, order="DESC",
         "lemma",
         "pos",
         "pos_cat",
-        "Lid",
+        "wd_id",
         "sama_lemma_id",
         "sama_lemma",
     ]
@@ -113,8 +120,17 @@ def select(data={}, table_name="P11038_lemmas", limit=0, offset=0, order="DESC",
     # ---
     for key, value in data.items():
         if key in types:
-            expend_query.append(f"{key} = ?")
-            params.append(value)
+            line = f"{key} = ?"
+            # ---
+            if value == "null":
+                line = f"({key} IS NULL OR {key} = '')"
+            elif value == "not null":
+                line = f"({key} IS NOT NULL AND {key} != '')"
+            elif value != "":
+                line = f"({key} = '')"
+                params.append(value)
+            # ---
+            expend_query.append(line)
     # ---
     query = query + " AND ".join(expend_query)
     # ---

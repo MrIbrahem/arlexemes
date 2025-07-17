@@ -28,7 +28,7 @@
     $(document).ready(function () {
         // if ?lex=324 in url then load it setExample
         const urlParams = new URLSearchParams(window.location.search);
-        const lex = urlParams.get('Lid');
+        const lex = urlParams.get('wd_id');
         if (lex) {
             setExample(lex);
         }

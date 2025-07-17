@@ -61,11 +61,12 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             lemma_id INTEGER NOT NULL,
             lemma TEXT NOT NULL,
-            pos TEXT NULL,
-            pos_cat TEXT NULL,
-            Lid TEXT NULL,
-            sama_lemma_id INTEGER NULL,
-            sama_lemma TEXT NULL,
+            pos TEXT NULL DEFAULT '',
+            pos_cat TEXT NULL DEFAULT '',
+            sama_lemma_id INTEGER NULL  DEFAULT '',
+            sama_lemma TEXT NULL  DEFAULT '',
+            wd_id TEXT NULL DEFAULT '',
+            wd_id_category TEXT NULL DEFAULT '',
             UNIQUE(lemma, lemma_id)
         );
         """

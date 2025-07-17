@@ -15,6 +15,7 @@ from .bot import (
 )
 
 from .insert import (
+    update_lemma,
     insert_lemma,
     insert_multi_lemmas,
 )
@@ -28,6 +29,7 @@ __all__ = [
     "get_logs",
     "count_all",
     "insert_lemma",
+    "update_lemma",
     "insert_multi_lemmas",
     "get_all",
 ]

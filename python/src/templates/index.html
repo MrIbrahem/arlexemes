@@ -17,7 +17,7 @@
                 <div class="col-md-12">
                     <div class="form-group mb-2">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label for="Lid" class="form-label fw-bold mb-2">
+                            <label for="wd_id" class="form-label fw-bold mb-2">
                                 <i class="fas fa-link ms-2"></i> ابحث عن مفردة
                                 <div class="spinner-border spinner-border-sm" id="autocomplete_loading" role="status"
                                     style="display: none;">
@@ -30,7 +30,7 @@
                         </div>
                         <span id="wikidatasearch_label"></span>
                         <div class="input-group input-group-lg">
-                            <input type="text" id="Lid" required name="Lid" class="form-control input-group-input"
+                            <input type="text" id="wd_id" required name="wd_id" class="form-control input-group-input"
                                 placeholder="كتب" value="">
                         </div>
                         <div id="autocomplete-results" class="autocomplete-results"></div>
@@ -78,7 +78,7 @@
 <script src="{{ url_for('static', filename='random.js') }}"></script>
 <script>
     function setLabel(lexeme) {
-        $("#Lid").val(lexeme);
+        $("#wd_id").val(lexeme);
     }
     $(function () {
         load_search(setLabel);

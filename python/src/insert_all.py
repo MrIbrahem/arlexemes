@@ -22,7 +22,7 @@ def instert_multi(data):
 
 
 def in_sql():
-    # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'Lid': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
+    # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'wd_id': '', 'wd_id_category': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
     # ---
     result = get_all(table_name="P11038_lemmas")
     # ---
@@ -43,7 +43,7 @@ def get_data():
     # ---
     insql = in_sql()
     # ---
-    to_add = {x : y for x, y in tab.items() if x not in insql}
+    to_add = {lemma_id : y for lemma_id, y in tab.items() if lemma_id not in insql}
     # ---
     # sort to_add by sama_lemma_id
     to_add = {x : y for x, y in sorted(to_add.items(), key=lambda item: (item[1]['sama_lemma'] or ""), reverse=True)}
@@ -98,7 +98,8 @@ def start():
             "sama_lemma_id": y['sama_lemma_id'] or "",
             "sama_lemma": sama_lemma,
 
-            "Lid": "",
+            "wd_id": "",
+            "wd_id_category": "",
         }
         # ---
         to_send.append(params)
