@@ -3,8 +3,10 @@
 from .db import (
     init_db,
     db_commit,
+    delete_all,
 )
 from .bot import (
+    select,
     fetch_all,
     count_all,
     get_logs,
@@ -17,8 +19,10 @@ from .insert import (
     insert_multi_lemmas,
 )
 __all__ = [
+    "select",
     "change_db_path",
     "db_commit",
+    "delete_all",
     "init_db",
     "fetch_all",
     "get_logs",

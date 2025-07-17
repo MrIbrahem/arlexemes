@@ -37,11 +37,16 @@ def change_db_path(file):
     return dbs
 
 
-def db_commit(query, params=[]):
+def db_commit(query, params=[], many=False):
     try:
         with sqlite3.connect(db_path_main[1]) as conn:
             cursor = conn.cursor()
-            cursor.execute(query, params)
+
+            if many:  # في حالة إذا كانت هناك العديد من المدخلات
+                cursor.executemany(query, params)  # استخدام executemany لإدخال العديد من السجلات
+            else:
+                cursor.execute(query, params)  # استخدام execute للإدخال الفردي
+
         conn.commit()
         return True
 
@@ -64,6 +69,13 @@ def init_db():
             UNIQUE(lemma, lemma_id)
         );
         """
+    db_commit(query)
+
+
+def delete_all(table_name="P11038_lemmas"):
+    # ---
+    query = f"DELETE FROM {table_name}"
+    # ---
     db_commit(query)
 
 

@@ -13,7 +13,7 @@ import logs_bot
 @app.route("/api/logs", methods=["GET"])
 def logs_api():
     # ---
-    result = logs_bot.view_logs(request)
+    result = logs_bot.find_logs(request)
     # ---
     return jsonify(result)
 
@@ -21,7 +21,7 @@ def logs_api():
 @app.route("/logs1", methods=["GET"])
 def view_logs():
     # ---
-    result = logs_bot.view_logs(request)
+    result = logs_bot.find_logs(request)
     # ---
     return render_template("logs.html", result=result)
 

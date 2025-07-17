@@ -21,10 +21,7 @@ def get_args(request):
     order = request.args.get("order", "desc").upper()
     order_by = request.args.get("order_by", "response_count")
     # ---
-    day = request.args.get("day", "")
-    # ---
-    status = request.args.get("status", "")
-    like = request.args.get("like", "")
+    filter_data = request.args.get("filter_data", "")
     # ---
     table_name = request.args.get("table_name", "")
     # ---
@@ -52,10 +49,8 @@ def get_args(request):
         "offset": offset,
         "order": order,
         "order_by": order_by,
-        "day": day,
-        "status": status,
-        "like": like,
         "table_name": table_name,
+        "filter_data": filter_data,
     }
     # ---
     return SimpleNamespace(**args)
@@ -78,7 +73,7 @@ def make_Pagination(args, total_logs):
     }
 
 
-def view_logs(request):
+def find_logs(request):
     # ---
     args = get_args(request)
     # ---
@@ -95,17 +90,12 @@ def view_logs(request):
     # ---
     order_by = "lemma_id" if args.order_by not in order_by_types else args.order_by
     # ---
-    status = "All"
-    # ---
-    logs = logs_db.get_all(args.per_page, args.offset, args.order, order_by=order_by, status=args.status, table_name=args.table_name)
+    logs = logs_db.get_all(args.per_page, args.offset, args.order, order_by=order_by, table_name=args.table_name)
     # ---
     # Convert to list of dicts
     log_list = logs
     # ---
-    total_logs = logs_db.count_all(status=args.status, table_name=args.table_name, like=args.like)
-    # ---
-    if status == "":
-        status = "All"
+    total_logs = logs_db.count_all(table_name=args.table_name)
     # ---
     table_new = {
         "db_path": args.db_path,
@@ -115,9 +105,7 @@ def view_logs(request):
         "order_by": order_by,
         "per_page": args.per_page,
         "page": args.page,
-        "status": args.status,
-        "like": args.like,
-        "day": args.day,
+        "filter_data": args.filter_data,
     }
     # ---
     # Pagination calculations

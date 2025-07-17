@@ -4,10 +4,8 @@
 from .logs_db.bot import change_db_path, fetch_all
 
 """
-import re
-
 from .db import change_db_path as _change_db_path, fetch_all
-from .insert import insert_lemma
+# from .insert import insert_lemma
 
 """
 
@@ -41,7 +39,7 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
     return query, params
 
 
-def count_all(status="", table_name="P11038_lemmas", like=""):
+def count_all(table_name="P11038_lemmas"):
     # ---
     query = f"SELECT COUNT(*) FROM {table_name}"
     # ---
@@ -60,7 +58,7 @@ def count_all(status="", table_name="P11038_lemmas", like=""):
     return total_logs
 
 
-def get_logs(per_page=10, offset=0, order="DESC", order_by="timestamp", status="", table_name="P11038_lemmas", like="", day=""):
+def get_logs(per_page=10, offset=0, order="DESC", order_by="timestamp", table_name="P11038_lemmas"):
     # ---
     if order not in ["ASC", "DESC"]:
         order = "DESC"
@@ -78,7 +76,7 @@ def get_logs(per_page=10, offset=0, order="DESC", order_by="timestamp", status="
     return logs
 
 
-def get_all(per_page=10, offset=0, order="DESC", order_by="id", status="", table_name="P11038_lemmas"):
+def get_all(per_page=10, offset=0, order="DESC", order_by="id", table_name="P11038_lemmas"):
     # ---
     if order not in ["ASC", "DESC"]:
         order = "DESC"
@@ -94,11 +92,31 @@ def get_all(per_page=10, offset=0, order="DESC", order_by="id", status="", table
     return logs
 
 
-def select(table_name="P11038_lemmas", limit=0, offset=0, order="DESC", order_by="id", **kwargs):
+def select(data={}, table_name="P11038_lemmas", limit=0, offset=0, order="DESC", order_by="id"):
     # ---
-    query = f"SELECT * FROM {table_name} "
+    query = f"SELECT * FROM {table_name} WHERE "
+    # ---
+    types = [
+        "id",
+        "lemma_id",
+        "lemma",
+        "pos",
+        "pos_cat",
+        "Lid",
+        "sama_lemma_id",
+        "sama_lemma",
+    ]
     # ---
     params = []
+    # ---
+    expend_query = []
+    # ---
+    for key, value in data.items():
+        if key in types:
+            expend_query.append(f"{key} = ?")
+            params.append(value)
+    # ---
+    query = query + " AND ".join(expend_query)
     # ---
     query, params = add_order_limit_offset(query, params, order_by, order, limit, offset)
     # ---

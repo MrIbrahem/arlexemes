@@ -4,14 +4,16 @@
 from .insert import insert_lemma
 
 """
-
+from .db import db_commit, init_db
+"""
 try:
     from .db import db_commit, init_db
 except ImportError:
     from db import db_commit, init_db
+"""
 
 
-def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", Lid="", sama_lemma_id=0, sama_lemma=""):
+def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", sama_lemma_id=0, sama_lemma="", Lid=""):
     # ---
     query = """
         INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, Lid)
@@ -30,6 +32,8 @@ def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", Lid="", sama_lemma_id
             Lid = COALESCE(NULLIF(excluded.Lid, ''), P11038_lemmas.Lid)
     """
     # ---
+    if lemma.strip() == sama_lemma.strip():
+        print(f"lemma.strip() == sama_lemma.strip(): {lemma.strip()} == {sama_lemma.strip()}")
     # ---
     params = (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, Lid)
     # ---
@@ -58,7 +62,7 @@ def insert_multi_lemmas(data):
     # ---
     params = [(x['lemma_id'], x['lemma'], x['pos'], x['pos_cat'], x['sama_lemma_id'], x['sama_lemma'], x['Lid']) for x in data]
     # ---
-    result = db_commit(query, params)
+    result = db_commit(query, params, many=True)
     # ---
     if result is not True:
         print(f"Error logging request: {result}")
