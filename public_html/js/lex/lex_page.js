@@ -4,7 +4,7 @@ function make_to_display(formsToProcess, to_dis) {
     let displayHtml = ""; // تم تغيير اسم المتغير ليكون أكثر وضوحًا لمحتواه
 
     for (const form of formsToProcess) {
-        const formId = form.id;
+        const formId = form?.id || "L000-F0";
         const value = form.representations?.ar?.value;
         const feats = form.grammaticalFeatures || [];
 
@@ -48,19 +48,36 @@ function fix_it2(lemma) {
     return new_lemma;
 }
 
-async function fetchLexeme(id, entity) {
+function add_page_title(id, lemma) {
+
+    document.title += ` ${id} - ${lemma}`;
+    // ---
+    let lemma2 = fix_it2(lemma);
+    // ---
+    let lemma_link_tag = $("#lemma_link");
+    // ---
+    if (lemma_link_tag) {
+        lemma_link_tag.html(`<a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary font-weight-bold" id="lemma_link">${lemma}</a>`);
+    }
+    // ---
+    let lemma_link_en = $("#lemma_link_en");
+    // ---
+    if (lemma_link_en) {
+        lemma_link_en.html(`
+        <span id="lemma_link_en">
+        (<a href="https://en.wiktionary.org/wiki/${lemma2}" target="_blank" class="text-primary font-sm">en</a>)
+        </span>
+    `);
+        // ---
+    }
+}
+async function fetchLexemeById(id, entity) {
 
     const Category = entity.lexicalCategory ?? "";
 
     const lemma = entity.lemmas?.ar?.value || "(غير متوفر)";
     // add lemma to title of the page
-
-    document.title += ` ${id} - ${lemma}`;
-    let lemma2 = fix_it2(lemma);
-    $("#header_main").html(`تحليل:
-                <a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary font-weight-bold">${lemma}</a>
-                (<a href="https://en.wiktionary.org/wiki/${lemma2}" target="_blank" class="text-primary font-sm">en</a>)
-            `);
+    add_page_title(id, lemma);
 
     const lexicalCategory = entity.lexicalCategory ? wdlink(entity.lexicalCategory) : "";
     const language = entity.language ? wdlink(entity.language) : "";
@@ -117,7 +134,7 @@ async function start_lexeme(id) {
 
     let entity = await getentity(id);
 
-    let html = await fetchLexeme(id, entity);
+    let html = await fetchLexemeById(id, entity);
 
     output.innerHTML = html;
 

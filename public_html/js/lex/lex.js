@@ -103,7 +103,7 @@ function attrFormatter(qid) {
 
 function entryFormatter(form) {
     // return `! ${form}`;
-    const formId = form.id;
+    const formId = form?.id || "L000-F0";
     let value = form.representations?.ar?.value || "";
 
     if (!value) {
