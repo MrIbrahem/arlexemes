@@ -1,3 +1,4 @@
+let display_empty_cells = true;
 
 // قاموس لربط مفاتيح ويكيداتا بالتسميات العربية
 let keyLabels = {
