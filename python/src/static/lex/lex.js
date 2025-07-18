@@ -337,7 +337,8 @@ async function adj_and_nouns(entity_type, entity) {
     let numberKeys = singular_plural_dual;
 
     let rowKeys = Pausal_Forms;
-    let genderKeys, colKeys;
+    let genderKeys = [""];
+    let colKeys = [""];
 
     if (entity_type === "Q1084") {
         genderKeys = [""];

@@ -15,7 +15,7 @@
             <div class="input-group mb-3">
                 <input type="text" id="lexemeId" class="form-control" placeholder="أدخل معرف مثل L1467242"
                     value="L1467242">
-                <button class="btn btn-primary" onclick="fetchLexeme()">تحميل</button>
+                <button class="btn btn-primary" onclick="start_lexeme()">تحميل</button>
             </div>
         </div>
     </div>
@@ -23,8 +23,19 @@
 
 </div>
 <script src="{{ url_for('static', filename='lex/lex.js') }}"></script>
+<script src="{{ url_for('static', filename='lex/fetch.js') }}"></script>
 <script src="{{ url_for('static', filename='lex/lex_page.js') }}"></script>
 <script>
+    async function start_lexeme_wrap() {
+        const id = document.getElementById("lexemeId").value.trim();
+        if (!id) return;
+        await start_lexeme(id);
+    }
+    function setExample(lexeme) {
+        document.getElementById('lexemeId').value = lexeme;
+        start_lexeme(lexeme);
+    }
+
     $(document).ready(function () {
         // if ?lex=324 in url then load it setExample
         const urlParams = new URLSearchParams(window.location.search);

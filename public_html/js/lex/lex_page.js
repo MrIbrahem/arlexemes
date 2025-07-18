@@ -36,34 +36,6 @@ function make_to_display(formsToProcess, to_dis) {
     return displayHtml;
 }
 
-function setExample(lexeme) {
-    document.getElementById('lexemeId').value = lexeme;
-    start_exeme(lexeme);
-}
-
-async function getentity(id) {
-    let entity;
-    let output = document.getElementById("output");
-    const url = `https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=${id}&origin=*`;
-
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        entity = data.entities[id];
-        if (!entity) {
-            output.innerHTML = "<div class='alert alert-danger'>لم يتم العثور على الكيان المطلوب.</div>";
-            return [];
-        }
-
-    } catch (err) {
-        console.error(err);
-        output.innerHTML = "<div class='alert alert-danger'>حدث خطأ أثناء جلب البيانات.</div>";
-    }
-
-    return entity;
-}
-
 function fix_it2(lemma) {
     // ---
     if (!lemma || typeof lemma !== 'string') return '';
@@ -121,16 +93,22 @@ async function fetchLexeme(id, entity) {
     `;
 
 
+    let table_html = "";
     if (typeof window[Category] === "function") {
-        html += await window[Category](entity);
+        table_html = await window[Category](entity);
         // $("#main_table").DataTable({ searching: false });
     } else {
-        html = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
+        table_html = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
+    }
+    if (table_html) {
+        html += table_html;
+    } else {
+        html += `<div class='alert alert-warning'>لا يوجد بيانات</div>`
     }
     return html;
 }
 
-async function start_exeme(id) {
+async function start_lexeme(id) {
     // const id = document.getElementById("lexemeId").value.trim();
     // if (!id) return;
 

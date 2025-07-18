@@ -74,8 +74,7 @@
     </style>
 </head>
 
-<body class="bg-light p-4 text-end" dir="rtl">
-
+<body class="p-4 bg-light text-end" dir="rtl">
     <div class="container-fluid">
 
         <div class="row">
@@ -121,7 +120,7 @@
                 <div class="input-group mb-3">
                     <input type="text" id="lexemeId" class="form-control" placeholder="أدخل معرف مثل L1467242"
                         value="L1467242">
-                    <button class="btn btn-primary" onclick="start_exeme()">تحميل</button>
+                    <button class="btn btn-primary" onclick="start_lexeme_wrap()">تحميل</button>
                 </div>
             </div>
             <div class="col-md-2">
@@ -145,13 +144,26 @@
                 </div>
             </div>
         </div>
+        <div id="errors"></div>
         <div id="output"></div>
 
     </div>
     <script src="js/autocomplete.js"></script>
+    <script src="js/lex/fetch.js"></script>
     <script src="js/lex/lex.js"></script>
     <script src="js/lex/lex_page.js"></script>
     <script>
+
+        async function start_lexeme_wrap() {
+            const id = document.getElementById("lexemeId").value.trim();
+            if (!id) return;
+            await start_lexeme(id);
+        }
+        function setExample(lexeme) {
+            document.getElementById('lexemeId').value = lexeme;
+            start_lexeme(lexeme);
+        }
+
         $(document).ready(function () {
             // if ?lex=324 in url then load it setExample
             const urlParams = new URLSearchParams(window.location.search);
