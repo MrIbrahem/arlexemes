@@ -69,6 +69,13 @@ const gender_Keys_global = ["Q499327", "Q1775415", ""];
 
 const Pausal_Forms = ["Q117262361", "Q131105", "Q146078", "Q146233", ""];
 
+function empty_cells() {
+    if (display_empty_cells) {
+        return "";
+    }
+    return false;
+}
+
 function wdlink_2(id) {
     if (!id || id === "") return "";
     let label = keyLabels[id] ? keyLabels[id] : id;
@@ -120,61 +127,146 @@ function entryFormatter(form) {
     // ---
     const feats = form.grammaticalFeatures || [];
     let attr = feats.map(attrFormatter).join("\n");
-    let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
+    // ---
+    // let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
+    // ---
+    let link = `
+		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
+			<span word="${value}">${value}</span>
+			<small>(${formId_number})</small>
+		</a>`;
     // ---
     return link;
 }
 
+function make_thead(first_rows, second_rows, first_person, dual) {
+    let thead = `
+        <tr data-dt-order="disable">
+            <th colspan="2"></th>
+    `;
+
+    // الصف الأول من الرؤوس
+    for (const gender of first_rows) {
+        // ---
+        let colspan = second_rows.length;
+        // ---
+        if (second_rows.includes(first_person) && gender === dual) {
+            colspan -= 1;
+        }
+        // ---
+        if (!display_empty_cells && second_rows.includes("")) {
+            colspan -= 1;
+        }
+        // ---
+        const headerText = (first_rows.length === 1 && gender === "") ? "النوع" : wdlink_2(gender);
+        // ---
+        if (!display_empty_cells && gender === "" && first_rows.length > 1) continue;
+        // ---
+        thead += `
+            <th colspan="${colspan}">${headerText}</th>
+        `;
+    }
+
+    thead += `
+        </tr>
+        <tr>
+            <th data-dt-order="disable"></th> <!-- Top-left empty cell, spans two rows -->
+            <th data-dt-order="disable">الحالة</th> <!-- Case header (الحالة), spans two rows -->
+    `;
+
+    // الصف الثاني من الرؤوس
+    for (const gender of first_rows) {
+        // ---
+        if (!display_empty_cells && gender === "" && first_rows.length > 1) continue;
+        // ---
+        for (const col of second_rows) {
+            // ---
+            if (!display_empty_cells && col === "") continue;
+            // ---
+            if (col === first_person && gender === dual) {
+                // تجاهل هذه الخلية
+                continue;
+            }
+            // ---
+            let text = wdlink_2(col);
+            // ---
+            thead += `
+                <th>${text}</th>
+            `;
+        }
+    }
+
+    thead += `
+        </tr>
+    `;
+
+    return thead;
+}
+
+function right_side_th(i, number, row, row_Keys) {
+    let add_to_tbody = "";
+
+    // Add the number header (مفرد or جمع) in the first column, spanning all case rows
+    if (i === 0) {
+        // ---
+        let text = wdlink_2(number);
+        // ---
+        let rowspan = row_Keys.length;
+        // ---
+        if (!display_empty_cells && row_Keys.includes("")) {
+            rowspan -= 1;
+        };
+        // ---
+        let add_th = `
+            <th rowspan="${rowspan}" class="table-light">${text}</th>
+        `;
+        // ---
+        if (!display_empty_cells && number === "") add_th = "";
+        // ---
+        add_to_tbody += add_th;
+    }
+    // ---
+    let text2 = wdlink_2(row);
+    // ---
+    let add_th2 = `
+        <th>${text2}</th>
+    `;
+    // ---
+    if (!display_empty_cells && row === "") add_th2 = "";
+    // ---
+    // Add the case header (e.g., رفع) in the second column
+    add_to_tbody += add_th2;
+    // ---
+    return add_to_tbody;
+}
 // Function to generate the HTML table from structured data
 function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header) {
 
-    let html = `
-        <table id="main_table" class="table display table-bordered table-striped table-sm table-hover text-center">
-            <thead class="table-light">
-                <tr>
-                    <th rowspan="2" class="align-middle"></th> <!-- Top-left empty cell, spans two rows -->
-                    <th rowspan="2" class="align-middle">الحالة</th> <!-- Case header (الحالة), spans two rows -->
-        `;
-    // ---
     let first_person = "Q21714344";
     let second_person = "Q51929049";
     let dual = "Q110022";
     let singular = "Q110786";
     let plural = "Q146786";
     // ---
+    let Masculine = "Q499327";
+    let Feminine = "Q1775415";
+    // ---
     let number_Keys = first_collumn;
     let gender_Keys = first_rows;
     let col_Keys = second_rows;
     let row_Keys = second_collumn;
     // ---
-    html += gender_Keys.map(gender => {
-        const headerText = (gender_Keys.length === 1 && gender === "") ? "النوع" :
-            wdlink_2(gender);
-        let colspan = col_Keys.length;
-        if (col_Keys.includes(first_person) && gender === dual) colspan = colspan - 1;
-        return `<th colspan="${colspan}">${headerText}</th>`;
-    }).join("")
+    let thead = make_thead(gender_Keys, col_Keys, first_person, dual);
     // ---
-    html += `
-        </tr>
-        <tr>
-        `;
-    // ---
-    html += gender_Keys.map(gender =>
-        col_Keys.map(col => (col === first_person && gender === dual) ? "" : `<th>${wdlink_2(col)}</th>`).join("")
-    ).join("")
-    // ---
-    html += `
-            </tr>
-        </thead>
-        <tbody>`;
-
     let tbody = "";
 
     // Iterate through number categories (مفرد, جمع)
     for (const number of number_Keys) {
+        // ---
+        if (!display_empty_cells && number === "") continue;
+        // ---
         // Check if there is any data for this number category to avoid empty sections
-        const hasNumberData = row_Keys.some(row =>
+        let hasNumberData = row_Keys.some(row =>
             gender_Keys.some(gender =>
                 col_Keys.some(col => (tableData[number][row][col][gender] || []).length > 0)
             )
@@ -186,66 +278,95 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         // Iterate through case rows (وقف, رفع, نصب, إضافة) for each number category
         for (let i = 0; i < row_Keys.length; i++) {
             const row = row_Keys[i];
-            tbody += "<tr>";
-
-            // Add the number header (مفرد or جمع) in the first column, spanning all case rows
-            if (i === 0) {
-                tbody += `<th rowspan="${row_Keys.length}" class="table-light align-middle">${wdlink_2(number)}</th>`;
-            }
-
-            // Add the case header (e.g., رفع) in the second column
-            tbody += `<th class="table-light">${wdlink_2(row)}</th>`;
+            // ---
+            if (!display_empty_cells && row === "") continue;
+            // ---
+            let add_to_tbody = right_side_th(i, number, row, row_Keys);
 
             // Add the data cells for each gender and column type
             for (const gender of gender_Keys) {
+                // ---
+                if (!display_empty_cells && gender === "" && gender_Keys.length > 1) continue;
+                // ---
                 let gender_tds = "";
                 for (const col of col_Keys) {
 
                     if (col === first_person && gender === dual) continue;
 
+                    // ---
+                    if (!display_empty_cells && col === "") continue;
+                    // ---
                     let td = `<td>`;
                     let entries = tableData[number][row][col][gender] || [];
                     // ---
                     let check_1 = col === first_person && (gender === singular || gender === plural);
                     let check_2 = col === second_person && gender === dual;
                     // ---
-
                     if (check_1 || check_2) {
                         if (singular_fixed[gender]) continue;
-                        let fem_entries = tableData[number]["Q1775415"][col][gender] || [];
+                        let fem_entries = tableData[number][Feminine][col][gender] || [];
                         let third_entries = tableData[number][""][col][gender] || [];
-                        if (row === "Q499327" && third_entries.length > 0 && entries.length == 0 && fem_entries.length == 0) {
+                        if (row === Masculine && third_entries.length > 0 && entries.length == 0 && fem_entries.length == 0) {
                             entries = third_entries;
                             singular_fixed[gender] = true;
-                            td = `<td rowspan="3" class="table-light align-middle">`;
+                            // ---
+                            let rowspan = (display_empty_cells) ? 3 : 2;
+                            // ---
+                            td = `
+                                <td rowspan="${rowspan}">
+                            `;
                         }
                     };
                     // ---
                     td += entries.map(entryFormatter).join("<br>") || "";
-                    td += `</td>`;
+                    td += `
+                        </td>
+                    `;
 
                     gender_tds += td
                 }
-                tbody += gender_tds;
+                add_to_tbody += gender_tds;
             }
-
-            tbody += "</tr>";
+            if (add_to_tbody !== "") {
+                tbody += `
+                    <tr>
+                    ${add_to_tbody}
+                    </tr>
+                `;
+            }
         }
     }
 
     if (tbody === "") return "";
 
-    html += tbody;
-    html += "</tbody></table>";
+    // table-striped
+
+    let html = `
+        <table idx="main_table" class="table table-bordered table-sm table-hover text-center align-middle pages_table">
+            <thead class="table-light">
+                ${thead}
+            </thead>
+            <tbody>
+                ${tbody}
+            </tbody>
+        </table>
+        `;
     // ---
     let card = `
-        <div class="card">
-            <div class="card-header">${title_header || ""}</div>
-            <div class="card-body">${html}</div>
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="card-title">
+                    ${title_header || ""}
+                </div>
+            </div>
+            <div class="card-body">
+            ${html}
+            </div>
         </div>
     `
     return card;
 }
+
 function removeKeyIfNotFound(colKeys, forms, keyToRemove) {
     let found = false;
 
@@ -304,16 +425,16 @@ async function Q24905(entity) {
     for (const form of forms) {
         const feats = form.grammaticalFeatures || [];
         // البحث عن المطابقة، إذا لم يتم العثور عليها، استخدم المفتاح الفارغ ""
+
         const verb = verbs_main.find(n => feats.includes(n)) || "";
         const number = numberKeys.find(n => feats.includes(n)) || "";
         const row = rowKeys.find(r => feats.includes(r)) || "";
 
         const gender = genderKeys.find(g => feats.includes(g)) || "";
         const col = colKeys.find(c => feats.includes(c)) || "";
-
+        // ---
         tableData[verb][number][row][col][gender].push(form);
         // ---
-        // }
     }
     let result = "";
     // ---

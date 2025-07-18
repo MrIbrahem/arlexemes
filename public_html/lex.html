@@ -24,6 +24,11 @@
     <script
         src='https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
     <style>
+        .pages_table,
+        .pages_table>thead>tr>th {
+            text-align: center ! important
+        }
+
         .table_text_right,
         .table_text_right>thead>tr>th {
             text-align: right
@@ -152,6 +157,8 @@
         <div id="output"></div>
 
     </div>
+    <script src="js/table_filter.js"></script>
+    <script src="js/lex/toggle_table.js"></script>
     <script src="js/autocomplete.js"></script>
     <script src="js/lex/fetch.js"></script>
     <script src="js/lex/lex.js"></script>

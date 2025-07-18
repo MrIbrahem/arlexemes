@@ -119,7 +119,12 @@ function entryFormatter(form) {
     // ---
     const feats = form.grammaticalFeatures || [];
     let attr = feats.map(attrFormatter).join("\n");
-    let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
+    // ---
+    let link = `
+		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
+			<span word="${value}">${value}</span>
+			<small>(${formId_number})</small>
+		</a>`;
     // ---
     return link;
 }
@@ -130,9 +135,8 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     let html = `
         <table id="main_table" class="table display table-bordered table-striped table-sm table-hover text-center">
             <thead class="table-light">
-                <tr>
-                    <th rowspan="2" class="align-middle"></th> <!-- Top-left empty cell, spans two rows -->
-                    <th rowspan="2" class="align-middle">الحالة</th> <!-- Case header (الحالة), spans two rows -->
+                <tr data-dt-order="disable">
+					<th colspan="2"></th>
         `;
     // ---
     let first_person = "Q21714344";
@@ -157,6 +161,8 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     html += `
         </tr>
         <tr>
+			<th class="align-middle"></th> <!-- Top-left empty cell, spans two rows -->
+			<th class="align-middle">الحالة</th> <!-- Case header (الحالة), spans two rows -->
         `;
     // ---
     html += gender_Keys.map(gender =>
