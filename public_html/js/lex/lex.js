@@ -1,98 +1,123 @@
 let display_empty_cells = true;
 
-// قاموس لربط مفاتيح ويكيداتا بالتسميات العربية
-let keyLabels = {
-    "Q1098772": "جمع تكسير",
+let ty = "";
 
-    "Q23663136": "ماضي تام",        // past
-    "Q56649265": "مضارع ناقص",      // imperfective
-    "Q473746": "مضارع منصوب",   // subjunctive
-
-    "Q462367": "مضارع مجزوم",             // jussive
-    "Q22716": "فعل أمر",            // imperative
-
-    "Q12230930": "فعل مضارع",       // fi'il muḍāri
-
-    "Q124351233": "أدائي",           // performative - إنجازي
-
-    "Q13955": "العربية",
-    "Q118465097": "الصيغة السياقية",
-
-    // الأعداد
-    "Q110786": "مفرد", // Singular
-    "Q110022": "مثنى",  // Dual
-    "Q146786": "جمع",   // Plural
-
-    // الحالات الإعرابية (Pausal Forms)
-    // "Q117262361": "مرفوع", // Nominative/Marfu'
-    // "Q131105": "منصوب",    // Accusative/Mansub
-    // "Q146078": "مجرور",     // Genitive/Majrur
-    // "Q146233": "مضارع مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
-    "Q117262361": "الوقف",
-    "Q131105": "رفع",
-    "Q146078": "نصب",
-    "Q146233": "إضافة",
-
-    // أنواع الاسم (Definiteness)
-    "Q53997851": "معرفة", // Definite
-    "Q53997857": "نكرة",  // Indefinite
-    "Q1641446": "مركب",  // Compound
-
-    // الأشخاص (Person) - للاستخدام المستقبلي إذا لزم الأمر
-    "Q21714344": "متكلم", // First Person
-    "Q51929049": "مخاطب",  // Second Person
-    "Q51929074": "غائب",   // Third Person
-
-    // الجنس (Gender) - للاستخدام المستقبلي إذا لزم الأمر
-    "Q499327": "مذكر", // Masculine
-    "Q1775415": "مؤنث", // Feminine
-
-    "Q111029": "جذر",
-    "Q1084": "اسم",
-    "Q24905": "فعل",
-    "Q34698": "صفة",
-
-    "Q1350145": "اسم مصدر",
-
-
-    "Q1194697": "فعل مبني للمجهول",
-    "Q1317831": "فعل مبني للمعلوم",
-
-
-};
+let Pausal_Forms = [
+    "Q117262361",
+    "Q131105",
+    "Q146078",
+    "Q146233",
+    ""
+];
 
 // مفرد مثنى جمع
 const singular_plural_dual = ["Q110786", "Q110022", "Q146786", ""];
 
-const first_second_third_person = ["Q21714344", "Q51929049", "Q51929074", ""];
+const first_second_third_person = [
+    "Q21714344",
+    "Q51929049",
+    "Q51929074",
+    ""
+];
 
 const gender_Keys_global = ["Q499327", "Q1775415", ""];
 
-const Pausal_Forms = ["Q117262361", "Q131105", "Q146078", "Q146233", ""];
+let numberKeys_verb = [
+    "Q23663136", // past
+    "Q56649265", // imperfective
+    "Q473746", // subjunctive
 
-function empty_cells() {
-    if (display_empty_cells) {
-        return "";
+    "Q462367", // jussive
+    "Q22716",  // imperative
+
+    "Q12230930", // fi'il muḍāri'
+
+    "Q124351233", // أدائي
+    ""
+];
+
+
+function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
+    const featuresSet = new Set();
+
+    // اجمع كل grammaticalFeatures الموجودة في جميع forms
+    for (const form of forms) {
+        const feats = form.tags || form.grammaticalFeatures || [];
+        feats.forEach(f => featuresSet.add(f));
     }
-    return false;
+
+    // تحقق لكل مفتاح: هل موجود في أي grammaticalFeatures؟
+    for (const key of keysToRemove) {
+        if (!featuresSet.has(key)) {
+            const index = colKeys.indexOf(key);
+            if (index > -1) {
+                colKeys.splice(index, 1);
+                console.log("removeKeysIfNotFound removed:", key);
+            }
+        }
+    }
+
+    return colKeys;
 }
 
-function wdlink_2(id) {
-    if (!id || id === "") return "";
-    let label = keyLabels[id] ? keyLabels[id] : id;
-    return `<a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary">${label}</a>`
+function wdlink_2(key) {
+    // ---
+    if (!key || key === "") return "";
+    // ---
+    let qid = "";
+    let label = "";
+    // ---
+    // if key start With Q
+    if (key.startsWith("Q")) {
+        qid = key;
+        label = keyLabels[qid] ? keyLabels[qid] : "";
+    } else {
+        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
+        label = grammaticalFeatures[key] ? grammaticalFeatures[key]["ar"] : key;
+    }
+    // ---
+    let numberKeys = [
+        "singular",     // مفرد
+        "dual",         // مثنى
+        "plural",       // جمع
+        "singulative",  // صيغة المفرد الفردي
+        "collective",   // صيغة الجمع الجماعي
+        "paucal",       // صيغة القلة
+        "perfective",   // تام
+
+        "broken-form",  // جمع تكسير
+        "sound-form",    // جمع سالم
+        "plural-sound-form", // جمع سالم
+        "plural-broken-form", // جمع تكسير
+
+        "singular invariable",
+        "plural invariable",
+
+    ];
+    // ---
+    let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
+    // ---
+    if (to_find.includes(key)) {
+        label = `${label}<br>${key}`
+    }
+    // ---
+    return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
 }
 
-function make_tableData(numberKeys, rowKeys, colKeys, genderKeys) {
+function make_tableData(number_Keys, row_Keys, col_Keys, gender_Keys) {
+    // ---
+    let first_person = ["first-person", "Q21714344"];
+    let dual = ["dual", "Q110022"];
+    // ---
     const tableData = {};
-    for (const num of numberKeys) {
+    for (const num of number_Keys) {
         tableData[num] = {};
-        for (const row of rowKeys) {
+        for (const row of row_Keys) {
             tableData[num][row] = {};
-            for (const col of colKeys) {
+            for (const col of col_Keys) {
                 tableData[num][row][col] = {};
-                for (const gender of genderKeys) {
-                    if (col === "Q21714344" && gender === "Q110022") continue;
+                for (const gender of gender_Keys) {
+                    if (first_person.includes(col) && dual.includes(gender)) continue;
                     tableData[num][row][col][gender] = [];
                 }
             }
@@ -100,33 +125,59 @@ function make_tableData(numberKeys, rowKeys, colKeys, genderKeys) {
     }
     return tableData;
 }
-function wdlink(id) {
-    if (!id || id === "") return "";
-    let label = keyLabels[id] ? `${keyLabels[id]} (${id})` : id;
-    return `<a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary">${label}</a>`
+
+function wdlink(key) {
+    // ---
+    if (!key || key === "") return "";
+    // ---
+    let qid = "";
+    // ---
+    // if key start With Q
+    if (key.startsWith("Q")) {
+        qid = key;
+    } else {
+        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
+    }
+    // ---
+    let label = keyLabels[qid] ? `${keyLabels[qid]} (${key})` : qid;
+    // ---
+    return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
 }
 
-function attrFormatter(qid) {
-    return (keyLabels[qid]) ? `${qid} - ${keyLabels[qid]}` : qid;
+function attrFormatter(key) {
+    // ---
+    if (!key || key === "") return "";
+    // ---
+    let qid = "";
+    // ---
+    // if key start With Q
+    if (key.startsWith("Q")) {
+        qid = key;
+    } else {
+        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
+    }
+    // ---
+    return (keyLabels[qid]) ? `${key} - ${keyLabels[qid]}` : key;
 }
 
 function entryFormatter(form) {
     // return `! ${form}`;
     const formId = form?.id || "L000-F0";
-    let value = form.representations?.ar?.value || "";
-
-    if (!value) {
+    let value = form.representations?.ar?.value || form?.form || "";
+    // ---
+    if (!value && form.representations) {
         const reps = Object.values(form.representations || {});
         for (const rep of reps) {
             value = rep.value;
             break; // خذ أول تمثيل متاح
         }
     }
+    // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
     const formId_number = formId.split("-")[1]; // Extract F-number part
     // ---
-    const feats = form.grammaticalFeatures || [];
+    const feats = form.tags || form.grammaticalFeatures || [];
     let attr = feats.map(attrFormatter).join("\n");
     // ---
     // let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
@@ -141,16 +192,18 @@ function entryFormatter(form) {
     // ---
     if (lexemeId === "L000") {
         link = `
-		<span title="${attr}">
+        <span title="${attr}">
 			<span word="${value}">${value}</span>
 			<small>(${formId_number})</small>
-		</span>`;
+        </span>
+        `;
     }
     // ---
     return link;
 }
 
 function make_thead(first_rows, second_rows, first_person, dual) {
+    // ---
     let thead = `
         <tr data-dt-order="disable">
             <th colspan="2"></th>
@@ -210,7 +263,7 @@ function make_thead(first_rows, second_rows, first_person, dual) {
     thead += `
         </tr>
     `;
-
+    // ---
     return thead;
 }
 
@@ -274,12 +327,14 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     // Iterate through number categories (مفرد, جمع)
     for (const number of number_Keys) {
         // ---
+        let number_data = tableData[number];
+        // ---
         if (!display_empty_cells && number === "") continue;
         // ---
         // Check if there is any data for this number category to avoid empty sections
         let hasNumberData = row_Keys.some(row =>
             gender_Keys.some(gender =>
-                col_Keys.some(col => (tableData[number][row][col][gender] || []).length > 0)
+                col_Keys.some(col => (number_data[row][col][gender] || []).length > 0)
             )
         );
 
@@ -308,15 +363,15 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     if (!display_empty_cells && col === "") continue;
                     // ---
                     let td = `<td>`;
-                    let entries = tableData[number][row][col][gender] || [];
+                    let entries = number_data[row][col][gender] || [];
                     // ---
                     let check_1 = col === first_person && (gender === singular || gender === plural);
                     let check_2 = col === second_person && gender === dual;
                     // ---
                     if (check_1 || check_2) {
                         if (singular_fixed[gender]) continue;
-                        let fem_entries = tableData[number][Feminine][col][gender] || [];
-                        let third_entries = tableData[number][""][col][gender] || [];
+                        let fem_entries = number_data[Feminine][col][gender] || [];
+                        let third_entries = number_data[""][col][gender] || [];
                         if (row === Masculine && third_entries.length > 0 && entries.length == 0 && fem_entries.length == 0) {
                             entries = third_entries;
                             singular_fixed[gender] = true;
@@ -378,62 +433,25 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     return card;
 }
 
-function removeKeyIfNotFound(colKeys, forms, keyToRemove) {
-    let found = false;
-
-    // Iterate through each form
-    for (const form of forms) {
-        // Check if grammaticalFeatures exist and is an array
-        const feats = form.grammaticalFeatures || [];
-
-        // Check if the keyToRemove exists in the current form's grammaticalFeatures
-        if (feats.includes(keyToRemove)) {
-            found = true;
-            break; // No need to continue searching once found
-        }
-    }
-
-    // If the keyToRemove was not found in any grammaticalFeatures, remove it from colKeys
-    if (!found) {
-        const index = colKeys.indexOf(keyToRemove);
-        if (index > -1) {
-            colKeys.splice(index, 1);
-        }
-    }
-
-    return colKeys;
-}
-
 /*
 
 Q24905 الأفعال
 
 */
 async function Q24905(entity) {
+    ty = "verb";
 
-    // "Q1194697": "فعل مبني للمجهول", "Q1317831": "فعل مبني للمعلوم",
-    // const numberKeys = ["Q1194697", "Q1317831"];
+    let forms = entity.forms || [];
 
     let verbs_main = ["Q1317831", "Q1194697", ""];
 
-    let numberKeys = [
-        "Q23663136", // past
-        "Q56649265", // imperfective
-        "Q473746", // subjunctive
-
-        "Q462367", // jussive
-        "Q22716",  // imperative
-
-        "Q12230930", // fi'il muḍāri'
-        "Q124351233", // أدائي
-        ""
-    ];
+    let numberKeys = numberKeys_verb;
 
     let rowKeys = gender_Keys_global;
 
     let colKeys = first_second_third_person; // Q21714344
 
-    let genderKeys = singular_plural_dual; // Q110022
+    let genderKeys = removeKeysIfNotFound([...singular_plural_dual], forms, ["Q110786", "Q110022", "Q146786"]);
 
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
@@ -441,11 +459,11 @@ async function Q24905(entity) {
     for (const verb of verbs_main) {
         tableData[verb] = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
     }
-    const forms = entity.forms || [];
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
-        const feats = form.grammaticalFeatures || [];
+        const feats = form.tags || form.grammaticalFeatures || [];
+
         // البحث عن المطابقة، إذا لم يتم العثور عليها، استخدم المفتاح الفارغ ""
 
         const verb = verbs_main.find(n => feats.includes(n)) || "";
@@ -464,7 +482,6 @@ async function Q24905(entity) {
         let verb2 = (verb !== "") ? verb : "فعل آخر";
         let verb_lab = wdlink(verb2);
         let caption = `<div class="text-center"><h3>${verb_lab}</h3></div>`;
-
         // Call the shared HTML generation function
         result += _generateHtmlTable(tableData[verb], numberKeys, rowKeys, colKeys, genderKeys, caption);
     }
@@ -473,39 +490,29 @@ async function Q24905(entity) {
 
 }
 
-
 async function adj_and_nouns(entity_type, entity) {
 
     const forms = entity.forms || [];
 
-    let numberKeys = singular_plural_dual;
+    let number_Keys = singular_plural_dual;
+    // ---
+    let Masculine = "Q499327";
+    let Feminine = "Q1775415";
+    // ---
+    let row_Keys = Pausal_Forms;
+    let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
 
-    let rowKeys = Pausal_Forms;
-    let genderKeys = [""];
-    let colKeys = [""];
-
-    if (entity_type === "Q1084") {
-        // genderKeys = [""];
-        genderKeys = gender_Keys_global;
-        colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
-
-    } else if (entity_type === "Q34698") {
-        genderKeys = gender_Keys_global;
-        colKeys = ["Q53997857", "Q53997851", "Q118465097", ""];
-
-        // find Q118465097 in the grammatical features
-        colKeys = removeKeyIfNotFound([...colKeys], forms, "Q118465097");
-    }
-
-    const tableData = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
+    let colKeys = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
+    colKeys = removeKeysIfNotFound([...colKeys], forms, ["Q118465097", "Q1641446"]);
+    // ---
+    const tableData = make_tableData(number_Keys, row_Keys, colKeys, genderKeys);
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
-        const feats = form.grammaticalFeatures || [];
+        let feats = form.tags || form.grammaticalFeatures || [];
 
-        // البحث عن المطابقة، إذا لم يتم العثور عليها، استخدم المفتاح الفارغ ""
-        const number = numberKeys.find(n => feats.includes(n)) || "";
-        const row = rowKeys.find(r => feats.includes(r)) || "";
+        const number = number_Keys.find(n => feats.includes(n)) || "";
+        const row = row_Keys.find(r => feats.includes(r)) || "";
         const col = colKeys.find(c => feats.includes(c)) || "";
         const gender = genderKeys.find(g => feats.includes(g)) || "";
 
@@ -513,7 +520,7 @@ async function adj_and_nouns(entity_type, entity) {
     }
 
     // Call the shared HTML generation function
-    return _generateHtmlTable(tableData, numberKeys, rowKeys, colKeys, genderKeys);
+    return _generateHtmlTable(tableData, number_Keys, row_Keys, colKeys, genderKeys);
 }
 
 /*
