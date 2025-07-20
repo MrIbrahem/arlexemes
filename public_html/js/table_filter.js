@@ -1,4 +1,5 @@
 
+
 function generateColor(index, total) {
     const hue = (index * 360 / total) % 360;
     return `hsl(${hue}, 70%, 85%)`; // لون هادئ فاتح

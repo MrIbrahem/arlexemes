@@ -31,18 +31,27 @@ async function loadsparqlQuery(sparqlQuery) {
 
 async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
     const sparqlQuery = `
-        SELECT ?item ?lemma ?category ?categoryLabel ?P31Label ?P6771 ?P11038 ?P11757 ?P12451 WHERE {
+
+        SELECT ?item
+            (SAMPLE(?lemma1) AS ?lemma)
+            ?category ?categoryLabel ?P31Label
+            (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
+            (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
+            (GROUP_CONCAT(DISTINCT ?P11757_z; separator=", ") AS ?P11757)
+            (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
+        WHERE {
         ?item rdf:type ontolex:LexicalEntry;
-            wikibase:lemma ?lemma;
-            wikibase:lexicalCategory ?category;
-            dct:language wd:Q13955.
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar". }
+                wikibase:lemma ?lemma1;
+                wikibase:lexicalCategory ?category;
+                dct:language wd:Q13955.
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
         OPTIONAL { ?item wdt:P31 ?P31. }
-        OPTIONAL { ?item wdt:P6771 ?P6771. }
-        OPTIONAL { ?item wdt:P11038 ?P11038. }
-        OPTIONAL { ?item wdt:P11757 ?P11757. }
-        OPTIONAL { ?item wdt:P12451 ?P12451. }
+        OPTIONAL { ?item wdt:P6771 ?P6771_z. }
+        OPTIONAL { ?item wdt:P11038 ?P11038_z. }
+        OPTIONAL { ?item wdt:P11757 ?P11757_z. }
+        OPTIONAL { ?item wdt:P12451 ?P12451_z. }
         }
+        GROUP BY ?item ?category ?categoryLabel ?P31Label
         limit ${limit}
     `;
 

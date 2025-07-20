@@ -6,8 +6,8 @@ let keyLabels = {
     "Q23663136": "ماضي تام",
     "Q56649265": "مضارع ناقص",
     "Q12230930": "فعل مضارع",
-    "Q473746": "فعل مضارع منصوب",
-    "Q462367": "مجزوم",
+    "Q473746": "مضارع منصوب",
+    "Q462367": "مضارع مجزوم",
     "Q22716": "فعل أمر",
 
 
@@ -23,7 +23,7 @@ let keyLabels = {
     // "Q117262361": "مرفوع", // Nominative/Marfu'
     // "Q131105": "منصوب",    // Accusative/Mansub
     // "Q146078": "مجرور",     // Genitive/Majrur
-    // "Q146233": "مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
+    // "Q146233": "مضارع مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
     "Q117262361": "الوقف",
     "Q131105": "رفع",
     "Q146078": "نصب",
@@ -347,7 +347,8 @@ async function adj_and_nouns(entity_type, entity) {
     let colKeys = [""];
 
     if (entity_type === "Q1084") {
-        genderKeys = [""];
+        // genderKeys = [""];
+        genderKeys = gender_Keys_global;
         colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
 
     } else if (entity_type === "Q34698") {

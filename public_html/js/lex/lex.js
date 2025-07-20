@@ -4,13 +4,16 @@ let display_empty_cells = true;
 let keyLabels = {
     "Q1098772": "جمع تكسير",
 
-    "Q23663136": "ماضي تام",
-    "Q56649265": "مضارع ناقص",
-    "Q12230930": "فعل مضارع",
-    "Q473746": "فعل مضارع منصوب",
-    "Q462367": "مجزوم",
-    "Q22716": "فعل أمر",
+    "Q23663136": "ماضي تام",        // past
+    "Q56649265": "مضارع ناقص",      // imperfective
+    "Q473746": "مضارع منصوب",   // subjunctive
 
+    "Q462367": "مضارع مجزوم",             // jussive
+    "Q22716": "فعل أمر",            // imperative
+
+    "Q12230930": "فعل مضارع",       // fi'il muḍāri
+
+    "Q124351233": "أدائي",           // performative - إنجازي
 
     "Q13955": "العربية",
     "Q118465097": "الصيغة السياقية",
@@ -24,7 +27,7 @@ let keyLabels = {
     // "Q117262361": "مرفوع", // Nominative/Marfu'
     // "Q131105": "منصوب",    // Accusative/Mansub
     // "Q146078": "مجرور",     // Genitive/Majrur
-    // "Q146233": "مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
+    // "Q146233": "مضارع مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
     "Q117262361": "الوقف",
     "Q131105": "رفع",
     "Q146078": "نصب",
@@ -55,8 +58,6 @@ let keyLabels = {
     "Q1194697": "فعل مبني للمجهول",
     "Q1317831": "فعل مبني للمعلوم",
 
-    "Q124351233": "أدائي",
-    // "Q124351233": "إنجازي",
 
 };
 
@@ -135,6 +136,16 @@ function entryFormatter(form) {
 			<span word="${value}">${value}</span>
 			<small>(${formId_number})</small>
 		</a>`;
+    // ---
+    const lexemeId = formId.split("-")[0];
+    // ---
+    if (lexemeId === "L000") {
+        link = `
+		<span title="${attr}">
+			<span word="${value}">${value}</span>
+			<small>(${formId_number})</small>
+		</span>`;
+    }
     // ---
     return link;
 }
@@ -405,7 +416,18 @@ async function Q24905(entity) {
 
     let verbs_main = ["Q1317831", "Q1194697", ""];
 
-    let numberKeys = ["Q23663136", "Q56649265", "Q462367", "Q473746", "Q12230930", "Q22716", "Q124351233", ""];
+    let numberKeys = [
+        "Q23663136", // past
+        "Q56649265", // imperfective
+        "Q473746", // subjunctive
+
+        "Q462367", // jussive
+        "Q22716",  // imperative
+
+        "Q12230930", // fi'il muḍāri'
+        "Q124351233", // أدائي
+        ""
+    ];
 
     let rowKeys = gender_Keys_global;
 
@@ -463,7 +485,8 @@ async function adj_and_nouns(entity_type, entity) {
     let colKeys = [""];
 
     if (entity_type === "Q1084") {
-        genderKeys = [""];
+        // genderKeys = [""];
+        genderKeys = gender_Keys_global;
         colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
 
     } else if (entity_type === "Q34698") {
