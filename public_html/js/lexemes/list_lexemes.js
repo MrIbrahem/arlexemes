@@ -149,8 +149,7 @@ async function fetchData() {
 
     let limit = get_param_from_window_location("limit", 100);
     $("#limit").val(limit);
-    // Assuming get_wd_result is defined elsewhere and returns the data
-    let treeMap = await get_wd_result(limit);
+    let treeMap = await find_wd_result(limit);
 
     treeMap = slice_data(treeMap);
 

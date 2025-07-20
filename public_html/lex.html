@@ -24,6 +24,11 @@
     <script
         src='https://tools-static.wmflabs.org/cdnjs/ajax/libs/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
     <style>
+        .pages_table,
+        .pages_table>thead>tr>th {
+            text-align: center ! important
+        }
+
         .table_text_right,
         .table_text_right>thead>tr>th {
             text-align: right
@@ -74,13 +79,59 @@
     </style>
 </head>
 
-<body class="bg-light p-4 text-end" dir="rtl">
-
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow mb-4">
     <div class="container-fluid">
+        <div class="nav_title">
+            <a class="navbar-brand fw-bold" href="/">
+                <span class="tool_icon me-2"></span> المفردات العربية
+            </a>
+        </div>
+        <button class="navbar-toggler me_ms_by_dir" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
+                <li class="nav-item col-6 col-lg-auto">
+                    <a class="nav-link" href="/index.html"><i class="bi bi-journal-text ms-1"></i>
+                        قائمة المفردات
+                    </a>
+                </li>
+                <li class="nav-item col-6 col-lg-auto">
+                    <a class="nav-link" href="/wd.html"><i class="bi bi-journal-text ms-1"></i>
+                        المخطط
+                    </a>
+                </li>
+                <li class="nav-item col-6 col-lg-auto">
+                    <a class="nav-link" href="/duplicate_lemmas.html"><i class="bi bi-journal-text ms-1"></i>
+                        المكررات
+                    </a>
+                </li>
+            </ul>
+            <hr class="d-lg-none text-black-50">
+            <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav me-lg-auto">
+
+                <li class="nav-item col-4 col-lg-auto">
+                    <a href="#" class="nav-link py-2 px-0 px-lg-2">
+                        <i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">مرحبًا!</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body class="bg-gray-100 min-h-screen p-6">
+    <div class="container-fluid my-4">
 
         <div class="row">
             <div class="col-md-4">
-                <h1 class="mb-4" id="header_main">عرض بيانات Lexeme</h1>
+                <h1 class="mb-4" id="header_main">
+                    تحليل:
+                    <a href="#" target="_blank" class="text-primary font-weight-bold" id="lemma_link"></a>
+                    <span id="lemma_link_en"></span>
+                </h1>
             </div>
             <div class="col-md-8">
                 <div class="row">
@@ -121,7 +172,7 @@
                 <div class="input-group mb-3">
                     <input type="text" id="lexemeId" class="form-control" placeholder="أدخل معرف مثل L1467242"
                         value="L1467242">
-                    <button class="btn btn-primary" onclick="fetchLexeme()">تحميل</button>
+                    <button class="btn btn-primary" onclick="start_lexeme_wrap()">تحميل</button>
                 </div>
             </div>
             <div class="col-md-2">
@@ -145,13 +196,29 @@
                 </div>
             </div>
         </div>
+        <div id="errors"></div>
         <div id="output"></div>
 
     </div>
+    <script src="js/lex/data.js"></script>
+    <script src="js/table_filter.js"></script>
+    <script src="js/lex/toggle_table.js"></script>
     <script src="js/autocomplete.js"></script>
+    <script src="js/lex/fetch.js"></script>
     <script src="js/lex/lex.js"></script>
     <script src="js/lex/lex_page.js"></script>
     <script>
+
+        async function start_lexeme_wrap() {
+            const id = document.getElementById("lexemeId").value.trim();
+            if (!id) return;
+            await start_lexeme(id);
+        }
+        function setExample(lexeme) {
+            document.getElementById('lexemeId').value = lexeme;
+            start_lexeme(lexeme);
+        }
+
         $(document).ready(function () {
             // if ?lex=324 in url then load it setExample
             const urlParams = new URLSearchParams(window.location.search);

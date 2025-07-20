@@ -79,7 +79,7 @@ SELECT DISTINCT ?lemma ?item ?categoryLabel (count(*) as ?count) WHERE {
             wikibase:lemma ?lemma .
     FILTER(CONTAINS(STR(?lemma), "$escapedTerm")) .
 
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "ar". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
 }
 group by ?lemma ?item ?categoryLabel
 ORDER BY DESC(?count)

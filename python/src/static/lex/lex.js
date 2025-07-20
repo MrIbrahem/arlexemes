@@ -6,8 +6,8 @@ let keyLabels = {
     "Q23663136": "ماضي تام",
     "Q56649265": "مضارع ناقص",
     "Q12230930": "فعل مضارع",
-    "Q473746": "فعل مضارع منصوب",
-    "Q462367": "مجزوم",
+    "Q473746": "مضارع منصوب",
+    "Q462367": "مضارع مجزوم",
     "Q22716": "فعل أمر",
 
 
@@ -23,7 +23,7 @@ let keyLabels = {
     // "Q117262361": "مرفوع", // Nominative/Marfu'
     // "Q131105": "منصوب",    // Accusative/Mansub
     // "Q146078": "مجرور",     // Genitive/Majrur
-    // "Q146233": "مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
+    // "Q146233": "مضارع مجزوم",    // Jussive/Majzoom (أكثر شيوعًا للأفعال)
     "Q117262361": "الوقف",
     "Q131105": "رفع",
     "Q146078": "نصب",
@@ -103,7 +103,7 @@ function attrFormatter(qid) {
 
 function entryFormatter(form) {
     // return `! ${form}`;
-    const formId = form.id;
+    const formId = form?.id || "L000-F0";
     let value = form.representations?.ar?.value || "";
 
     if (!value) {
@@ -119,7 +119,12 @@ function entryFormatter(form) {
     // ---
     const feats = form.grammaticalFeatures || [];
     let attr = feats.map(attrFormatter).join("\n");
-    let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
+    // ---
+    let link = `
+		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
+			<span word="${value}">${value}</span>
+			<small>(${formId_number})</small>
+		</a>`;
     // ---
     return link;
 }
@@ -130,9 +135,8 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     let html = `
         <table id="main_table" class="table display table-bordered table-striped table-sm table-hover text-center">
             <thead class="table-light">
-                <tr>
-                    <th rowspan="2" class="align-middle"></th> <!-- Top-left empty cell, spans two rows -->
-                    <th rowspan="2" class="align-middle">الحالة</th> <!-- Case header (الحالة), spans two rows -->
+                <tr data-dt-order="disable">
+					<th colspan="2"></th>
         `;
     // ---
     let first_person = "Q21714344";
@@ -157,6 +161,8 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     html += `
         </tr>
         <tr>
+			<th class="align-middle"></th> <!-- Top-left empty cell, spans two rows -->
+			<th class="align-middle">الحالة</th> <!-- Case header (الحالة), spans two rows -->
         `;
     // ---
     html += gender_Keys.map(gender =>
@@ -337,10 +343,12 @@ async function adj_and_nouns(entity_type, entity) {
     let numberKeys = singular_plural_dual;
 
     let rowKeys = Pausal_Forms;
-    let genderKeys, colKeys;
+    let genderKeys = [""];
+    let colKeys = [""];
 
     if (entity_type === "Q1084") {
-        genderKeys = [""];
+        // genderKeys = [""];
+        genderKeys = gender_Keys_global;
         colKeys = ["Q53997857", "Q53997851", "Q1641446", ""];
 
     } else if (entity_type === "Q34698") {

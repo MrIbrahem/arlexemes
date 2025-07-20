@@ -88,8 +88,15 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='lex/lex.js') }}"></script>
+<script src="{{ url_for('static', filename='lex/fetch.js') }}"></script>
 <script src="{{ url_for('static', filename='lex/lex_page.js') }}"></script>
 <script>
+
+	function setExample(lexeme) {
+		document.getElementById('lexemeId').value = lexeme;
+		start_lexeme(lexeme);
+	}
+
     $(document).ready(function () {
         // if ?lex=324 in url then load it setExample
         const urlParams = new URLSearchParams(window.location.search);

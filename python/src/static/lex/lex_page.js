@@ -4,7 +4,7 @@ function make_to_display(formsToProcess, to_dis) {
     let displayHtml = ""; // تم تغيير اسم المتغير ليكون أكثر وضوحًا لمحتواه
 
     for (const form of formsToProcess) {
-        const formId = form.id;
+        const formId = form?.id || "L000-F0";
         const value = form.representations?.ar?.value;
         const feats = form.grammaticalFeatures || [];
 
@@ -36,34 +36,6 @@ function make_to_display(formsToProcess, to_dis) {
     return displayHtml;
 }
 
-function setExample(lexeme) {
-    document.getElementById('lexemeId').value = lexeme;
-    fetchLexeme();
-}
-
-async function getentity(id) {
-    let entity;
-    let output = document.getElementById("output");
-    const url = `https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=${id}&origin=*`;
-
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-
-        entity = data.entities[id];
-        if (!entity) {
-            output.innerHTML = "<div class='alert alert-danger'>لم يتم العثور على الكيان المطلوب.</div>";
-            return [];
-        }
-
-    } catch (err) {
-        console.error(err);
-        output.innerHTML = "<div class='alert alert-danger'>حدث خطأ أثناء جلب البيانات.</div>";
-    }
-
-    return entity;
-}
-
 function fix_it2(lemma) {
     // ---
     if (!lemma || typeof lemma !== 'string') return '';
@@ -76,26 +48,36 @@ function fix_it2(lemma) {
     return new_lemma;
 }
 
-async function fetchLexeme() {
-    const id = document.getElementById("lexemeId").value.trim();
-    if (!id) return;
+function add_page_title(id, lemma) {
 
-    const output = document.getElementById("output");
-    output.innerHTML = "<div class='alert alert-info'>جاري تحميل البيانات...</div>";
-
-    let entity = await getentity(id);
+    document.title += ` ${id} - ${lemma}`;
+    // ---
+    let lemma2 = fix_it2(lemma);
+    // ---
+    let lemma_link_tag = $("#lemma_link");
+    // ---
+    if (lemma_link_tag) {
+        lemma_link_tag.html(`<a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary font-weight-bold" id="lemma_link">${lemma}</a>`);
+    }
+    // ---
+    let lemma_link_en = $("#lemma_link_en");
+    // ---
+    if (lemma_link_en) {
+        lemma_link_en.html(`
+        <span id="lemma_link_en">
+        (<a href="https://en.wiktionary.org/wiki/${lemma2}" target="_blank" class="text-primary font-sm">en</a>)
+        </span>
+    `);
+        // ---
+    }
+}
+async function fetchLexemeById(id, entity) {
 
     const Category = entity.lexicalCategory ?? "";
 
     const lemma = entity.lemmas?.ar?.value || "(غير متوفر)";
     // add lemma to title of the page
-
-    document.title += ` ${id} - ${lemma}`;
-    let lemma2 = fix_it2(lemma);
-    $("#header_main").html(`تحليل:
-                <a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary font-weight-bold">${lemma}</a>
-                (<a href="https://en.wiktionary.org/wiki/${lemma2}" target="_blank" class="text-primary font-sm">en</a>)
-            `);
+    add_page_title(id, lemma);
 
     const lexicalCategory = entity.lexicalCategory ? wdlink(entity.lexicalCategory) : "";
     const language = entity.language ? wdlink(entity.language) : "";
@@ -116,26 +98,46 @@ async function fetchLexeme() {
     });
 
     let html = `
-                <div class="row mb-4">
-                    <div class="col">
-                        <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
-                    </div>
-                    <div class="col">
-                        <strong>اللغة:</strong> ${language}
-                    </div>
-                    ${to_display}
-                </div>
-                `;
+        <div class="row mb-4">
+            <div class="col">
+                <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
+            </div>
+            <div class="col">
+                <strong>اللغة:</strong> ${language}
+            </div>
+            ${to_display}
+        </div>
+    `;
 
 
+    let table_html = "";
     if (typeof window[Category] === "function") {
-        html += await window[Category](entity);
-        output.innerHTML = html;
+        table_html = await window[Category](entity);
         // $("#main_table").DataTable({ searching: false });
     } else {
-        output.innerHTML = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
+        table_html = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
     }
-    // ---
+    if (table_html) {
+        html += table_html;
+    } else {
+        html += `<div class='alert alert-warning'>لا يوجد بيانات</div>`
+    }
+    return html;
+}
+
+async function start_lexeme(id) {
+    // const id = document.getElementById("lexemeId").value.trim();
+    // if (!id) return;
+
+    const output = document.getElementById("output");
+    output.innerHTML = "<div class='alert alert-info'>جاري تحميل البيانات...</div>";
+
+    let entity = await getentity(id);
+
+    let html = await fetchLexemeById(id, entity);
+
+    output.innerHTML = html;
+
     table_filter();
 }
 

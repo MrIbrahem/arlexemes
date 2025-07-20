@@ -122,7 +122,7 @@ async function load_wd(limit) {
     return wd_result;
 }
 
-async function get_wd_result(limit) {
+async function find_wd_result(limit) {
     let wd_result = await load_wd(limit);
     // ---
     return wd_result;

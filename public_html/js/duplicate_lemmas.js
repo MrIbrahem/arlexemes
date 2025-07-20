@@ -29,7 +29,7 @@ async function load_wb(to_group_by = "categoryLabel") {
             wikibase:lemma ?lemma;
             wikibase:lexicalCategory ?category;
             dct:language wd:Q13955.
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
         OPTIONAL { ?item wdt:P31 ?P31. }
         }
     `;
