@@ -163,7 +163,12 @@ function attrFormatter(key) {
 function entryFormatter(form) {
     // return `! ${form}`;
     const formId = form?.id || "L000-F0";
-    let value = form.representations?.ar?.value || form?.form || "";
+    // ar-x-Q775724
+    // ---
+    let value = form.representations?.["ar-x-Q775724"]?.value
+        || form.representations?.ar?.value
+        || form?.form
+        || "";
     // ---
     if (!value && form.representations) {
         const reps = Object.values(form.representations || {});

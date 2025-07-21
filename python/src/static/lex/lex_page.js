@@ -54,7 +54,12 @@ function make_to_display(formsToProcess) {
     const qidValuesMap = {};
 
     for (const form of formsToProcess) {
-        const value = form.representations?.ar?.value || form?.form;
+        // ---
+        let value = form.representations?.["ar-x-Q775724"]?.value
+            || form.representations?.ar?.value
+            || form?.form
+            || "";
+        // ---
         const feats = (form.tags || form.grammaticalFeatures || []).slice().sort();
 
         for (const { qid, tagsSorted } of matchRules) {
@@ -169,7 +174,12 @@ async function fetchLexemeById(id, entity) {
 
     const Category = entity.lexicalCategory ?? "";
 
-    const lemma = entity.lemmas?.ar?.value || "(غير متوفر)";
+    // const lemma = entity.lemmas?.ar?.value || "(غير متوفر)";
+    // ---
+    let lemma = entity.lemmas?.["ar-x-Q775724"]?.value
+        || entity.lemmas?.ar?.value
+        || "(غير متوفر)";
+    // ---
     // add lemma to title of the page
     add_page_title(id, lemma);
 
