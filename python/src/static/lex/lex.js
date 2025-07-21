@@ -161,22 +161,15 @@ function attrFormatter(key) {
 }
 
 function entryFormatter(form) {
-    // return `! ${form}`;
+    // ---
     const formId = form?.id || "L000-F0";
+    // ---
     // ar-x-Q775724
-    // ---
-    let value = form.representations?.["ar-x-Q775724"]?.value
-        || form.representations?.ar?.value
-        || form?.form
-        || "";
-    // ---
-    if (!value && form.representations) {
-        const reps = Object.values(form.representations || {});
-        for (const rep of reps) {
-            value = rep.value;
-            break; // خذ أول تمثيل متاح
-        }
-    }
+    let values = Object.values(form.representations || {})
+        .map(r => r.value)
+        .filter(Boolean)
+        .map(v => `<span word="${v}">${v}</span>`)
+        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
     // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
@@ -185,11 +178,9 @@ function entryFormatter(form) {
     const feats = form.tags || form.grammaticalFeatures || [];
     let attr = feats.map(attrFormatter).join("\n");
     // ---
-    // let link = `<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank" word="${value}">${value} <small>(${formId_number})</small></a>`;
-    // ---
     let link = `
 		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
-			<span word="${value}">${value}</span>
+            ${values}
 			<small>(${formId_number})</small>
 		</a>`;
     // ---
@@ -198,7 +189,7 @@ function entryFormatter(form) {
     if (lexemeId === "L000") {
         link = `
         <span title="${attr}">
-			<span word="${value}">${value}</span>
+            ${values}
 			<small>(${formId_number})</small>
         </span>
         `;
