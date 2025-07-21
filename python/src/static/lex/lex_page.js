@@ -1,40 +1,134 @@
+let Labels = {
+    "P31": "فئة",
+    "P5920": "الجذر",
+    "P11038": "أنطولوجيا",
+}
 
-function make_to_display(formsToProcess, to_dis) {
+let to_dis_tags = {
+    "مصدر": ["Q1923028"],
+    "المصدر": ["Q1350145"],
+    "اِسْم الْمَفْعُول": ["Q72249544"],
+    "اِسْم الْفَاعِل": ["Q72249355"],
+    "المضارع": ["non-past"],
+    "مركب": ["construct"],
+    "مؤنث": ["Q1775415"],
+    "مذكر": ["Q499327"],
+    "بديل": ["alternative"],
+    "جمع": ["Q146786"],
+    "جمع مؤنث": ["Q1775415", "Q146786"],
+    "جمع مذكر": ["Q499327", "Q146786"],
+};
 
-    let displayHtml = ""; // تم تغيير اسم المتغير ليكون أكثر وضوحًا لمحتواه
+function make_claims(claims) {
+    let row = "";
+    // ---
+    for (const prop in claims) {
+        let label = Labels[prop] ? Labels[prop] : prop;
+        let pv = ``;
+        for (const v of claims[prop]) {
+            let value = v.mainsnak.datavalue.value;
+            if (typeof value === "object") {
+                value = `<a href="https://wikidata.org/entity/${value.id}" target="_blank">${value.id}</a>`;
+            }
+            pv += `${value}`;
+        }
+        row += `
+            <div class='col'>
+                <a href="https://wikidata.org/entity/${prop}" target="_blank">${label}</a>: ${pv}
+            </div>
+        `;
+    }
+    // ---
+    return row;
+}
+
+function make_to_display(formsToProcess) {
+
+    // تجهيز قائمة الوسوم المرتبة المرتبطة بكل QID
+    const matchRules = Object.entries(to_dis_tags).map(([qid, tags]) => ({
+        qid,
+        tagsSorted: [...tags].sort()
+    }));
+
+    // نحفظ لكل QID مجموعة القيم المطابقة
+    const qidValuesMap = {};
 
     for (const form of formsToProcess) {
-        const formId = form?.id || "L000-F0";
-        const value = form.representations?.ar?.value;
-        const feats = form.grammaticalFeatures || [];
+        const value = form.representations?.ar?.value || form?.form;
+        const feats = (form.tags || form.grammaticalFeatures || []).slice().sort();
 
-        // نمر على كل المفاتيح (QIDs) المعرفة في to_dis
-        for (const qid of Object.keys(to_dis)) {
-            // نتحقق إذا كانت ميزات الشكل الحالي تتضمن QID هذا
-            if (feats.includes(qid)) {
-                const label = to_dis[qid]; // نحصل على التسمية العربية المقابلة
-                const formIdlink = formId.replace("-", "#");
-                const formId_number = formId.split("-")[1]; // استخراج الجزء F-number
-
-                // إضافة HTML المنسق لهذا الشكل ونوعه
-                // استخدمنا <div> لفصل أفضل لكل إدخال
-                displayHtml += `
-                            <div class="col">
-                                <strong>${label}:</strong>
-                                <a href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
-                                    ${value} <small>(${formId_number})</small>
-                                </a>
-                            </div>`;
-
-                // إذا كان من المفترض أن يتطابق الشكل مع نوع واحد فقط (مصدر، اسم فاعل، اسم مفعول)،
-                // يمكننا استخدام 'break' هنا للانتقال إلى الشكل التالي.
-                // إذا كان من الممكن أن يتطابق الشكل مع أنواع متعددة، فأزل 'break'.
-                break; // ننتقل إلى الشكل التالي بمجرد العثور على نوع ذي صلة للشكل الحالي
+        for (const { qid, tagsSorted } of matchRules) {
+            // تحقق من تطابق الوسوم تمامًا
+            if (
+                feats.length === tagsSorted.length &&
+                feats.every((tag, i) => tag === tagsSorted[i])
+            ) {
+                if (!qidValuesMap[qid]) qidValuesMap[qid] = new Set();
+                qidValuesMap[qid].add(value); // نضيف القيمة إلى المجموعة الفريدة
+                break;
+            } else if (feats.length === 1) {
+                let to_skip = ["canonical"];
+                // ---
+                if (to_skip.includes(feats[0])) continue;
+                // ---
+                let qid1 = en2ar[feats[0]] ? en2ar[feats[0]] : feats[0];
+                // ---
+                if (!qidValuesMap[qid1]) qidValuesMap[qid1] = new Set();
+                // ---
+                qidValuesMap[qid1].add(value); // نضيف القيمة إلى المجموعة الفريدة
+                // ---
+                break;
             }
         }
     }
+
+    let displayHtml = "<div class='col'>";
+    let count = 0;
+    // نعرض كل QID مع القيم الخاصة به
+    for (const [qid, valuesSet] of Object.entries(qidValuesMap)) {
+        const values = Array.from(valuesSet).join("، ");
+        displayHtml += `
+            <div class="col">
+                <strong>${qid}:</strong>
+                ${values}
+            </div>`;
+
+        count++;
+
+        // بعد كل 3 عناصر، أضف تقسيم جديد
+        if (count % 3 === 0) {
+            displayHtml += "</div><div class='col'>";
+        }
+    }
+    displayHtml += "</div>";
     return displayHtml;
 }
+
+function filter_forms(forms) {
+    // قائمة الوسوم المطلوب استبعادها كأزواج كاملة
+    const excludedTags = Object.values(to_dis_tags).map((arr) => JSON.stringify(arr.sort()));
+
+    // فلترة النماذج
+    forms = forms.filter((form) => {
+        const feats = (form.tags || form.grammaticalFeatures || []).slice().sort(); // ننسخ ونرتب
+        return !excludedTags.includes(JSON.stringify(feats));
+    });
+
+    /*
+    forms = forms.filter((form) => {
+        const tags = form.tags || form.grammaticalFeatures || [];
+        return !(tags.length === 1 && tags[0] === "canonical");
+    });
+    */
+
+    forms = forms.filter((form) => {
+        const tags = form.tags || form.grammaticalFeatures || [];
+        return !(tags.length === 2 && (tags[0] === "common" || tags[1] === "common"));
+    });
+
+    return forms;
+}
+
 
 function fix_it2(lemma) {
     // ---
@@ -83,22 +177,22 @@ async function fetchLexemeById(id, entity) {
     const language = entity.language ? wdlink(entity.language) : "";
     let forms = entity.forms || [];
 
-    let to_dis = {
-        "Q1923028": "مصدر",
-        "Q1350145": "المصدر",
-        "Q72249544": "اِسْم الْمَفْعُول",
-        "Q72249355": "اِسْم الْفَاعِل",
-    };
-    let to_display = make_to_display(forms, to_dis);
+    let to_display = make_to_display(forms);
 
-    // filter forms to remove any form has to_dis keys in its grammaticalFeatures
-    entity.forms = forms.filter((form) => {
-        const feats = form.grammaticalFeatures || [];
-        return !feats.some((feat) => Object.keys(to_dis).includes(feat));
-    });
+    forms = filter_forms(forms);
 
+    entity.forms = forms;
+
+    let claims = make_claims(entity?.claims);
+    let forms_len = forms.length;
     let html = `
         <div class="row mb-4">
+            <div class="col">
+                <span class="h4">المفردات:  ${forms_len}</span>
+            </div>
+            <div class="col">
+                ${claims}
+            </div>
             <div class="col">
                 <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
             </div>
@@ -109,13 +203,12 @@ async function fetchLexemeById(id, entity) {
         </div>
     `;
 
-
     let table_html = "";
     if (typeof window[Category] === "function") {
         table_html = await window[Category](entity);
         // $("#main_table").DataTable({ searching: false });
     } else {
-        table_html = "<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع من التصنيف بعد.</div>";
+        table_html = `<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع ${Category} من التصنيف بعد.</div>`;
     }
     if (table_html) {
         html += table_html;
@@ -139,40 +232,4 @@ async function start_lexeme(id) {
     output.innerHTML = html;
 
     table_filter();
-}
-
-function generateColor(index, total) {
-    const hue = (index * 360 / total) % 360;
-    return `hsl(${hue}, 70%, 85%)`; // لون هادئ فاتح
-}
-
-function table_filter() {
-
-    // لكل جدول على حدة
-    document.querySelectorAll(".table").forEach(table => {
-        const wordMap = new Map();
-
-        // اجمع كل العناصر التي تحتوي على word="..."
-        const wordElements = table.querySelectorAll('[word]');
-        wordElements.forEach(el => {
-            const word = el.getAttribute("word");
-            if (!wordMap.has(word)) {
-                wordMap.set(word, []);
-            }
-            wordMap.get(word).push(el);
-        });
-
-        // خذ فقط الكلمات المتكررة (أكثر من 1)
-        const repeatedWords = Array.from(wordMap.entries()).filter(([_, els]) => els.length > 1);
-
-        // لوّن كل مجموعة بلون مختلف
-        repeatedWords.forEach(([word, elements], index) => {
-            const color = generateColor(index, repeatedWords.length);
-            elements.forEach(el => {
-                el.style.backgroundColor = color;
-                el.style.borderRadius = "4px";
-                el.style.padding = "2px 4px";
-            });
-        });
-    });
 }
