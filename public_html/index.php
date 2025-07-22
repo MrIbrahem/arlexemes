@@ -22,20 +22,19 @@ require __DIR__ . "/main.php";
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <label for="wd_id" class="form-label fw-bold mb-2">
                                             <i class="fas fa-link ms-2"></i> ابحث عن مفردة
-                                            <div class="spinner-border spinner-border-sm" id="autocomplete-loader"
-                                                role="status" style="display: none;">
+                                            <div class="spinner-border spinner-border-sm" id="autocomplete-loader" role="status"
+                                                style="display: none;">
                                                 <span class="visually-hidden">تحميل...</span>
                                             </div>
                                         </label>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                                            onclick="randomCategory()">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="randomCategory()">
                                             <i class="bi bi-shuffle ms-1"></i> عشوائي
                                         </button>
                                     </div>
                                     <span id="wikidatasearch_label"></span>
                                     <div class="input-group input-group-lg">
-                                        <input type="text" id="wd_id" required name="wd_id"
-                                            class="form-control input-group-input" placeholder="كتب" value="">
+                                        <input type="text" id="wd_id" required name="wd_id" class="form-control input-group-input"
+                                            placeholder="كتب" value="">
                                     </div>
                                     <div id="autocomplete-results" class="autocomplete-results"></div>
                                 </div>
@@ -57,34 +56,24 @@ require __DIR__ . "/main.php";
                     <div class="row">
                         <div class="col-md-5">
                             <span class="me-2">اسم:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1244618')">L1244618</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2465')">L2465
-                                -
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1244618')">L1244618</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2465')">L2465 -
                                 معدود</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2355')">L2355
-                                - غير
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2355')">L2355 - غير
                                 معدود</button>
                         </div>
                         <div class="col-md-4">
                             <span class="me-2">صفة:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1131459')">L1131459</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1153733')">L1153733</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1153733')">L1153733</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1131459')">L1131459</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1153733')">L1153733</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1153733')">L1153733</button>
                         </div>
                         <div class="col-md-3">
                             <span class="me-2">فعل:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1460479')">L1460479</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L12100')">L12100</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1235177')">L1235177</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
-                                onclick="setLabel('L1464180')">L1464180</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1460479')">L1460479</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L12100')">L12100</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1235177')">L1235177</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1464180')">L1464180</button>
                         </div>
                     </div>
                 </div>
@@ -92,7 +81,14 @@ require __DIR__ . "/main.php";
         </div>
     </div>
 </div>
-
+<script>
+    function setLabel(lexeme) {
+        $("#wd_id").val(lexeme);
+    }
+    $(function() {
+        load_search(setLabel, 'wd_id', 'autocomplete-results');
+    });
+</script>
 <?php
 
 require __DIR__ . "/footer.php";

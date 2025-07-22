@@ -52,9 +52,10 @@
                 <div class="tab-pane fade show {{ active }}" id="home-tab-pane_{{index}}" role="tabpanel"
                     aria-labelledby="hometab_{{index}}" tabindex="1">
 
-                        <h2 class="mb-4">
-                            <a href="https://www.wikidata.org/entity/{{ data.category }}" target="_blank">{{ data.categoryLabel }}</a>
-                        </h2>
+                    <h2 class="mb-4">
+                        <a href="https://www.wikidata.org/entity/{{ data.category }}"
+                            target="_blank">{{ data.categoryLabel }}</a>
+                    </h2>
 
                     <table id="P11038_table" class="table display table-striped table-bordered">
                         <thead>
@@ -71,10 +72,12 @@
                                 <td>{{loop.index}}</td>
                                 <td>{{item.lemma}}</td>
                                 <td>
-                                    <a href="https://www.wikidata.org/entity/{{item.item}}" target="_blank"> {{item.item}} </a>
+                                    <a href="https://www.wikidata.org/entity/{{item.item}}" target="_blank">
+                                        {{item.item}} </a>
                                 </td>
                                 <td>
-                                    <a href="https://ontology.birzeit.edu/lemma/{{item.P11038}}" target="_blank">{{item.P11038}}</a>
+                                    <a href="https://ontology.birzeit.edu/lemma/{{item.P11038}}"
+                                        target="_blank">{{item.P11038}}</a>
                                 </td>
                             </tr>
                             {%endfor%}
@@ -94,10 +97,10 @@
 <script src="{{ url_for('static', filename='js/lex/lex_page.js') }}"></script>
 <script>
 
-	function setExample(lexeme) {
-		document.getElementById('lexemeId').value = lexeme;
-		start_lexeme(lexeme);
-	}
+    function setExample(lexeme) {
+        document.getElementById('lexemeId').value = lexeme;
+        start_lexeme(lexeme);
+    }
 
     $(document).ready(function () {
         // if ?lex=324 in url then load it setExample
@@ -106,7 +109,7 @@
         if (lex) {
             setExample(lex);
         }
-        load_search(setExample);
+        load_search(setExample, 'wd_id', 'autocomplete-results');
         // ---
         $("#P11038_table").DataTable({
             order: [

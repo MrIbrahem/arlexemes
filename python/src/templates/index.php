@@ -78,16 +78,15 @@
                     </div>
                 </div>
             </div>
-            <script src="{{ url_for('static', filename='js/random.js') }}"></script>
-            <script>
-                function setLabel(lexeme) {
-                    $("#wd_id").val(lexeme);
-                }
-                $(function() {
-                    load_search(setLabel);
-                });
-            </script>
         </div>
     </div>
 </div>
+<script>
+    function setLabel(lexeme) {
+        $("#wd_id").val(lexeme);
+    }
+    $(function() {
+        load_search(setLabel, 'wd_id', 'autocomplete-results');
+    });
+</script>
 {% endblock %}

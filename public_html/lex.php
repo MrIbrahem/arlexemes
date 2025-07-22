@@ -88,7 +88,7 @@ require __DIR__ . "/main.php";
 <script src="js/lex/lex.js"></script>
 <script src="js/lex/lex_page_claims.js"></script>
 <script src="js/lex/lex_page.js"></script>
-<!-- to compare -->
+
 <script>
     async function start_lexeme_wrap() {
         const id = document.getElementById("lexemeId").value.trim();
@@ -111,7 +111,7 @@ require __DIR__ . "/main.php";
         if (lex) {
             await setExample(lex);
         }
-        load_search(setExample);
+        load_search(setExample, 'wikidatasearch', 'autocomplete-results');
 
     });
 </script>

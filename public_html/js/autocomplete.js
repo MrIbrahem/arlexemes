@@ -1,7 +1,4 @@
-
-// هنا سيأتي كود JavaScript
-const searchInput = document.getElementById('wd_id');
-const resultsContainer = document.getElementById('autocomplete-results');
+let resultsContainer;
 let debounceTimeout;
 
 async function fetchWikidataSuggestions(query, callback) {
@@ -61,7 +58,12 @@ function displaySuggestions(suggestions) {
     }
 }
 
-function load_search(callback) {
+function load_search(callback, searchInputId, resultsContainerId) {
+    // هنا سيأتي كود JavaScript
+    const searchInput = document.getElementById(searchInputId);
+
+    resultsContainer = document.getElementById(resultsContainerId);
+
     // الاستماع لأحداث الكتابة في مربع الإدخال مع Debounce
     if (searchInput) {
 
