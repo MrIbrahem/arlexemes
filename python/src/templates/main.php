@@ -85,7 +85,7 @@
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/P11038.php"><i class="bi bi-journal-text ms-1"></i>
+                        <a class="nav-link" href="/P11038"><i class="bi bi-journal-text ms-1"></i>
                             الأنطولوجيا العربية
                         </a>
                     </li>

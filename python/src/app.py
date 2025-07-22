@@ -86,7 +86,7 @@ def P11038():
         # ---
         split_by_category[category]['members'].append(item)
 
-    return render_template("P11038.php", limit=limit, result=split_by_category)
+    return render_template("P11038.html", limit=limit, result=split_by_category)
 
 
 @app.route("/wd.php", methods=["GET"])
