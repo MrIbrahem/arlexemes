@@ -102,7 +102,6 @@ function filter_forms(forms) {
     return forms;
 }
 
-
 function fix_it2(lemma) {
     // ---
     if (!lemma || typeof lemma !== 'string') return '';
@@ -140,16 +139,26 @@ function add_page_title(id, lemma) {
 }
 async function fetchLexemeById(id, entity) {
 
-    const Category = entity.lexicalCategory ?? "";
-
-    let lemma = Object.values(entity.lemmas || {}).map(l => l.value).filter(Boolean).join(" / ") || "(غير متوفر)";
+    let lemma = entity.lemma || "(غير متوفر)";
+    if (entity.lemmas) {
+        lemma = Object.values(entity.lemmas || {}).map(l => l.value).filter(Boolean).join(" / ") || "(غير متوفر)";
+    }
 
     // add lemma to title of the page
     add_page_title(id, lemma);
 
-    const lexicalCategory = entity.lexicalCategory ? wdlink(entity.lexicalCategory) : "";
+    let Category = entity.lexicalCategory ?? "";
+
+    // ---
+
+    // ---
+    const lexicalCategorylink = (Category) ? wdlink(Category) : "";
     const language = entity.language ? wdlink(entity.language) : "";
+    // ---
     let forms = entity.forms || [];
+    // ---
+    console.log("len forms:", forms.length);
+    // ---
 
     let to_display = make_to_display(forms);
 
@@ -160,6 +169,10 @@ async function fetchLexemeById(id, entity) {
     let claims = make_claims(entity?.claims);
     let claims_row = (claims !== "") ? `<div class="col">${claims}</div>` : "";
     let forms_len = forms.length;
+    // ---
+    let pos = "";
+    // ---
+    // ---
     let html = `
         <div class="row mb-4">
             <div class="col">
@@ -167,7 +180,8 @@ async function fetchLexemeById(id, entity) {
             </div>
             ${claims_row}
             <div class="col">
-                <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
+                <strong>التصنيف:</strong>
+                ${lexicalCategorylink}
             </div>
             <div class="col">
                 <strong>اللغة:</strong> ${language}
@@ -179,11 +193,22 @@ async function fetchLexemeById(id, entity) {
     `;
 
     let table_html = "";
-    if (typeof window[Category] === "function") {
+    if (Category === "Q1084") {             // nouns
+        table_html = await Q1084(entity);
+
+    } else if (Category === "Q24905") {     // verbs
+        table_html = await Q24905(entity);
+
+    } else if (Category === "Q34698") {     // adjectives
+        table_html = await Q34698(entity);
+
+    } else if (typeof window[Category] === "function") {
         table_html = await window[Category](entity);
+
         // $("#main_table").DataTable({ searching: false });
     } else {
-        table_html = `<div class='alert alert-warning'>لم يتم التعامل مع هذا النوع ${Category} من التصنيف بعد.</div>`;
+        table_html = await Q34698(entity);
+        // table_html = `<div class='alert alert-warning'>هذا النوع ${pos}-${Category} غير مدعوم</div>`;
     }
     if (table_html) {
         html += table_html;

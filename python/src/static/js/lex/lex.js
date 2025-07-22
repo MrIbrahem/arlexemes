@@ -2,41 +2,6 @@ let display_empty_cells = true;
 
 let ty = "";
 
-let Pausal_Forms = [
-    "Q117262361",
-    "Q131105",
-    "Q146078",
-    "Q146233",
-    ""
-];
-
-// مفرد مثنى جمع
-const singular_plural_dual = ["Q110786", "Q110022", "Q146786", ""];
-
-const first_second_third_person = [
-    "Q21714344",
-    "Q51929049",
-    "Q51929074",
-    ""
-];
-
-const gender_Keys_global = ["Q499327", "Q1775415", ""];
-
-let numberKeys_verb = [
-    "Q23663136", // past
-    "Q56649265", // imperfective
-    "Q473746", // subjunctive
-
-    "Q462367", // jussive
-    "Q22716",  // imperative
-
-    "Q12230930", // fi'il muḍāri'
-
-    "Q124351233", // أدائي
-    ""
-];
-
-
 function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
     const featuresSet = new Set();
 
@@ -106,8 +71,8 @@ function wdlink_2(key) {
 
 function make_tableData(number_Keys, row_Keys, col_Keys, gender_Keys) {
     // ---
-    let first_person = ["first-person", "Q21714344"];
-    let dual = ["dual", "Q110022"];
+    let first_persons = ["first-person", "Q21714344"];
+    let duals = ["dual", "Q110022"];
     // ---
     const tableData = {};
     for (const num of number_Keys) {
@@ -117,7 +82,7 @@ function make_tableData(number_Keys, row_Keys, col_Keys, gender_Keys) {
             for (const col of col_Keys) {
                 tableData[num][row][col] = {};
                 for (const gender of gender_Keys) {
-                    if (first_person.includes(col) && dual.includes(gender)) continue;
+                    if (first_persons.includes(col) && duals.includes(gender)) continue;
                     tableData[num][row][col][gender] = [];
                 }
             }
@@ -304,15 +269,6 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     // ---
     let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
     // ---
-    let first_person = "Q21714344";
-    let second_person = "Q51929049";
-    let dual = "Q110022";
-    let singular = "Q110786";
-    let plural = "Q146786";
-    // ---
-    let Masculine = "Q499327";
-    let Feminine = "Q1775415";
-    // ---
     let number_Keys = first_collumn;
     let gender_Keys = first_rows;
     let col_Keys = second_rows;
@@ -441,7 +397,7 @@ async function Q24905(entity) {
 
     let forms = entity.forms || [];
 
-    let verbs_main = ["Q1317831", "Q1194697", ""];
+    let verbs_main = verbs_main_g;
 
     let numberKeys = numberKeys_verb;
 
@@ -449,7 +405,11 @@ async function Q24905(entity) {
 
     let colKeys = first_second_third_person; // Q21714344
 
-    let genderKeys = removeKeysIfNotFound([...singular_plural_dual], forms, ["Q110786", "Q110022", "Q146786"]);
+    let spd = singular_plural_dual;
+    // remove "" from spd
+    spd = spd.filter(item => item !== "");
+    // ---
+    let genderKeys = removeKeysIfNotFound([...singular_plural_dual], forms, spd);
 
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
@@ -497,16 +457,15 @@ async function adj_and_nouns(entity_type, entity) {
 
     const forms = entity.forms || [];
 
-    let number_Keys = singular_plural_dual;
-    // ---
-    let Masculine = "Q499327";
-    let Feminine = "Q1775415";
     // ---
     let row_Keys = Pausal_Forms;
     let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
 
     let colKeys = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
     colKeys = removeKeysIfNotFound([...colKeys], forms, ["Q118465097", "Q1641446"]);
+    // ---
+    let number_Keys = singular_plural_dual;
+    // ---
     // ---
     const tableData = make_tableData(number_Keys, row_Keys, colKeys, genderKeys);
     // ---

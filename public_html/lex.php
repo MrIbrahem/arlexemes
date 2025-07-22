@@ -123,6 +123,7 @@ require __DIR__ . "/main.php";
 <script src="js/table_filter.js"></script>
 <script src="js/lex/toggle_table.js"></script>
 <script src="js/lex/fetch.js"></script>
+<script src="js/lex/lex_data.js"></script>
 <script src="js/lex/lex.js"></script>
 <script src="js/lex/lex_page_claims.js"></script>
 <script src="js/lex/lex_page.js"></script>
