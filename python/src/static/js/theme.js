@@ -7,15 +7,15 @@ const htmlElement = document.documentElement;
 const themes = {
     system: {
         icon: 'bi-circle-half',
-        label: 'Auto'
+        label: 'تلقائي'
     },
     dark: {
         icon: 'bi-moon-stars-fill',
-        label: 'Dark'
+        label: 'مظلم'
     },
     light: {
         icon: 'bi-sun-fill',
-        label: 'Light'
+        label: 'مضيئ'
     }
 };
 

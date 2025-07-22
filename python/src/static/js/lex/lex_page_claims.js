@@ -26,7 +26,7 @@ function make_claims(claims) {
         // ---
         if (!only_show.includes(prop)) continue;
         // ---
-        let label = Labels[prop] ? Labels[prop] : `<span find-label="${prop}">${prop}</span>`;
+        let label = Labels[prop] ? `<span class="fw-bold">${Labels[prop]}</span>` : `<span class="fw-bold" find-label="${prop}">${prop}</span>`;
         let pv = [];
         // ---
         for (const v of claims[prop]) {

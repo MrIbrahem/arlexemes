@@ -37,6 +37,29 @@ const categories = [
     "Q7075064", // wd:Q7075064	1
 ]
 
+function parse_results(result) {
+    let wd_result = {};
+
+    for (const item of result) {
+        let to_group = item['categoryLabel'] || '!';
+
+        if (!wd_result[to_group]) {
+            // ---
+            wd_result[to_group] = {
+                group_by: to_group,
+                qid: item['category'],
+                items: []
+            };
+        }
+        // ---
+        wd_result[to_group].items.push(item);
+    }
+    // ---
+    wd_result = Object.fromEntries(Object.entries(wd_result).sort(([, a], [, b]) => b.items.length - a.items.length));
+    // ---
+    return wd_result;
+}
+
 async function load_wd(limit) {
     const sparqlQuery1 = `
         VALUES ?category {
@@ -47,57 +70,34 @@ async function load_wd(limit) {
         }
     `;
     let sparqlQuery = `
-        SELECT DISTINCT ?item ?lemma ?category ?categoryLabel ?P31 ?P31Label (count(?form) as ?count) WHERE {
+        SELECT DISTINCT
+            ?item
+            (SAMPLE(?lemma1) AS ?lemma)
+            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
+            ?category ?categoryLabel
+            ?P31 ?P31Label
+            (count(?form) as ?count)
+        WHERE {
 
-        ?item rdf:type ontolex:LexicalEntry;
-                wikibase:lemma ?lemma;
+            ?item rdf:type ontolex:LexicalEntry;
+                wikibase:lemma ?lemma1;
                 wikibase:lexicalCategory ?category;
                 dct:language wd:Q13955.
 
-        optional {?item ontolex:lexicalForm ?form}
-        optional {?item wdt:P31 ?P31}
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
+            optional {?item ontolex:lexicalForm ?form}
+            optional {?item wdt:P31 ?P31}
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
         }
-        group by ?item ?lemma ?category ?categoryLabel ?P31 ?P31Label
+        group by ?item ?category ?categoryLabel ?P31 ?P31Label
         ORDER BY DESC(?count)
     `;
     if (limit && isFinite(limit)) {
         sparqlQuery += ` LIMIT ${limit}`;
     }
     let result = await loadsparqlQuery(sparqlQuery);
-    let vars = result.head.vars;
 
+    let wd_result = parse_results(result);
 
-    const items = result.results.bindings;
-    let wd_result = {};
-
-    for (const item of items) {
-        // value of all item keys from vars
-        let new_item = {};
-        for (const key of vars) {
-            let value = item[key]?.value ?? '';
-            // if value has /entity/ then value = value.split("/").pop();
-            if (value.includes("/entity/")) {
-                value = value.split("/").pop();
-            }
-            new_item[key] = value;
-        }
-        let to_group = new_item['categoryLabel'] || '!';
-
-        if (!wd_result[to_group]) {
-            // ---
-            wd_result[to_group] = {
-                group_by: to_group,
-                qid: new_item['category'],
-                items: []
-            };
-        }
-        // ---
-        wd_result[to_group].items.push(new_item);
-    }
-    // ---
-    wd_result = Object.fromEntries(Object.entries(wd_result).sort(([, a], [, b]) => b.items.length - a.items.length));
-    // ---
     return wd_result;
 }
 

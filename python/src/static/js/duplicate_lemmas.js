@@ -14,24 +14,11 @@ async function load_wb(to_group_by = "categoryLabel") {
     `;
 
     let result = await loadsparqlQuery(sparqlQuery);
-    let vars = result.head.vars;
-
-    const items = result.results.bindings;
 
     let wd_result = {};
-    for (const item of items) {
-        // value of all item keys from vars
-        let new_item = {};
-        for (const key of vars) {
-            let value = item[key]?.value ?? '';
-            // if value has /entity/ then value = value.split("/").pop();
-            if (value.includes("/entity/")) {
-                value = value.split("/").pop();
-            }
-            new_item[key] = value;
-        }
 
-        let to_group = new_item[to_group_by] || '!';
+    for (const item of result) {
+        let to_group = item[to_group_by] || '!';
 
         if (!wd_result[to_group]) {
             // ---
@@ -41,7 +28,7 @@ async function load_wb(to_group_by = "categoryLabel") {
             };
         }
         // ---
-        wd_result[to_group].items.push(new_item);
+        wd_result[to_group].items.push(item);
     }
     // ---
     // sort wd_result keys by values length

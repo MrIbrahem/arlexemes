@@ -51,45 +51,64 @@ require __DIR__ . "/main.php";
 <div class="container-fluid my-4">
 
     <div class="row">
-        <div class="col-md-4">
-            <span class="mb-4 h1" id="header_main">
-                تحليل:
-                <a href="#" target="_blank" class="text-primary font-weight-bold" id="lemma_link"></a>
-                <span id="lemma_link_en"></span>
-            </span>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-outline-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">بعض الأمثلة</button>
-        </div>
-        <div class="col-md-3">
-            <div class="input-group mb-3">
-                <span class="input-group-text">أدخل معرف </span>
-                <input type="text" id="lexemeId" class="form-control" placeholder="مثل L1467242"
-                    value="L1467242">
-                <button class="btn btn-primary" onclick="start_lexeme_wrap()">تحميل</button>
+        <div class="col-md-6 col-sm-12">
+            <div class="row">
+                <div class="col-md-10 col-sm-9">
+                    <span class="mb-4 h1" id="header_main">
+                        تحليل:
+                        <a href="#" target="_blank" class="text-primary font-weight-bold" id="lemma_link"></a>
+                        <span id="lemma_link_en"></span>
+                    </span>
+                </div>
+                <div class="col-md-2 col-sm-3">
+                    <button class="btn btn-outline-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">بعض الأمثلة</button>
+                </div>
             </div>
+            <hr class="d-lg-none d-md-none text-dark-subtle text-50">
         </div>
         <div class="col-md-3">
             <div class="row">
-                <div class="col-md-4">
-                    <select name="data_source" id="data_source" class="form-select d-inline-block">
-                        <option value="Q34698">صفة</option>
-                        <option value="Q24905">فعل</option>
-                        <option value="Q1084">اسم</option>
-                        <option value="Q111029">جذر</option>
-                    </select>
+                <div class="col-md-11">
+                    <div class="input-group">
+                        <span class="input-group-text">ادخل معرف</span>
+                        <input type="text" id="lexemeId" class="form-control" placeholder="مثل L1467242"
+                            value="L1467242">
+                    </div>
+                    <div class="col-md-11">
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-outline-primary w-75" onclick="start_lexeme_wrap()">تحميل</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="input-group mb-3">
+            </div>
+            <hr class="d-lg-none d-md-none text-dark-subtle text-50">
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <span class="input-group-text">التصنيف</span>
+                        <select name="data_source" id="data_source" class="form-select d-inline-block">
+                            <option value="Q34698">صفة</option>
+                            <option value="Q24905">فعل</option>
+                            <option value="Q1084">اسم</option>
+                            <option value="Q111029">جذر</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="input-group">
                         <div class="autocomplete-container">
-                            <input type="text" id="wikidatasearch" class="form-control" placeholder="اكتب للبحث..."
-                                value=""> <span id="autocomplete-loader"
-                                class="spinner-border spinner-border-sm inline-flex" role="status" style="display:none;">
-                                <span class="visually-hidden">Loading...</span>
-                            </span>
+                            <input type="text" id="wikidatasearch" class="form-control" placeholder="اكتب للبحث..." value="">
                             <div id="autocomplete-results" class="autocomplete-results"></div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <span id="autocomplete-loader"
+                        class="spinner-border spinner-border-sm inline-flex" role="status" style="display:none;">
+                        <span class="visually-hidden">جاري البحث...</span>
+                    </span>
                 </div>
             </div>
         </div>

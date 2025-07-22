@@ -8,73 +8,61 @@ const noResultsDiv = document.getElementById("noResults");
 
 let treeDataWD = [];
 
-async function loadsparqlQuery(sparqlQuery) {
-
-    const endpoint = 'https://query.wikidata.org/sparql';
-    const fullUrl = endpoint + '?format=json&query=' + encodeURIComponent(sparqlQuery);
-    const headers = { 'Accept': 'application/sparql-results+json' };
-    let data;
-    try {
-        const response = await fetch(fullUrl, { headers });
-        data = await response.json();
-    } catch (e) {
-        console.error(`catch: `, e);
-        return {};
-    }
-    if (typeof data === 'object' && data !== null) {
-        return data;
-    } else {
-        console.error(`loadsparqlQuery: `, data);
-        return {};
-    }
-}
-
 async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
-    const sparqlQuery = `
+    // ---
+    let props_in = [
+        "P31",
+        "P6771",
+        "P11038",
+        "P11757",
+        "P12451"
+    ]
+    // ---
+    let add_group = "";
+    let add_group_optional = "";
+    // ---
+    if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
+        to_group_by = to_group_by.replace("P", "");
+        // if to_group_by is number
+        add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
+        add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
 
-        SELECT ?item
+    }
+    // ---
+    const sparqlQuery = `
+        SELECT
+            ?item
             (SAMPLE(?lemma1) AS ?lemma)
-			(GROUP_CONCAT(DISTINCT ?lemma1; separator='|') AS ?lemmas)
+            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
             ?category ?categoryLabel ?P31Label
             (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
             (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
             (GROUP_CONCAT(DISTINCT ?P11757_z; separator=", ") AS ?P11757)
             (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
+            ${add_group}
         WHERE {
-        ?item rdf:type ontolex:LexicalEntry;
+            ?item rdf:type ontolex:LexicalEntry;
                 wikibase:lemma ?lemma1;
                 wikibase:lexicalCategory ?category;
                 dct:language wd:Q13955.
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-        OPTIONAL { ?item wdt:P31 ?P31. }
-        OPTIONAL { ?item wdt:P6771 ?P6771_z. }
-        OPTIONAL { ?item wdt:P11038 ?P11038_z. }
-        OPTIONAL { ?item wdt:P11757 ?P11757_z. }
-        OPTIONAL { ?item wdt:P12451 ?P12451_z. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            OPTIONAL { ?item wdt:P31 ?P31. }
+            OPTIONAL { ?item wdt:P6771 ?P6771_z. }
+            OPTIONAL { ?item wdt:P11038 ?P11038_z. }
+            OPTIONAL { ?item wdt:P11757 ?P11757_z. }
+            OPTIONAL { ?item wdt:P12451 ?P12451_z. }
+            ${add_group_optional}
         }
         GROUP BY ?item ?category ?categoryLabel ?P31Label
         limit ${limit}
     `;
 
     let result = await loadsparqlQuery(sparqlQuery);
-    let vars = result.head.vars;
 
-    // console.table(vars);
-
-    const items = result.results.bindings;
     let wd_result = {};
-    for (const item of items) {
-        // value of all item keys from vars
-        let new_item = {};
-        for (const key of vars) {
-            let value = item[key]?.value ?? '';
-            // if value has /entity/ then value = value.split("/").pop();
-            if (value.includes("/entity/")) {
-                value = value.split("/").pop();
-            }
-            new_item[key] = value;
-        }
-        let to_group = new_item[to_group_by] || '!';
+
+    for (const item of result) {
+        let to_group = item[to_group_by] || '!';
 
         if (!wd_result[to_group]) {
             // ---
@@ -84,8 +72,7 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
             };
         }
         // ---
-        wd_result[to_group].items.push(new_item);
-
+        wd_result[to_group].items.push(item);
     }
     // ---
     // sort wd_result keys by values length
@@ -101,7 +88,7 @@ function showLoading() {
     noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
 }
 
-function renderTree(data) {
+function renderTree(data, all_open) {
     loadingDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
     treeContainer.innerHTML = "";
 
@@ -112,7 +99,9 @@ function renderTree(data) {
 
     noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
 
-    data.forEach(category => {
+    data.forEach((category, index) => {
+        if (!category.items || category.items.length === 0) return;
+
         const li = document.createElement("li");
         // Adjusted classes for Bootstrap 5 list group items and styling
         li.className = "list-group-item border-start border-primary border-4 ps-3 mb-2";
@@ -122,20 +111,28 @@ function renderTree(data) {
         button.className = "btn btn-sm btn-link text-decoration-none d-flex justify-content-between align-items-center w-100 text-end pe-0";
         button.onclick = () => {
             const ul = li.querySelector("ul");
-            ul.classList.toggle("d-none"); // Bootstrap 5: use d-none for hidden
             const icon = li.querySelector(".arrow-icon");
-            icon.classList.toggle("rotate-180"); // Keep custom class for rotation
+
+            ul.classList.toggle("d-none"); // إخفاء أو إظهار القائمة
+
+            // تبديل الأيقونة حسب الحالة
+            const isOpen = !ul.classList.contains("d-none");
+            icon.className = `bi ${isOpen ? "bi-chevron-double-down" : "bi-chevron-double-left"} arrow-icon`;
         };
 
+        // محتوى الزر عند الإنشاء
         button.innerHTML = `
-                <span class="fw-medium text-black">${category.group_by}</span>
-                <span class="text-muted ms-2">(${category.items.length})</span>
-                <span class="arrow-icon transform transition-transform duration-200 text-black">&#9660;</span>
-            `;
+            <span class="fw-medium text-black">${category.group_by}</span>
+            <span class="text-muted ms-2">(${category.items.length})</span>
+            <i class="bi bi-chevron-double-left arrow-icon"></i>
+        `;
+
 
         const ul = document.createElement("ul");
-        // Adjusted classes for Bootstrap 5 list group and styling
-        ul.className = "list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end d-none"; // d-none for hidden initially
+
+        const d_class = (data.length === 1 || all_open) ? '' : 'd-none';
+
+        ul.className = `list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end ${d_class}`; // d-none for hidden initially
 
         category.items.forEach(item => {
             const liItem = document.createElement("li");
@@ -148,7 +145,8 @@ function renderTree(data) {
             a.rel = "noopener noreferrer";
             // Bootstrap 5: block link class
             a.className = "d-block w-100 h-100 text-decoration-none text-body";
-            a.textContent = `${item.lemma} (${item.item})`;
+            // a.textContent = `${item.lemma} (${item.item})`;
+            a.textContent = `${item.lemmas} (${item.item})`;
 
             liItem.appendChild(a);
             ul.appendChild(liItem);
@@ -156,6 +154,7 @@ function renderTree(data) {
 
         li.appendChild(button);
         li.appendChild(ul);
+
         treeContainer.appendChild(li);
     });
 }
@@ -164,7 +163,7 @@ function filterTreeData(term) {
     return treeDataWD.map(cat => ({
         ...cat,
         items: cat.items.filter(item =>
-            item.lemma.toLowerCase().includes(term.toLowerCase())
+            item.lemma.toLowerCase().includes(term.toLowerCase()) || item.lemmas.toLowerCase().includes(term.toLowerCase())
         )
     }));
 }
@@ -178,11 +177,21 @@ function get_param_from_window_location1(key, defaultvalue) {
 async function fetchData() {
     showLoading();
     let group_by = get_param_from_window_location1("group_by", "P31Label")
+    let custom_group_by = get_param_from_window_location1("custom_group_by", "")
     let limit = get_param_from_window_location1("limit", 100)
-
-    document.getElementById('group_by').value = group_by;
+    // ---
+    // let group_by_item = document.getElementById('group_by');
+    // if (group_by_item) group_by_item.value = group_by;
+    // ---
+    $("#group_by").val(group_by);
+    // ---
+    $("#custom_group_by").val(custom_group_by);
     $("#limit").val(limit);
-
+    // ---
+    if (custom_group_by !== "" && group_by === "custom") {
+        group_by = custom_group_by;
+    }
+    // ---
     const treeMap = await find_wd_result(group_by, limit);
 
     // count all items.length in wd_result
@@ -198,5 +207,5 @@ async function fetchData() {
 search_Input.addEventListener("input", e => {
     const term = e.target.value;
     const filtered = filterTreeData(term);
-    renderTree(filtered);
+    renderTree(filtered, true);
 });

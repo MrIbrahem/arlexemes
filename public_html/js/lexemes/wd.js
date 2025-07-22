@@ -88,7 +88,7 @@ function showLoading() {
     noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
 }
 
-function renderTree(data) {
+function renderTree(data, all_open) {
     loadingDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
     treeContainer.innerHTML = "";
 
@@ -99,7 +99,9 @@ function renderTree(data) {
 
     noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
 
-    data.forEach(category => {
+    data.forEach((category, index) => {
+        if (!category.items || category.items.length === 0) return;
+
         const li = document.createElement("li");
         // Adjusted classes for Bootstrap 5 list group items and styling
         li.className = "list-group-item border-start border-primary border-4 ps-3 mb-2";
@@ -109,20 +111,28 @@ function renderTree(data) {
         button.className = "btn btn-sm btn-link text-decoration-none d-flex justify-content-between align-items-center w-100 text-end pe-0";
         button.onclick = () => {
             const ul = li.querySelector("ul");
-            ul.classList.toggle("d-none"); // Bootstrap 5: use d-none for hidden
             const icon = li.querySelector(".arrow-icon");
-            icon.classList.toggle("rotate-180"); // Keep custom class for rotation
+
+            ul.classList.toggle("d-none"); // إخفاء أو إظهار القائمة
+
+            // تبديل الأيقونة حسب الحالة
+            const isOpen = !ul.classList.contains("d-none");
+            icon.className = `bi ${isOpen ? "bi-chevron-double-down" : "bi-chevron-double-left"} arrow-icon`;
         };
 
+        // محتوى الزر عند الإنشاء
         button.innerHTML = `
-                <span class="fw-medium text-black">${category.group_by}</span>
-                <span class="text-muted ms-2">(${category.items.length})</span>
-                <span class="arrow-icon transform transition-transform duration-200 text-black">&#9660;</span>
-            `;
+            <span class="fw-medium text-black">${category.group_by}</span>
+            <span class="text-muted ms-2">(${category.items.length})</span>
+            <i class="bi bi-chevron-double-left arrow-icon"></i>
+        `;
+
 
         const ul = document.createElement("ul");
-        // Adjusted classes for Bootstrap 5 list group and styling
-        ul.className = "list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end d-none"; // d-none for hidden initially
+
+        const d_class = (data.length === 1 || all_open) ? '' : 'd-none';
+
+        ul.className = `list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end ${d_class}`; // d-none for hidden initially
 
         category.items.forEach(item => {
             const liItem = document.createElement("li");
@@ -144,6 +154,7 @@ function renderTree(data) {
 
         li.appendChild(button);
         li.appendChild(ul);
+
         treeContainer.appendChild(li);
     });
 }
@@ -196,5 +207,5 @@ async function fetchData() {
 search_Input.addEventListener("input", e => {
     const term = e.target.value;
     const filtered = filterTreeData(term);
-    renderTree(filtered);
+    renderTree(filtered, true);
 });

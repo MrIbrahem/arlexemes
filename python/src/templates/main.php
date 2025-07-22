@@ -42,6 +42,7 @@
     <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
 
+    <script src="{{ url_for('static', filename='js/sparql.js') }}"></script>
     <script src="{{ url_for('static', filename='js/random.js') }}"></script>
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>

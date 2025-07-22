@@ -13,18 +13,6 @@ require __DIR__ . "/main.php";
                 <form method="GET" class="mb-0">
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            <!-- <div class="form-group">
-                                <label for="group_by1" class="form-label fw-bold">جمع بـ:</label>
-                                <select name="group_by1" id="group_by1" class="form-select w-100 d-inline-block"
-                                    onchangex="this.form.submit()">
-                                    <option value="P31Label">Instance of - P31</option>
-                                    <option value="categoryLabel">التصنيف المعجمي</option>
-                                    <option value="P6771">Arabic Ontology concept ID - P6771</option>
-                                    <option value="P11038">Arabic Ontology lemma ID - P11038</option>
-                                    <option value="P11757">Arabic Ontology form ID - P11757</option>
-                                    <option value="P12451">Arabic Ontology lexical concept ID - P12451</option>
-                                </select>
-                            </div> -->
                             <div class="form-group">
                                 <label for="group_by" class="form-label fw-bold">جمع بـ:</label>
                                 <select name="group_by" id="group_by" class="form-select w-100 d-inline-block" onchange="toggleCustomInput()">

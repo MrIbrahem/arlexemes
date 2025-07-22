@@ -45,10 +45,10 @@ echo <<<HTML
     <link href="/css/theme.css" rel="stylesheet">
     <link href="/css/style2.css" rel="stylesheet">
 
+    <script src="/js/sparql.js"></script>
     <script src="/js/random.js"></script>
     <script src="/js/theme.js"></script>
     <script src="/js/autocomplete.js"></script>
-    <script src="/js/sparql.js"></script>
 HTML;
 ?>
 
