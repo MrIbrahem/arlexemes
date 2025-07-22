@@ -22,14 +22,18 @@ let properties_formts = {
 function make_claims(claims) {
     let row = "";
     // ---
-    for (const prop in claims) {
+    if (!claims) return "";
+    // ---
+    let filterd_claims = Object.fromEntries(Object.entries(claims).filter(([prop]) => only_show.includes(prop)));
+    // ---
+    for (const prop in filterd_claims) {
         // ---
         if (!only_show.includes(prop)) continue;
         // ---
         let label = Labels[prop] ? `<span class="fw-bold">${Labels[prop]}</span>` : `<span class="fw-bold" find-label="${prop}">${prop}</span>`;
         let pv = [];
         // ---
-        for (const v of claims[prop]) {
+        for (const v of filterd_claims[prop]) {
             let value = v.mainsnak.datavalue.value;
             if (typeof value === "object") {
                 if (value.id) {

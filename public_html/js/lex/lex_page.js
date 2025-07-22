@@ -60,19 +60,18 @@ function make_to_display(formsToProcess) {
     let count = 0;
     // نعرض كل QID مع القيم الخاصة به
     for (const [qid, valuesSet] of Object.entries(qidValuesMap)) {
+        let label = keyLabels[qid] ? keyLabels[qid] : qid;
         const values = Array.from(valuesSet).join("، ");
         displayHtml += `
             <div class="col">
-                <strong>${qid}:</strong>
+                <strong>${label}:</strong>
                 ${values}
             </div>`;
 
         count++;
 
         // بعد كل 3 عناصر، أضف تقسيم جديد
-        if (count % 3 === 0) {
-            displayHtml += "</div><div class='col'>";
-        }
+        // if (count % 2 === 0) { displayHtml += "</div><div class='col'>"; }
     }
     displayHtml += "</div>";
     return displayHtml;
@@ -159,22 +158,23 @@ async function fetchLexemeById(id, entity) {
     entity.forms = forms;
 
     let claims = make_claims(entity?.claims);
+    let claims_row = (claims !== "") ? `<div class="col">${claims}</div>` : "";
     let forms_len = forms.length;
     let html = `
         <div class="row mb-4">
             <div class="col">
                 <span class="h4">المفردات:  ${forms_len}</span>
             </div>
-            <div class="col">
-                ${claims}
-            </div>
+            ${claims_row}
             <div class="col">
                 <strong>التصنيف المعجمي:</strong> ${lexicalCategory}
             </div>
             <div class="col">
                 <strong>اللغة:</strong> ${language}
             </div>
-            ${to_display}
+            <div class="col">
+                ${to_display}
+            </div>
         </div>
     `;
 

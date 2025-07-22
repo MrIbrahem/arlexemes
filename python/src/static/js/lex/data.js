@@ -97,6 +97,9 @@ const grammaticalFeatures = {
     // أخرى
     "performative": { qid: "Q124351233", ar: "أدائي" }, // إنجازي
 
+    "passive participle": { qid: "Q72249544", ar: "اِسْم الْمَفْعُول" },
+    "active participle": { qid: "Q72249355", ar: "اِسْم الْفَاعِل" },
+
 }
 for (const [en, { qid, ar }] of Object.entries(grammaticalFeatures)) {
     keyLabels[qid] = ar;

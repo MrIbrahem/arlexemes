@@ -151,7 +151,7 @@
         if (lex) {
             await setExample(lex);
         }
-        // load_search(setExample, 'wikidatasearch', 'autocomplete-results');
+        load_search(setExample, 'wikidatasearch', 'autocomplete-results');
 
     });
 </script>
