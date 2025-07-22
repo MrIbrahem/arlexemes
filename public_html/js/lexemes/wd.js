@@ -32,24 +32,26 @@ async function loadsparqlQuery(sparqlQuery) {
 async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
     const sparqlQuery = `
 
-        SELECT ?item
+        SELECT
+            ?item
             (SAMPLE(?lemma1) AS ?lemma)
+            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
             ?category ?categoryLabel ?P31Label
             (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
             (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
             (GROUP_CONCAT(DISTINCT ?P11757_z; separator=", ") AS ?P11757)
             (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
         WHERE {
-        ?item rdf:type ontolex:LexicalEntry;
+            ?item rdf:type ontolex:LexicalEntry;
                 wikibase:lemma ?lemma1;
                 wikibase:lexicalCategory ?category;
                 dct:language wd:Q13955.
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-        OPTIONAL { ?item wdt:P31 ?P31. }
-        OPTIONAL { ?item wdt:P6771 ?P6771_z. }
-        OPTIONAL { ?item wdt:P11038 ?P11038_z. }
-        OPTIONAL { ?item wdt:P11757 ?P11757_z. }
-        OPTIONAL { ?item wdt:P12451 ?P12451_z. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            OPTIONAL { ?item wdt:P31 ?P31. }
+            OPTIONAL { ?item wdt:P6771 ?P6771_z. }
+            OPTIONAL { ?item wdt:P11038 ?P11038_z. }
+            OPTIONAL { ?item wdt:P11757 ?P11757_z. }
+            OPTIONAL { ?item wdt:P12451 ?P12451_z. }
         }
         GROUP BY ?item ?category ?categoryLabel ?P31Label
         limit ${limit}
@@ -147,7 +149,8 @@ function renderTree(data) {
             a.rel = "noopener noreferrer";
             // Bootstrap 5: block link class
             a.className = "d-block w-100 h-100 text-decoration-none text-body";
-            a.textContent = `${item.lemma} (${item.item})`;
+            // a.textContent = `${item.lemma} (${item.item})`;
+            a.textContent = `${item.lemmas} (${item.item})`;
 
             liItem.appendChild(a);
             ul.appendChild(liItem);
@@ -163,7 +166,7 @@ function filterTreeData(term) {
     return treeDataWD.map(cat => ({
         ...cat,
         items: cat.items.filter(item =>
-            item.lemma.toLowerCase().includes(term.toLowerCase())
+            item.lemma.toLowerCase().includes(term.toLowerCase()) || item.lemmas.toLowerCase().includes(term.toLowerCase())
         )
     }));
 }

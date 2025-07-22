@@ -34,6 +34,7 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
 
         SELECT ?item
             (SAMPLE(?lemma1) AS ?lemma)
+			(GROUP_CONCAT(DISTINCT ?lemma1; separator='|') AS ?lemmas)
             ?category ?categoryLabel ?P31Label
             (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
             (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)

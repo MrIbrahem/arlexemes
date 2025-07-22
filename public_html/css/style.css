@@ -1,11 +1,23 @@
 :root {
-    --tool_icon: url('https://upload.wikimedia.org/wikipedia/commons/1/1c/MediaWiki-2020-large-icon-%28black%29.svg');
+    --tool_icon_img: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'><path fill='%23900' d='M24.656,5.203 H 60.656 L 24.656,67.179Z'/><path fill='%23396' d='M24.656,67.179 V 144.797 L 60.656,82.486 V 5.203Z M83.630,117.797 H 125.344 V 144.797 H 68.273Z'/><path fill='%230063BF' d='M60.656,82.486 V 117.797 H 83.630 L 68.273,144.797 H 24.656Z'/></svg>");
     --background-color: #ecf0f1;
 }
 
 :root[data-bs-theme="dark"] {
-    --tool_icon: url('https://upload.wikimedia.org/wikipedia/commons/c/ca/MediaWiki-2020-icon-%28white%29.svg');
+    --tool_icon_img: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'><path fill='%23FF6B6B' d='M24.656,5.203 H 60.656 L 24.656,67.179Z'/><path fill='%236CF5B5' d='M24.656,67.179 V 144.797 L 60.656,82.486 V 5.203Z M83.630,117.797 H 125.344 V 144.797 H 68.273Z'/><path fill='%2366B2FF' d='M60.656,82.486 V 117.797 H 83.630 L 68.273,144.797 H 24.656Z'/></svg>");
     --background-color: #2c3e50;
+}
+
+.tool_icon {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    background-image: var(--tool_icon_img);
+    background-size: cover;
+    /* border-radius: 50%; */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
 }
 
 .soro th {
@@ -33,18 +45,6 @@
 .alert-danger {
     border-color: var(--bs-danger-border-subtle);
     border-width: 2px;
-}
-
-.tool_icon {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    background-image: var(--tool_icon);
-    background-size: cover;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    margin-right: 0.5rem;
-    margin-left: 0.5rem;
 }
 
 /*

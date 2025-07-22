@@ -8,13 +8,14 @@ require __DIR__ . "/main.php";
     <div class="d-flex align-items-center justify-content-center">
         <div class="row col-md-9">
             <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
-                <h3 class="text-2xl font-bold text-center m-6 p-3">المخطط الشجري للكلمات <span id="total"></span>
+                <h3 class="text-2xl font-bold text-center m-6 p-3">
+                    المخطط الشجري للكلمات <span id="total"></span>
                 </h3>
                 <form method="GET" class="mb-0">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4 col-sm-6">
                             <label for="group_by" class="form-label fw-bold">جمع بـ:</label>
-                            <select name="group_by" id="group_by" class="form-select w-auto d-inline-block"
+                            <select name="group_by" id="group_by" class="form-select form-control w-auto d-inline-block"
                                 onchange="this.form.submit()">
                                 <option value="P31Label">P31Label</option>
                                 <option value="categoryLabel">categoryLabel</option>
@@ -25,21 +26,18 @@ require __DIR__ . "/main.php";
                                 <option value="P12451">P12451</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-6">
                             <label for="group_by" class="form-label fw-bold">العدد:</label>
-                            <div class="row">
-                                <div class="col-md-6 text-center">
-                                    <input type="number" id="limit" name="limit" class="form-control"
-                                        placeholder="عدد النتائج" value="1000">
-                                </div>
-                                <div class="col-md-6 text-center">
-                                    <button type="submit" class="btn btn-primary">تحميل</button>
-                                </div>
-                            </div>
+                            <input type="number" id="limit" name="limit" class="form-control"
+                                placeholder="عدد النتائج" value="1000">
                         </div>
-                    </div>
+                        <div class="col-md-4 col-sm-6">
+                            <label for="group_by" class="form-label fw-bold"></label>
+                            <button type="submit" class="form-control btn btn-outline-primary">تحميل</button>
+                        </div>
                 </form>
                 <div class="mb-3">
+                    <hr>
                     <input type="text" id="searchInput" placeholder="ابحث عن كلمة..." class="form-control" />
                 </div>
 
