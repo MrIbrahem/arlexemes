@@ -278,7 +278,7 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
         };
         // ---
         let add_th = `
-            <th rowspan="${rowspan}" class="table-light">${text}</th>
+            <th rowspan="${rowspan}" class="table-active">${text}</th>
         `;
         // ---
         if (!display_mt_cells && number === "") add_th = "";
@@ -407,7 +407,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
 
     let html = `
         <table idx="main_table" class="table table-bordered table-sm table-hover text-center align-middle pages_table">
-            <thead class="table-light">
+            <thead class="table-active">
                 ${thead}
             </thead>
             <tbody>

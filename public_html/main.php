@@ -48,6 +48,7 @@ echo <<<HTML
     <script src="/js/random.js"></script>
     <script src="/js/theme.js"></script>
     <script src="/js/autocomplete.js"></script>
+    <script src="/js/sparql.js"></script>
 HTML;
 ?>
 

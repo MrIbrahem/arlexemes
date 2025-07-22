@@ -8,30 +8,28 @@ const noResultsDiv = document.getElementById("noResults");
 
 let treeDataWD = [];
 
-async function loadsparqlQuery(sparqlQuery) {
-
-    const endpoint = 'https://query.wikidata.org/sparql';
-    const fullUrl = endpoint + '?format=json&query=' + encodeURIComponent(sparqlQuery);
-    const headers = { 'Accept': 'application/sparql-results+json' };
-    let data;
-    try {
-        const response = await fetch(fullUrl, { headers });
-        data = await response.json();
-    } catch (e) {
-        console.error(`catch: `, e);
-        return {};
-    }
-    if (typeof data === 'object' && data !== null) {
-        return data;
-    } else {
-        console.error(`loadsparqlQuery: `, data);
-        return {};
-    }
-}
-
 async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
-    const sparqlQuery = `
+    // ---
+    let props_in = [
+        "P31",
+        "P6771",
+        "P11038",
+        "P11757",
+        "P12451"
+    ]
+    // ---
+    let add_group = "";
+    let add_group_optional = "";
+    // ---
+    if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
+        to_group_by = to_group_by.replace("P", "");
+        // if to_group_by is number
+        add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
+        add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
 
+    }
+    // ---
+    const sparqlQuery = `
         SELECT
             ?item
             (SAMPLE(?lemma1) AS ?lemma)
@@ -41,6 +39,7 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
             (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
             (GROUP_CONCAT(DISTINCT ?P11757_z; separator=", ") AS ?P11757)
             (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
+            ${add_group}
         WHERE {
             ?item rdf:type ontolex:LexicalEntry;
                 wikibase:lemma ?lemma1;
@@ -52,30 +51,18 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
             OPTIONAL { ?item wdt:P11038 ?P11038_z. }
             OPTIONAL { ?item wdt:P11757 ?P11757_z. }
             OPTIONAL { ?item wdt:P12451 ?P12451_z. }
+            ${add_group_optional}
         }
         GROUP BY ?item ?category ?categoryLabel ?P31Label
         limit ${limit}
     `;
 
     let result = await loadsparqlQuery(sparqlQuery);
-    let vars = result.head.vars;
 
-    // console.table(vars);
-
-    const items = result.results.bindings;
     let wd_result = {};
-    for (const item of items) {
-        // value of all item keys from vars
-        let new_item = {};
-        for (const key of vars) {
-            let value = item[key]?.value ?? '';
-            // if value has /entity/ then value = value.split("/").pop();
-            if (value.includes("/entity/")) {
-                value = value.split("/").pop();
-            }
-            new_item[key] = value;
-        }
-        let to_group = new_item[to_group_by] || '!';
+
+    for (const item of result) {
+        let to_group = item[to_group_by] || '!';
 
         if (!wd_result[to_group]) {
             // ---
@@ -85,8 +72,7 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
             };
         }
         // ---
-        wd_result[to_group].items.push(new_item);
-
+        wd_result[to_group].items.push(item);
     }
     // ---
     // sort wd_result keys by values length
@@ -180,11 +166,21 @@ function get_param_from_window_location1(key, defaultvalue) {
 async function fetchData() {
     showLoading();
     let group_by = get_param_from_window_location1("group_by", "P31Label")
+    let custom_group_by = get_param_from_window_location1("custom_group_by", "")
     let limit = get_param_from_window_location1("limit", 100)
-
-    document.getElementById('group_by').value = group_by;
+    // ---
+    // let group_by_item = document.getElementById('group_by');
+    // if (group_by_item) group_by_item.value = group_by;
+    // ---
+    $("#group_by").val(group_by);
+    // ---
+    $("#custom_group_by").val(custom_group_by);
     $("#limit").val(limit);
-
+    // ---
+    if (custom_group_by !== "" && group_by === "custom") {
+        group_by = custom_group_by;
+    }
+    // ---
     const treeMap = await find_wd_result(group_by, limit);
 
     // count all items.length in wd_result

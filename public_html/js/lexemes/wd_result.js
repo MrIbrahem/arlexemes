@@ -37,62 +37,27 @@ const categories = [
     "Q7075064", // wd:Q7075064	1
 ]
 
-function parse_sparql_results(result) {
-    let vars = result.head.vars;
-
-    const items = result.results.bindings;
-
+function parse_results(result) {
     let wd_result = {};
 
-    for (const item of items) {
-        // value of all item keys from vars
-        let new_item = {};
-        for (const key of vars) {
-            let value = item[key]?.value ?? '';
-            // if value has /entity/ then value = value.split("/").pop();
-            if (value.includes("/entity/")) {
-                value = value.split("/").pop();
-            }
-            new_item[key] = value;
-        }
-        let to_group = new_item['categoryLabel'] || '!';
+    for (const item of result) {
+        let to_group = item['categoryLabel'] || '!';
 
         if (!wd_result[to_group]) {
             // ---
             wd_result[to_group] = {
                 group_by: to_group,
-                qid: new_item['category'],
+                qid: item['category'],
                 items: []
             };
         }
         // ---
-        wd_result[to_group].items.push(new_item);
+        wd_result[to_group].items.push(item);
     }
     // ---
     wd_result = Object.fromEntries(Object.entries(wd_result).sort(([, a], [, b]) => b.items.length - a.items.length));
     // ---
     return wd_result;
-}
-
-async function loadsparqlQuery(sparqlQuery) {
-
-    const endpoint = 'https://query.wikidata.org/sparql';
-    const fullUrl = endpoint + '?format=json&query=' + encodeURIComponent(sparqlQuery);
-    const headers = { 'Accept': 'application/sparql-results+json' };
-    let data;
-    try {
-        const response = await fetch(fullUrl, { headers });
-        data = await response.json();
-    } catch (e) {
-        console.error(`catch: `, e);
-        return {};
-    }
-    if (typeof data === 'object' && data !== null) {
-        return data;
-    } else {
-        console.error(`loadsparqlQuery: `, data);
-        return {};
-    }
 }
 
 async function load_wd(limit) {
@@ -131,7 +96,7 @@ async function load_wd(limit) {
     }
     let result = await loadsparqlQuery(sparqlQuery);
 
-    let wd_result = parse_sparql_results(result);
+    let wd_result = parse_results(result);
 
     return wd_result;
 }
