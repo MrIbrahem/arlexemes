@@ -198,7 +198,7 @@ function entryFormatter(form) {
     return link;
 }
 
-function make_thead(first_rows, second_rows, first_person, dual) {
+function make_thead(first_rows, second_rows, first_person, dual, display_mt_cells) {
     // ---
     let thead = `
         <tr data-dt-order="disable">
@@ -214,13 +214,13 @@ function make_thead(first_rows, second_rows, first_person, dual) {
             colspan -= 1;
         }
         // ---
-        if (!display_empty_cells && second_rows.includes("")) {
+        if (!display_mt_cells && second_rows.includes("")) {
             colspan -= 1;
         }
         // ---
         const headerText = (first_rows.length === 1 && gender === "") ? "النوع" : wdlink_2(gender);
         // ---
-        if (!display_empty_cells && gender === "" && first_rows.length > 1) continue;
+        if (!display_mt_cells && gender === "" && first_rows.length > 1) continue;
         // ---
         thead += `
             <th colspan="${colspan}">${headerText}</th>
@@ -237,11 +237,11 @@ function make_thead(first_rows, second_rows, first_person, dual) {
     // الصف الثاني من الرؤوس
     for (const gender of first_rows) {
         // ---
-        if (!display_empty_cells && gender === "" && first_rows.length > 1) continue;
+        if (!display_mt_cells && gender === "" && first_rows.length > 1) continue;
         // ---
         for (const col of second_rows) {
             // ---
-            if (!display_empty_cells && col === "") continue;
+            if (!display_mt_cells && col === "") continue;
             // ---
             if (col === first_person && gender === dual) {
                 // تجاهل هذه الخلية
@@ -263,7 +263,7 @@ function make_thead(first_rows, second_rows, first_person, dual) {
     return thead;
 }
 
-function right_side_th(i, number, row, row_Keys) {
+function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     let add_to_tbody = "";
 
     // Add the number header (مفرد or جمع) in the first column, spanning all case rows
@@ -273,7 +273,7 @@ function right_side_th(i, number, row, row_Keys) {
         // ---
         let rowspan = row_Keys.length;
         // ---
-        if (!display_empty_cells && row_Keys.includes("")) {
+        if (!display_mt_cells && row_Keys.includes("")) {
             rowspan -= 1;
         };
         // ---
@@ -281,7 +281,7 @@ function right_side_th(i, number, row, row_Keys) {
             <th rowspan="${rowspan}" class="table-light">${text}</th>
         `;
         // ---
-        if (!display_empty_cells && number === "") add_th = "";
+        if (!display_mt_cells && number === "") add_th = "";
         // ---
         add_to_tbody += add_th;
     }
@@ -292,7 +292,7 @@ function right_side_th(i, number, row, row_Keys) {
         <th>${text2}</th>
     `;
     // ---
-    if (!display_empty_cells && row === "") add_th2 = "";
+    if (!display_mt_cells && row === "") add_th2 = "";
     // ---
     // Add the case header (e.g., رفع) in the second column
     add_to_tbody += add_th2;
@@ -300,8 +300,10 @@ function right_side_th(i, number, row, row_Keys) {
     return add_to_tbody;
 }
 // Function to generate the HTML table from structured data
-function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header) {
-
+function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
+    // ---
+    let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
+    // ---
     let first_person = "Q21714344";
     let second_person = "Q51929049";
     let dual = "Q110022";
@@ -316,7 +318,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     let col_Keys = second_rows;
     let row_Keys = second_collumn;
     // ---
-    let thead = make_thead(gender_Keys, col_Keys, first_person, dual);
+    let thead = make_thead(gender_Keys, col_Keys, first_person, dual, show_empty_cells);
     // ---
     let tbody = "";
 
@@ -325,7 +327,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         // ---
         let number_data = tableData[number];
         // ---
-        if (!display_empty_cells && number === "") continue;
+        if (!show_empty_cells && number === "") continue;
         // ---
         // Check if there is any data for this number category to avoid empty sections
         let hasNumberData = row_Keys.some(row =>
@@ -341,14 +343,14 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         for (let i = 0; i < row_Keys.length; i++) {
             const row = row_Keys[i];
             // ---
-            if (!display_empty_cells && row === "") continue;
+            if (!show_empty_cells && row === "") continue;
             // ---
-            let add_to_tbody = right_side_th(i, number, row, row_Keys);
+            let add_to_tbody = right_side_th(i, number, row, row_Keys, show_empty_cells);
 
             // Add the data cells for each gender and column type
             for (const gender of gender_Keys) {
                 // ---
-                if (!display_empty_cells && gender === "" && gender_Keys.length > 1) continue;
+                if (!show_empty_cells && gender === "" && gender_Keys.length > 1) continue;
                 // ---
                 let gender_tds = "";
                 for (const col of col_Keys) {
@@ -356,7 +358,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     if (col === first_person && gender === dual) continue;
 
                     // ---
-                    if (!display_empty_cells && col === "") continue;
+                    if (!show_empty_cells && col === "") continue;
                     // ---
                     let td = `<td>`;
                     let entries = number_data[row][col][gender] || [];
@@ -372,7 +374,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                             entries = third_entries;
                             singular_fixed[gender] = true;
                             // ---
-                            let rowspan = (display_empty_cells) ? 3 : 2;
+                            let rowspan = (show_empty_cells) ? 3 : 2;
                             // ---
                             td = `
                                 <td rowspan="${rowspan}">
@@ -455,6 +457,7 @@ async function Q24905(entity) {
     for (const verb of verbs_main) {
         tableData[verb] = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
     }
+    let display_mt_cells = {};
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
@@ -471,7 +474,10 @@ async function Q24905(entity) {
         // ---
         tableData[verb][number][row][col][gender].push(form);
         // ---
+        // if any (number, row, col, gender) is "" set display_mt_cells to true
+        display_mt_cells[verb] = [number, row, col, gender].includes("");
     }
+    // ---
     let result = "";
     // ---
     for (let verb of verbs_main) {
@@ -479,7 +485,8 @@ async function Q24905(entity) {
         let verb_lab = wdlink(verb2);
         let caption = `<div class="text-center"><h3>${verb_lab}</h3></div>`;
         // Call the shared HTML generation function
-        result += _generateHtmlTable(tableData[verb], numberKeys, rowKeys, colKeys, genderKeys, caption);
+        let mt_cells = display_mt_cells[verb] || false;
+        result += _generateHtmlTable(tableData[verb], numberKeys, rowKeys, colKeys, genderKeys, caption, mt_cells);
     }
     // ---
     return result;
@@ -502,7 +509,9 @@ async function adj_and_nouns(entity_type, entity) {
     colKeys = removeKeysIfNotFound([...colKeys], forms, ["Q118465097", "Q1641446"]);
     // ---
     const tableData = make_tableData(number_Keys, row_Keys, colKeys, genderKeys);
-
+    // ---
+    let display_mt_cells = false;
+    // ---
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
         let feats = form.tags || form.grammaticalFeatures || [];
@@ -513,10 +522,14 @@ async function adj_and_nouns(entity_type, entity) {
         const gender = genderKeys.find(g => feats.includes(g)) || "";
 
         tableData[number][row][col][gender].push(form);
+
+        // if any (number, row, col, gender) is "" set display_mt_cells to true
+        display_mt_cells = [number, row, col, gender].includes("");
+
     }
 
     // Call the shared HTML generation function
-    return _generateHtmlTable(tableData, number_Keys, row_Keys, colKeys, genderKeys);
+    return _generateHtmlTable(tableData, number_Keys, row_Keys, colKeys, genderKeys, "", display_mt_cells);
 }
 
 /*

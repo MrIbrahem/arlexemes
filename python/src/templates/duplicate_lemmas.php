@@ -1,11 +1,11 @@
-{% extends "main.html" %}
+{% extends "main.php" %}
 
 {% block content %}
 
 <div class="container-fluid my-2">
     <div class="card shadow rounded-4">
         <div class="card-header">
-            <span id="h1" class="card-title fs-3 fw-bold text-dark mb-3"> المفردات المكررة </span>
+            <span id="h1" class="card-title fs-3 fw-bold mb-3"> المفردات المكررة </span>
         </div>
 
         <div class="card-body">

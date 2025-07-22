@@ -1,8 +1,3 @@
-let Labels = {
-    "P31": "فئة",
-    "P5920": "الجذر",
-    "P11038": "أنطولوجيا",
-}
 
 let to_dis_tags = {
     "مصدر": ["Q1923028"],
@@ -18,29 +13,6 @@ let to_dis_tags = {
     "جمع مؤنث": ["Q1775415", "Q146786"],
     "جمع مذكر": ["Q499327", "Q146786"],
 };
-
-function make_claims(claims) {
-    let row = "";
-    // ---
-    for (const prop in claims) {
-        let label = Labels[prop] ? Labels[prop] : prop;
-        let pv = ``;
-        for (const v of claims[prop]) {
-            let value = v.mainsnak.datavalue.value;
-            if (typeof value === "object") {
-                value = `<a href="https://wikidata.org/entity/${value.id}" target="_blank">${value.id}</a>`;
-            }
-            pv += `${value}`;
-        }
-        row += `
-            <div class='col'>
-                <a href="https://wikidata.org/entity/${prop}" target="_blank">${label}</a>: ${pv}
-            </div>
-        `;
-    }
-    // ---
-    return row;
-}
 
 function make_to_display(formsToProcess) {
 
@@ -235,6 +207,5 @@ async function start_lexeme(id) {
     output.innerHTML = html;
 
     table_filter();
-    await table_toggle();
 
 }

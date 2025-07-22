@@ -83,7 +83,7 @@ function renderTree(data) {
         }
         // ---
         category.items.forEach(item => {
-            let href = `lex?wd_id=${item.item}`;
+            let href = `lex.php?lex=${item.item}`;
             let lemma = `${item.lemma} (${item.count})`;
             // ---
             if (!to_lex.includes(item.category)) {

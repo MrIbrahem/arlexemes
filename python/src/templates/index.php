@@ -1,4 +1,4 @@
-{% extends "main.html" %}
+{% extends "main.php" %}
 {% block title %}
 <title>المفردات العربية</title>
 {% endblock %}
@@ -11,7 +11,7 @@
         </h4>
     </div>
     <div class="card-body p-3">
-        <form id="form" action="/lex" method="get">
+        <form id="form" action="/lex.php" method="get">
 
             <div class="row">
                 <div class="col-md-12">
@@ -19,7 +19,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <label for="wd_id" class="form-label fw-bold mb-2">
                                 <i class="fas fa-link ms-2"></i> ابحث عن مفردة
-                                <div class="spinner-border spinner-border-sm" id="autocomplete_loading" role="status"
+                                <div class="spinner-border spinner-border-sm" id="autocomplete-loader" role="status"
                                     style="display: none;">
                                     <span class="visually-hidden">تحميل...</span>
                                 </div>

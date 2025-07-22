@@ -4,12 +4,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="https://www.mediawiki.org/static/images/icons/mediawikiwiki.svg" type="image/svg+xml">
     {% block title %}
-    <title>المفردات العربية</title>
+    <title>قائمة المفردات العربية - ويكي بيانات</title>
     {% endblock %}
     <link href="{{ cdn_base }}/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ cdn_base }}/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel='stylesheet' type='text/css'>
@@ -18,8 +18,6 @@
     <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
     <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
 
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
     <script src="{{ cdn_base }}/jquery/3.7.0/jquery.min.js"></script>
     <script src="{{ cdn_base }}/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script src="{{ cdn_base }}/popper.js/2.11.8/umd/popper.min.js"></script>
@@ -28,62 +26,10 @@
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
-    <style>
-        :root[data-bs-theme="light"] {
-            body {
-                background-color: rgb(243, 244, 246);
-                /* Ensure the iframe has a white background */
-            }
-        }
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style2.css') }}" rel="stylesheet">
 
-        .table_text_right,
-        .table_text_right>thead>tr>th {
-            text-align: right
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        .autocomplete-container {
-            position: relative;
-            /* مهم لتموضع النتائج بشكل صحيح */
-            width: 100%;
-            /* أو أي عرض تريده */
-            /* margin-top: 20px; */
-        }
-
-        .autocomplete-results {
-            position: absolute;
-            z-index: 1000;
-            width: 80%;
-            border: 1px solid #ced4da;
-            border-top: none;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-height: 300px;
-            overflow-y: auto;
-            border-radius: 0 0 .25rem .25rem;
-        }
-
-        .autocomplete-item {
-            padding: 8px 12px;
-            cursor: pointer;
-            text-align: right;
-            /* للمحتوى العربي */
-        }
-
-        .autocomplete-item:hover,
-        .autocomplete-item.selected {
-            /* لإضافة تأثير عند التحديد بالكيبورد لاحقًا إذا أردت */
-            background-color: #f0f0f0;
-        }
-
-        .autocomplete-item .description {
-            font-size: 0.85em;
-            color: #666;
-        }
-    </style>
 </head>
 
 <body>
@@ -102,32 +48,32 @@
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/list"><i class="bi bi-journal-text ms-1"></i>
+                        <a class="nav-link" href="/list.php"><i class="bi bi-journal-text ms-1"></i>
                             قائمة المفردات
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/duplicate_lemmas"><i class="bi bi-journal-text ms-1"></i>
+                        <a class="nav-link" href="/duplicate_lemmas.php"><i class="bi bi-journal-text ms-1"></i>
                             المكررات
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/chart"><i class="bi bi-journal-text ms-1"></i>
+                        <a class="nav-link" href="/chart.php"><i class="bi bi-journal-text ms-1"></i>
                             مخطط بياني
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/wd"><i class="bi bi-tree ms-1"></i>
+                        <a class="nav-link" href="/wd.php"><i class="bi bi-tree ms-1"></i>
                             مخطط شجري
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/P11038"><i class="bi bi-journal-text ms-1"></i>
+                        <a class="nav-link" href="/P11038.php"><i class="bi bi-journal-text ms-1"></i>
                             الأنطولوجيا العربية
                         </a>
                     </li>
                 </ul>
-                <hr class="d-lg-none text-black-50">
+                <hr class="d-lg-none text-dark-subtle text-50">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav me-lg-auto">
 
                     <li class="nav-item col-4 col-lg-auto">
@@ -155,42 +101,12 @@
     <script src="{{ url_for('static', filename='theme.js') }}"></script>
     <script src="{{ url_for('static', filename='autocomplete.js') }}"></script>
     <script>
-
         $('.soro').DataTable({
             paging: false,
             info: false,
             searching: false,
             order: []
-        });
-        function copyResult(id, event) {
-            const resultText = document.getElementById(id);
-            if (resultText.value === '') return;
-
-            // Get button for feedback
-            const copyBtn = event.currentTarget;
-            const originalText = copyBtn.innerHTML;
-
-            // Use Clipboard API
-            navigator.clipboard.writeText(resultText.value)
-                .then(() => {
-                    // Success feedback
-                    copyBtn.innerHTML = '<i class="bi bi-check2"></i> نُسخ النص';
-                    // Accessibility announcement
-                    const announcement = document.createElement('div');
-                    announcement.setAttribute('aria-live', 'polite');
-                    announcement.classList.add('visually-hidden');
-                    announcement.textContent = 'تم نسخ النص';
-                    document.body.appendChild(announcement);
-
-                    setTimeout(() => {
-                        copyBtn.innerHTML = originalText;
-                        document.body.removeChild(announcement);
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
-        }
+        })
     </script>
     <footer class="footer mt-5 py-0">
     </footer>

@@ -139,7 +139,7 @@ function renderTree(data) {
         category.items.forEach(item => {
             const liItem = document.createElement("li");
             // Adjusted classes for Bootstrap 5 list group items
-            liItem.className = "list-group-item bg-light px-3 py-2 rounded hover:bg-info hover:bg-opacity-10 cursor-pointer transition-colors";
+            liItem.className = "list-group-item bg-light-subtle px-3 py-2 rounded hover:bg-info hover:bg-opacity-10 cursor-pointer transition-colors";
 
             const a = document.createElement("a");
             a.href = `https://www.wikidata.org/wiki/Lexeme:${item.item}`;

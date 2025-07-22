@@ -1,6 +1,6 @@
 
 // هنا سيأتي كود JavaScript
-const searchInput = document.getElementById('wikidatasearch');
+const searchInput = document.getElementById('wd_id');
 const resultsContainer = document.getElementById('autocomplete-results');
 let debounceTimeout;
 
