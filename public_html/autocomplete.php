@@ -40,6 +40,33 @@ class SPARQLQueryDispatcher
         $this->endpointUrl = $endpointUrl;
     }
 
+    public function parse_sparql_results(array $data): array
+    {
+        $result = [];
+
+        $items = $data['results']['bindings'] ?? [];
+        $vars_list = $data['head']['vars'] ?? [];
+
+        foreach ($items as $row) {
+            $new_row = [];
+
+            foreach ($vars_list as $var) {
+                $value = $row[$var]['value'] ?? '';
+
+                if (strpos($value, '/entity/') !== false) {
+                    $parts = explode('/', $value);
+                    $value = end($parts);
+                }
+
+                $new_row[$var] = $value;
+            }
+
+            $result[] = $new_row;
+        }
+
+        return $result;
+    }
+
     public function query(string $sparqlQuery): array
     {
         $opts = [
@@ -55,7 +82,9 @@ class SPARQLQueryDispatcher
         $url = $this->endpointUrl . '?query=' . urlencode($sparqlQuery);
         $response = file_get_contents($url, false, $context) ?? '';
 
-        return json_decode($response, true);
+        $data = json_decode($response, true) ?? [];
+
+        return $this->parse_sparql_results($data);
     }
 }
 
@@ -64,21 +93,21 @@ $endpointUrl = 'https://query.wikidata.org/sparql';
 // ⚠️ تأكد من الهروب السليم (بما أن الإدخال من المستخدم)
 $escapedTerm = addslashes($term); // لا تستخدم مباشرة داخل SPARQL بدون هروب
 
-$values = "";
+$values = "VALUES ?category { wd:Q24905 wd:Q34698 wd:Q1084 } . ";
+
 if ($data_source !== "") {
     $values = "VALUES ?category { wd:" . $data_source . " } . ";
 }
 
 $sparqlQueryString = <<<SPARQL
-SELECT DISTINCT ?lemma ?item ?categoryLabel (count(*) as ?count) WHERE {
+SELECT DISTINCT ?lemma ?item ?categoryLabel (count(?form) as ?count) WHERE {
     $values
     ?item a ontolex:LexicalEntry ;
             wikibase:lexicalCategory ?category ;
-            ontolex:lexicalForm ?form ;
             dct:language wd:Q13955 ;
             wikibase:lemma ?lemma .
+    optional { ?item ontolex:lexicalForm ?form }
     FILTER(CONTAINS(STR(?lemma), "$escapedTerm")) .
-
     SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
 }
 group by ?lemma ?item ?categoryLabel
@@ -86,13 +115,7 @@ ORDER BY DESC(?count)
 LIMIT 50
 SPARQL;
 
-
 $queryDispatcher = new SPARQLQueryDispatcher($endpointUrl);
-
-// تنسيق النتائج على شكل [{ label: "...", value: "...", id: "Q..." }, ...]
-$items = [
-    "search" => []
-];
 
 try {
     $result = $queryDispatcher->query($sparqlQueryString);
@@ -100,20 +123,29 @@ try {
     error_log($e->getMessage());
 }
 
+// تنسيق النتائج على شكل [{ label: "...", value: "...", id: "Q..." }, ...]
+$items = [
+    "search" => []
+];
+
 if ($result) {
+    $items = ['search' => []];
 
-    foreach ($result['results']['bindings'] as $row) {
-        // split id before /entity/
-        $id = $row['item']['value'];
-        $id = substr($id, strpos($id, '/entity/') + 8);
+    foreach ($result as $row) {
+        $item_id = $row['item'];
+        $lemma = $row['lemma'];
+        $categoryLabel = $row['categoryLabel'];
+        $count = isset($row['count']) ? (int)$row['count'] : 0;
 
-        // $added = isset($row['categoryLabel']['value']) ? ' - ' . $row['categoryLabel']['value'] : '';
-        $added = isset($row['count']['value']) ? ' - ' . $row['count']['value'] : '';
+        $label = "$lemma - $categoryLabel";
+        if ($count > 1) {
+            $label .= " - ($count كلمة)";
+        }
 
-        $items["search"][] = [
-            'label' => $row['lemma']['value'] . $added,
-            'value' => $row['lemma']['value'],
-            'id'    => $id,
+        $items['search'][] = [
+            'label' => $label,
+            'value' => $lemma,
+            'id' => $item_id
         ];
     }
 }

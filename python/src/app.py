@@ -42,7 +42,7 @@ def not_in_sql():
     # ---
     len_of_ids = max([len(x['P11038_list']) for x in result if x['P11038_list']])
     # ---
-    return render_template("not_in_sql.html", data=result, len_of_ids=len_of_ids, limit=limit)
+    return render_template("not_in_sql.php", data=result, len_of_ids=len_of_ids, limit=limit)
 
 
 @app.route("/logs1", methods=["GET"])
@@ -50,7 +50,7 @@ def view_logs():
     # ---
     result = logs_bot.find_logs(request)
     # ---
-    return render_template("logs.html", result=result)
+    return render_template("logs.php", result=result)
 
 
 def jsonify(data : dict) -> str:
@@ -58,14 +58,14 @@ def jsonify(data : dict) -> str:
     return Response(response=response_json, content_type="application/json; charset=utf-8")
 
 
-@app.route("/autocomplete", methods=["GET"])
+@app.route("/autocomplete.php", methods=["GET"])
 def autocomplete():
     return sparql_bot.search(request.args)
 
 
-@app.route("/list", methods=["GET"])
+@app.route("/list.php", methods=["GET"])
 def list_lexemes():
-    return render_template("list_lexemes.html")
+    return render_template("list.php")
 
 
 @app.route("/P11038", methods=["GET"])
@@ -89,30 +89,30 @@ def P11038():
     return render_template("P11038.html", limit=limit, result=split_by_category)
 
 
-@app.route("/wd", methods=["GET"])
+@app.route("/wd.php", methods=["GET"])
 def wd():
-    return render_template("wd.html")
+    return render_template("wd.php")
 
 
-@app.route("/duplicate_lemmas", methods=["GET"])
+@app.route("/duplicate_lemmas.php", methods=["GET"])
 def duplicate_lemmas():
-    return render_template("duplicate_lemmas.html")
+    return render_template("duplicate_lemmas.php")
 
 
-@app.route("/chart", methods=["GET"])
+@app.route("/chart.php", methods=["GET"])
 def chart():
-    return render_template("chart.html")
+    return render_template("chart.php")
 
 
-@app.route("/lex", methods=["GET"])
+@app.route("/lex.php", methods=["GET"])
 def lex():
-    return render_template("lex.html")
+    return render_template("lex.php")
 
 
 @app.route("/", methods=["GET"])
 def index() -> str:
     username = session.get('username', None)
-    return render_template("index.html", username=username)
+    return render_template("index.php", username=username)
 
 
 @app.errorhandler(404)
