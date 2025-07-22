@@ -3,7 +3,7 @@
 <title>المفردات العربية</title>
 {% endblock %}
 
-{% block content2 %}
+{% block content %}
 
 <div>
     <div class="container-fluid">
@@ -20,7 +20,7 @@
                 <div class="input-group mb-3">
                     <input type="text" id="lexemeId" class="form-control" placeholder="أدخل معرف مثل L1467242"
                         value="L1467242">
-                    <button class="btn btn-primary" onclick="start_lexeme()">تحميل</button>
+                    <button class="btn btn-primary" onclick="start_lexeme_wrap()">تحميل</button>
                 </div>
             </div>
         </div>
@@ -29,14 +29,14 @@
 
     </div>
 </div>
-<script src="{{ url_for('static', filename='lex/find_labels.js') }}"></script>
-<script src="{{ url_for('static', filename='lex/data.js') }}"></script>
-<script src="{{ url_for('static', filename='table_filter.js') }}"></script>
-<script src="{{ url_for('static', filename='lex/toggle_table.js') }}"></script>
-<script src="{{ url_for('static', filename='lex/fetch.js') }}"></script>
-<script src="{{ url_for('static', filename='lex/lex.js') }}"></script>
-<script src="{{ url_for('static', filename='lex/lex_page_claims.js') }}"></script>
-<script src="{{ url_for('static', filename='lex/lex_page.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/data.js') }}"></script>
+<script src="{{ url_for('static', filename='js/table_filter.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/toggle_table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/fetch.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/lex.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/lex_page_claims.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/lex_page.js') }}"></script>
 <div>
     <!-- to compare -->
     <script>

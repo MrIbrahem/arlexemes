@@ -1,6 +1,6 @@
 {% extends "main.php" %}
 
-{% block content2 %}
+{% block content %}
 <div class="container my-4">
     <div class="d-flex align-items-center justify-content-center">
         <div class="row col-md-9">
@@ -55,7 +55,7 @@
         </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='lexemes/wd.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lexemes/wd.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => fetchData());
 </script>

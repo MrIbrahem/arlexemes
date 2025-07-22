@@ -99,7 +99,7 @@ def duplicate_lemmas():
     return render_template("duplicate_lemmas.php")
 
 
-@app.route("/chart", methods=["GET"])
+@app.route("/chart.php", methods=["GET"])
 def chart():
     return render_template("chart.php")
 
@@ -117,12 +117,12 @@ def index() -> str:
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template("error.php", tt="invalid_url", error=str(e)), 404
+    return render_template("error.html", tt="invalid_url", error=str(e)), 404
 
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template("error.php", tt="unexpected_error", error=str(e)), 500
+    return render_template("error.html", tt="unexpected_error", error=str(e)), 500
 
 
 if __name__ == "__main__":

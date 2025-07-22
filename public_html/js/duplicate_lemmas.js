@@ -1,5 +1,5 @@
 
-let duplicate_lemmas = [];
+let dup_lemmas = [];
 
 async function loadsparqlQuery(sparqlQuery) {
 
@@ -98,12 +98,12 @@ async function load_duplicate() {
         });
     })
     // ---
-    let duplicate_lemmas = [];
+    let dup_lemmas = [];
 
     // جمع المكررات فقط
     for (const key in data) {
         if (data[key].length > 1) {
-            duplicate_lemmas.push(data[key]);
+            dup_lemmas.push(data[key]);
         }
     }
 
@@ -111,7 +111,7 @@ async function load_duplicate() {
     $('#tables_container').html('');
 
     let groupIndex = 0;
-    duplicate_lemmas.forEach(group => {
+    dup_lemmas.forEach(group => {
         groupIndex++;
 
         // جمع كل المفاتيح
@@ -170,7 +170,7 @@ async function load_duplicate() {
         });
     });
 
-    if (duplicate_lemmas.length) {
+    if (dup_lemmas.length) {
         document.getElementById('loading').classList.add('d-none');
     }
     // ---

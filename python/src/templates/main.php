@@ -11,24 +11,36 @@
     {% block title %}
     <title>قائمة المفردات العربية - ويكي بيانات</title>
     {% endblock %}
-    <link href="{{ cdn_base }}/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ cdn_base }}/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel='stylesheet' type='text/css'>
-    <link href="{{ cdn_base }}/jqueryui/1.13.2/themes/base/jquery-ui.min.css" rel="stylesheet">
-    <link href="{{ cdn_base }}/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-    <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
-    <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
 
+    <!-- jQuery -->
     <script src="{{ cdn_base }}/jquery/3.7.0/jquery.min.js"></script>
-    <script src="{{ cdn_base }}/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script src="{{ cdn_base }}/popper.js/2.11.8/umd/popper.min.js"></script>
-    <script src="{{ cdn_base }}/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-    <script src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
-    <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
-    <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='style2.css') }}" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="{{ cdn_base }}/bootstrap/5.3.0/css/bootstrap.min.css"
+        rel="stylesheet">
+    <link href="{{ cdn_base }}/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        rel='stylesheet' type='text/css'>
+    <link href="{{ cdn_base }}/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet">
+
+    <!-- DataTables Bootstrap 5 -->
+    <link rel='stylesheet'
+        href='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
+    <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css"
+        rel='stylesheet' type='text/css'>
+
+    <script src="{{ cdn_base }}/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="{{ cdn_base }}/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script
+        src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
+    <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
+    <script
+        src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
+
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
 
 </head>
 
@@ -58,13 +70,13 @@
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/chart.php"><i class="bi bi-journal-text ms-1"></i>
-                            مخطط بياني
+                        <a class="nav-link" href="/wd.php"><i class="bi bi-tree ms-1"></i>
+                            مخطط شجري
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/wd.php"><i class="bi bi-tree ms-1"></i>
-                            مخطط شجري
+                        <a class="nav-link" href="/chart.php"><i class="bi bi-journal-text ms-1"></i>
+                            مخطط بياني
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
@@ -90,16 +102,9 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-8">
-                {% block content %}{% endblock %}
-            </div>
-        </div>
-    </div>
-    {% block content2 %}{% endblock %}
-    <script src="{{ url_for('static', filename='theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='autocomplete.js') }}"></script>
+    {% block content %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
     <script>
         $('.soro').DataTable({
             paging: false,

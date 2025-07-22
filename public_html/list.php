@@ -6,7 +6,7 @@ require __DIR__ . "/main.php";
 
 <div class="container my-4">
     <div class="d-flex align-items-center justify-content-center">
-        <div class="row col-md-9">
+        <div class="row col-md-9 border rounded">
             <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
                 <div class="d-flex align-items-center justify-content-between  m-6 p-3">
                     <span class="text-2xl font-bold text-center h2">
