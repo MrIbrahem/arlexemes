@@ -2,6 +2,25 @@ let display_empty_cells = true;
 
 let ty = "";
 
+let colors = {};
+
+function get_color(form) {
+    // ---
+    // ar-x-Q775724
+    let word = form.representations.ar.value;
+    // ---
+    if (colors[word]) return colors[word];
+    // ---
+    let index = Object.keys(colors).length + 1;
+    // ---
+    let color = generateColor(index, 20);
+    // ---
+    colors[word] = color;
+    // ---
+    console.log("get_color:", word, color);
+    // ---
+    return color;
+}
 function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
     const featuresSet = new Set();
 
@@ -82,7 +101,7 @@ function make_tableData(number_Keys, row_Keys, col_Keys, gender_Keys) {
             for (const col of col_Keys) {
                 tableData[num][row][col] = {};
                 for (const gender of gender_Keys) {
-                    if (first_persons.includes(col) && duals.includes(gender)) continue;
+                    // if (first_persons.includes(col) && duals.includes(gender)) continue;
                     tableData[num][row][col][gender] = [];
                 }
             }
@@ -123,6 +142,44 @@ function attrFormatter(key) {
     }
     // ---
     return (keyLabels[qid]) ? `${key} - ${keyLabels[qid]}` : key;
+}
+
+function entryFormatterNoColor(form) {
+    // ---
+    const formId = form?.id || "L000-F0";
+    // ---
+    // ar-x-Q775724
+    let values = Object.values(form.representations || {})
+        .map(r => r.value)
+        .filter(Boolean)
+        .map(v => `<span>${v}</span>`)
+        .join(" / ") || `<span>${form?.form}</span>` || "";
+    // ---
+    // Convert formId to a URL-friendly format for linking to Wikidata
+    const formIdlink = formId.replace("-", "#");
+    const formId_number = formId.split("-")[1]; // Extract F-number part
+    // ---
+    const feats = form.tags || form.grammaticalFeatures || [];
+    let attr = feats.map(attrFormatter).join("\n");
+    // ---
+    let link = `
+		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
+            ${values}
+			<small>(${formId_number})</small>
+		</a>`;
+    // ---
+    const lexemeId = formId.split("-")[0];
+    // ---
+    if (lexemeId === "L000") {
+        link = `
+        <span title="${attr}">
+            ${values}
+			<!-- <small>(${formId_number})</small> -->
+        </span>
+        `;
+    }
+    // ---
+    return link;
 }
 
 function entryFormatter(form) {
@@ -208,10 +265,7 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
             // ---
             if (!display_mt_cells && col === "") continue;
             // ---
-            if (col === first_person && gender === dual) {
-                // تجاهل هذه الخلية
-                continue;
-            }
+            // if (col === first_person && gender === dual) continue;
             // ---
             let text = wdlink_2(col);
             // ---
@@ -293,15 +347,22 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         );
 
         if (!hasNumberData) continue; // Skip displaying this number category if no data
+        let row_Keys2 = row_Keys;
 
+        // Q22716 أمر
+        //
+        if (number == "Q22716") {
+            row_Keys2 = [second_person];
+        };
+        // ---
         let singular_fixed = [];
         // Iterate through case rows (وقف, رفع, نصب, إضافة) for each number category
-        for (let i = 0; i < row_Keys.length; i++) {
-            const row = row_Keys[i];
+        for (let i = 0; i < row_Keys2.length; i++) {
+            const row = row_Keys2[i];
             // ---
             if (!show_empty_cells && row === "") continue;
             // ---
-            let add_to_tbody = right_side_th(i, number, row, row_Keys, show_empty_cells);
+            let add_to_tbody = right_side_th(i, number, row, row_Keys2, show_empty_cells);
 
             // Add the data cells for each gender and column type
             for (const gender of gender_Keys) {
@@ -311,7 +372,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                 let gender_tds = "";
                 for (const col of col_Keys) {
 
-                    if (col === first_person && gender === dual) continue;
+                    // if (row === first_person && col === dual) continue;
 
                     // ---
                     if (!show_empty_cells && col === "") continue;
@@ -319,33 +380,41 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     let td = `<td>`;
                     let entries = number_data[row][col][gender] || [];
                     // ---
-                    let check_1 = col === first_person && (gender === singular || gender === plural);
-                    let check_2 = col === second_person && gender === dual;
+                    let check_1 = row === first_person && (col === singular || col === plural);
+                    let check_2 = row === second_person && col === dual;
+                    // ---
+                    let nocolor = false;
                     // ---
                     if (check_1 || check_2) {
                         if (singular_fixed[gender]) continue;
                         // ---
-                        let fem_entries = number_data[Feminine][col][gender] || [];
-                        let third_entries = number_data[""][col][gender] || [];
+                        let fem_entries = number_data[row][col][Feminine] || [];
+                        let third_entries = number_data[row][col][""] || [];
                         // ---
                         let male_is_empty = third_entries.length > 0 && entries.length == 0;
                         let third_is_empty = entries.length > 0 && third_entries.length == 0;
                         // ---
-                        if (row === Masculine && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
+                        if ((gender === Masculine || gender === Feminine) && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
                             // ---
                             entries = (male_is_empty) ? third_entries : entries;
                             // ---
-                            singular_fixed[gender] = true;
+                            // singular_fixed[gender] = true;
                             // ---
-                            let rowspan = (show_empty_cells) ? 3 : 2;
+                            // let rowspan = (show_empty_cells) ? 3 : 2;
                             // ---
-                            td = `
-                                <td rowspan="${rowspan}">
-                            `;
+                            // let color = get_color(entries[0]);
+                            // ---
+                            // nocolor = true;
+                            // td = ` <td style="background-color:${color}; border-radius: 4px; padding: 2px 4px;"> `;
                         }
-                    };
+                    }
                     // ---
-                    td += entries.map(entryFormatter).join("<br>") || "";
+                    if (nocolor) {
+                        td += entries.map(entryFormatterNoColor).join("<br>") || "";
+                    } else {
+                        td += entries.map(entryFormatter).join("<br>") || "";
+                    }
+                    // ---
                     td += `
                         </td>
                     `;
@@ -404,19 +473,28 @@ async function Q24905(entity) {
 
     let forms = entity.forms || [];
 
-    let verbs_main = verbs_main_g;
+    const first_second_third_person = [
+        "Q51929074",
+        "Q51929049",
+        "Q21714344",
+        ""
+    ];
+    // let rowKeys = gender_Keys_global; // مذكر مؤنث
+    // let colKeys = first_second_third_person; // مخاطب متكلم غائب
+    // let genderKeys = singular_plural_dual; // مفرد مثنى جمع
 
-    let numberKeys = numberKeys_verb;
+    let genderKeys = gender_Keys_global;
+    let colKeys = singular_plural_dual;
+    let rowKeys = first_second_third_person;
 
-    let rowKeys = gender_Keys_global;
+    let verbs_main = verbs_main_g; // معلوم ومجهول
+    let numberKeys = numberKeys_verb; // ماضي مضارع
 
-    let colKeys = first_second_third_person; // Q21714344
-
-    let spd = singular_plural_dual;
+    let spd = singular_plural_dual;// مفرد مثنى جمع
     // remove "" from spd
     spd = spd.filter(item => item !== "");
     // ---
-    let genderKeys = removeKeysIfNotFound([...singular_plural_dual], forms, spd);
+    genderKeys = removeKeysIfNotFound([...genderKeys], forms, spd);
 
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831

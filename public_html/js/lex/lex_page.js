@@ -122,20 +122,20 @@ function add_page_title(id, lemma) {
     // ---
     let lemma_link_tag = $("#lemma_link");
     // ---
-    if (lemma_link_tag) {
+    if (lemma_link_tag.length > 0) {
         lemma_link_tag.html(`<a href="https://www.wikidata.org/entity/${id}" target="_blank" class="text-primary font-weight-bold" id="lemma_link">${lemma}</a>`);
     }
     // ---
     let lemma_link_en = $("#lemma_link_en");
     // ---
-    if (lemma_link_en) {
+    if (lemma_link_en.length > 0) {
         lemma_link_en.html(`
-        <span id="lemma_link_en">
-        (<a href="https://en.wiktionary.org/wiki/${lemma2}" target="_blank" class="text-primary font-sm">en</a>)
-        </span>
-    `);
-        // ---
+            <span id="lemma_link_en">
+            (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
+            </span>
+        `);
     }
+    // ---
 }
 async function fetchLexemeById(id, entity) {
 
@@ -146,6 +146,7 @@ async function fetchLexemeById(id, entity) {
 
     // add lemma to title of the page
     add_page_title(id, lemma);
+    let lemma2 = fix_it2(lemma);
 
     let Category = entity.lexicalCategory ?? "";
 
@@ -172,12 +173,30 @@ async function fetchLexemeById(id, entity) {
     // ---
     let pos = "";
     // ---
-    // ---
-    let html = `
-        <div class="row mb-4">
+    let header_main = `
             <div class="col">
                 <span class="h4">المفردات:  ${forms_len}</span>
             </div>
+        `;
+    // ---
+    let lemma_link_tag = $("#lemma_link");
+    let lemma_link_en = $("#lemma_link_en");
+    // ---
+    if (lemma_link_tag.length === 0 && lemma_link_en.length === 0) {
+        header_main = `
+            <div class="col-md-4">
+                <span class="mb-4 h1" id="header_main">
+                ${lemma}
+                (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
+                </span>
+                <span class="h4">المفردات: ${forms_len}</span>
+            </div>
+        `;
+    }
+    // ---
+    let html = `
+        <div class="row mb-4">
+            ${header_main}
             ${claims_row}
             <div class="col">
                 <strong>التصنيف:</strong>

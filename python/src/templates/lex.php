@@ -53,7 +53,7 @@
 <div class="container-fluid my-4">
 
     <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-5 col-sm-12">
             <div class="row">
                 <div class="col-md-10 col-sm-9">
                     <span class="mb-4 h1" id="header_main">
@@ -67,6 +67,11 @@
                 </div>
             </div>
             <hr class="d-lg-none d-md-none text-dark-subtle text-50">
+        </div>
+        <div class="col-md-1">
+            <button onclick="toggleHighlights()" class="btn btn-outline-secondary mb-2">
+                🎨
+            </button>
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -122,7 +127,7 @@
 </div>
 <script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/data.js') }}"></script>
-<script src="{{ url_for('static', filename='js/table_filter.js') }}"></script>
+<script src="{{ url_for('static', filename='js/table_filter2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/toggle_table.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/fetch.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_data.js') }}"></script>

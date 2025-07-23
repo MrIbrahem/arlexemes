@@ -51,7 +51,7 @@ require __DIR__ . "/main.php";
 <div class="container-fluid my-4">
 
     <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-md-5 col-sm-12">
             <div class="row">
                 <div class="col-md-10 col-sm-9">
                     <span class="mb-4 h1" id="header_main">
@@ -65,6 +65,11 @@ require __DIR__ . "/main.php";
                 </div>
             </div>
             <hr class="d-lg-none d-md-none text-dark-subtle text-50">
+        </div>
+        <div class="col-md-1">
+            <button onclick="toggleHighlights()" class="btn btn-outline-secondary mb-2">
+                🎨
+            </button>
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -120,7 +125,7 @@ require __DIR__ . "/main.php";
 </div>
 <script src="js/lex/find_labels.js"></script>
 <script src="js/lex/data.js"></script>
-<script src="js/table_filter.js"></script>
+<script src="js/table_filter2.js"></script>
 <script src="js/lex/toggle_table.js"></script>
 <script src="js/lex/fetch.js"></script>
 <script src="js/lex/lex_data.js"></script>
