@@ -174,23 +174,7 @@ function get_param_from_window_location1(key, defaultvalue) {
     return urlParams.get(key) || defaultvalue;
 }
 
-async function fetchData() {
-    showLoading();
-    let group_by = get_param_from_window_location1("group_by", "P31Label")
-    let custom_group_by = get_param_from_window_location1("custom_group_by", "")
-    let limit = get_param_from_window_location1("limit", 100)
-    // ---
-    // let group_by_item = document.getElementById('group_by');
-    // if (group_by_item) group_by_item.value = group_by;
-    // ---
-    $("#group_by").val(group_by);
-    // ---
-    $("#custom_group_by").val(custom_group_by);
-    $("#limit").val(limit);
-    // ---
-    if (custom_group_by !== "" && group_by === "custom") {
-        group_by = custom_group_by;
-    }
+async function fetchData(limit, group_by) {
     // ---
     const treeMap = await find_wd_result(group_by, limit);
 

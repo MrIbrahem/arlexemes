@@ -31,7 +31,7 @@
                                 placeholder="عدد النتائج" value="1000">
                         </div>
                         <div class="col-md-4 col-sm-12">
-                            <label for="" class="form-label fw-bold"></label>
+                            <label class="form-label fw-bold"></label>
                             <button type="submit" class="form-control btn btn-outline-primary">تحميل</button>
                         </div>
                     </div>
