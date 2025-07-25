@@ -56,7 +56,8 @@ require __DIR__ . "/main.php";
                     <div class="row">
                         <div class="col-md-5">
                             <span class="me-2">اسم:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1244618')">L1244618</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1473670')">L1473670</button>
                             <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2465')">L2465 -
                                 معدود</button>
                             <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2355')">L2355 - غير
@@ -64,16 +65,23 @@ require __DIR__ . "/main.php";
                         </div>
                         <div class="col-md-4">
                             <span class="me-2">صفة:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1131459')">L1131459</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1153733')">L1153733</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1153733')">L1153733</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1131459')">L1131459</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1473674')">L1473674</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1472818')">L1472818</button>
                         </div>
                         <div class="col-md-3">
                             <span class="me-2">فعل:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1460479')">L1460479</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L12100')">L12100</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1235177')">L1235177</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L1464180')">L1464180</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1474373')">L1474373</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1474244')">L1474244</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1473584')">L1473584</button>
+                            <button class="btn btn-outline-secondary btn-sm me-1"
+                                onclick="setLabel('L1474044')">L1474044</button>
                         </div>
                     </div>
                 </div>
