@@ -15,6 +15,9 @@ function table_filter() {
 
         wordElements.forEach(el => {
             const word = el.getAttribute("word");
+            if (word.trim() === "") {
+                return;
+            }
             if (!wordMap.has(word)) {
                 wordMap.set(word, []);
             }

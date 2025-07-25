@@ -130,12 +130,12 @@ function add_page_title(id, lemma) {
     // ---
     if (lemma_link_en.length > 0) {
         lemma_link_en.html(`
-        <span id="lemma_link_en">
-        (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
-        </span>
-    `);
-        // ---
+            <span id="lemma_link_en">
+            (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
+            </span>
+        `);
     }
+    // ---
 }
 async function fetchLexemeById(id, entity) {
 
