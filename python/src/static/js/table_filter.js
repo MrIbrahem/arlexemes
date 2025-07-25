@@ -1,18 +1,23 @@
 
-
 function generateColor(index, total) {
-    const hue = (index * 360 / total) % 360;
+    const hue = (index * 500 / total) % 500;
     return `hsl(${hue}, 70%, 85%)`; // لون هادئ فاتح
 }
 
 function table_filter() {
-
     // لكل جدول على حدة
-    document.querySelectorAll(".table").forEach(table => {
+    let tables = document.querySelectorAll(".table");
+
+    console.log("table_filter", tables.length);
+
+    tables.forEach(table => {
         const wordMap = new Map();
 
         // اجمع كل العناصر التي تحتوي على word="..."
         const wordElements = table.querySelectorAll('[word]');
+
+        console.log("wordElements", wordElements.length);
+
         wordElements.forEach(el => {
             const word = el.getAttribute("word");
             if (!wordMap.has(word)) {
@@ -28,9 +33,11 @@ function table_filter() {
         repeatedWords.forEach(([word, elements], index) => {
             const color = generateColor(index, repeatedWords.length);
             elements.forEach(el => {
-                el.style.backgroundColor = color;
-                el.style.borderRadius = "4px";
-                el.style.padding = "2px 4px";
+                let parent = el.parentElement.parentElement;
+                parent.style.backgroundColor = color;
+                parent.style.borderRadius = "4px";
+                parent.style.padding = "2px 4px";
+
             });
         });
     });

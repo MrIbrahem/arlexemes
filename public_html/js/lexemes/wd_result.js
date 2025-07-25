@@ -60,7 +60,8 @@ function parse_results(result) {
     return wd_result;
 }
 
-async function load_wd(limit) {
+async function load_wd(limit, data_source) {
+    let VALUES = ``;
     const sparqlQuery1 = `
         VALUES ?category {
             wd:Q111029	# جذر
@@ -69,6 +70,12 @@ async function load_wd(limit) {
             wd:Q34698	# صفة
         }
     `;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
     let sparqlQuery = `
         SELECT DISTINCT
             ?item
@@ -78,7 +85,7 @@ async function load_wd(limit) {
             ?P31 ?P31Label
             (count(?form) as ?count)
         WHERE {
-
+            ${VALUES}
             ?item rdf:type ontolex:LexicalEntry;
                 wikibase:lemma ?lemma1;
                 wikibase:lexicalCategory ?category;
@@ -101,8 +108,8 @@ async function load_wd(limit) {
     return wd_result;
 }
 
-async function find_wd_result(limit) {
-    let wd_result = await load_wd(limit);
+async function make_wd_result(limit, data_source) {
+    let wd_result = await load_wd(limit, data_source);
     // ---
     return wd_result;
 }

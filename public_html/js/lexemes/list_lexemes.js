@@ -144,12 +144,9 @@ function get_param_from_window_location(key, defaultvalue) {
     return urlParams.get(key) || defaultvalue;
 }
 
-async function fetchData() {
-    showLoading();
-
-    let limit = get_param_from_window_location("limit", 100);
-    $("#limit").val(limit);
-    let treeMap = await find_wd_result(limit);
+async function fetchData(limit, data_source) {
+    // ---
+    let treeMap = await make_wd_result(limit, data_source);
 
     treeMap = slice_data(treeMap);
 

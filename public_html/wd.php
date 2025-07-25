@@ -34,7 +34,7 @@ require __DIR__ . "/main.php";
                                 placeholder="عدد النتائج" value="1000">
                         </div>
                         <div class="col-md-4 col-sm-12">
-                            <label for="" class="form-label fw-bold"></label>
+                            <label class="form-label fw-bold"></label>
                             <button type="submit" class="form-control btn btn-outline-primary">تحميل</button>
                         </div>
                     </div>
@@ -48,7 +48,7 @@ require __DIR__ . "/main.php";
 
                 <div id="error" class="hidden alert alert-danger p-4 rounded text-center">
                     <p id="errorMessage" class="text-danger"></p>
-                    <button onclick="fetchData()" class="mt-3 btn btn-primary">إعادة
+                    <button onclick="loadfetchData()" class="mt-3 btn btn-primary">إعادة
                         المحاولة</button>
                 </div>
 
@@ -61,6 +61,29 @@ require __DIR__ . "/main.php";
 </div>
 <script src="/js/lexemes/wd.js"></script>
 <script>
+    function loadfetchData() {
+        // ---
+        showLoading();
+        // ---
+        let group_by = get_param_from_window_location1("group_by", "P31Label")
+        let custom_group_by = get_param_from_window_location1("custom_group_by", "")
+        let limit = get_param_from_window_location1("limit", 100)
+        // ---
+        // let group_by_item = document.getElementById('group_by');
+        // if (group_by_item) group_by_item.value = group_by;
+        // ---
+        $("#limit").val(limit);
+        $("#group_by").val(group_by);
+        // ---
+        if (custom_group_by !== "" && group_by === "custom") {
+            $("#custom_group_by").val(custom_group_by);
+            group_by = custom_group_by;
+            document.getElementById('custom_group_by').style.display = 'block';
+        }
+        // ---
+        fetchData(limit, group_by);
+    }
+
     function toggleCustomInput() {
         let select = document.getElementById('group_by');
         const customInput = document.getElementById('custom_group_by');
@@ -73,12 +96,7 @@ require __DIR__ . "/main.php";
 
     document.addEventListener('DOMContentLoaded', () => {
         // ---
-        let pramas = new URLSearchParams(window.location.search);
-        // ---
-        let custom_group_by = pramas.get('custom_group_by');
-        // if (custom_group_by) { document.getElementById('custom_group_by').value = custom_group_by; }
-        // ---
-        fetchData();
+        loadfetchData();
         // ---
         toggleCustomInput();
     });

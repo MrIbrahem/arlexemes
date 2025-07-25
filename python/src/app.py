@@ -70,7 +70,7 @@ def list_lexemes():
 
 @app.route("/P11038", methods=["GET"])
 def P11038():
-    limit = request.args.get('limit', 100)
+    limit = request.args.get('limit', 100, type=int)
 
     result = sparql_bot.all_arabic(limit)
     split_by_category = {}

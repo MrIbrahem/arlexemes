@@ -155,7 +155,7 @@ function entryFormatter(form) {
         link = `
         <span title="${attr}">
             ${values}
-			<small>(${formId_number})</small>
+			<!-- <small>(${formId_number})</small> -->
         </span>
         `;
     }
@@ -243,7 +243,7 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
         };
         // ---
         let add_th = `
-            <th rowspan="${rowspan}" class="table-active">${text}</th>
+            <th rowspan="${rowspan}" class="table-light">${text}</th>
         `;
         // ---
         if (!display_mt_cells && number === "") add_th = "";
@@ -324,10 +324,17 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     // ---
                     if (check_1 || check_2) {
                         if (singular_fixed[gender]) continue;
+                        // ---
                         let fem_entries = number_data[Feminine][col][gender] || [];
                         let third_entries = number_data[""][col][gender] || [];
-                        if (row === Masculine && third_entries.length > 0 && entries.length == 0 && fem_entries.length == 0) {
-                            entries = third_entries;
+                        // ---
+                        let male_is_empty = third_entries.length > 0 && entries.length == 0;
+                        let third_is_empty = entries.length > 0 && third_entries.length == 0;
+                        // ---
+                        if (row === Masculine && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
+                            // ---
+                            entries = (male_is_empty) ? third_entries : entries;
+                            // ---
                             singular_fixed[gender] = true;
                             // ---
                             let rowspan = (show_empty_cells) ? 3 : 2;
@@ -363,7 +370,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
 
     let html = `
         <table idx="main_table" class="table table-bordered table-sm table-hover text-center align-middle pages_table">
-            <thead class="table-active">
+            <thead class="table-light">
                 ${thead}
             </thead>
             <tbody>
@@ -461,10 +468,11 @@ async function adj_and_nouns(entity_type, entity) {
     let row_Keys = Pausal_Forms;
     let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
 
-    let colKeys = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
-    colKeys = removeKeysIfNotFound([...colKeys], forms, ["Q118465097", "Q1641446"]);
+    let colKeys = indefinite_definite_construct;
     // ---
-    let number_Keys = singular_plural_dual;
+    colKeys = removeKeysIfNotFound([...colKeys], forms, construct_contextform);
+    // ---
+    let number_Keys = adj_and_nouns_keys[entity_type] || [];
     // ---
     // ---
     const tableData = make_tableData(number_Keys, row_Keys, colKeys, genderKeys);

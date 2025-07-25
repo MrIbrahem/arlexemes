@@ -1,3 +1,11 @@
+.highlighted-word {
+    background-color: var(--highlight-color);
+}
+
+.hide-highlight {
+    background-color: transparent !important;
+}
+
 .table_text_right,
 .table_text_right>thead>tr>th {
     text-align: right
