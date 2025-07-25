@@ -5,19 +5,20 @@
 
 {% block content %}
 
-<div class="modal fade" id="exampleModalToggle" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+
+<div class="modal fade" id="modal_div" tabindex="-1" role="dialog" aria-labelledby="modal_1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalToggleLabel">الأمثلة</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h6 class="modal-title" id="modal_1"></h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-5">
                         <span class="me-2">اسم:</span><br>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L1244618')">L1244618</button>
+                            onclick="setExample('L1473670')">L1473670</button>
                         <button class="btn btn-outline-secondary btn-sm me-1" onclick="setExample('L2465')">L2465 -
                             معدود</button>
                         <button class="btn btn-outline-secondary btn-sm me-1" onclick="setExample('L2355')">L2355 - غير
@@ -28,24 +29,25 @@
                         <button class="btn btn-outline-secondary btn-sm me-1"
                             onclick="setExample('L1131459')">L1131459</button>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L1153733')">L1153733</button>
+                            onclick="setExample('L1473674')">L1473674</button>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L1153733')">L1153733</button>
+                            onclick="setExample('L1472818')">L1472818</button>
                     </div>
                     <div class="col-md-3">
                         <span class="me-2">فعل:</span><br>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L1460479')">L1460479</button>
+                            onclick="setExample('L1474373')">L1474373</button>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L12100')">L12100</button>
+                            onclick="setExample('L1474244')">L1474244</button>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L1235177')">L1235177</button>
+                            onclick="setExample('L1473584')">L1473584</button>
                         <button class="btn btn-outline-secondary btn-sm me-1"
-                            onclick="setExample('L1464180')">L1464180</button>
+                            onclick="setExample('L1474044')">L1474044</button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -63,7 +65,8 @@
                     </span>
                 </div>
                 <div class="col-md-2 col-sm-3">
-                    <button class="btn btn-outline-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">بعض الأمثلة</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#modal_div">أمثلة</button>
                 </div>
             </div>
             <hr class="d-lg-none d-md-none text-dark-subtle text-50">
@@ -106,14 +109,15 @@
                 <div class="col-md-9">
                     <div class="input-group">
                         <div class="autocomplete-container">
-                            <input type="text" id="wikidatasearch" class="form-control" placeholder="اكتب للبحث..." value="">
+                            <input type="text" id="wikidatasearch" class="form-control" placeholder="اكتب للبحث..."
+                                value="">
                             <div id="autocomplete-results" class="autocomplete-results"></div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <span id="autocomplete-loader"
-                        class="spinner-border spinner-border-sm inline-flex" role="status" style="display:none;">
+                    <span id="autocomplete-loader" class="spinner-border spinner-border-sm inline-flex" role="status"
+                        style="display:none;">
                         <span class="visually-hidden">جاري البحث...</span>
                     </span>
                 </div>
