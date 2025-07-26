@@ -11,7 +11,7 @@ const themes = {
     },
     dark: {
         icon: 'bi-moon-stars-fill',
-        label: 'مظلم'
+        label: 'داكن'
     },
     light: {
         icon: 'bi-sun-fill',

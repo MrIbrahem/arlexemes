@@ -9,46 +9,36 @@ echo "<head>";
 
 echo <<<HTML
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="https://www.mediawiki.org/static/images/icons/mediawikiwiki.svg" type="image/svg+xml">
     <title>قائمة المفردات العربية - ويكي بيانات</title>
 
-    <!-- jQuery -->
     <script src="$cdn_base/jquery/3.7.0/jquery.min.js"></script>
     <script src="$cdn_base/popper.js/2.11.8/umd/popper.min.js"></script>
-
-    <!-- Bootstrap 5 -->
-    <link href="$cdn_base/bootstrap/5.3.0/css/bootstrap.min.css"
-        rel="stylesheet">
-    <link href="$cdn_base/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
-        rel='stylesheet' type='text/css'>
-    <link href="$cdn_base/font-awesome/6.7.2/css/all.min.css"
-        rel="stylesheet">
-
-    <!-- DataTables Bootstrap 5 -->
-    <link rel='stylesheet'
-        href='$cdn_base/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
-    <link href="$cdn_base/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css"
-        rel='stylesheet' type='text/css'>
-
     <script src="$cdn_base/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-    <script src="$cdn_base/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script
-        src="$cdn_base/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
+    <script src="$cdn_base/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src='$cdn_base/datatables.net/2.2.2/dataTables.js'></script>
-    <script
-        src='$cdn_base/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
-
-    <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/theme.css" rel="stylesheet">
-    <link href="/css/style2.css" rel="stylesheet">
+    <script src='$cdn_base/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
     <script src="/js/sparql.js"></script>
     <script src="/js/random.js"></script>
     <script src="/js/theme.js"></script>
     <script src="/js/autocomplete.js"></script>
+
+    <!-- Bootstrap 5 -->
+    <link href="$cdn_base/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="$cdn_base/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel='stylesheet' type='text/css'>
+    <link href="$cdn_base/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+    <!-- DataTables Bootstrap 5 -->
+    <link rel='stylesheet' href='$cdn_base/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
+    <link href="$cdn_base/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
+
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/theme.css" rel="stylesheet">
+    <link href="/css/style2.css" rel="stylesheet">
+
 HTML;
 ?>
 
