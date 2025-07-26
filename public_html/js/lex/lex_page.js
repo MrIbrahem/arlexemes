@@ -137,6 +137,32 @@ function add_page_title(id, lemma) {
     }
     // ---
 }
+
+function count_dup_forms(forms) {
+    // إزالة التكرار في forms بناءً على form.form و form.tags (مع تجاهل ترتيب الوسوم)
+    const seen = new Set();
+    const uniqueForms = [];
+    let duplicates = 0;
+    for (const form of forms) {
+        const tagsSorted = (form.tags || form.grammaticalFeatures || []).slice().sort(); // نسخ وفرز الوسوم
+        // ---
+        // if (tagsSorted.length < 2) continue;
+        // ---
+        let key = `${tagsSorted.join(",")}`;
+        // ---
+        if (!seen.has(key)) {
+            seen.add(key);
+            uniqueForms.push(form);
+        } else {
+            // console.log("count_dup_forms:", key);
+            duplicates += 1;
+        }
+    }
+    console.log("count_dup_forms: ", duplicates);
+
+    return duplicates;
+}
+
 async function fetchLexemeById(id, entity) {
 
     let lemma = entity.lemma || "(غير متوفر)";
@@ -173,11 +199,20 @@ async function fetchLexemeById(id, entity) {
     // ---
     let pos = "";
     // ---
+    let count_duplicate = count_dup_forms(forms);
+    // ---
+    let dup_forms = "";
+    // ---
+    if (count_duplicate > 0) {
+        dup_forms = `
+            <span>(مكرر: ${count_duplicate})</span>`;
+    }
+    // ---
     let header_main = `
-            <div class="col">
-                <span class="h4">المفردات:  ${forms_len}</span>
-            </div>
-        `;
+        <div class="col">
+            <span class="h4">المفردات:  ${forms_len} ${dup_forms}</span>
+        </div>
+    `;
     // ---
     let lemma_link_tag = $("#lemma_link");
     let lemma_link_en = $("#lemma_link_en");
@@ -189,7 +224,7 @@ async function fetchLexemeById(id, entity) {
                 ${lemma}
                 (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
                 </span>
-                <span class="h4">المفردات: ${forms_len}</span>
+                <span class="h4">المفردات: ${forms_len} ${dup_forms}</span>
             </div>
         `;
     }
