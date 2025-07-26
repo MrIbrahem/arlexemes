@@ -421,10 +421,11 @@ async function Q24905(entity) {
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
 
+    let display_mt_cells = {};
     for (const verb of verbs_main) {
         tableData[verb] = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
+        display_mt_cells[verb] = false;
     }
-    let display_mt_cells = {};
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
@@ -442,7 +443,12 @@ async function Q24905(entity) {
         tableData[verb][number][row][col][gender].push(form);
         // ---
         // if any (number, row, col, gender) is "" set display_mt_cells to true
-        display_mt_cells[verb] = [number, row, col, gender].includes("");
+        // display_mt_cells[verb] = [number, row, col, gender].includes("");
+        display_mt_cells[verb] = [number, col, gender].includes("");
+        //
+        if (display_mt_cells[verb]) {
+            console.table(form.id);
+        }
     }
     // ---
     let result = "";
@@ -452,7 +458,7 @@ async function Q24905(entity) {
         let verb_lab = wdlink(verb2);
         let caption = `<div class="text-center"><h3>${verb_lab}</h3></div>`;
         // Call the shared HTML generation function
-        let mt_cells = display_mt_cells[verb] || false;
+        let mt_cells = display_mt_cells[verb]; // || false;
         result += _generateHtmlTable(tableData[verb], numberKeys, rowKeys, colKeys, genderKeys, caption, mt_cells);
     }
     // ---
