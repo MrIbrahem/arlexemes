@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
+
 python3 I:/milion/arlexemes/python/src/insert_sparql.py
+
 """
 import re
 import tqdm

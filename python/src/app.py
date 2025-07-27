@@ -42,7 +42,7 @@ def not_in_sql():
     # ---
     len_of_ids = max([len(x['P11038_list']) for x in result if x['P11038_list']])
     # ---
-    return render_template("not_in_sql.php", data=result, len_of_ids=len_of_ids, limit=limit)
+    return render_template("not_in_sql.html", data=result, len_of_ids=len_of_ids, limit=limit)
 
 
 @app.route("/logs1", methods=["GET"])

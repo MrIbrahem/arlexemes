@@ -78,6 +78,11 @@
                             الأنطولوجيا العربية
                         </a>
                     </li>
+                    <li class="nav-item col-6 col-lg-auto">
+                        <a class="nav-link" href="/not_in_sql"><i class="bi bi-journal-text ms-1"></i>
+                            الأنطولوجيا 2
+                        </a>
+                    </li>
                 </ul>
                 <hr class="d-lg-none text-dark-subtle text-50">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav me-lg-auto">
