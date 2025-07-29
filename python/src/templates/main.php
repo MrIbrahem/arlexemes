@@ -59,6 +59,11 @@
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto">
+                        <a class="nav-link" href="/new.php"><i class="bi bi-journal-text ms-1"></i>
+                            أحدث المفردات
+                        </a>
+                    </li>
+                    <li class="nav-item col-6 col-lg-auto">
                         <a class="nav-link" href="/duplicate_lemmas.php"><i class="bi bi-journal-text ms-1"></i>
                             المكررات
                         </a>
