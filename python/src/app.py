@@ -68,6 +68,11 @@ def list_lexemes():
     return render_template("list.php")
 
 
+@app.route("/new.php", methods=["GET"])
+def new_lexemes():
+    return render_template("new.php")
+
+
 @app.route("/P11038", methods=["GET"])
 def P11038():
     limit = request.args.get('limit', 100, type=int)
