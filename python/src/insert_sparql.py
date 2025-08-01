@@ -118,6 +118,7 @@ def start():
     no_data = 0
     not_same_ids = 0
     with_same_ids = 0
+    to_update = 0
     # ---
     for _n, (_x, y) in tqdm.tqdm(enumerate(tab_P11038.items(), start=1), total=len(tab_P11038)):
         # ---
@@ -162,6 +163,8 @@ def start():
         else:
             wd_ids_done[item] = [P11038]
             # ---
+            to_update += 1
+            # ---
             lemma_update(data['id'], {"wd_id": item, "wd_id_category": categoryLabel})
         # ---
         # ty = "lemma" if insql_lemma.get(P11038) else "sama"
@@ -181,6 +184,8 @@ def start():
     # ---
     print(f"not_same_ids: {not_same_ids}")
     print(f"with_same_ids: {with_same_ids}")
+    # ---
+    print(f"to_update: {to_update}")
 
 
 if __name__ == "__main__":

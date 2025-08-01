@@ -17,13 +17,7 @@ def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", sama_lemma_id=0, sama
     # ---
     query = """
         INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT(lemma_id, lemma) DO UPDATE SET pos = excluded.pos, wd_id = excluded.wd_id, wd_id_category = excluded.wd_id_category
-    """
-    # ---
-    query = """
-        INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(lemma_id, lemma) DO UPDATE SET
             pos = COALESCE(NULLIF(excluded.pos, ''), P11038_lemmas.pos),
             pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), P11038_lemmas.pos_cat),

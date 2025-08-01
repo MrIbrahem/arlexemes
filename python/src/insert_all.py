@@ -122,6 +122,7 @@ def start():
         instert_multi(to_send)
     # ---
     print(f"lemma_equal_sama: {lemma_equal_sama}")
+    print(f"total_sent: {total_sent}")
 
 
 if __name__ == "__main__":

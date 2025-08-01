@@ -35,7 +35,14 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
-
+    <style>
+        .navbar-nav .nav-item.active {
+            /* border-radius: 4px; */
+            /* display: block; */
+            background-color: #c2c5c8;
+            /* font-weight: bold; */
+        }
+    </style>
 </head>
 
 <body>
@@ -52,52 +59,45 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/list.php"><i class="bi bi-journal-text ms-1"></i>
+                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav navbar-default">
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/list.php' else '' }}">
+                        <a class="nav-link" href="/list.php"><i
+                                class="bi bi-journal-text ms-1"></i>
                             قائمة المفردات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/new.php"><i class="bi bi-journal-text ms-1"></i>
-                            أحدث المفردات
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/new.php' else '' }}">
+                        <a class="nav-link" href="/new.php">
+                            <i class="bi bi-journal-text ms-1"></i> أحدث المفردات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/duplicate_lemmas.php"><i class="bi bi-journal-text ms-1"></i>
-                            المكررات
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/duplicate_lemmas.php' else '' }}">
+                        <a class="nav-link" href="/duplicate_lemmas.php">
+                            <i class="bi bi-journal-text ms-1"></i> المكررات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/wd.php"><i class="bi bi-tree ms-1"></i>
-                            مخطط شجري
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd.php' else '' }}">
+                        <a class="nav-link" href="/wd.php">
+                            <i class="bi bi-tree ms-1"></i> مخطط شجري
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/chart.php"><i class="bi bi-journal-text ms-1"></i>
-                            مخطط بياني
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/logs') else '' }}">
+                        <a class="nav-link" href="/logs">
+                            <i class="bi bi-journal-text ms-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/P11038"><i class="bi bi-journal-text ms-1"></i>
-                            الأنطولوجيا العربية
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
+                        <a class="nav-link" href="/P11038">
+                            <i class="bi bi-journal-text ms-1"></i> في ويكي بيانات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
-                        <a class="nav-link" href="/not_in_sql"><i class="bi bi-journal-text ms-1"></i>
-                            الأنطولوجيا 2
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/not_in_db') else '' }}">
+                        <a class="nav-link" href="/not_in_db">
+                            <i class="bi bi-journal-text ms-1"></i> غير موصولة
                         </a>
                     </li>
                 </ul>
-                <hr class="d-lg-none text-dark-subtle text-50">
-                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav me-lg-auto">
 
-                    <li class="nav-item col-4 col-lg-auto">
-                        <a href="#" class="nav-link py-2 px-0 px-lg-2">
-                            <i class="fas fa-user fa-sm fa-fw mr-2"></i> <span class="navtitles">مرحبًا!</span>
-                        </a>
-                    </li>
-                </ul>
             </div>
             <div class="d-flex">
                 <button class="theme-toggle btn btn-link me-ms-auto" aria-label="Toggle theme">

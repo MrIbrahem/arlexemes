@@ -155,3 +155,24 @@ def all_arabic_with_P11038(limit):
     data = get_results(sparql_query)
 
     return data
+
+
+def count_arabic_with_P11038():
+
+    sparql_query = """
+        SELECT (count(*) as ?count)
+        WHERE {
+        ?item rdf:type ontolex:LexicalEntry;
+                dct:language wd:Q13955.
+        ?item wdt:P11038 ?P11038
+        }
+
+    """
+    data = get_results(sparql_query)
+    count = 0
+    # [ { "count": "1632" } ]
+    # ---
+    if data:
+        count = data[0]['count']
+    # ---
+    return count

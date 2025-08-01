@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-8">
+        <div class="col-lg-10 col-sm-12">
             <div class="card shadow rounded-4">
                 <div class="card-header">
                     <span id="h1" class="card-title fs-3 fw-bold mb-3"> المفردات المكررة </span>

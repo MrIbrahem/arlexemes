@@ -27,25 +27,7 @@ def api_wd_not_in_sql():
     return jsonify(result)
 
 
-@app.route("/not_in_sql", methods=["GET"])
-def not_in_sql():
-    # ---
-    limit = request.args.get('limit', 100, type=int)
-    # ---
-    result = get_wd_not_in_sql()
-    # ---
-    # sort result by len of P11038_list
-    result = sorted(result, key=lambda x: len(x['P11038_list']), reverse=True)
-    # ---
-    if limit > 0:
-        result = result[:limit]
-    # ---
-    len_of_ids = max([len(x['P11038_list']) for x in result if x['P11038_list']])
-    # ---
-    return render_template("not_in_sql.html", data=result, len_of_ids=len_of_ids, limit=limit)
-
-
-@app.route("/logs1", methods=["GET"])
+@app.route("/logs", methods=["GET"])
 def view_logs():
     # ---
     result = logs_bot.find_logs(request)
@@ -74,7 +56,8 @@ def new_lexemes():
 
 
 @app.route("/P11038", methods=["GET"])
-def P11038():
+def P11038_wd():
+    wd_count = sparql_bot.count_arabic_with_P11038()
     limit = request.args.get('limit', 100, type=int)
 
     result = sparql_bot.all_arabic(limit)
@@ -91,7 +74,25 @@ def P11038():
         # ---
         split_by_category[category]['members'].append(item)
 
-    return render_template("P11038.html", limit=limit, result=split_by_category)
+    return render_template("P11038.html", limit=limit, result=split_by_category, wd_count=wd_count)
+
+
+@app.route("/not_in_db", methods=["GET"])
+def not_in_db():
+    # ---
+    limit = request.args.get('limit', 100, type=int)
+    # ---
+    result = get_wd_not_in_sql()
+    # ---
+    # sort result by len of P11038_list
+    result = sorted(result, key=lambda x: len(x['P11038_list']), reverse=True)
+    # ---
+    if limit > 0:
+        result = result[:limit]
+    # ---
+    len_of_ids = max([len(x['P11038_list']) for x in result if x['P11038_list']])
+    # ---
+    return render_template("not_in_db.html", data=result, len_of_ids=len_of_ids, limit=limit)
 
 
 @app.route("/wd.php", methods=["GET"])
@@ -102,12 +103,6 @@ def wd():
 @app.route("/duplicate_lemmas.php", methods=["GET"])
 def duplicate_lemmas():
     return render_template("duplicate_lemmas.php")
-
-
-@app.route("/chart.php", methods=["GET"])
-def chart():
-    return render_template("chart.php")
-
 
 @app.route("/lex.php", methods=["GET"])
 def lex():
