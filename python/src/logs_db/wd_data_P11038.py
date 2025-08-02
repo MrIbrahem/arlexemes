@@ -6,7 +6,7 @@ from logs_db import wd_data_P11038
 # counts = wd_data_P11038.count_all()
 
 """
-from .db import fetch_all
+from .db_mysql import fetch_all
 # from .insert import insert_lemma
 
 

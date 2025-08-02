@@ -5,7 +5,7 @@ from .logs_db.bot import fetch_all
 from logs_db.bot import get_P11038_lemmas
 
 """
-from .db import fetch_all
+from .db_mysql import fetch_all
 # from .insert import insert_lemma
 
 

@@ -51,7 +51,7 @@ def init_db():
             wd_id TEXT NULL DEFAULT '',
             wd_id_category TEXT NULL DEFAULT '',
             UNIQUE(lemma, lemma_id)
-        );
+        )
         """
     # ---
     db_commit(query)
@@ -62,7 +62,7 @@ def init_db():
             wd_id TEXT NOT NULL UNIQUE,
             wd_id_category TEXT NOT NULL,
             lemma TEXT NOT NULL
-        );
+        )
         """
     # ---
     db_commit(query)
@@ -74,7 +74,7 @@ def init_db():
             value TEXT NOT NULL,
             FOREIGN KEY(wd_data_id) REFERENCES wd_data(wd_id) ON DELETE CASCADE,
             UNIQUE (wd_data_id, value)
-        );
+        )
         """
     # ---
     db_commit(query)

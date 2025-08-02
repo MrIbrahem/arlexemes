@@ -9,7 +9,7 @@ from .logs_db import wd_data_table
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 
 """
-from .db import fetch_all, init_db, db_commit
+from .db_mysql import fetch_all, init_db, db_commit
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):
@@ -116,10 +116,21 @@ def get_all_by_value():
 
 def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
     # ---
-    query = """
+    query_sqlite = """
         INSERT INTO wd_data (wd_id, wd_id_category, lemma)
         VALUES (?, ?, ?)
         ON CONFLICT(wd_id) DO NOTHING
+    """
+    # ---
+    query = """
+        INSERT IGNORE INTO wd_data (wd_id, wd_id_category, lemma)
+        VALUES (%s, %s, %s)
+    """
+    # ---
+    _query = """
+        ON DUPLICATE KEY UPDATE
+            wd_id_category = VALUES(wd_id_category),
+            lemma = VALUES(lemma)
     """
     # ---
     params = (wd_id, wd_id_category, lemma)
@@ -137,10 +148,15 @@ def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
 def insert_multi_wd_data_P11038(data):
     # ---
     # UNIQUE	wd_data_id, value
-    query = """
+    _query_sqlite3 = """
         INSERT INTO wd_data_P11038 (wd_data_id, value)
             VALUES (?, ?)
         ON CONFLICT(wd_data_id, value) DO NOTHING
+    """
+    # ---
+    query = """
+        INSERT IGNORE INTO wd_data_P11038 (wd_data_id, value)
+        VALUES (%s, %s)
     """
     # ---
     data_new = []

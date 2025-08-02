@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .db import (
+from .db_mysql import (
     init_db,
     db_commit,
     delete_all,
