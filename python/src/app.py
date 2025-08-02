@@ -7,6 +7,7 @@ app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
 
 import logs_bot
+import logs_bot_new
 from bots import sparql_bot
 from bots.match_sparql import get_wd_not_in_sql
 # from logs_db import wd_data_table  # count_all, get_all
@@ -46,6 +47,14 @@ def api_wd_not_in_sql():
     result = get_wd_not_in_sql()
     # ---
     return jsonify(result)
+
+
+@app.route("/logs_new", methods=["GET"])
+def view_logs_new():
+    # ---
+    result = logs_bot_new.find_logs(request)
+    # ---
+    return render_template("logs_new.php", result=result)
 
 
 @app.route("/logs", methods=["GET"])
