@@ -33,54 +33,84 @@ def count_all():
     # ---
     query = """
         SELECT
-            COUNT(*) AS total_rows,
-            COUNT(CASE WHEN w.vi_value IS NOT NULL AND w.vi_value != '' THEN 1 END) AS count_has_value,
-            COUNT(CASE WHEN w.vi_value IS NULL OR w.vi_value = '' THEN 1 END) AS count_no_value
-        FROM P11038_lemmas AS l
-        LEFT JOIN wd_data_both AS w
-            ON (l.lemma_id = w.vi_value OR l.sama_lemma_id = w.vi_value);
+            SUM(total_rows) AS total_rows,
+            SUM(count_has_value) AS count_has_value
+        FROM (
+            SELECT
+                COUNT(*) AS total_rows,
+                COUNT(CASE WHEN wdp.value IS NOT NULL AND wdp.value != '' THEN 1 END) AS count_has_value
+            FROM P11038_lemmas AS l
+            LEFT JOIN wd_data_p11038 AS wdp
+                ON l.lemma_id = wdp.value
 
+            UNION ALL
+
+            SELECT
+                COUNT(*) AS total_rows,
+                COUNT(CASE WHEN wdp.value IS NOT NULL AND wdp.value != '' THEN 1 END) AS count_has_value
+            FROM P11038_lemmas AS l
+            LEFT JOIN wd_data_p11038 AS wdp
+                ON l.sama_lemma_id = wdp.value
+        ) AS combined
     """
     # ---
     result = fetch_all(query, [], fetch_one=True)
     # ---
     if not result:
-        return 0
+        return {}
     # ---
     if isinstance(result, list):
         result = result[0]
     # ---
+    total_rows = int(result["total_rows"]) // 2
+    # ---
     data = {
-        "all": result["total_rows"],
-        "with": result["count_has_value"],
-        "without": result["count_no_value"],
+        "all": total_rows,
+        "with": int(result["count_has_value"]),
+        "without": total_rows - int(result["count_has_value"]),
     }
+    # ---
+    print(data)
     # ---
     return data
 
 
-def get_P11038_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="all"):
-    # ---
-    query = """
-    SELECT * FROM P11038_lemmas AS l JOIN wd_data_P11038 AS w ON l.lemma_id = w.value OR l.sama_lemma_id = w.value WHERE w.value != ""
-    """
-    # ---
-    # { "id": 116837, "lemma_id": 2023255974, "lemma": "صَالٍ", "pos": "صفة", "pos_cat": "اسم", "sama_lemma_id": "", "sama_lemma": "", "vi_wd_id": "L1475214", "vi_wd_id_category": "صفة", "vi_lemma": "صَالٍ", "vi_value": "2023255974" }
+def get_P11038_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with"):
     # ---
     query = """
         SELECT
-            id, lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma
-            vi_wd_id, vi_wd_id_category, vi_lemma, vi_value
+            l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma,
+            w.wd_id as vi_wd_id, w.wd_id_category as vi_wd_id_category, w.lemma as vi_lemma, wdp.value as vi_value
+
         FROM P11038_lemmas AS l
-        LEFT JOIN wd_data_both AS w
-            ON l.lemma_id = w.vi_value
-                OR l.sama_lemma_id = w.vi_value
+         JOIN wd_data_p11038 AS wdp
+        ON l.lemma_id = wdp.value
+         JOIN wd_data AS w ON wdp.wd_data_id = w.wd_id
+
+            UNION ALL
+
+        SELECT
+            l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma,
+            w.wd_id as vi_wd_id, w.wd_id_category as vi_wd_id_category, w.lemma as vi_lemma, wdp.value as vi_value
+
+        FROM P11038_lemmas AS l
+         JOIN wd_data_p11038 AS wdp
+        ON l.sama_lemma_id = wdp.value
+         JOIN wd_data AS w ON wdp.wd_data_id = w.wd_id
+
     """
     # ---
-    if filter_data == "with":
-        query += " WHERE (w.vi_value IS NOT NULL AND w.vi_value != '') "
-    elif filter_data == "without":
-        query += " WHERE (w.vi_value IS NULL OR w.vi_value = '') "
+    query_without = """
+    SELECT
+        l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma
+
+        FROM P11038_lemmas AS l
+        where l.sama_lemma_id not in (select value from wd_data_p11038)
+        and l.lemma_id not in (select value from wd_data_p11038)
+    """
+    # ---
+    if filter_data == "without":
+        query = query_without
     # ---
     params = []
     # ---

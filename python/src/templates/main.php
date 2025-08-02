@@ -81,8 +81,8 @@
                             <i class="bi bi-tree ms-1"></i> مخطط شجري
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/logs') else '' }}">
-                        <a class="nav-link" href="/logs">
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/logs_new') else '' }}">
+                        <a class="nav-link" href="/logs_new">
                             <i class="bi bi-journal-text ms-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>

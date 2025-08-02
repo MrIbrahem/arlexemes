@@ -86,15 +86,6 @@
                                             <div class="form-control d-flex flex-column">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="filter_data"
-                                                        id="filter_all" value="all"
-                                                        {% if result.tab.filter_data == 'all' %}checked{% endif %}>
-                                                    <label class="form-check-label" for="filter_all">
-                                                        الكل {% if result.total_logs_data %}
-                                                        ({{ result.total_logs_data.all }}){% endif %}
-                                                    </label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="filter_data"
                                                         id="filter_with" value="with"
                                                         {% if result.tab.filter_data == 'with' %}checked{% endif %}>
                                                     <label class="form-check-label" for="filter_with">

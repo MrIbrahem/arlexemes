@@ -22,7 +22,9 @@ def jsonify(data : dict) -> str:
 @app.route("/api/wd_data_count", methods=["GET"])
 def wd_data_api_count():
     # ---
-    counts = wd_data_P11038.count_all()
+    filter_data = request.args.get("filter_data", "all", type=str)
+    # ---
+    counts = wd_data_P11038.count_all(filter_data)
     # ---
     return jsonify(counts)
 
@@ -30,11 +32,11 @@ def wd_data_api_count():
 @app.route("/api/wd_data", methods=["GET"])
 def wd_data_api():
     # ---
-    limit = request.args.get('limit', 100, type=int)
+    limit = request.args.get('limit', 10000, type=int)
     offset = request.args.get('offset', 0, type=int)
     order = request.args.get("order", "desc").upper()
     order_by = request.args.get("order_by", "id", type=str)
-    filter_data = request.args.get("filter_data", "all", type=str)
+    filter_data = request.args.get("filter_data", "with", type=str)
     # ---
     all_result = wd_data_P11038.get_P11038_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
     # ---

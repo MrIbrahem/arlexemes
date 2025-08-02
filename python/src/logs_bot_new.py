@@ -20,11 +20,11 @@ def get_args(request):
     order = request.args.get("order", "desc").upper()
     order_by = request.args.get("order_by", "response_count", type=str)
     # ---
-    filter_data = request.args.get("filter_data", "all", type=str)
+    filter_data = request.args.get("filter_data", "with", type=str)
     # ---
     # Validate values
     page = max(1, page)
-    per_page = max(1, min(200, per_page))
+    per_page = max(1, min(5000, per_page))
 
     # Offset for pagination
     offset = (page - 1) * per_page
@@ -102,7 +102,6 @@ def find_logs(request):
         all_logs = total_logs_data[args.filter_data]
     # ---
     table_new = {
-        "total_logs": f"{all_logs:,}",
         "order": args.order,
         "order_by": order_by,
         "per_page": args.per_page,
