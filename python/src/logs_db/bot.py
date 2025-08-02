@@ -2,6 +2,7 @@
 """
 
 from .logs_db.bot import change_db_path, fetch_all
+from logs_db.bot import get_P11038_lemmas
 
 """
 from .db import change_db_path as _change_db_path, fetch_all

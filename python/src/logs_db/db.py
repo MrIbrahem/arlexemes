@@ -70,6 +70,30 @@ def init_db():
             UNIQUE(lemma, lemma_id)
         );
         """
+    # ---
+    db_commit(query)
+    # ---
+    query = """
+        CREATE TABLE IF NOT EXISTS wd_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            wd_id TEXT NOT NULL UNIQUE,
+            wd_id_category TEXT NOT NULL,
+            lemma TEXT NOT NULL
+        );
+        """
+    # ---
+    db_commit(query)
+    # ---
+    query = """
+        CREATE TABLE IF NOT EXISTS wd_data_P11038 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            wd_data_id TEXT NOT NULL,
+            value TEXT NOT NULL,
+            FOREIGN KEY(wd_data_id) REFERENCES wd_data(wd_id) ON DELETE CASCADE,
+            UNIQUE (wd_data_id, value)
+        );
+        """
+    # ---
     db_commit(query)
 
 

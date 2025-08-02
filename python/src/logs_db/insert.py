@@ -100,3 +100,28 @@ def update_lemma(lemma_id, data):
     result = db_commit(query, params)
     # ---
     return result
+
+
+def update_wd(lid, P11038_list):
+    # ---
+    set_query = []
+    params = []
+    # ---
+    for key, value in data.items():
+        if value != "":
+            set_query.append(f"{key} = ?")
+            params.append(value)
+    # ---
+    set_query_str = ", ".join(set_query)
+    # ---
+    query = f"""
+        UPDATE wd_data
+        SET {set_query_str}
+        WHERE id = ?
+    """
+    # ---
+    params.append(lemma_id)
+    # ---
+    result = db_commit(query, params)
+    # ---
+    return result

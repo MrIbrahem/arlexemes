@@ -9,14 +9,35 @@ app = Flask(__name__)
 import logs_bot
 from bots import sparql_bot
 from bots.match_sparql import get_wd_not_in_sql
+# from logs_db import wd_data_table  # count_all, get_all
+from logs_db import wd_data_P11038
 
 
-@app.route("/api/logs", methods=["GET"])
-def logs_api():
+def jsonify(data : dict) -> str:
+    response_json = json.dumps(data, ensure_ascii=False, indent=4)
+    return Response(response=response_json, content_type="application/json; charset=utf-8")
+
+
+@app.route("/api/wd_data_count", methods=["GET"])
+def wd_data_api_count():
     # ---
-    result = logs_bot.find_logs(request)
+    counts = wd_data_P11038.count_all()
     # ---
-    return jsonify(result)
+    return jsonify(counts)
+
+
+@app.route("/api/wd_data", methods=["GET"])
+def wd_data_api():
+    # ---
+    limit = request.args.get('limit', 100, type=int)
+    offset = request.args.get('offset', 0, type=int)
+    order = request.args.get("order", "desc").upper()
+    order_by = request.args.get("order_by", "id", type=str)
+    filter_data = request.args.get("filter_data", "all", type=str)
+    # ---
+    all_result = wd_data_P11038.get_P11038_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+    # ---
+    return jsonify(all_result)
 
 
 @app.route("/api/wd_not_in_sql", methods=["GET"])
@@ -33,11 +54,6 @@ def view_logs():
     result = logs_bot.find_logs(request)
     # ---
     return render_template("logs.php", result=result)
-
-
-def jsonify(data : dict) -> str:
-    response_json = json.dumps(data, ensure_ascii=False, indent=4)
-    return Response(response=response_json, content_type="application/json; charset=utf-8")
 
 
 @app.route("/autocomplete.php", methods=["GET"])
@@ -103,6 +119,7 @@ def wd():
 @app.route("/duplicate_lemmas.php", methods=["GET"])
 def duplicate_lemmas():
     return render_template("duplicate_lemmas.php")
+
 
 @app.route("/lex.php", methods=["GET"])
 def lex():

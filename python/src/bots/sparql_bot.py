@@ -157,16 +157,46 @@ def all_arabic_with_P11038(limit):
     return data
 
 
+def all_arabic_with_P11038_grouped(limit=0):
+
+    sparql_query = """
+        SELECT DISTINCT ?item ?lemma ?category ?categoryLabel
+            (GROUP_CONCAT(DISTINCT ?P11038; separator=", ") AS ?P11038_values)
+        WHERE {
+            ?item a ontolex:LexicalEntry ;
+                wikibase:lexicalCategory ?category ;
+                dct:language wd:Q13955 ;
+                wikibase:lemma ?lemma ;
+                wdt:P11038 ?P11038 .
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+        }
+        GROUP BY ?item ?lemma ?category ?categoryLabel
+
+    """
+    if limit > 0:
+        sparql_query += f" limit {limit}"
+
+    data = get_results(sparql_query)
+    # ---
+    new_data = []
+    # ---
+    for x in data:
+        P11038_values = [o.strip() for o in x.get("P11038_values", "").split(",")]
+        x["P11038_values"] = P11038_values
+        new_data.append(x)
+    # ---
+    return new_data
+
+
 def count_arabic_with_P11038():
 
     sparql_query = """
-        SELECT (count(*) as ?count)
+        SELECT (count(DISTINCT ?item) as ?count)
         WHERE {
         ?item rdf:type ontolex:LexicalEntry;
                 dct:language wd:Q13955.
         ?item wdt:P11038 ?P11038
         }
-
     """
     data = get_results(sparql_query)
     count = 0
