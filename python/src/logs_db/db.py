@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-from .db import change_db_path, db_commit, init_db, fetch_all
+from .db import db_commit, init_db, fetch_all
 
 """
 import os
@@ -18,23 +18,6 @@ if HOME:
 db_path = f"{str(main_path)}/new_logs.db"
 
 db_path_main = {1: str(db_path)}
-
-print("db_path", db_path_main[1])
-
-
-def change_db_path(file):
-    # ---
-    db_path = str(main_path) + f"/{file}"
-    # ---
-    dbs_path = Path(main_path)
-    # ---
-    # list of files *.db in dbs_path
-    dbs = [str(f.name) for f in dbs_path.glob("*.db") if f.is_file()]
-    # ---
-    if file in dbs and os.path.exists(db_path):
-        db_path_main[1] = str(db_path)
-    # ---
-    return dbs
 
 
 def db_commit(query, params=[], many=False):

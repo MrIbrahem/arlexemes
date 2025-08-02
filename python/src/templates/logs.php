@@ -12,10 +12,6 @@
 
 {% set col_class = "col-md-4" %}
 
-{% if result.dbs %}
-{% set col_class = "col-md-3" %}
-{% endif %}
-
 {% block content %}
 <div class="container-fluid">
     <div class="row justify-content-center">

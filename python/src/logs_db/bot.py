@@ -1,24 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 
-from .logs_db.bot import change_db_path, fetch_all
+from .logs_db.bot import fetch_all
 from logs_db.bot import get_P11038_lemmas
 
 """
-from .db import change_db_path as _change_db_path, fetch_all
+from .db import fetch_all
 # from .insert import insert_lemma
-
-"""
-
-try:
-    from .db import change_db_path as _change_db_path, fetch_all
-except ImportError:
-    from db import change_db_path as _change_db_path, fetch_all
-"""
-
-
-def change_db_path(file):
-    return _change_db_path(file)
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):
