@@ -18,11 +18,11 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
         query += f" ORDER BY {order_by} {order}"
     # ---
     if limit > 0:
-        query += " LIMIT ?"
+        query += " LIMIT %s"
         params.extend([limit])
     # ---
     if offset > 0:
-        query += " OFFSET ?"
+        query += " OFFSET %s"
         params.extend([offset])
     # ---
     return query, params
@@ -109,14 +109,14 @@ def select(data={}, table_name="P11038_lemmas", limit=0, offset=0, order="DESC",
     # ---
     for key, value in data.items():
         if key in types:
-            line = f"{key} = ?"
+            line = f"{key} = %s"
             # ---
             if value == "null":
                 line = f"({key} IS NULL OR {key} = '')"
             elif value == "not null":
                 line = f"({key} IS NOT NULL AND {key} != '')"
             elif value != "":
-                line = f"({key} = ?)"
+                line = f"({key} = %s)"
                 params.append(value)
             # ---
             expend_query.append(line)

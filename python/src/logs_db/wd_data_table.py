@@ -21,11 +21,11 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
         query += f" ORDER BY {order_by} {order}"
     # ---
     if limit > 0:
-        query += " LIMIT ?"
+        query += " LIMIT %s"
         params.extend([limit])
     # ---
     if offset > 0:
-        query += " OFFSET ?"
+        query += " OFFSET %s"
         params.extend([offset])
     # ---
     return query, params

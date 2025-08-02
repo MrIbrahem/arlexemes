@@ -19,11 +19,11 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
         query += f" ORDER BY {order_by} {order}"
     # ---
     if limit > 0:
-        query += " LIMIT ?"
+        query += " LIMIT %s"
         params.extend([limit])
     # ---
     if offset > 0:
-        query += " OFFSET ?"
+        query += " OFFSET %s"
         params.extend([offset])
     # ---
     return query, params
@@ -38,8 +38,7 @@ def count_all():
             COUNT(CASE WHEN w.vi_value IS NULL OR w.vi_value = '' THEN 1 END) AS count_no_value
         FROM P11038_lemmas AS l
         LEFT JOIN wd_data_both AS w
-            ON l.lemma_id = w.vi_value
-                OR l.sama_lemma_id = w.vi_value;
+            ON (l.lemma_id = w.vi_value OR l.sama_lemma_id = w.vi_value);
 
     """
     # ---
@@ -76,7 +75,6 @@ def get_P11038_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_dat
         LEFT JOIN wd_data_both AS w
             ON l.lemma_id = w.vi_value
                 OR l.sama_lemma_id = w.vi_value
-
     """
     # ---
     if filter_data == "with":

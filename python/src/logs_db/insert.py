@@ -104,7 +104,7 @@ def update_lemma(lemma_id, data):
     # ---
     for key, value in data.items():
         if value != "":
-            set_query.append(f"{key} = ?")
+            set_query.append(f"{key} = %s")
             params.append(value)
     # ---
     set_query_str = ", ".join(set_query)
