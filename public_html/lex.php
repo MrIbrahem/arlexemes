@@ -141,13 +141,11 @@ require __DIR__ . "/main.php";
         const id = document.getElementById("lexemeId").value.trim();
         if (!id) return;
         await start_lexeme(id);
-        await table_toggle();
         await find_labels();
     }
     async function setExample(lexeme) {
         document.getElementById('lexemeId').value = lexeme;
         await start_lexeme(lexeme);
-        await table_toggle();
         await find_labels();
     }
 

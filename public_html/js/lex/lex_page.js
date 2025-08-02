@@ -259,7 +259,6 @@ async function fetchLexemeById(id, entity) {
     } else if (typeof window[Category] === "function") {
         table_html = await window[Category](entity);
 
-        // $("#main_table").DataTable({ searching: false });
     } else {
         table_html = await Q34698(entity);
         // table_html = `<div class='alert alert-warning'>هذا النوع ${pos}-${Category} غير مدعوم</div>`;

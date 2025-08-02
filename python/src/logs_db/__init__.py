@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .db import (
+from .db_mysql import (
     init_db,
     db_commit,
     delete_all,
@@ -10,7 +10,6 @@ from .bot import (
     fetch_all,
     count_all,
     get_logs,
-    change_db_path,
     get_all,
 )
 
@@ -21,7 +20,6 @@ from .insert import (
 )
 __all__ = [
     "select",
-    "change_db_path",
     "db_commit",
     "delete_all",
     "init_db",

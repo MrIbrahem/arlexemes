@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import logs_db  # logs_db.change_db_path(file)
+import logs_db
 from types import SimpleNamespace
 
 db_tables = ["P11038_lemmas"]
@@ -13,7 +13,6 @@ pos_cat_data = {
 
 
 def get_args(request):
-    db_path = request.args.get("db_path")
     # ---
     page = request.args.get("page", 1, type=int)
     # ---
@@ -35,15 +34,7 @@ def get_args(request):
     # Offset for pagination
     offset = (page - 1) * per_page
     # ---
-    dbs = []
-    # ---
-    if db_path:
-        dbs = logs_db.change_db_path(db_path)
-        db_path = db_path if db_path in dbs else "new_logs.db"
-    # ---
     args = {
-        "dbs": dbs,
-        "db_path": db_path,
         "per_page": per_page,
         "page": page,
         "offset": offset,
@@ -114,7 +105,6 @@ def find_logs(request):
         all_logs = total_logs_data[args.filter_data]
     # ---
     table_new = {
-        "db_path": args.db_path,
         "table_name": args.table_name,
         "total_logs": f"{all_logs:,}",
         "order": args.order,
@@ -136,7 +126,6 @@ def find_logs(request):
     total_logs_data_formated = {key: f"{value:,}" for key, value in total_logs_data.items()}
     # ---
     result = {
-        "dbs": args.dbs,
         "logs": log_list,
         "order_by_types": order_by_types,
         "tab": table_new,

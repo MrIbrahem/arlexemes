@@ -1,23 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 
-from .logs_db.bot import change_db_path, fetch_all
+from .logs_db.bot import fetch_all
+from logs_db.bot import get_P11038_lemmas
 
 """
-from .db import change_db_path as _change_db_path, fetch_all
+from .db_mysql import fetch_all
 # from .insert import insert_lemma
-
-"""
-
-try:
-    from .db import change_db_path as _change_db_path, fetch_all
-except ImportError:
-    from db import change_db_path as _change_db_path, fetch_all
-"""
-
-
-def change_db_path(file):
-    return _change_db_path(file)
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):
@@ -26,14 +15,14 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
         order = "DESC"
     # ---
     if order_by:
-        query += f"ORDER BY {order_by} {order}"
+        query += f" ORDER BY {order_by} {order}"
     # ---
     if limit > 0:
-        query += " LIMIT ?"
+        query += " LIMIT %s"
         params.extend([limit])
     # ---
     if offset > 0:
-        query += " OFFSET ?"
+        query += " OFFSET %s"
         params.extend([offset])
     # ---
     return query, params
@@ -120,14 +109,14 @@ def select(data={}, table_name="P11038_lemmas", limit=0, offset=0, order="DESC",
     # ---
     for key, value in data.items():
         if key in types:
-            line = f"{key} = ?"
+            line = f"{key} = %s"
             # ---
             if value == "null":
                 line = f"({key} IS NULL OR {key} = '')"
             elif value == "not null":
                 line = f"({key} IS NOT NULL AND {key} != '')"
             elif value != "":
-                line = f"({key} = '')"
+                line = f"({key} = %s)"
                 params.append(value)
             # ---
             expend_query.append(line)

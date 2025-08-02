@@ -60,7 +60,7 @@ function parse_results(result) {
     return wd_result;
 }
 
-async function load_wd(limit, data_source) {
+async function load_wd(limit, data_source, sort_by) {
     let VALUES = ``;
     const sparqlQuery1 = `
         VALUES ?category {
@@ -74,6 +74,12 @@ async function load_wd(limit, data_source) {
     // if data_source match Q\d+
     if (data_source !== "" && data_source.match(/Q\d+/)) {
         VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
+    let ORDER = "ORDER BY DESC(?count)";
+    // ---
+    if (sort_by === "id") {
+        ORDER = "ORDER BY DESC(xsd:integer(STRAFTER(STR(?item), '/entity/L')))";
     }
     // ---
     let sparqlQuery = `
@@ -96,10 +102,10 @@ async function load_wd(limit, data_source) {
             SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
         }
         group by ?item ?category ?categoryLabel ?P31 ?P31Label
-        ORDER BY DESC(?count)
+        ${ORDER}
     `;
     if (limit && isFinite(limit)) {
-        sparqlQuery += ` LIMIT ${limit}`;
+        sparqlQuery += ` LIMIT ${limit} `;
     }
     let result = await loadsparqlQuery(sparqlQuery);
 
@@ -108,8 +114,8 @@ async function load_wd(limit, data_source) {
     return wd_result;
 }
 
-async function make_wd_result(limit, data_source) {
-    let wd_result = await load_wd(limit, data_source);
+async function make_wd_result(limit, data_source, sort_by) {
+    let wd_result = await load_wd(limit, data_source, sort_by);
     // ---
     return wd_result;
 }

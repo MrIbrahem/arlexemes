@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-from .db import change_db_path, db_commit, init_db, fetch_all
+from .db import db_commit, init_db, fetch_all
 
 """
 import os
@@ -18,23 +18,6 @@ if HOME:
 db_path = f"{str(main_path)}/new_logs.db"
 
 db_path_main = {1: str(db_path)}
-
-print("db_path", db_path_main[1])
-
-
-def change_db_path(file):
-    # ---
-    db_path = str(main_path) + f"/{file}"
-    # ---
-    dbs_path = Path(main_path)
-    # ---
-    # list of files *.db in dbs_path
-    dbs = [str(f.name) for f in dbs_path.glob("*.db") if f.is_file()]
-    # ---
-    if file in dbs and os.path.exists(db_path):
-        db_path_main[1] = str(db_path)
-    # ---
-    return dbs
 
 
 def db_commit(query, params=[], many=False):
@@ -68,8 +51,32 @@ def init_db():
             wd_id TEXT NULL DEFAULT '',
             wd_id_category TEXT NULL DEFAULT '',
             UNIQUE(lemma, lemma_id)
-        );
+        )
         """
+    # ---
+    db_commit(query)
+    # ---
+    query = """
+        CREATE TABLE IF NOT EXISTS wd_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            wd_id TEXT NOT NULL UNIQUE,
+            wd_id_category TEXT NOT NULL,
+            lemma TEXT NOT NULL
+        )
+        """
+    # ---
+    db_commit(query)
+    # ---
+    query = """
+        CREATE TABLE IF NOT EXISTS wd_data_P11038 (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            wd_data_id TEXT NOT NULL,
+            value TEXT NOT NULL,
+            FOREIGN KEY(wd_data_id) REFERENCES wd_data(wd_id) ON DELETE CASCADE,
+            UNIQUE (wd_data_id, value)
+        )
+        """
+    # ---
     db_commit(query)
 
 

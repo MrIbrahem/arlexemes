@@ -1,17 +1,19 @@
 {% extends "main.php" %}
 {% block title %}
-<title>المفردات العربية</title>
+<title>الأنطولوجيا في ويكي بيانات</title>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid my-2">
+<div class="container my-2">
     <div class="card shadow rounded-4">
         <div class="card-header">
             <div class="d-flex align-items-center justify-content-between m-1 p-1">
-                <h2 class="mb-4" id="header_main">عرض بيانات
-                    الأنطولوجيا العربية <a href="https://www.wikidata.org/wiki/Property:P11038"
-                        target="_blank">(P11038)</a>
+                <h2 class="mb-4" id="header_main">المفردات الموصولة بالأنطولوجيا العربية <a
+                        href="https://www.wikidata.org/wiki/Property:P11038" target="_blank">(P11038)</a>
                 </h2>
+                <span class="mb-4 h3">
+                    الإجمالي: {{ wd_count }}
+                </span>
                 <form method="GET">
                     <div class="row">
                         <div class="col-md-6 text-center">
