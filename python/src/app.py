@@ -156,8 +156,8 @@ if __name__ == "__main__":
     debug = "debug" in sys.argv
     # ---
     if debug:
-        url = "http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=P11038_lemmas"
+        print("http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=P11038_lemmas")
         # ---
-        print(url)
+        print("http://localhost:9001/adminer.php?server=localhost&username=root&db=arlexemes")
     # ---
     app.run(debug=debug)
