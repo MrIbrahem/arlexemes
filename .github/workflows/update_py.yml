@@ -18,4 +18,9 @@ jobs:
           script_stop: true
           key: ${{ secrets.KEY }}
           script: |
-            become arlexemes sh -c "~/sh/update_py.sh"
+            become arlexemes sh -c "
+              ~/sh/update_py.sh &&
+              toolforge-webservice stop &&
+              toolforge-webservice start &&
+              echo 'done..'
+            "
