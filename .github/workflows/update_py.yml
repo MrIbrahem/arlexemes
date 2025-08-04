@@ -21,6 +21,6 @@ jobs:
             become arlexemes sh -c "
               ~/sh/update_py.sh &&
               toolforge-webservice stop &&
-              toolforge-webservice start &&
+              toolforge-webservice python3.11 start &&
               echo 'done..'
             "
