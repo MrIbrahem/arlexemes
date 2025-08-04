@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from logs_db import init_db, count_all, get_logs
+from logs_db.db_mysql import init_db
+from logs_db.bot import get_logs, count_all
 
 
 def test():
+    print("test init_db: ")
+    # ---
     init_db()
     # ---
     print("count_all", count_all())
