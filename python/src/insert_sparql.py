@@ -29,7 +29,7 @@ def lemma_update(lemma_id, data):
 def in_sql():
     # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'wd_id': '', 'wd_id_category': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
     # ---
-    result = get_all(table_name="P11038_lemmas")
+    result = get_all(table_name="p11038_lemmas")
     # ---
     Lid_not_null = {str(x['lemma_id']) : x for x in result if x['wd_id']}
     # ---

@@ -1,0 +1,26 @@
+name: update_py.yml
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy python to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: 22
+          request_pty: true
+          script_stop: true
+          key: ${{ secrets.KEY }}
+          script: |
+            become arlexemes sh -c "
+              ~/sh/update_py.sh &&
+              toolforge-webservice stop &&
+              toolforge-webservice start &&
+              echo 'done..'
+            "

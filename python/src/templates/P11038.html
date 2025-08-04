@@ -7,90 +7,25 @@
 <div class="container my-2">
     <div class="card shadow rounded-4">
         <div class="card-header">
-            <div class="d-flex align-items-center justify-content-between m-1 p-1">
-                <h2 class="mb-4" id="header_main">المفردات الموصولة بالأنطولوجيا العربية <a
-                        href="https://www.wikidata.org/wiki/Property:P11038" target="_blank">(P11038)</a>
-                </h2>
-                <span class="mb-4 h3">
-                    الإجمالي: {{ wd_count }}
-                </span>
-                <form method="GET">
-                    <div class="row">
-                        <div class="col-md-6 text-center">
-                            <input type="number" id="limit" name="limit" class="form-control" placeholder="عدد النتائج"
-                                value="{{ limit }}">
-                        </div>
-                        <div class="col-md-6 text-center">
-                            <button type="submit" class="btn btn-primary">تحميل</button>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
+            <h2>المفردات الموصولة بالأنطولوجيا العربية <a href="https://www.wikidata.org/wiki/Property:P11038"
+                    target="_blank">(P11038)</a>
+            </h2>
         </div>
-
         <div class="card-body">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                {%for category, data in result.items() %}
-                {%set index = loop.index%}
-                {%set active = 'active' if index == 1 else ''%}
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link {{ active }} position-relative" id="hometab_{{index}}" data-bs-toggle="tab"
-                        data-bs-target="#home-tab-pane_{{index}}" type="button" role="tab"
-                        aria-controls="home-tab-pane_{{index}}" aria-selected="true" fdprocessedid="85sihc">
-                        {{ data.categoryLabel }} ({{ data.members|length }})
-                        <!-- <span class="position-absolute top-5 start-90 translate-middle p-1 bg-danger border border-light rounded-circle">
-                            <span class="visually-hidden">New alerts</span>
-                        </span> -->
-                    </button>
-                </li>
-                {%endfor%}
-            </ul>
-            <div class="tab-content row list-group mt-3" id="myTabContent">
-
-                {%for category, data in result.items() %}
-                {%set index = loop.index%}
-                {%set active = 'active' if index == 1 else ''%}
-                <div class="tab-pane fade show {{ active }}" id="home-tab-pane_{{index}}" role="tabpanel"
-                    aria-labelledby="hometab_{{index}}" tabindex="1">
-
-                    <h2 class="mb-4">
-                        <a href="https://www.wikidata.org/entity/{{ data.category }}"
-                            target="_blank">{{ data.categoryLabel }}</a>
-                    </h2>
-
-                    <table id="P11038_table" class="table display table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>lemma</th>
-                                <th>item</th>
-                                <th>P11038</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_body">
-                            {%for item in data.members%}
-                            <tr>
-                                <td>{{loop.index}}</td>
-                                <td>{{item.lemma}}</td>
-                                <td>
-                                    <a href="https://www.wikidata.org/entity/{{item.item}}" target="_blank">
-                                        {{item.item}} </a>
-                                </td>
-                                <td>
-                                    <a href="https://ontology.birzeit.edu/lemma/{{item.P11038}}"
-                                        target="_blank">{{item.P11038}}</a>
-                                </td>
-                            </tr>
-                            {%endfor%}
-                        </tbody>
-                    </table>
-                </div>
-
-                {%endfor%}
+            <div class="list-group list-group-flush">
+                <a target="_blank" href="/P11038_wd" class="list-group-item list-group-item-action">
+                    استخدام الخاصية في ويكي بيانات
+                </a>
+                <a target="_blank" href="/logs_new" class="list-group-item list-group-item-action">
+                    تقرير الربط
+                </a>
+                <a target="_blank" href="/not_in_db" class="list-group-item list-group-item-action">
+                    بيانات غير موصولة
+                </a>
             </div>
         </div>
     </div>
+</div>
 </div>
 <script src="{{ url_for('static', filename='js/lex/data.js') }}"></script>
 <script src="{{ url_for('static', filename='js/table_filter2.js') }}"></script>

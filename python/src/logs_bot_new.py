@@ -3,7 +3,7 @@
 from logs_db import wd_data_P11038
 from types import SimpleNamespace
 
-db_tables = ["P11038_lemmas"]
+db_tables = ["p11038_lemmas"]
 
 pos_cat_data = {
     "اسم": 45168,
@@ -89,7 +89,7 @@ def find_logs(request):
     # ---
     order_by = "lemma_id" if args.order_by not in order_by_types else args.order_by
     # ---
-    logs = wd_data_P11038.get_P11038_lemmas(args.per_page, args.offset, args.order, order_by=order_by, filter_data=args.filter_data)
+    logs = wd_data_P11038.get_p11038_lemmas(args.per_page, args.offset, args.order, order_by=order_by, filter_data=args.filter_data)
     # ---
     # Convert to list of dicts
     log_list = logs

@@ -3,7 +3,7 @@
 import logs_db
 from types import SimpleNamespace
 
-db_tables = ["P11038_lemmas"]
+db_tables = ["p11038_lemmas"]
 
 pos_cat_data = {
     "اسم": 45168,
@@ -25,7 +25,7 @@ def get_args(request):
     table_name = request.args.get("table_name", "", type=str)
     # ---
     if table_name not in db_tables:
-        table_name = "P11038_lemmas"
+        table_name = "p11038_lemmas"
     # ---
     # Validate values
     page = max(1, page)

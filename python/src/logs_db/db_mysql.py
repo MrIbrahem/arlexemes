@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
 import pymysql
-from pymysql.cursors import DictCursor
+from .config_db import load_db_config
 
-# إعدادات الاتصال
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",           # غيّر حسب المستخدم
-    "password": "root11",   # غيّر حسب كلمة المرور
-    "database": "arlexemes",
-    "charset": "utf8mb4",
-    "cursorclass": DictCursor
-}
+DB_CONFIG = load_db_config()
 
 
 def get_connection():
@@ -20,6 +12,8 @@ def get_connection():
 
 def db_commit(query, params=None, many=False):
     """تنفيذ أوامر INSERT / UPDATE / DELETE"""
+    conn = None
+    cursor = None
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -38,53 +32,63 @@ def db_commit(query, params=None, many=False):
         print(f"MySQL Database error: {e}")
         return e
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
 
 
 def init_db():
     query = """
-        CREATE TABLE IF NOT EXISTS P11038_lemmas (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            lemma_id INT NOT NULL,
-            lemma VARCHAR(255) NOT NULL,
-            pos VARCHAR(255) DEFAULT '',
-            pos_cat VARCHAR(255) DEFAULT '',
-            sama_lemma_id INT DEFAULT NULL,
-            sama_lemma VARCHAR(255) DEFAULT '',
-            wd_id VARCHAR(255) DEFAULT '',
-            wd_id_category VARCHAR(255) DEFAULT '',
-            UNIQUE (lemma, lemma_id)
-        )
+        CREATE TABLE `p11038_lemmas` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `lemma_id` int NOT NULL,
+            `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `pos` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `pos_cat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `sama_lemma_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `sama_lemma` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `lemma` (`lemma`,`lemma_id`),
+            KEY `sama_lemma_id` (`sama_lemma_id`),
+            KEY `lemma_id` (`lemma_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """
     # ---
     db_commit(query)
     # ---
     query = """
-        CREATE TABLE IF NOT EXISTS wd_data (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            wd_id VARCHAR(255) NOT NULL UNIQUE,
-            wd_id_category VARCHAR(255) NOT NULL,
-            lemma VARCHAR(255) NOT NULL
-        )
+        CREATE TABLE `wd_data` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `wd_id2` (`wd_id`),
+            KEY `wd_id` (`wd_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """
     # ---
     db_commit(query)
     # ---
     query = """
-        CREATE TABLE IF NOT EXISTS wd_data_P11038 (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            wd_data_id VARCHAR(255) NOT NULL,
-            value VARCHAR(255) NOT NULL,
-            CONSTRAINT fk_wd_data FOREIGN KEY (wd_data_id) REFERENCES wd_data(wd_id) ON DELETE CASCADE,
-            UNIQUE (wd_data_id, value)
-        )
-        """
+        CREATE TABLE `wd_data_p11038` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `wd_data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `wd_data_id` (`wd_data_id`,`value`),
+            KEY `wd_data_id_value` (`wd_data_id`,`value`),
+            CONSTRAINT `fk_wd_data` FOREIGN KEY (`wd_data_id`) REFERENCES `wd_data` (`wd_id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    """
     # ---
     db_commit(query)
 
 
-def delete_all(table_name="P11038_lemmas"):
+def delete_all(table_name="p11038_lemmas"):
     # ---
     query = f"DELETE FROM {table_name}"
     # ---
@@ -93,6 +97,8 @@ def delete_all(table_name="P11038_lemmas"):
 
 def fetch_all(query, params=None, fetch_one=False):
     """جلب بيانات من قاعدة MySQL"""
+    conn = None
+    cursor = None
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -112,8 +118,10 @@ def fetch_all(query, params=None, fetch_one=False):
         print(f"MySQL Database error in fetch_all: {e}")
         return []
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
 
 
 # مثال

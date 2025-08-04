@@ -38,7 +38,7 @@ def wd_data_api():
     order_by = request.args.get("order_by", "id", type=str)
     filter_data = request.args.get("filter_data", "with", type=str)
     # ---
-    all_result = wd_data_P11038.get_P11038_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+    all_result = wd_data_P11038.get_p11038_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
     # ---
     return jsonify(all_result)
 
@@ -83,6 +83,11 @@ def new_lexemes():
 
 
 @app.route("/P11038", methods=["GET"])
+def P11038():
+    return render_template("P11038.html")
+
+
+@app.route("/P11038_wd", methods=["GET"])
 def P11038_wd():
     wd_count = sparql_bot.count_arabic_with_P11038()
     limit = request.args.get('limit', 100, type=int)
@@ -101,7 +106,7 @@ def P11038_wd():
         # ---
         split_by_category[category]['members'].append(item)
 
-    return render_template("P11038.html", limit=limit, result=split_by_category, wd_count=wd_count)
+    return render_template("P11038_wd.html", limit=limit, result=split_by_category, wd_count=wd_count)
 
 
 @app.route("/not_in_db", methods=["GET"])
@@ -158,7 +163,7 @@ if __name__ == "__main__":
     debug = "debug" in sys.argv
     # ---
     if debug:
-        print("http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=P11038_lemmas")
+        print("http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=p11038_lemmas")
         # ---
         print("http://localhost:9001/adminer.php?server=localhost&username=root&db=arlexemes")
     # ---

@@ -10,19 +10,19 @@ from .db_mysql import db_commit, init_db
 def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", sama_lemma_id=0, sama_lemma="", wd_id="", wd_id_category=""):
     # ---
     _query_sqlite3 = """
-        INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
+        INSERT INTO p11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(lemma_id, lemma) DO UPDATE SET
-            pos = COALESCE(NULLIF(excluded.pos, ''), P11038_lemmas.pos),
-            pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), P11038_lemmas.pos_cat),
-            sama_lemma_id = COALESCE(NULLIF(excluded.sama_lemma_id, ''), P11038_lemmas.sama_lemma_id),
-            sama_lemma = COALESCE(NULLIF(excluded.sama_lemma, ''), P11038_lemmas.sama_lemma),
-            wd_id = COALESCE(NULLIF(excluded.wd_id, ''), P11038_lemmas.wd_id),
-            wd_id_category = COALESCE(NULLIF(excluded.wd_id_category, ''), P11038_lemmas.wd_id_category)
+            pos = COALESCE(NULLIF(excluded.pos, ''), p11038_lemmas.pos),
+            pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), p11038_lemmas.pos_cat),
+            sama_lemma_id = COALESCE(NULLIF(excluded.sama_lemma_id, ''), p11038_lemmas.sama_lemma_id),
+            sama_lemma = COALESCE(NULLIF(excluded.sama_lemma, ''), p11038_lemmas.sama_lemma),
+            wd_id = COALESCE(NULLIF(excluded.wd_id, ''), p11038_lemmas.wd_id),
+            wd_id_category = COALESCE(NULLIF(excluded.wd_id_category, ''), p11038_lemmas.wd_id_category)
     """
     # ---
     query = """
-        INSERT INTO P11038_lemmas
+        INSERT INTO p11038_lemmas
             (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
@@ -52,19 +52,19 @@ def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", sama_lemma_id=0, sama
 def insert_multi_lemmas(data):
     # ---
     _query_sqlite3 = """
-        INSERT INTO P11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
+        INSERT INTO p11038_lemmas (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(lemma_id, lemma) DO UPDATE SET
-            pos = COALESCE(NULLIF(excluded.pos, ''), P11038_lemmas.pos),
-            pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), P11038_lemmas.pos_cat),
-            sama_lemma_id = COALESCE(NULLIF(excluded.sama_lemma_id, ''), P11038_lemmas.sama_lemma_id),
-            sama_lemma = COALESCE(NULLIF(excluded.sama_lemma, ''), P11038_lemmas.sama_lemma),
-            wd_id = COALESCE(NULLIF(excluded.wd_id, ''), P11038_lemmas.wd_id),
-            wd_id_category = COALESCE(NULLIF(excluded.wd_id_category, ''), P11038_lemmas.wd_id_category)
+            pos = COALESCE(NULLIF(excluded.pos, ''), p11038_lemmas.pos),
+            pos_cat = COALESCE(NULLIF(excluded.pos_cat, ''), p11038_lemmas.pos_cat),
+            sama_lemma_id = COALESCE(NULLIF(excluded.sama_lemma_id, ''), p11038_lemmas.sama_lemma_id),
+            sama_lemma = COALESCE(NULLIF(excluded.sama_lemma, ''), p11038_lemmas.sama_lemma),
+            wd_id = COALESCE(NULLIF(excluded.wd_id, ''), p11038_lemmas.wd_id),
+            wd_id_category = COALESCE(NULLIF(excluded.wd_id_category, ''), p11038_lemmas.wd_id_category)
     """
     # ---
     query = """
-        INSERT INTO P11038_lemmas
+        INSERT INTO p11038_lemmas
             (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
@@ -110,7 +110,7 @@ def update_lemma(lemma_id, data):
     set_query_str = ", ".join(set_query)
     # ---
     query = f"""
-        UPDATE P11038_lemmas
+        UPDATE p11038_lemmas
         SET {set_query_str}
         WHERE id = ?
     """

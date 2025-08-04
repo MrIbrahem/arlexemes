@@ -2,6 +2,10 @@
 
 python3 I:/milion/arlexemes/python/src/test.py sparql
 
+
+source "$HOME/www/python/venv/bin/activate"
+python3 www/python/src/test.py
+
 """
 import sys
 

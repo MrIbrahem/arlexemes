@@ -27,7 +27,7 @@ def instert_multi(data):
 def in_sql():
     # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'wd_id': '', 'wd_id_category': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
     # ---
-    result = get_all(table_name="P11038_lemmas")
+    result = get_all(table_name="p11038_lemmas")
     # ---
     tab = {x.get('lemma_id', "") : x for x in result if x.get('lemma_id', "")}
     # ---
@@ -65,7 +65,7 @@ def start():
     to_add = get_data()
     # ---
     if "clear" in sys.argv:
-        delete_all(table_name="P11038_lemmas")
+        delete_all(table_name="p11038_lemmas")
     # ---
     if "sama" in sys.argv:
         old_len = len(to_add)
