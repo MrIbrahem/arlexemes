@@ -1,4 +1,4 @@
-name: deploy.yml
+name: update_py.yml
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to server
+      - name: Deploy python to server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
@@ -18,4 +18,4 @@ jobs:
           script_stop: true
           key: ${{ secrets.KEY }}
           script: |
-            become arlexemes sh -c "~/sh/update.sh"
+            become arlexemes sh -c "~/sh/update_py.sh"
