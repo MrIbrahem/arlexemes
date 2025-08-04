@@ -73,7 +73,7 @@
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/duplicate_lemmas.php' else '' }}">
                         <a class="nav-link" href="/duplicate_lemmas.php">
-                            <i class="bi bi-journal-text ms-1"></i> المكررات
+                            <i class="bi bi-journal-text ms-1"></i> مفردات مكررة
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd.php' else '' }}">
@@ -81,19 +81,9 @@
                             <i class="bi bi-tree ms-1"></i> مخطط شجري
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/logs_new') else '' }}">
-                        <a class="nav-link" href="/logs_new">
-                            <i class="bi bi-journal-text ms-1"></i> الأنطولوجيا العربية
-                        </a>
-                    </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
                         <a class="nav-link" href="/P11038">
-                            <i class="bi bi-journal-text ms-1"></i> في ويكي بيانات
-                        </a>
-                    </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/not_in_db') else '' }}">
-                        <a class="nav-link" href="/not_in_db">
-                            <i class="bi bi-journal-text ms-1"></i> غير موصولة
+                            <i class="bi bi-journal-text ms-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>
                 </ul>

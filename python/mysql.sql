@@ -1,58 +1,77 @@
+-- Adminer 5.3.0 MySQL 8.0.42 dump
 
-DROP TABLE IF EXISTS `P11038_lemmas`;
-CREATE TABLE `P11038_lemmas` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `lemma_id` INT NOT NULL,
-    `lemma` VARCHAR(255) NOT NULL,
-    `pos` VARCHAR(255) DEFAULT '',
-    `pos_cat` VARCHAR(255) DEFAULT '',
-    `sama_lemma_id` INT DEFAULT NULL,
-    `sama_lemma` VARCHAR(255) DEFAULT '',
-    `wd_id` VARCHAR(255) DEFAULT '',
-    `wd_id_category` VARCHAR(255) DEFAULT '',
-    UNIQUE (`lemma`, `lemma_id`)
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `p11038_lemmas`;
+CREATE TABLE `p11038_lemmas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `lemma_id` int NOT NULL,
+  `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pos` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `pos_cat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `sama_lemma_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `sama_lemma` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lemma` (`lemma`,`lemma_id`),
+  KEY `sama_lemma_id` (`sama_lemma_id`),
+  KEY `lemma_id` (`lemma_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- index auto created by UNIQUE (`lemma`, `lemma_id`)
+
+DROP VIEW IF EXISTS `p11038_lemmas_match`;
+CREATE TABLE `p11038_lemmas_match` (`id` int);
+
 
 DROP TABLE IF EXISTS `wd_data`;
 CREATE TABLE `wd_data` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `wd_id` VARCHAR(255) NOT NULL UNIQUE,
-    `wd_id_category` VARCHAR(255) NOT NULL,
-    `lemma` VARCHAR(255) NOT NULL
+  `id` int NOT NULL AUTO_INCREMENT,
+  `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `wd_id2` (`wd_id`),
+  KEY `wd_id` (`wd_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- unique index auto created by UNIQUE (`wd_id`)
-
-DROP TABLE IF EXISTS `wd_data_P11038`;
-CREATE TABLE `wd_data_P11038` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `wd_data_id` VARCHAR(255) NOT NULL,
-    `value` VARCHAR(255) NOT NULL,
-    CONSTRAINT fk_wd_data FOREIGN KEY (`wd_data_id`) REFERENCES `wd_data`(`wd_id`) ON DELETE CASCADE,
-    UNIQUE (`wd_data_id`, `value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- لا نحتاج sqlite_sequence في MySQL
 
 DROP VIEW IF EXISTS `wd_data_both`;
-CREATE VIEW `wd_data_both` AS
-SELECT
-    d.wd_id AS vi_wd_id,
-    d.wd_id_category AS vi_wd_id_category,
-    d.lemma AS vi_lemma,
-    p.value AS vi_value
-FROM wd_data d
-LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id;
+CREATE TABLE `wd_data_both` (`vi_wd_id` varchar(255), `vi_wd_id_category` varchar(255), `vi_lemma` varchar(255), `vi_value` varchar(255));
+
+
+DROP TABLE IF EXISTS `wd_data_p11038`;
+CREATE TABLE `wd_data_p11038` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `wd_data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `wd_data_id` (`wd_data_id`,`value`),
+  KEY `wd_data_id_value` (`wd_data_id`,`value`),
+  CONSTRAINT `fk_wd_data` FOREIGN KEY (`wd_data_id`) REFERENCES `wd_data` (`wd_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 DROP VIEW IF EXISTS `wd_data_view`;
-CREATE VIEW `wd_data_view` AS
-SELECT
-    d.wd_id,
-    d.wd_id_category,
-    d.lemma,
-    GROUP_CONCAT(p.value SEPARATOR ', ') AS P11038_values
-FROM wd_data d
-LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
-GROUP BY d.wd_id, d.wd_id_category, d.lemma;
+CREATE TABLE `wd_data_view` (`wd_id` varchar(255), `wd_id_category` varchar(255), `lemma` varchar(255), `P11038_values` text);
+
+
+DROP TABLE IF EXISTS `p11038_lemmas_match`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `p11038_lemmas_match` AS select `l`.`id` AS `id` from ((`p11038_lemmas` `l` join `wd_data_p11038` `wdp` on((`l`.`lemma_id` = `wdp`.`value`))) join `wd_data` `w` on((`wdp`.`wd_data_id` = `w`.`wd_id`))) union all select `l`.`id` AS `id` from ((`p11038_lemmas` `l` join `wd_data_p11038` `wdp` on((`l`.`sama_lemma_id` = `wdp`.`value`))) join `wd_data` `w` on((`wdp`.`wd_data_id` = `w`.`wd_id`)));
+
+DROP TABLE IF EXISTS `wd_data_both`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `wd_data_both` AS select `d`.`wd_id` AS `vi_wd_id`,`d`.`wd_id_category` AS `vi_wd_id_category`,`d`.`lemma` AS `vi_lemma`,`p`.`value` AS `vi_value` from (`wd_data` `d` left join `wd_data_p11038` `p` on((`d`.`wd_id` = `p`.`wd_data_id`)));
+
+DROP TABLE IF EXISTS `wd_data_view`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `wd_data_view` AS select `d`.`wd_id` AS `wd_id`,`d`.`wd_id_category` AS `wd_id_category`,`d`.`lemma` AS `lemma`,group_concat(`p`.`value` separator ', ') AS `P11038_values` from (`wd_data` `d` left join `wd_data_p11038` `p` on((`d`.`wd_id` = `p`.`wd_data_id`))) group by `d`.`wd_id`,`d`.`wd_id_category`,`d`.`lemma`;
+
+-- 2025-08-04 21:05:29 UTC
+Cc
+W
+.*
+

@@ -1,17 +1,8 @@
 # -*- coding: utf-8 -*-
 import pymysql
-from pymysql.cursors import DictCursor
+from .config_db import load_db_config
 
-# إعدادات الاتصال
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",           # غيّر حسب المستخدم
-    "password": "root11",   # غيّر حسب كلمة المرور
-    "database": "arlexemes",
-    "charset": "utf8mb4",
-    "cursorclass": DictCursor
-}
-
+DB_CONFIG = load_db_config()
 
 def get_connection():
     """إنشاء اتصال جديد مع قاعدة البيانات MySQL"""
@@ -20,6 +11,8 @@ def get_connection():
 
 def db_commit(query, params=None, many=False):
     """تنفيذ أوامر INSERT / UPDATE / DELETE"""
+    conn = None
+    cursor = None
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -38,8 +31,10 @@ def db_commit(query, params=None, many=False):
         print(f"MySQL Database error: {e}")
         return e
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
 
 
 def init_db():
@@ -93,6 +88,8 @@ def delete_all(table_name="P11038_lemmas"):
 
 def fetch_all(query, params=None, fetch_one=False):
     """جلب بيانات من قاعدة MySQL"""
+    conn = None
+    cursor = None
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -112,8 +109,10 @@ def fetch_all(query, params=None, fetch_one=False):
         print(f"MySQL Database error in fetch_all: {e}")
         return []
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
 
 
 # مثال

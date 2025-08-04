@@ -83,6 +83,11 @@ def new_lexemes():
 
 
 @app.route("/P11038", methods=["GET"])
+def P11038():
+    return render_template("P11038.html")
+
+
+@app.route("/P11038_wd", methods=["GET"])
 def P11038_wd():
     wd_count = sparql_bot.count_arabic_with_P11038()
     limit = request.args.get('limit', 100, type=int)
@@ -101,7 +106,7 @@ def P11038_wd():
         # ---
         split_by_category[category]['members'].append(item)
 
-    return render_template("P11038.html", limit=limit, result=split_by_category, wd_count=wd_count)
+    return render_template("P11038_wd.html", limit=limit, result=split_by_category, wd_count=wd_count)
 
 
 @app.route("/not_in_db", methods=["GET"])
