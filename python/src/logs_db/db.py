@@ -40,7 +40,7 @@ def db_commit(query, params=[], many=False):
 
 def init_db():
     query = """
-        CREATE TABLE IF NOT EXISTS P11038_lemmas (
+        CREATE TABLE IF NOT EXISTS p11038_lemmas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             lemma_id INTEGER NOT NULL,
             lemma TEXT NOT NULL,
@@ -80,7 +80,7 @@ def init_db():
     db_commit(query)
 
 
-def delete_all(table_name="P11038_lemmas"):
+def delete_all(table_name="p11038_lemmas"):
     # ---
     query = f"DELETE FROM {table_name}"
     # ---

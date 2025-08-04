@@ -1,6 +1,6 @@
 -- Adminer 4.8.1 SQLite 3 3.46.0 dump
-DROP TABLE IF EXISTS "P11038_lemmas";
-CREATE TABLE P11038_lemmas (
+DROP TABLE IF EXISTS "p11038_lemmas";
+CREATE TABLE p11038_lemmas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             lemma_id INTEGER NOT NULL,
             lemma TEXT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE P11038_lemmas (
             UNIQUE(lemma, lemma_id)
         );
 
-CREATE UNIQUE INDEX "sqlite_autoindex_P11038_lemmas_1" ON "P11038_lemmas" ("lemma", "lemma_id");
+CREATE UNIQUE INDEX "sqlite_autoindex_p11038_lemmas_1" ON "p11038_lemmas" ("lemma", "lemma_id");
 
 
 DROP TABLE IF EXISTS "sqlite_sequence";
