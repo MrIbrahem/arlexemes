@@ -5,7 +5,7 @@ source ~/.bashrc
 TOKEN="${GH_TOKEN}"
 
 if [ -z "$TOKEN" ]; then
-    echo "Usage: $0 <TOKEN>"
+    echo "Error: GH_TOKEN environment variable is required"
     exit 1
 fi
 

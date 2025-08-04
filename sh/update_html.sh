@@ -1,17 +1,18 @@
 #!/bin/bash
+set -euo pipefail
+
 source ~/.bashrc
 TOKEN="${GH_TOKEN}"
 
 if [ -z "$TOKEN" ]; then
-    echo "Usage: $0 <TOKEN>"
+    echo "Error: GH_TOKEN environment variable is required"
     exit 1
 fi
 
-REPO_URL="https://MrIbrahem:${TOKEN}@github.com/MrIbrahem/arlexemes.git"
-
 BRANCH="${1:-main}"
+echo ">>> Updating from branch: ${BRANCH}"
 
-echo ">>> clone --branch ${BRANCH} ."
+REPO_URL="https://MrIbrahem:${TOKEN}@github.com/MrIbrahem/arlexemes.git"
 
 cd "$HOME" || { echo "Failed to change directory to home directory"; exit 1; }
 
