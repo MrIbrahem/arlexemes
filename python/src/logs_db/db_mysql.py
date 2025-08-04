@@ -40,42 +40,50 @@ def db_commit(query, params=None, many=False):
 
 def init_db():
     query = """
-        CREATE TABLE IF NOT EXISTS p11038_lemmas (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            lemma_id INT NOT NULL,
-            lemma VARCHAR(255) NOT NULL,
-            pos VARCHAR(255) DEFAULT '',
-            pos_cat VARCHAR(255) DEFAULT '',
-            sama_lemma_id INT DEFAULT NULL,
-            sama_lemma VARCHAR(255) DEFAULT '',
-            wd_id VARCHAR(255) DEFAULT '',
-            wd_id_category VARCHAR(255) DEFAULT '',
-            UNIQUE (lemma, lemma_id)
-        )
+        CREATE TABLE `p11038_lemmas` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `lemma_id` int NOT NULL,
+            `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `pos` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `pos_cat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `sama_lemma_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `sama_lemma` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `lemma` (`lemma`,`lemma_id`),
+            KEY `sama_lemma_id` (`sama_lemma_id`),
+            KEY `lemma_id` (`lemma_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """
     # ---
     db_commit(query)
     # ---
     query = """
-        CREATE TABLE IF NOT EXISTS wd_data (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            wd_id VARCHAR(255) NOT NULL UNIQUE,
-            wd_id_category VARCHAR(255) NOT NULL,
-            lemma VARCHAR(255) NOT NULL
-        )
+        CREATE TABLE `wd_data` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `wd_id2` (`wd_id`),
+            KEY `wd_id` (`wd_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
         """
     # ---
     db_commit(query)
     # ---
     query = """
-        CREATE TABLE IF NOT EXISTS wd_data_P11038 (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            wd_data_id VARCHAR(255) NOT NULL,
-            value VARCHAR(255) NOT NULL,
-            CONSTRAINT fk_wd_data FOREIGN KEY (wd_data_id) REFERENCES wd_data(wd_id) ON DELETE CASCADE,
-            UNIQUE (wd_data_id, value)
-        )
-        """
+        CREATE TABLE `wd_data_p11038` (
+            `id` int NOT NULL AUTO_INCREMENT,
+            `wd_data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `wd_data_id` (`wd_data_id`,`value`),
+            KEY `wd_data_id_value` (`wd_data_id`,`value`),
+            CONSTRAINT `fk_wd_data` FOREIGN KEY (`wd_data_id`) REFERENCES `wd_data` (`wd_id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    """
     # ---
     db_commit(query)
 
