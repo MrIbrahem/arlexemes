@@ -2,12 +2,9 @@
 """
 
 from .logs_db.bot import fetch_all
-from logs_db.bot import get_p11038_lemmas
 
 """
 from .db_mysql import fetch_all
-# from .insert import insert_lemma
-
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):
     # ---
@@ -28,7 +25,7 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
     return query, params
 
 
-def count_all(table_name="p11038_lemmas"):
+def count_all(table_name="lemmas_p11038"):
     # ---
     query = f"""
     SELECT
@@ -55,7 +52,7 @@ def count_all(table_name="p11038_lemmas"):
     return data
 
 
-def get_logs(per_page=0, offset=0, order="DESC", order_by="timestamp", table_name="p11038_lemmas"):
+def get_logs(per_page=0, offset=0, order="DESC", order_by="timestamp", table_name="lemmas_p11038"):
     # ---
     query = f"SELECT * FROM {table_name} "
     # ---
@@ -70,7 +67,7 @@ def get_logs(per_page=0, offset=0, order="DESC", order_by="timestamp", table_nam
     return logs
 
 
-def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="p11038_lemmas", filter_data="all"):
+def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="lemmas_p11038", filter_data="all"):
     # ---
     query = f"SELECT * FROM {table_name} "
     # ---
@@ -88,7 +85,7 @@ def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="p1103
     return logs
 
 
-def select(data={}, table_name="p11038_lemmas", limit=0, offset=0, order="DESC", order_by="id"):
+def select(data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC", order_by="id"):
     # ---
     query = f"SELECT * FROM {table_name} WHERE "
     # ---

@@ -9,13 +9,9 @@ from bots import sparql_bot
 
 
 def in_sql():
-    # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'wd_id': '', 'wd_id_category': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
+    # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
     # ---
-    result = get_all(table_name="p11038_lemmas")
-    # ---
-    Lid_not_null = {x['wd_id'] : x for x in result if x['wd_id']}
-    # ---
-    print(f"in_sql: Lid_not_null: {len(Lid_not_null)}")
+    result = get_all(table_name="lemmas_p11038")
     # ---
     insql_lemma = {str(x['lemma_id']) : x for x in result}
     # ---

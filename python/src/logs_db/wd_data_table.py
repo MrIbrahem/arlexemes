@@ -6,6 +6,7 @@ from .logs_db import wd_data_table
 # wd_data_table.get_all()
 # wd_data_table.get_all_by_value()  # [value,wd_id,wd_id_category,lemma]
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
+# wd_data_table.insert_multi_wd_id(params) # (wd_id, wd_id_category, lemma)
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 
 """
@@ -130,6 +131,29 @@ def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
     params = (wd_id, wd_id_category, lemma)
     # ---
     result = db_commit(query, params)
+    # ---
+    if result is not True:
+        print(f"Error logging request: {result}")
+        if "no such table" in str(result):
+            init_db()
+    # ---
+    return result
+
+
+def insert_multi_wd_id(params):
+    # ---
+    query = """
+        INSERT IGNORE INTO wd_data (wd_id, wd_id_category, lemma)
+        VALUES (%s, %s, %s)
+    """
+    # ---
+    _query = """
+        ON DUPLICATE KEY UPDATE
+            wd_id_category = VALUES(wd_id_category),
+            lemma = VALUES(lemma)
+    """
+    # ---
+    result = db_commit(query, params, many=True)
     # ---
     if result is not True:
         print(f"Error logging request: {result}")
