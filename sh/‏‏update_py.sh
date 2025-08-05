@@ -49,6 +49,8 @@ mv "$CLONE_DIR/python/src" "$TARGET_DIR"
 cp -rf "$CLONE_DIR/sh/*" "$HOME/sh"
 cp -f "$CLONE_DIR/*.yaml" "$HOME/"
 
+chmod -R 6770 ~/sh
+
 # Activate the Python virtual environment and install requirements
 if source "$HOME/www/python/venv/bin/activate"; then
     pip install -r "$TARGET_DIR/requirements.txt"
