@@ -7,8 +7,8 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
-DROP TABLE IF EXISTS `p11038_lemmas`;
-CREATE TABLE `p11038_lemmas` (
+DROP TABLE IF EXISTS `lemmas_p11038`;
+CREATE TABLE `lemmas_p11038` (
   `id` int NOT NULL AUTO_INCREMENT,
   `lemma_id` int NOT NULL,
   `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -16,8 +16,6 @@ CREATE TABLE `p11038_lemmas` (
   `pos_cat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `sama_lemma_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `sama_lemma` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
-  `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
-  `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lemma` (`lemma`,`lemma_id`),
   KEY `sama_lemma_id` (`sama_lemma_id`),
@@ -62,7 +60,7 @@ CREATE TABLE `wd_data_view` (`wd_id` varchar(255), `wd_id_category` varchar(255)
 
 
 DROP TABLE IF EXISTS `p11038_lemmas_match`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `p11038_lemmas_match` AS select `l`.`id` AS `id` from ((`p11038_lemmas` `l` join `wd_data_p11038` `wdp` on((`l`.`lemma_id` = `wdp`.`value`))) join `wd_data` `w` on((`wdp`.`wd_data_id` = `w`.`wd_id`))) union all select `l`.`id` AS `id` from ((`p11038_lemmas` `l` join `wd_data_p11038` `wdp` on((`l`.`sama_lemma_id` = `wdp`.`value`))) join `wd_data` `w` on((`wdp`.`wd_data_id` = `w`.`wd_id`)));
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `p11038_lemmas_match` AS select `l`.`id` AS `id` from ((`lemmas_p11038` `l` join `wd_data_p11038` `wdp` on((`l`.`lemma_id` = `wdp`.`value`))) join `wd_data` `w` on((`wdp`.`wd_data_id` = `w`.`wd_id`))) union all select `l`.`id` AS `id` from ((`lemmas_p11038` `l` join `wd_data_p11038` `wdp` on((`l`.`sama_lemma_id` = `wdp`.`value`))) join `wd_data` `w` on((`wdp`.`wd_data_id` = `w`.`wd_id`)));
 
 DROP TABLE IF EXISTS `wd_data_both`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `wd_data_both` AS select `d`.`wd_id` AS `vi_wd_id`,`d`.`wd_id_category` AS `vi_wd_id_category`,`d`.`lemma` AS `vi_lemma`,`p`.`value` AS `vi_value` from (`wd_data` `d` left join `wd_data_p11038` `p` on((`d`.`wd_id` = `p`.`wd_data_id`)));

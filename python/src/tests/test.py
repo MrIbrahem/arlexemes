@@ -1,6 +1,6 @@
 """
 
-python3 I:/milion/arlexemes/python/src/test.py sparql
+python3 I:/milion/arlexemes/python/src/tests/test.py sparql
 
 
 source "$HOME/www/python/venv/bin/activate"
@@ -8,10 +8,15 @@ python3 www/python/src/test.py
 
 """
 import sys
+from pathlib import Path
 
-from tests import test_db
-from tests import test_log
-from tests import sparql
+path_1 = Path(__file__).parent.parent
+
+sys.path.append(str(path_1))
+
+import test_db
+import test_log
+import sparql
 
 bots = {
     "test_db": test_db,

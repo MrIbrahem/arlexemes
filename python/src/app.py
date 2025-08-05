@@ -5,8 +5,6 @@ import json
 
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
-
-import logs_bot
 import logs_bot_new
 from bots import sparql_bot
 from bots.match_sparql import get_wd_not_in_sql
@@ -38,7 +36,7 @@ def wd_data_api():
     order_by = request.args.get("order_by", "id", type=str)
     filter_data = request.args.get("filter_data", "with", type=str)
     # ---
-    all_result = wd_data_P11038.get_p11038_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+    all_result = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
     # ---
     return jsonify(all_result)
 
@@ -57,14 +55,6 @@ def view_logs_new():
     result = logs_bot_new.find_logs(request)
     # ---
     return render_template("logs_new.php", result=result)
-
-
-@app.route("/logs", methods=["GET"])
-def view_logs():
-    # ---
-    result = logs_bot.find_logs(request)
-    # ---
-    return render_template("logs.php", result=result)
 
 
 @app.route("/autocomplete.php", methods=["GET"])
@@ -163,7 +153,7 @@ if __name__ == "__main__":
     debug = "debug" in sys.argv
     # ---
     if debug:
-        print("http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=p11038_lemmas")
+        print("http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=lemmas_p11038")
         # ---
         print("http://localhost:9001/adminer.php?server=localhost&username=root&db=arlexemes")
     # ---

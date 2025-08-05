@@ -40,16 +40,14 @@ def db_commit(query, params=[], many=False):
 
 def init_db():
     query = """
-        CREATE TABLE IF NOT EXISTS p11038_lemmas (
+        CREATE TABLE IF NOT EXISTS lemmas_p11038 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             lemma_id INTEGER NOT NULL,
             lemma TEXT NOT NULL,
             pos TEXT NULL DEFAULT '',
             pos_cat TEXT NULL DEFAULT '',
             sama_lemma_id INTEGER NULL  DEFAULT '',
-            sama_lemma TEXT NULL  DEFAULT '',
-            wd_id TEXT NULL DEFAULT '',
-            wd_id_category TEXT NULL DEFAULT '',
+            sama_lemma TEXT NULL  DEFAULT ''
             UNIQUE(lemma, lemma_id)
         )
         """
@@ -68,7 +66,7 @@ def init_db():
     db_commit(query)
     # ---
     query = """
-        CREATE TABLE IF NOT EXISTS wd_data_P11038 (
+        CREATE TABLE IF NOT EXISTS wd_data_p11038 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             wd_data_id TEXT NOT NULL,
             value TEXT NOT NULL,
@@ -78,14 +76,6 @@ def init_db():
         """
     # ---
     db_commit(query)
-
-
-def delete_all(table_name="p11038_lemmas"):
-    # ---
-    query = f"DELETE FROM {table_name}"
-    # ---
-    db_commit(query)
-
 
 def fetch_all(query, params=[], fetch_one=False):
     try:

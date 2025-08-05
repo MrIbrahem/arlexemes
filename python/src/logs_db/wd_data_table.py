@@ -6,6 +6,7 @@ from .logs_db import wd_data_table
 # wd_data_table.get_all()
 # wd_data_table.get_all_by_value()  # [value,wd_id,wd_id_category,lemma]
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
+# wd_data_table.insert_multi_wd_id(params) # (wd_id, wd_id_category, lemma)
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 
 """
@@ -41,7 +42,7 @@ def count_all():
         FROM (
             SELECT d.wd_id, COUNT(p.id) AS has_data
             FROM wd_data d
-            LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
+            LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
             GROUP BY d.wd_id
         );
     """
@@ -72,7 +73,7 @@ def get_all():
             d.lemma,
             GROUP_CONCAT(p.value, ', ') AS P11038_values
         FROM wd_data d
-        LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
+        LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
         GROUP BY d.wd_id, d.wd_id_category, d.lemma
     """
     # ---
@@ -104,7 +105,7 @@ def get_all_by_value():
             d.wd_id_category,
             d.lemma
         FROM wd_data d
-        LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
+        LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
     """
     # ---
     params = []
@@ -139,10 +140,33 @@ def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
     return result
 
 
+def insert_multi_wd_id(params):
+    # ---
+    query = """
+        INSERT IGNORE INTO wd_data (wd_id, wd_id_category, lemma)
+        VALUES (%s, %s, %s)
+    """
+    # ---
+    _query = """
+        ON DUPLICATE KEY UPDATE
+            wd_id_category = VALUES(wd_id_category),
+            lemma = VALUES(lemma)
+    """
+    # ---
+    result = db_commit(query, params, many=True)
+    # ---
+    if result is not True:
+        print(f"Error logging request: {result}")
+        if "no such table" in str(result):
+            init_db()
+    # ---
+    return result
+
+
 def insert_multi_wd_data_P11038(data):
     # ---
     query = """
-        INSERT IGNORE INTO wd_data_P11038 (wd_data_id, value)
+        INSERT IGNORE INTO wd_data_p11038 (wd_data_id, value)
         VALUES (%s, %s)
     """
     # ---

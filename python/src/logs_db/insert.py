@@ -6,11 +6,15 @@ from .insert import insert_lemma
 """
 from .db_mysql import db_commit, init_db
 
+from . import wd_data_table
+# wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
+# wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
+
 
 def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", sama_lemma_id=0, sama_lemma="", wd_id="", wd_id_category=""):
     # ---
     query = """
-        INSERT INTO p11038_lemmas
+        INSERT INTO lemmas_p11038
             (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
@@ -40,16 +44,14 @@ def insert_lemma(lemma_id=0, lemma="", pos="", pos_cat="", sama_lemma_id=0, sama
 def insert_multi_lemmas(data):
     # ---
     query = """
-        INSERT INTO p11038_lemmas
-            (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma, wd_id, wd_id_category)
+        INSERT INTO lemmas_p11038
+            (lemma_id, lemma, pos, pos_cat, sama_lemma_id, sama_lemma)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
             pos = COALESCE(NULLIF(VALUES(pos), ''), pos),
             pos_cat = COALESCE(NULLIF(VALUES(pos_cat), ''), pos_cat),
             sama_lemma_id = COALESCE(NULLIF(VALUES(sama_lemma_id), ''), sama_lemma_id),
-            sama_lemma = COALESCE(NULLIF(VALUES(sama_lemma), ''), sama_lemma),
-            wd_id = COALESCE(NULLIF(VALUES(wd_id), ''), wd_id),
-            wd_id_category = COALESCE(NULLIF(VALUES(wd_id_category), ''), wd_id_category)
+            sama_lemma = COALESCE(NULLIF(VALUES(sama_lemma), ''), sama_lemma)
     """
     # ---
     params = [(
@@ -70,29 +72,17 @@ def insert_multi_lemmas(data):
         if "no such table" in str(result):
             init_db()
     # ---
-    return result
-
-
-def update_lemma(lemma_id, data):
+    params2 = [
+        (x['wd_id'], x['wd_id_category'], x['lemma']) for x in data
+    ]
     # ---
-    set_query = []
-    params = []
+    wd_data_table.insert_multi_wd_id(params2)  # (wd_id, wd_id_category, lemma)
     # ---
-    for key, value in data.items():
-        if value != "":
-            set_query.append(f"{key} = %s")
-            params.append(value)
+    # [{"wd_data_id":"wd_data_id", "value":"value"}]
+    params3 = [
+        {"wd_data_id": x['wd_id'], "value": x['lemma_id']} for x in data
+    ]
     # ---
-    set_query_str = ", ".join(set_query)
-    # ---
-    query = f"""
-        UPDATE p11038_lemmas
-        SET {set_query_str}
-        WHERE id = %s
-    """
-    # ---
-    params.append(lemma_id)
-    # ---
-    result = db_commit(query, params)
+    wd_data_table.insert_multi_wd_data_P11038(data=params3)
     # ---
     return result

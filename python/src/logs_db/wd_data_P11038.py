@@ -2,12 +2,11 @@
 """
 
 from logs_db import wd_data_P11038
-# all_result = wd_data_P11038.get_p11038_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+# all_result = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
 # counts = wd_data_P11038.count_all()
 
 """
 from .db_mysql import fetch_all
-# from .insert import insert_lemma
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):
@@ -39,7 +38,7 @@ def count_all():
             SELECT
                 COUNT(*) AS total_rows,
                 COUNT(CASE WHEN wdp.value IS NOT NULL AND wdp.value != '' THEN 1 END) AS count_has_value
-            FROM p11038_lemmas AS l
+            FROM lemmas_p11038 AS l
             LEFT JOIN wd_data_p11038 AS wdp
                 ON l.lemma_id = wdp.value
 
@@ -48,7 +47,7 @@ def count_all():
             SELECT
                 COUNT(*) AS total_rows,
                 COUNT(CASE WHEN wdp.value IS NOT NULL AND wdp.value != '' THEN 1 END) AS count_has_value
-            FROM p11038_lemmas AS l
+            FROM lemmas_p11038 AS l
             LEFT JOIN wd_data_p11038 AS wdp
                 ON l.sama_lemma_id = wdp.value
         ) AS combined
@@ -75,14 +74,14 @@ def count_all():
     return data
 
 
-def get_p11038_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with"):
+def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with"):
     # ---
     query = """
         SELECT
             l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma,
             w.wd_id as vi_wd_id, w.wd_id_category as vi_wd_id_category, w.lemma as vi_lemma, wdp.value as vi_value
 
-        FROM p11038_lemmas AS l
+        FROM lemmas_p11038 AS l
          JOIN wd_data_p11038 AS wdp
         ON l.lemma_id = wdp.value
          JOIN wd_data AS w ON wdp.wd_data_id = w.wd_id
@@ -93,7 +92,7 @@ def get_p11038_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_dat
             l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma,
             w.wd_id as vi_wd_id, w.wd_id_category as vi_wd_id_category, w.lemma as vi_lemma, wdp.value as vi_value
 
-        FROM p11038_lemmas AS l
+        FROM lemmas_p11038 AS l
          JOIN wd_data_p11038 AS wdp
         ON l.sama_lemma_id = wdp.value
          JOIN wd_data AS w ON wdp.wd_data_id = w.wd_id
@@ -104,7 +103,7 @@ def get_p11038_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_dat
     SELECT
         l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma
 
-        FROM p11038_lemmas AS l
+        FROM lemmas_p11038 AS l
         where l.sama_lemma_id not in (select value from wd_data_p11038)
         and l.lemma_id not in (select value from wd_data_p11038)
     """

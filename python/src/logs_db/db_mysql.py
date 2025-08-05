@@ -40,7 +40,7 @@ def db_commit(query, params=None, many=False):
 
 def init_db():
     query = """
-        CREATE TABLE `p11038_lemmas` (
+        CREATE TABLE `lemmas_p11038` (
             `id` int NOT NULL AUTO_INCREMENT,
             `lemma_id` int NOT NULL,
             `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -48,8 +48,6 @@ def init_db():
             `pos_cat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
             `sama_lemma_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
             `sama_lemma` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
-            `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
-            `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
             PRIMARY KEY (`id`),
             UNIQUE KEY `lemma` (`lemma`,`lemma_id`),
             KEY `sama_lemma_id` (`sama_lemma_id`),
@@ -87,14 +85,6 @@ def init_db():
     # ---
     db_commit(query)
 
-
-def delete_all(table_name="p11038_lemmas"):
-    # ---
-    query = f"DELETE FROM {table_name}"
-    # ---
-    db_commit(query)
-
-
 def fetch_all(query, params=None, fetch_one=False):
     """جلب بيانات من قاعدة MySQL"""
     conn = None
@@ -126,5 +116,5 @@ def fetch_all(query, params=None, fetch_one=False):
 
 # مثال
 if __name__ == "__main__":
-    rows = fetch_all("SELECT COUNT(*) AS total FROM p11038_lemmas")
+    rows = fetch_all("SELECT COUNT(*) AS total FROM lemmas_p11038")
     print(rows)
