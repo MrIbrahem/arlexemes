@@ -116,12 +116,6 @@ def get_all_by_value():
 
 def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
     # ---
-    query_sqlite = """
-        INSERT INTO wd_data (wd_id, wd_id_category, lemma)
-        VALUES (?, ?, ?)
-        ON CONFLICT(wd_id) DO NOTHING
-    """
-    # ---
     query = """
         INSERT IGNORE INTO wd_data (wd_id, wd_id_category, lemma)
         VALUES (%s, %s, %s)
@@ -146,13 +140,6 @@ def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
 
 
 def insert_multi_wd_data_P11038(data):
-    # ---
-    # UNIQUE	wd_data_id, value
-    _query_sqlite3 = """
-        INSERT INTO wd_data_P11038 (wd_data_id, value)
-            VALUES (?, ?)
-        ON CONFLICT(wd_data_id, value) DO NOTHING
-    """
     # ---
     query = """
         INSERT IGNORE INTO wd_data_P11038 (wd_data_id, value)
