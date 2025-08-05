@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+cd $HOME
+
+source $HOME/www/python/venv/bin/activate
+
+python3 www/python/src/update_wd/wd_data.py
