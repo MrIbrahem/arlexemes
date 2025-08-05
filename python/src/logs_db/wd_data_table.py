@@ -41,7 +41,7 @@ def count_all():
         FROM (
             SELECT d.wd_id, COUNT(p.id) AS has_data
             FROM wd_data d
-            LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
+            LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
             GROUP BY d.wd_id
         );
     """
@@ -72,7 +72,7 @@ def get_all():
             d.lemma,
             GROUP_CONCAT(p.value, ', ') AS P11038_values
         FROM wd_data d
-        LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
+        LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
         GROUP BY d.wd_id, d.wd_id_category, d.lemma
     """
     # ---
@@ -104,7 +104,7 @@ def get_all_by_value():
             d.wd_id_category,
             d.lemma
         FROM wd_data d
-        LEFT JOIN wd_data_P11038 p ON d.wd_id = p.wd_data_id
+        LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
     """
     # ---
     params = []
@@ -142,7 +142,7 @@ def insert_wd_id(wd_id="", wd_id_category="", lemma=""):
 def insert_multi_wd_data_P11038(data):
     # ---
     query = """
-        INSERT IGNORE INTO wd_data_P11038 (wd_data_id, value)
+        INSERT IGNORE INTO wd_data_p11038 (wd_data_id, value)
         VALUES (%s, %s)
     """
     # ---

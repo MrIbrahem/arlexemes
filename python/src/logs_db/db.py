@@ -68,7 +68,7 @@ def init_db():
     db_commit(query)
     # ---
     query = """
-        CREATE TABLE IF NOT EXISTS wd_data_P11038 (
+        CREATE TABLE IF NOT EXISTS wd_data_p11038 (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             wd_data_id TEXT NOT NULL,
             value TEXT NOT NULL,

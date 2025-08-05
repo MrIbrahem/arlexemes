@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 """
 
-python3 I:/milion/arlexemes/python/src/insert_sparql.py
+python3 I:/milion/arlexemes/python/src/update_wd/update_sparql.py
 
-python3 www/python/src/insert_sparql.py
+python3 www/python/src/update_wd/update_sparql.py
 
 """
 import json
-import re
 import tqdm
 import sys
 from pathlib import Path
 
+path_1 = Path(__file__).parent.parent
+sys.path.append(str(path_1))
 
 from logs_db import get_all, update_lemma
 from bots import sparql_bot
