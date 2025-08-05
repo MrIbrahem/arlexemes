@@ -2,7 +2,7 @@
 """
 
 python3 I:/milion/arlexemes/python/src/update_wd/wd_data.py
-python3 www/python/src/wd_data.py
+python3 www/python/src/update_wd/wd_data.py
 
 """
 import tqdm

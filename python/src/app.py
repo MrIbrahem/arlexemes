@@ -5,8 +5,6 @@ import json
 
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
-
-import logs_bot
 import logs_bot_new
 from bots import sparql_bot
 from bots.match_sparql import get_wd_not_in_sql
@@ -57,14 +55,6 @@ def view_logs_new():
     result = logs_bot_new.find_logs(request)
     # ---
     return render_template("logs_new.php", result=result)
-
-
-@app.route("/logs", methods=["GET"])
-def view_logs():
-    # ---
-    result = logs_bot.find_logs(request)
-    # ---
-    return render_template("logs.php", result=result)
 
 
 @app.route("/autocomplete.php", methods=["GET"])
