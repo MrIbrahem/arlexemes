@@ -89,7 +89,7 @@
                                                         id="filter_with" value="with"
                                                         {% if result.tab.filter_data == 'with' %}checked{% endif %}>
                                                     <label class="form-check-label" for="filter_with">
-                                                        مطابق {% if result.total_logs_data %}
+                                                        موصولة {% if result.total_logs_data %}
                                                         ({{ result.total_logs_data.with }}){% endif %}
                                                     </label>
                                                 </div>
@@ -98,7 +98,7 @@
                                                         id="filter_without" value="without"
                                                         {% if result.tab.filter_data == 'without' %}checked{% endif %}>
                                                     <label class="form-check-label" for="filter_without">
-                                                        غير مطابق {% if result.total_logs_data %}
+                                                        غير موصولة {% if result.total_logs_data %}
                                                         ({{ result.total_logs_data.without }}){% endif %}
                                                     </label>
                                                 </div>
