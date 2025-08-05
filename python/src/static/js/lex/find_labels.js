@@ -1,6 +1,6 @@
 async function find_labels() {
     const spans = document.querySelectorAll("span[find-label]");
-
+    console.log(`find_labels: ${spans.length}`)
     spans.forEach(async (span) => {
         const qid = span.getAttribute("find-label");
         if (!qid) return;
