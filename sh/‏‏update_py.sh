@@ -53,9 +53,17 @@ else
     echo "Failed to activate virtual environment" >&2
 fi
 
-cp -rf "$CLONE_DIR/sh/*" "$HOME/sh"
-cp -f "$CLONE_DIR/*.yaml" "$HOME/"
+echo "______________________________"
 
-chmod -R 6770 $HOME/sh
+ls -R "$CLONE_DIR"
+
+cp -rf "$CLONE_DIR/sh/"* "$HOME/sh/"
+
+cp -f $CLONE_DIR/*.yaml "$HOME/"
+
+chmod -R 750 $HOME/sh
 
 echo ">>> Update completed successfully."
+echo "webservice python3.11 restart"
+
+webservice python3.11 restart
