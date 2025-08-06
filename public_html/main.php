@@ -58,23 +58,23 @@ HTML;
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
-                    <li class="nav-item col-6 col-lg-auto">
+                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav navbar-default">
+                    <li class="nav-item col-6 col-lg-auto <?= basename($_SERVER['REQUEST_URI']) == 'list.php' ? 'active' : '' ?> ">
                         <a class="nav-link" href="/list.php"><i class="bi bi-journal-text ms-1"></i>
                             قائمة المفردات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
+                    <li class="nav-item col-6 col-lg-auto <?= basename($_SERVER['REQUEST_URI']) == 'new.php' ? 'active' : '' ?> ">
                         <a class="nav-link" href="/new.php"><i class="bi bi-journal-text ms-1"></i>
                             أحدث المفردات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
+                    <li class="nav-item col-6 col-lg-auto <?= basename($_SERVER['REQUEST_URI']) == 'duplicate_lemmas.php' ? 'active' : '' ?> ">
                         <a class="nav-link" href="/duplicate_lemmas.php"><i class="bi bi-journal-text ms-1"></i>
                             المكررات
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto">
+                    <li class="nav-item col-6 col-lg-auto <?= basename($_SERVER['REQUEST_URI']) == 'wd.php' ? 'active' : '' ?> ">
                         <a class="nav-link" href="/wd.php"><i class="bi bi-tree ms-1"></i>
                             مخطط شجري
                         </a>

@@ -35,14 +35,6 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
-    <style>
-        .navbar-nav .nav-item.active {
-            /* border-radius: 4px; */
-            /* display: block; */
-            background-color: #c2c5c8;
-            /* font-weight: bold; */
-        }
-    </style>
 </head>
 
 <body>
