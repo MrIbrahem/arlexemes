@@ -165,6 +165,13 @@ async function new_ar_lexemes(limit, data_source) {
         }
         GROUP BY ?item ?category ?categoryLabel ?P31 ?P31Label
     `;
+    // ---
+    var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
+    // ---
+    $("#sparql_url").attr("href", url1);
+    // remove disabled from class
+    $("#sparql_url").removeClass("disabled");
+    // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
     let wd_result = parse_results(result);

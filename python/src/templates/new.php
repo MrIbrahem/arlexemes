@@ -8,7 +8,8 @@
             <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
                 <div class="d-flex align-items-center justify-content-between  m-6 p-3">
                     <span class="text-2xl font-bold text-center h2">
-                        أحدث المفردات العربية: <span id="total"></span>
+                        أحدث المفردات:
+                        <span class="query"></span>
                     </span>
                     <form method="GET">
                         <div class="row">
@@ -38,7 +39,7 @@
                     </form>
                 </div>
                 <hr>
-                <div id="loading" class="text-center text-primary hidden">جارٍ التحميل...</div>
+                <div id="loading" class="text-center text-primary hidden">جارٍ التحميل (بطيء)...<br>أي مقترح لتحسين الاستعلام مرحب به</div>
 
                 <div id="error" class="hidden alert alert-danger p-4 rounded text-center">
                     <p id="errorMessage" class="text-danger"></p>
@@ -48,6 +49,9 @@
 
                 <ul id="tree" class="list-unstyled space-y-2"></ul>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item nav-link position-relative fw-bold">
+                    الإجمالي: <span id="total"></span>
+                    </li>
                 </ul>
                 <div class="tab-content row list-group mt-3" id="myTabContent">
                 </div>
