@@ -21,6 +21,7 @@
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
     <script src="{{ url_for('static', filename='js/sparql.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/render.js') }}"></script>
     <script src="{{ url_for('static', filename='js/random.js') }}"></script>
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>

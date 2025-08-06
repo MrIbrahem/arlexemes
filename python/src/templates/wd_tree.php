@@ -67,8 +67,12 @@
                     </div>
                 </form>
 
-                <div id="loading" class="text-center text-primary hidden">جارٍ التحميل...</div>
-
+                <div id="loading" class="text-center text- hidden">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    جارٍ التحميل (بطيء)...<br>أي مقترح لتحسين الاستعلام مرحب به
+                </div>
                 <div id="error" class="hidden alert alert-danger p-4 rounded text-center">
                     <p id="errorMessage" class="text-danger"></p>
                     <button onclick="loadfetchData()" class="mt-3 btn btn-primary">إعادة

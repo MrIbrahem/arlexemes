@@ -1,6 +1,4 @@
 
-let dup_lemmas = [];
-
 async function get_wdresult() {
     const sparqlQuery = `
     SELECT ?item ?lemma ?category ?categoryLabel ?P31Label WHERE {
@@ -26,7 +24,8 @@ async function get_wdresult() {
     return result;
 }
 
-async function load_duplicate() {
+async function get_data_dup() {
+    // ---
     let wdresult = await get_wdresult();
     let treeData1 = Object.values(wdresult);
     // ---
@@ -48,19 +47,26 @@ async function load_duplicate() {
     // })
     // ---
     let dup_lemmas = [];
-
     // جمع المكررات فقط
     for (const key in data) {
         if (data[key].length > 1) {
             dup_lemmas.push(data[key]);
         }
     }
+    // ---
+    return dup_lemmas;
+}
+
+async function load_duplicate() {
+    let data = await get_data_dup();
+    // ---
+    HandelDataError(data);
 
     // تفريغ الحاوية الأساسية أولاً
     $('#tables_container').html('');
 
     let groupIndex = 0;
-    dup_lemmas.forEach(group => {
+    data.forEach(group => {
         groupIndex++;
 
         // جمع كل المفاتيح
@@ -118,11 +124,6 @@ async function load_duplicate() {
             responsive: false
         });
     });
-
-    if (dup_lemmas.length) {
-        document.getElementById('loading').classList.add('d-none');
-    }
-    // ---
 
 }
 

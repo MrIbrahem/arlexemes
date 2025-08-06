@@ -1,8 +1,5 @@
 
 const treeContainer = document.getElementById("tree");
-const loadingDiv = document.getElementById("loading");
-const errorDiv = document.getElementById("error");
-const noResultsDiv = document.getElementById("noResults");
 
 let treeDataWD = [];
 
@@ -118,24 +115,15 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
     return wd_result;
 }
 
-function showLoading() {
-    treeContainer.innerHTML = "";
-    loadingDiv.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
-    errorDiv.classList.add("d-none");     // Bootstrap 5: use d-none for hidden
-    noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-}
-
 function renderTree(data, all_open) {
-    loadingDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
     treeContainer.innerHTML = "";
-
+    // ---
+    HandelDataError(data);
+    // ---
     if (!data.length) {
-        noResultsDiv.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
         return;
     }
-
-    noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-
+    // ---
     data.forEach((category, index) => {
         if (!category.items || category.items.length === 0) return;
 
@@ -177,7 +165,7 @@ function renderTree(data, all_open) {
 
         const ul = document.createElement("ul");
 
-        const d_class = (data.length === 1 || all_open) ? '' : 'd-none';
+        const d_class = (data.length === 1 || all_open) ? '' : "d-none";
 
         ul.className = `list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end ${d_class}`; // d-none for hidden initially
 
@@ -255,6 +243,7 @@ async function add_options_to_select(data_source, group_by) {
 
 async function loadfetchData() {
     // ---
+    treeContainer.innerHTML = "";
     showLoading();
     // ---
     let group_by = get_param_from_window_location1("group_by", "P31Label")

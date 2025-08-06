@@ -1,8 +1,4 @@
 
-const loadingEl = document.getElementById("loading");
-const errorEl = document.getElementById("error");
-const noResultsEl = document.getElementById("noResults");
-
 let treeData = [];
 
 async function make_wd_result_for_list(limit, data_source, sort_by) {
@@ -63,12 +59,6 @@ async function make_wd_result_for_list(limit, data_source, sort_by) {
     return wd_result;
 }
 
-function showLoading() {
-    loadingEl.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
-    errorEl.classList.add("d-none");     // Bootstrap 5: use d-none for hidden
-    noResultsEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-}
-
 function make_switch_nav(title, count, n) {
     let active = n == 1 ? "active" : "";
     // ---
@@ -115,13 +105,13 @@ function make_switch_nav(title, count, n) {
 }
 
 function renderTree(data) {
-    loadingEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-
+    // ---
+    HandelDataError(data);
+    // ---
     if (!data.length) {
-        noResultsEl.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
         return;
     }
-    noResultsEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+    // ---
     let cat_number = 0;
 
     data.forEach(category => {
