@@ -1,9 +1,7 @@
 
 const treeContainer = document.getElementById("tree");
-const search_Input = document.getElementById("searchInput");
 const loadingDiv = document.getElementById("loading");
 const errorDiv = document.getElementById("error");
-const errorMessageDiv = document.getElementById("errorMessage");
 const noResultsDiv = document.getElementById("noResults");
 
 let treeDataWD = [];
@@ -237,8 +235,74 @@ async function fetchData(limit, data_source, group_by) {
     renderTree(treeDataWD);
 }
 
-search_Input.addEventListener("input", e => {
-    const term = e.target.value;
-    const filtered = filterTreeData(term);
-    renderTree(filtered, true);
-});
+async function add_options_to_select(data_source, group_by) {
+    let select = document.getElementById('group_by');
+    // ---
+    let data = await most_used_properties(data_source);
+    // ---
+    // console.log(data);
+    // { "prop": "P5238", "propLabel": "يجمع بين وحدات معجمية", "usage": "10463" }
+    // ---
+    for (let i = 0; i < data.length; i++) {
+        let option = document.createElement('option');
+        option.value = data[i].prop;
+        option.text = `${data[i].propLabel} (${data[i].usage})`;
+        select.appendChild(option);
+    }
+    // ---
+    $("#group_by").val(group_by);
+}
+
+async function loadfetchData() {
+    // ---
+    showLoading();
+    // ---
+    let group_by = get_param_from_window_location1("group_by", "P31Label")
+    let custom_group_by = get_param_from_window_location1("custom_group_by", "")
+    let limit = get_param_from_window_location1("limit", 100)
+    let data_source = get_param_from_window_location1("data_source", "all");
+    // ---
+    // let group_by_item = document.getElementById('group_by');
+    // if (group_by_item) group_by_item.value = group_by;
+    // ---
+    $("#limit").val(limit);
+    $("#data_source").val(data_source);
+    // ---
+    if (custom_group_by !== "" && group_by === "custom") {
+        $("#custom_group_by").val(custom_group_by);
+        group_by = custom_group_by;
+        document.getElementById('custom_group_by').style.display = 'block';
+    }
+    // ---
+    await add_options_to_select(data_source, group_by);
+    // ---
+    await fetchData(limit, data_source, group_by);
+    // ---
+    await find_labels();
+}
+
+function toggleCustomInput() {
+    let select = document.getElementById('group_by');
+    const customInput = document.getElementById('custom_group_by');
+    if (select.value === 'custom') {
+        customInput.style.display = 'block';
+    } else {
+        customInput.style.display = 'none';
+    }
+}
+
+async function load_tree() {
+
+    const search_Input = document.getElementById("searchInput");
+    // ---
+    search_Input.addEventListener("input", e => {
+        const term = e.target.value;
+        const filtered = filterTreeData(term);
+        renderTree(filtered, true);
+    });
+    // ---
+    await loadfetchData();
+    // ---
+    toggleCustomInput();
+    // ---
+}
