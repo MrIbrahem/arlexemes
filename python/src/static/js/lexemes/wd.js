@@ -8,25 +8,63 @@ const noResultsDiv = document.getElementById("noResults");
 
 let treeDataWD = [];
 
-async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
+async function most_used_properties(data_source) {
+    let VALUES = ``;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
+    let query = `
+        SELECT ?prop ?propLabel (COUNT(?item) AS ?usage)
+            WHERE {
+            ${VALUES}
+            ?item rdf:type ontolex:LexicalEntry;
+                    wikibase:lemma ?lemma1;
+                    wikibase:lexicalCategory ?category;   # الفئة: فعل
+                    dct:language wd:Q13955.               # اللغة: العربية
+
+            # اختيار خصائص من مساحة بيانات Wikidata فقط
+            ?item ?wdtProp ?value.
+            FILTER(STRSTARTS(STR(?wdtProp), STR(wdt:)))
+
+            # تحويل URI للخاصية إلى عنصر الـProperty نفسه (Pxxxx)
+            BIND(IRI(REPLACE(STR(?wdtProp), STR(wdt:), STR(wd:))) AS ?prop)
+
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            }
+            GROUP BY ?prop ?propLabel
+            ORDER BY DESC(?usage)
+    `;
+    // ---
+    let result = await loadsparqlQuery(query);
+    // ---
+    return result;
+}
+
+async function find_wd_result(to_group_by = "categoryLabel", data_source = "all", limit = 100) {
     // ---
     let props_in = [
         "P31",
-        "P6771",
-        "P11038",
-        "P11757",
-        "P12451"
     ]
     // ---
     let add_group = "";
     let add_group_optional = "";
     // ---
     if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
-        to_group_by = to_group_by.replace("P", "");
-        // if to_group_by is number
+        // TODO: this has no sense
+        // to_group_by = to_group_by.replace("P", "");
         add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
         add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
 
+    }
+    // ---
+    let VALUES = ``;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
     }
     // ---
     const sparqlQuery = `
@@ -37,10 +75,10 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
             ?category ?categoryLabel ?P31Label
             (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
             (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
-            (GROUP_CONCAT(DISTINCT ?P11757_z; separator=", ") AS ?P11757)
             (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
             ${add_group}
         WHERE {
+            ${VALUES}
             ?item rdf:type ontolex:LexicalEntry;
                 wikibase:lemma ?lemma1;
                 wikibase:lexicalCategory ?category;
@@ -49,7 +87,6 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
             OPTIONAL { ?item wdt:P31 ?P31. }
             OPTIONAL { ?item wdt:P6771 ?P6771_z. }
             OPTIONAL { ?item wdt:P11038 ?P11038_z. }
-            OPTIONAL { ?item wdt:P11757 ?P11757_z. }
             OPTIONAL { ?item wdt:P12451 ?P12451_z. }
             ${add_group_optional}
         }
@@ -62,7 +99,7 @@ async function find_wd_result(to_group_by = "categoryLabel", limit = 100) {
     let wd_result = {};
 
     for (const item of result) {
-        let to_group = item[to_group_by] || '!';
+        let to_group = item[to_group_by] || 'غير محدد';
 
         if (!wd_result[to_group]) {
             // ---
@@ -119,11 +156,21 @@ function renderTree(data, all_open) {
             const isOpen = !ul.classList.contains("d-none");
             icon.className = `bi ${isOpen ? "bi-chevron-double-down" : "bi-chevron-double-left"} arrow-icon`;
         };
-
+        // ---
+        let label = category.group_by;
+        // ---
+        if (label !== "" && (label.match(/Q\d+/) || label.match(/L\d+/))) {
+            label = `<span find-label="${label}" find-label-both="true">${label}</span>`;
+        }
+        // ---
         // محتوى الزر عند الإنشاء
         button.innerHTML = `
-            <span class="fw-medium text-black">${category.group_by}</span>
-            <span class="text-muted ms-2">(${category.items.length})</span>
+            <span class="fw-medium text-black">
+                ${label}
+            </span>
+            <span class="text-muted ms-2">
+                (${category.items.length})
+            </span>
             <i class="bi bi-chevron-double-left arrow-icon"></i>
         `;
 
@@ -174,9 +221,9 @@ function get_param_from_window_location1(key, defaultvalue) {
     return urlParams.get(key) || defaultvalue;
 }
 
-async function fetchData(limit, group_by) {
+async function fetchData(limit, data_source, group_by) {
     // ---
-    const treeMap = await find_wd_result(group_by, limit);
+    const treeMap = await find_wd_result(group_by, data_source, limit);
 
     // count all items.length in wd_result
     let count = Object.values(treeMap).reduce((sum, obj) => sum + obj.items.length, 0);

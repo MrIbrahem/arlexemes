@@ -61,7 +61,6 @@ function parse_results(result) {
 }
 
 async function load_wd(limit, data_source, sort_by) {
-    let VALUES = ``;
     const sparqlQuery1 = `
         VALUES ?category {
             wd:Q111029	# جذر
@@ -70,6 +69,8 @@ async function load_wd(limit, data_source, sort_by) {
             wd:Q34698	# صفة
         }
     `;
+    // ---
+    let VALUES = ``;
     // ---
     // if data_source match Q\d+
     if (data_source !== "" && data_source.match(/Q\d+/)) {

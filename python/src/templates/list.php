@@ -78,7 +78,7 @@
             document.getElementById('custom_data_source').style.display = 'block';
         }
         // ---
-        fetchData(limit, data_source);
+        fetchListData(limit, data_source);
     }
 
     function toggleCustomInput() {
