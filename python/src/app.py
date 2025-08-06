@@ -112,14 +112,12 @@ def not_in_db():
     if limit > 0:
         result = result[:limit]
     # ---
-    len_of_ids = max([len(x['P11038_list']) for x in result if x['P11038_list']])
-    # ---
-    return render_template("not_in_db.html", data=result, len_of_ids=len_of_ids, limit=limit)
+    return render_template("not_in_db.html", data=result, limit=limit)
 
 
 @app.route("/not_in_db1", methods=["GET"])
 def not_in_db1():
-    return render_template("not_in_db.html", data={}, len_of_ids=100, limit=0)
+    return render_template("not_in_db.html", data={}, limit=0)
 
 
 @app.route("/wd_tree.php", methods=["GET"])
