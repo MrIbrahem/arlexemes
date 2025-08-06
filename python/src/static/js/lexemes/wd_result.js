@@ -60,7 +60,7 @@ function parse_results(result) {
     return wd_result;
 }
 
-async function load_wd(limit, data_source, sort_by) {
+async function make_wd_result_for_list(limit, data_source, sort_by) {
     const sparqlQuery1 = `
         VALUES ?category {
             wd:Q111029	# جذر
@@ -108,19 +108,15 @@ async function load_wd(limit, data_source, sort_by) {
     if (limit && isFinite(limit)) {
         sparqlQuery += ` LIMIT ${limit} `;
     }
+    // ---
+    add_sparql_url(sparqlQuery);
+    // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
     let wd_result = parse_results(result);
 
     return wd_result;
 }
-
-async function make_wd_result(limit, data_source, sort_by) {
-    let wd_result = await load_wd(limit, data_source, sort_by);
-    // ---
-    return wd_result;
-}
-
 
 async function new_ar_lexemes(limit, data_source) {
     // ---
@@ -166,11 +162,7 @@ async function new_ar_lexemes(limit, data_source) {
         GROUP BY ?item ?category ?categoryLabel ?P31 ?P31Label
     `;
     // ---
-    var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
-    // ---
-    $("#sparql_url").attr("href", url1);
-    // remove disabled from class
-    $("#sparql_url").removeClass("disabled");
+    add_sparql_url(sparqlQuery);
     // ---
     let result = await loadsparqlQuery(sparqlQuery);
 

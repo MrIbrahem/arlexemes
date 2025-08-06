@@ -1,7 +1,7 @@
 
 let dup_lemmas = [];
 
-async function load_wb(to_group_by = "categoryLabel") {
+async function get_wdresult() {
     const sparqlQuery = `
     SELECT ?item ?lemma ?category ?categoryLabel ?P31Label WHERE {
         ?item rdf:type ontolex:LexicalEntry;
@@ -12,34 +12,17 @@ async function load_wb(to_group_by = "categoryLabel") {
         OPTIONAL { ?item wdt:P31 ?P31. }
         }
     `;
-
+    // ---
+    add_sparql_url(sparqlQuery);
+    // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
-    let wd_result = {};
+    let wd_result = [];
 
     for (const item of result) {
-        let to_group = item[to_group_by] || '!';
-
-        if (!wd_result[to_group]) {
-            // ---
-            wd_result[to_group] = {
-                group_by: to_group,
-                items: []
-            };
-        }
-        // ---
-        wd_result[to_group].items.push(item);
+        wd_result.push(item);
     }
     // ---
-    // sort wd_result keys by values length
-    wd_result = Object.fromEntries(Object.entries(wd_result).sort(([, a], [, b]) => b.items.length - a.items.length));
-    // ---
-    return wd_result;
-}
-
-async function get_wdresult(to_group_by = "categoryLabel") {
-    // ---
-    let result = await load_wb(to_group_by = to_group_by);
     return result;
 }
 
@@ -49,20 +32,20 @@ async function load_duplicate() {
     // ---
     let data = [];
     // ---
-    treeData1.forEach(category => {
-        category.items.forEach(wditem => {
-            if (data[wditem.lemma]) {
-                let old = data[wditem.lemma][0];
-                // ---
-                if (old.item && wditem.item && wditem.item !== old.item) {
-                    console.log(wditem.item, old.item);
-                    data[wditem.lemma].push(wditem);
-                }
-            } else {
-                data[wditem.lemma] = [wditem];
+    // treeData1.forEach(category => {
+    treeData1.forEach(wditem => {
+        if (data[wditem.lemma]) {
+            let old = data[wditem.lemma][0];
+            // ---
+            if (old.item && wditem.item && wditem.item !== old.item) {
+                console.log(wditem.item, old.item);
+                data[wditem.lemma].push(wditem);
             }
-        });
-    })
+        } else {
+            data[wditem.lemma] = [wditem];
+        }
+    });
+    // })
     // ---
     let dup_lemmas = [];
 

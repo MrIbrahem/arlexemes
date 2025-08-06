@@ -143,19 +143,3 @@ function get_param_from_window_location(key, defaultvalue) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(key) || defaultvalue;
 }
-
-async function fetchListData(limit, data_source, sort_by) {
-    // ---
-    let treeMap = await make_wd_result(limit, data_source, sort_by);
-
-    treeMap = slice_data(treeMap);
-
-    // count all items.length in wd_result
-    let count = Object.values(treeMap).reduce((sum, obj) => sum + obj.items.length, 0);
-
-    // add total to the page
-    document.getElementById("total").textContent = `(${count})`;
-
-    treeData = Object.values(treeMap);
-    renderTree(treeData);
-}

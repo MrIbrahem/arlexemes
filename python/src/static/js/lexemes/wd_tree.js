@@ -93,7 +93,9 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
         GROUP BY ?item ?category ?categoryLabel ?P31Label
         limit ${limit}
     `;
-
+    // ---
+    add_sparql_url(sparqlQuery);
+    // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
     let wd_result = {};

@@ -5,8 +5,22 @@
     <div class="d-flex align-items-center justify-content-center">
         <div class="row col-md-9">
             <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
-                <h3 class="text-2xl font-bold text-center m-6 p-3"> المخطط الشجري للكلمات <span id="total"></span>
-                </h3>
+                <div class="row m-6 p-3">
+                    <div class="col-md-9 col-sm-8 mb-3 mb-md-0">
+                        <span class="text-2xl font-bold text-center h2">
+                            المخطط الشجري: <span id="total"></span>
+                        </span>
+                    </div>
+                    <div class="col-md-3 col-sm-4 mb-3 mb-md-0">
+                        <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled" role="button">
+                            <span class="d-flex text-center align-items-center">
+                                <span class="query"></span>&nbsp;
+                                استعلام
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <hr class="d-lg-none text-dark-subtle text-50">
                 <form method="GET" class="mb-0">
                     <div class="row">
                         <div class="col-md-3">
@@ -69,7 +83,7 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lexemes/wd.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lexemes/wd_tree.js') }}"></script>
 <script>
     async function add_options_to_select(data_source, group_by) {
         let select = document.getElementById('group_by');

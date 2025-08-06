@@ -70,8 +70,8 @@
                             <i class="bi bi-journal-text ms-1"></i> مفردات مكررة
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd.php' else '' }}">
-                        <a class="nav-link" href="/wd.php">
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd_tree.php' else '' }}">
+                        <a class="nav-link" href="/wd_tree.php">
                             <i class="bi bi-tree ms-1"></i> مخطط شجري
                         </a>
                     </li>

@@ -1,4 +1,17 @@
 
+function add_sparql_url(sparqlQuery) {
+    // ---
+    let sparql_url = $("#sparql_url");
+    // ---
+    if (sparql_url) {
+        var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
+        // ---
+        sparql_url.attr("href", url1);
+        // remove disabled from class
+        sparql_url.removeClass("disabled");
+    }
+    // ---
+}
 function parse_sparql_results(result) {
     let vars = result.head.vars;
 
