@@ -62,7 +62,7 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
         VALUES = `VALUES ?category { wd:${data_source} }`;
     }
     // ---
-    const sparqlQuery = `
+    const sparqlQueryOld = `
         SELECT
             ?item
             (SAMPLE(?lemma1) AS ?lemma)
@@ -83,6 +83,27 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
             OPTIONAL { ?item wdt:P6771 ?P6771_z. }
             OPTIONAL { ?item wdt:P11038 ?P11038_z. }
             OPTIONAL { ?item wdt:P12451 ?P12451_z. }
+            ${add_group_optional}
+        }
+        GROUP BY ?item ?category ?categoryLabel ?P31Label
+        limit ${limit}
+    `;
+    // ---
+    const sparqlQuery = `
+        SELECT
+            ?item
+            (SAMPLE(?lemma1) AS ?lemma)
+            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
+            ?category ?categoryLabel ?P31Label
+            ${add_group}
+        WHERE {
+            ${VALUES}
+            ?item rdf:type ontolex:LexicalEntry;
+                wikibase:lemma ?lemma1;
+                wikibase:lexicalCategory ?category;
+                dct:language wd:Q13955.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            OPTIONAL { ?item wdt:P31 ?P31. }
             ${add_group_optional}
         }
         GROUP BY ?item ?category ?categoryLabel ?P31Label
