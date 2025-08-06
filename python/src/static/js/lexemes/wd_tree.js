@@ -41,11 +41,11 @@ async function most_used_properties(data_source) {
 async function find_wd_result(to_group_by = "categoryLabel", data_source = "all", limit = 100) {
     // ---
     let props_in = [
-        "P31",
+        // "P31",
     ]
     // ---
-    let add_group = "";
-    let add_group_optional = "";
+    let add_group = " ?P31Label ";
+    let add_group_optional = " OPTIONAL { ?item wdt:P31 ?P31. } ";
     // ---
     if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
         // TODO: this has no sense
@@ -95,7 +95,7 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
             ?item
             (SAMPLE(?lemma1) AS ?lemma)
             (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
-            ?category ?categoryLabel ?P31Label
+            ?category ?categoryLabel
             ${add_group}
         WHERE {
             ${VALUES}
@@ -104,7 +104,7 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
                 wikibase:lexicalCategory ?category;
                 dct:language wd:Q13955.
             SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-            OPTIONAL { ?item wdt:P31 ?P31. }
+
             ${add_group_optional}
         }
         GROUP BY ?item ?category ?categoryLabel ?P31Label
