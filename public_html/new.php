@@ -82,7 +82,7 @@ require __DIR__ . "/main.php";
         // ---
         let sort_by = "id"
         // ---
-        fetchData(limit, data_source, sort_by);
+        fetchListData(limit, data_source, sort_by);
     }
 
     function toggleCustomInput() {

@@ -76,3 +76,10 @@ a {
     }
 
 }
+
+.navbar-nav .nav-item.active {
+    /* border-radius: 4px; */
+    /* display: block; */
+    background-color: #c2c5c8;
+    /* font-weight: bold; */
+}

@@ -6,7 +6,7 @@ require __DIR__ . "/main.php";
 
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-8">
+        <div class="col-lg-8 col-sm-12">
             <div class="card card_form">
                 <div class="card-header text-center py-2">
                     <h4 class="card-title mb-0 d-flex align-items-center justify-content-center">

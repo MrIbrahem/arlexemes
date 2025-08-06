@@ -46,16 +46,16 @@ fi
 # Move the new version to the final directory
 mv "$CLONE_DIR/python/src" "$TARGET_DIR"
 
-cp -rf "$CLONE_DIR/sh/*" "$HOME/sh"
-cp -f "$CLONE_DIR/*.yaml" "$HOME/"
-
-chmod -R 6770 ~/sh
-
 # Activate the Python virtual environment and install requirements
 if source "$HOME/www/python/venv/bin/activate"; then
     pip install -r "$TARGET_DIR/requirements.txt"
 else
     echo "Failed to activate virtual environment" >&2
 fi
+
+cp -rf "$CLONE_DIR/sh/*" "$HOME/sh"
+cp -f "$CLONE_DIR/*.yaml" "$HOME/"
+
+chmod -R 6770 $HOME/sh
 
 echo ">>> Update completed successfully."
