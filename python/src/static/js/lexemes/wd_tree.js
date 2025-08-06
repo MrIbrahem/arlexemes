@@ -51,7 +51,8 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
         // TODO: this has no sense
         // to_group_by = to_group_by.replace("P", "");
         add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
-        add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
+        // add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
+        add_group_optional = `?item wdt:${to_group_by} ?${to_group_by}_z. `;
 
     }
     // ---
