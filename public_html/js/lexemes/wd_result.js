@@ -120,3 +120,55 @@ async function make_wd_result(limit, data_source, sort_by) {
     // ---
     return wd_result;
 }
+
+
+async function new_ar_lexemes(limit, data_source) {
+    // ---
+    let VALUES = ``;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
+    let limit_line = ` LIMIT 100 `;
+    // ---
+    if (limit && isFinite(limit)) {
+        limit_line = ` LIMIT ${limit} `;
+    }
+    // ---
+    let sparqlQuery = `
+        SELECT
+        ?item
+        (SAMPLE(?lemma1) AS ?lemma)
+        (GROUP_CONCAT(DISTINCT ?lemma1; separator=" / ") AS ?lemmas)
+        ?category ?categoryLabel
+        ?P31 ?P31Label
+        (COUNT(?form) AS ?count)
+        WHERE {
+            ${VALUES}
+            {
+                SELECT ?item
+                WHERE {
+                ?item rdf:type ontolex:LexicalEntry ;
+                        dct:language wd:Q13955 .
+                }
+                ORDER BY DESC(xsd:integer(STRAFTER(STR(?item), "/entity/L")))
+                ${limit_line}
+            }
+
+        ?item wikibase:lemma ?lemma1 ;
+            wikibase:lexicalCategory ?category .
+        OPTIONAL { ?item ontolex:lexicalForm ?form }
+        OPTIONAL { ?item wdt:P31 ?P31 }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+        }
+        GROUP BY ?item ?category ?categoryLabel ?P31 ?P31Label
+    `;
+    let result = await loadsparqlQuery(sparqlQuery);
+
+    let wd_result = parse_results(result);
+
+    return wd_result;
+}
+

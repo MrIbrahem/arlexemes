@@ -59,6 +59,22 @@
 <script src="{{ url_for('static', filename='js/lexemes/wd_result.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lexemes/list_lexemes.js') }}"></script>
 <script>
+    async function fetchNewData(limit, data_source) {
+        // ---
+        let treeMap = await new_ar_lexemes(limit, data_source);
+
+        treeMap = slice_data(treeMap);
+
+        // count all items.length in wd_result
+        let count = Object.values(treeMap).reduce((sum, obj) => sum + obj.items.length, 0);
+
+        // add total to the page
+        document.getElementById("total").textContent = `(${count})`;
+
+        treeData = Object.values(treeMap);
+        renderTree(treeData);
+    }
+
     function loadfetchData() {
         // ---
         showLoading();
@@ -78,9 +94,7 @@
             document.getElementById('custom_data_source').style.display = 'block';
         }
         // ---
-        let sort_by = "id"
-        // ---
-        fetchListData(limit, data_source, sort_by);
+        fetchNewData(limit, data_source);
     }
 
     function toggleCustomInput() {
