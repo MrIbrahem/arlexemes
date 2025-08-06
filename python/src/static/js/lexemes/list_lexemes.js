@@ -54,7 +54,7 @@ async function make_wd_result_for_list(limit, data_source, sort_by) {
     // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
-    let wd_result = parse_results(result);
+    let wd_result = parse_results_group_by(result);
 
     return wd_result;
 }

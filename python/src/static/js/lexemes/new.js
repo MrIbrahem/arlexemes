@@ -48,7 +48,7 @@ async function new_ar_lexemes(limit, data_source) {
     // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
-    let wd_result = parse_results(result);
+    let wd_result = parse_results_group_by(result);
 
     return wd_result;
 }

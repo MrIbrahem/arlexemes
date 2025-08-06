@@ -4,14 +4,14 @@
 <div class="container my-4">
     <div class="d-flex align-items-center justify-content-center">
         <div class="row col-md-10 border rounded">
-            <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
+            <div class="max-w-3xl mx-auto rounded-lg shadow-md bg-light-subtle">
                 <div class="row m-6 p-3"><!--  d-flex align-items-center justify-content-between -->
-                    <div class="col-md-4 col-sm-6">
+                    <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
                         <span class="text-2xl font-bold text-center h2">
                             قائمة المفردات:
                         </span>
                     </div>
-                    <div class="col-md-2 col-sm-6">
+                    <div class="col-md-2 col-sm-6 mb-2 mb-md-0">
 
                         <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled" role="button">
                             <span class="d-flex text-center align-items-center">
@@ -19,12 +19,13 @@
                                 استعلام
                             </span>
                         </a>
+                        <span id="query_time"></span>
 
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <form method="GET">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-2 mb-md-0">
                                     <div class="input-group">
                                         <span class="input-group-text">التصنيف</span>
                                         <select name="data_source" id="data_source" class="form-select d-inline-block" onchange="toggleCustomInput()">
@@ -37,10 +38,10 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3 text-center">
+                                <div class="col-md-3 text-center mb-2 mb-md-0">
                                     <input type="number" id="limit" name="limit" class="form-control" placeholder="عدد النتائج" value="1000">
                                 </div>
-                                <div class="col-md-3 text-center">
+                                <div class="col-md-3 text-center mb-2 mb-md-0">
                                     <button type="submit" class="btn btn-primary">تحميل</button>
                                 </div>
 

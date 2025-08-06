@@ -30,7 +30,21 @@ function slice_data(wd_result) {
     return new_wd_result;
 }
 
-function parse_results(result) {
+function add_sparql_url(sparqlQuery) {
+    // ---
+    let sparql_url = $("#sparql_url");
+    // ---
+    if (sparql_url) {
+        var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
+        // ---
+        sparql_url.attr("href", url1);
+        // remove disabled from class
+        sparql_url.removeClass("disabled");
+    }
+    // ---
+}
+
+function parse_results_group_by(result) {
     let wd_result = {};
 
     for (const item of result) {
@@ -53,19 +67,6 @@ function parse_results(result) {
     return wd_result;
 }
 
-function add_sparql_url(sparqlQuery) {
-    // ---
-    let sparql_url = $("#sparql_url");
-    // ---
-    if (sparql_url) {
-        var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
-        // ---
-        sparql_url.attr("href", url1);
-        // remove disabled from class
-        sparql_url.removeClass("disabled");
-    }
-    // ---
-}
 function parse_sparql_results(result) {
     let vars = result.head.vars;
 
@@ -112,13 +113,24 @@ async function _loadsparqlQuery(sparqlQuery) {
     }
 }
 
-async function loadsparqlQuery(sparqlQuery) {
-
+async function loadsparqlQuery(sparqlQuery, notime = false) {
+    // ---
+    let start_time = performance.now();
+    // ---
     const data = await _loadsparqlQuery(sparqlQuery);
     // ---
-    if (data) {
-        return parse_sparql_results(data);
+    let end_time = performance.now();
+    // ---
+    let query_time = (end_time - start_time) / 1000;
+    // ---
+    if (!notime) {
+        $('#query_time').text('(' + query_time.toFixed(3) + ' ث)');
     }
     // ---
-    return {};
+    if (!data) {
+        return {};
+    }
+    // ---
+    return parse_sparql_results(data);
+
 }

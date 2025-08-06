@@ -8,20 +8,21 @@
             <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
                 <form method="GET">
                     <div class="row m-6 p-3">
-                        <div class="col-md-4 col-sm-6 mb-3 mb-md-0">
+                        <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
                             <span class="text-2xl font-bold text-center h2">
                                 المفردات المكررة
                             </span>
                         </div>
-                        <div class="col-md-2 col-sm-6 mb-3 mb-md-0">
+                        <div class="col-md-2 col-sm-6 mb-2 mb-md-0">
                             <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled" role="button">
                                 <span class="d-flex text-center align-items-center">
                                     <span class="query"></span>&nbsp;
                                     استعلام
                                 </span>
                             </a>
+                            <span id="query_time"></span>
                         </div>
-                        <div class="col-md-4 col-sm-12 mb-3 mb-md-0">
+                        <div class="col-md-4 col-sm-12 mb-2 mb-md-0">
                             <div class="input-group">
                                 <span class="input-group-text">التصنيف</span>
                                 <select name="data_source" id="data_source" class="form-select d-inline-block">

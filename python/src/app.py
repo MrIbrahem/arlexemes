@@ -117,6 +117,11 @@ def not_in_db():
     return render_template("not_in_db.html", data=result, len_of_ids=len_of_ids, limit=limit)
 
 
+@app.route("/not_in_db1", methods=["GET"])
+def not_in_db1():
+    return render_template("not_in_db.html", data={}, len_of_ids=100, limit=0)
+
+
 @app.route("/wd_tree.php", methods=["GET"])
 def wd_tree():
     return render_template("wd_tree.php")

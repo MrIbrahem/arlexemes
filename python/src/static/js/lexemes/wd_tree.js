@@ -33,7 +33,7 @@ async function most_used_properties(data_source) {
             ORDER BY DESC(?usage)
     `;
     // ---
-    let result = await loadsparqlQuery(query);
+    let result = await loadsparqlQuery(query, no_time = true);
     // ---
     return result;
 }
