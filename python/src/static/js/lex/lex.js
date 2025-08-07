@@ -446,9 +446,7 @@ async function Q24905(entity) {
         // display_mt_cells[verb] = [number, row, col, gender].includes("");
         display_mt_cells[verb] = [number, col, gender].includes("");
         //
-        if (display_mt_cells[verb]) {
-            console.table(form.id);
-        }
+        // if (display_mt_cells[verb]) { console.table(form.id); }
     }
     // ---
     let result = "";
