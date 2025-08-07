@@ -40,9 +40,9 @@
                             <div class="form-group">
                                 <label for="group_by" class="form-label fw-bold">جمع بـ:</label>
                                 <select name="group_by" id="group_by" class="form-select w-100 d-inline-block" onchange="toggleCustomInput()">
+                                    <option value="categoryLabel">التصنيف المعجمي</option>
                                     <!-- <option value="P31Label">Instance of - P31</option>
                                     <option value="P5185">الجنس النحوي - P5185</option>
-                                    <option value="categoryLabel">التصنيف المعجمي</option>
                                     <option value="P6771">Arabic Ontology concept ID - P6771</option>
                                     <option value="P11038">Arabic Ontology lemma ID - P11038</option>
                                     <option value="P12451">Arabic Ontology lexical concept ID - P12451</option> -->
