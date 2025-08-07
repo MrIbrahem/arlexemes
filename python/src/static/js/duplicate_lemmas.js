@@ -106,7 +106,6 @@ async function get_wdresult(same_category = false) {
             WHERE {
             {
                 SELECT DISTINCT *
-                #?1_item ?2_item ?lemma ?1_category ?2_category
                         WHERE
                         {
                         # values ?lemma {"أنتما"@ar }
@@ -155,7 +154,7 @@ async function get_wdresult(same_category = false) {
 async function get_data_dup(same_category) {
     let wdresult = await get_wdresult(same_category);
     // ---
-    console.table(wdresult);
+    // console.table(wdresult);
     // ---
     wdresult = convertData(wdresult);
     // ---
