@@ -15,7 +15,7 @@
 
     <script src="{{ cdn_base }}/jquery/3.7.0/jquery.min.js"></script>
     <script src="{{ cdn_base }}/popper.js/2.11.8/umd/popper.min.js"></script>
-    <script src="{{ cdn_base }}/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="{{ cdn_base }}/bootstrap/5.3.7/js/bootstrap.min.js"></script>
     <script src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
@@ -27,7 +27,8 @@
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
 
     <!-- Bootstrap 5 -->
-    <link href="{{ cdn_base }}/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="{{ cdn_base }}/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{{ cdn_base }}/bootstrap/5.3.7/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link href="{{ cdn_base }}/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel='stylesheet' type='text/css'>
     <link href="{{ cdn_base }}/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 

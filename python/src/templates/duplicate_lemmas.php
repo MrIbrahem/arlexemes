@@ -13,7 +13,7 @@
                                 المفردات المكررة
                             </span>
                         </div>
-                        <div class="col-md-2 col-sm-6 mb-2 mb-md-0">
+                        <div class="col-md-3 col-sm-6 mb-2 mb-md-0">
                             <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled" role="button">
                                 <span class="d-flex text-center align-items-center">
                                     <span class="query"></span>&nbsp;
@@ -23,12 +23,16 @@
                             <span id="query_time"></span>
                         </div>
                         <div class="col-md-4 col-sm-12 mb-2 mb-md-0">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1">
-                                <label class="check-label" for="same_category">نفس التصنيف النحوي</label>
+                            <div class="input-group">
+                                <div class="form-control d-flex flex-column">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1">
+                                        <label class="check-label" for="same_category">نفس التصنيف المعجمي</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-2 col-sm-12 text-center">
+                        <div class="col-md-1 col-sm-12 text-center">
                             <button type="submit" class="btn btn-primary">تحميل</button>
                         </div>
                     </div>
@@ -40,10 +44,7 @@
                     </div>
                     جارٍ التحميل (بطيء)...<br>أي مقترح لتحسين الاستعلام مرحب به
                 </div>
-                <div class="card-body">
-                    <div id="rowCount" class="mb-3 text-center fw-bold"></div>
-                    <div id="tables_container"></div>
-                </div>
+                <div id="tables_container"></div>
             </div>
         </div>
     </div>
