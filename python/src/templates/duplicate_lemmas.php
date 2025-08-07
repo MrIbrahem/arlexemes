@@ -49,6 +49,7 @@
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
 <script src="{{ url_for('static', filename='js/duplicate_lemmas.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => load_duplicate());
