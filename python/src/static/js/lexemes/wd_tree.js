@@ -4,34 +4,8 @@ const treeContainer = document.getElementById("tree");
 let treeDataWD = [];
 
 async function most_used_properties(data_source) {
-    let VALUES = ``;
     // ---
-    // if data_source match Q\d+
-    if (data_source !== "" && data_source.match(/Q\d+/)) {
-        VALUES = `VALUES ?category { wd:${data_source} }`;
-    }
-    // ---
-    let query = `
-        SELECT ?prop ?propLabel (COUNT(?item) AS ?usage)
-            WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                    wikibase:lemma ?lemma1;
-                    wikibase:lexicalCategory ?category;   # الفئة: فعل
-                    dct:language wd:Q13955.               # اللغة: العربية
-
-            # اختيار خصائص من مساحة بيانات Wikidata فقط
-            ?item ?wdtProp ?value.
-            FILTER(STRSTARTS(STR(?wdtProp), STR(wdt:)))
-
-            # تحويل URI للخاصية إلى عنصر الـProperty نفسه (Pxxxx)
-            BIND(IRI(REPLACE(STR(?wdtProp), STR(wdt:), STR(wd:))) AS ?prop)
-
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-            }
-            GROUP BY ?prop ?propLabel
-            ORDER BY DESC(?usage)
-    `;
+    let query = most_used_properties_query(data_source);
     // ---
     let result = await loadsparqlQuery(query, no_time = true);
     // ---
@@ -40,76 +14,7 @@ async function most_used_properties(data_source) {
 
 async function find_wd_result(to_group_by = "categoryLabel", data_source = "all", limit = 100) {
     // ---
-    let props_in = [
-        // "P31",
-    ]
-    // ---
-    let add_group = " ?P31Label ";
-    let add_group_optional = " OPTIONAL { ?item wdt:P31 ?P31. } ";
-    // ---
-    if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
-        // TODO: this has no sense
-        // to_group_by = to_group_by.replace("P", "");
-        add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
-        // add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
-        add_group_optional = `?item wdt:${to_group_by} ?${to_group_by}_z. `;
-
-    }
-    // ---
-    let VALUES = ``;
-    // ---
-    // if data_source match Q\d+
-    if (data_source !== "" && data_source.match(/Q\d+/)) {
-        VALUES = `VALUES ?category { wd:${data_source} }`;
-    }
-    // ---
-    const sparqlQueryOld = `
-        SELECT
-            ?item
-            (SAMPLE(?lemma1) AS ?lemma)
-            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
-            ?category ?categoryLabel ?P31Label
-            (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
-            (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
-            (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
-            ${add_group}
-        WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                wikibase:lemma ?lemma1;
-                wikibase:lexicalCategory ?category;
-                dct:language wd:Q13955.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-            OPTIONAL { ?item wdt:P31 ?P31. }
-            OPTIONAL { ?item wdt:P6771 ?P6771_z. }
-            OPTIONAL { ?item wdt:P11038 ?P11038_z. }
-            OPTIONAL { ?item wdt:P12451 ?P12451_z. }
-            ${add_group_optional}
-        }
-        GROUP BY ?item ?category ?categoryLabel ?P31Label
-        limit ${limit}
-    `;
-    // ---
-    const sparqlQuery = `
-        SELECT
-            ?item
-            (SAMPLE(?lemma1) AS ?lemma)
-            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
-            ?category ?categoryLabel
-            ${add_group}
-        WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                wikibase:lemma ?lemma1;
-                wikibase:lexicalCategory ?category;
-                dct:language wd:Q13955.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-
-            ${add_group_optional}
-        }
-        GROUP BY ?item ?category ?categoryLabel ?P31Label
-        limit ${limit}
-    `;
+    let sparqlQuery = wg_tree_query(data_source, to_group_by, limit);
     // ---
     add_sparql_url(sparqlQuery);
     // ---
@@ -279,9 +184,13 @@ async function loadfetchData() {
         document.getElementById('custom_group_by').style.display = 'block';
     }
     // ---
-    await add_options_to_select(data_source, group_by);
+    // await add_options_to_select(data_source, group_by);
+    // await fetchData(limit, data_source, group_by);
     // ---
-    await fetchData(limit, data_source, group_by);
+    await Promise.all([
+        add_options_to_select(data_source, group_by),
+        fetchData(limit, data_source, group_by)
+    ]);
     // ---
     await find_labels();
 }

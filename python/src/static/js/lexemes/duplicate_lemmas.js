@@ -87,62 +87,7 @@ function convertData(data) {
 }
 
 async function get_wdresult(same_category = false) {
-    let same_category_filter = "";
-    // ---
-    if (same_category) {
-        same_category_filter = "FILTER(?1_category = ?2_category)";
-    }
-    // ---
-    const sparqlQuery = `
-        SELECT
-            ?lemma
-            ?1_item ?1_categoryLabel
-            ?2_item ?2_categoryLabel
-
-            ?p ?pLabel
-            ?1_p_value ?1_p_valueLabel
-            ?2_p_value ?2_p_valueLabel
-
-            WHERE {
-            {
-                SELECT DISTINCT *
-                        WHERE
-                        {
-                        # values ?lemma {"أنتما"@ar }
-                        ?1_item rdf:type ontolex:LexicalEntry ;
-                                wikibase:lemma ?lemma ;
-                                wikibase:lexicalCategory ?1_category;
-                                dct:language wd:Q13955 .
-                        ?2_item rdf:type ontolex:LexicalEntry ;
-                                wikibase:lemma ?lemma ;
-                                wikibase:lexicalCategory ?2_category;
-                                dct:language wd:Q13955 .
-                        FILTER(?1_item != ?2_item && STR(?1_item) < STR(?2_item))
-                        ${same_category_filter}
-                        {
-                            ?1_item ?pz ?1_p_value.
-                            ?2_item ?pz ?2_p_value.
-                            FILTER(STRSTARTS(STR(?pz), STR(wdt:)))
-                            BIND(IRI(REPLACE(STR(?pz), STR(wdt:), STR(wd:))) AS ?p)
-                        }
-                        UNION {
-                            ?2_item ?pz ?2_p_value.
-                            FILTER(STRSTARTS(STR(?pz), STR(wdt:)))
-                            BIND(IRI(REPLACE(STR(?pz), STR(wdt:), STR(wd:))) AS ?p)
-                        }
-                        UNION {
-                            ?1_item ?pz ?1_p_value.
-                            FILTER(STRSTARTS(STR(?pz), STR(wdt:)))
-                            BIND(IRI(REPLACE(STR(?pz), STR(wdt:), STR(wd:))) AS ?p)
-                        }
-                        }
-                LIMIT 1000
-            }
-
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-            }
-            ORDER BY ?lemma
-    `;
+    const sparqlQuery = duplicate_lemmas_query(same_category);
     // ---
     add_sparql_url(sparqlQuery);
     // ---

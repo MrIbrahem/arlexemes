@@ -1,54 +1,9 @@
 
 let treeData = [];
 
-async function make_wd_result_for_list(limit, data_source, sort_by) {
-    const sparqlQuery1 = `
-        VALUES ?category {
-            wd:Q111029	# جذر
-            wd:Q1084	# اسم
-            wd:Q24905	# فعل
-            wd:Q34698	# صفة
-        }
-    `;
-    // ---
-    let VALUES = ``;
-    // ---
-    // if data_source match Q\d+
-    if (data_source !== "" && data_source.match(/Q\d+/)) {
-        VALUES = `VALUES ?category { wd:${data_source} }`;
-    }
-    // ---
-    let ORDER = "ORDER BY DESC(?count)";
-    // ---
-    if (sort_by === "id") {
-        ORDER = "ORDER BY DESC(xsd:integer(STRAFTER(STR(?item), '/entity/L')))";
-    }
-    // ---
-    let sparqlQuery = `
-        SELECT DISTINCT
-            ?item
-            (SAMPLE(?lemma1) AS ?lemma)
-            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
-            ?category ?categoryLabel
-            ?P31 ?P31Label
-            (count(?form) as ?count)
-        WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                wikibase:lemma ?lemma1;
-                wikibase:lexicalCategory ?category;
-                dct:language wd:Q13955.
+async function make_wd_result_for_list(limit, data_source) {
 
-            optional {?item ontolex:lexicalForm ?form}
-            optional {?item wdt:P31 ?P31}
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
-        }
-        group by ?item ?category ?categoryLabel ?P31 ?P31Label
-        ${ORDER}
-    `;
-    if (limit && isFinite(limit)) {
-        sparqlQuery += ` LIMIT ${limit} `;
-    }
+    let sparqlQuery = list_lexemes_query(limit, data_source);
     // ---
     add_sparql_url(sparqlQuery);
     // ---
@@ -59,9 +14,9 @@ async function make_wd_result_for_list(limit, data_source, sort_by) {
     return wd_result;
 }
 
-async function fetchListData(limit, data_source, sort_by) {
+async function fetchListData(limit, data_source) {
     // ---
-    let treeMap = await make_wd_result_for_list(limit, data_source, sort_by);
+    let treeMap = await make_wd_result_for_list(limit, data_source);
 
     treeMap = slice_data(treeMap);
 
@@ -79,7 +34,7 @@ function loadfetchData() {
     // ---
     showLoading();
     // ---
-    let limit = get_param_from_window_location("limit", 100);
+    let limit = get_param_from_window_location("limit", 1000);
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
     // ---

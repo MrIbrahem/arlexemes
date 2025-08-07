@@ -78,6 +78,7 @@
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/lexemes/queries.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lexemes/list_and_new.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lexemes/new.js') }}"></script>
 <script>
