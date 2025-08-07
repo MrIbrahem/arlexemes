@@ -75,7 +75,7 @@ function renderTree(data) {
             // ---
             if (!to_lex.includes(item.category)) {
                 href = `http://www.wikidata.org/entity/${item.item}`;
-                lemma = (item.P31Label != "") ? `${item.lemma} (${item.P31Label})` : item.lemma;
+                lemma = (item?.P31Label && item?.P31Label != "") ? `${item.lemma} (${item.P31Label})` : item.lemma;
             }
             // ---
             if (category.group_by == "أخرى") {

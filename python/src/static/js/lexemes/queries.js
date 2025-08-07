@@ -151,8 +151,7 @@ function list_lexemes_query(limit, data_source) {
             (GROUP_CONCAT(DISTINCT ?lemma1; SEPARATOR = " / ") AS ?lemma)
             ?category
             ?categoryLabel
-            #(SAMPLE(?P31) AS ?P31)
-            #(SAMPLE(?P31Label) AS ?P31Label)
+            ?P31Label
             (COUNT(?form) AS ?count)
             WHERE {
             {
@@ -168,10 +167,10 @@ function list_lexemes_query(limit, data_source) {
             }
             OPTIONAL { ?item wikibase:lemma ?lemma1. }
             OPTIONAL { ?item ontolex:lexicalForm ?form. }
-            #OPTIONAL { ?item wdt:P31 ?P31. }
+            OPTIONAL { ?item wdt:P31 ?P31. }
             SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
             }
-            GROUP BY ?item ?category ?categoryLabel
+            GROUP BY ?item ?category ?categoryLabel ?P31Label
             ORDER BY DESC (?count)
     `;
     // ---

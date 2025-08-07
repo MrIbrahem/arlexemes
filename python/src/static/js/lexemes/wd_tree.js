@@ -42,7 +42,7 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
     return wd_result;
 }
 
-function renderTree(data, all_open) {
+function render_wd_tree(data, all_open) {
     treeContainer.innerHTML = "";
     // ---
     HandelDataError(data);
@@ -141,7 +141,7 @@ async function fetchData(limit, data_source, group_by) {
     document.getElementById("total").textContent = `(${count})`;
 
     treeDataWD = Object.values(treeMap);
-    renderTree(treeDataWD);
+    render_wd_tree(treeDataWD);
 }
 
 async function add_options_to_select(data_source, group_by) {
@@ -212,7 +212,7 @@ async function load_tree() {
     search_Input.addEventListener("input", e => {
         const term = e.target.value;
         const filtered = filterTreeData(term);
-        renderTree(filtered, true);
+        render_wd_tree(filtered, true);
     });
     // ---
     await loadfetchData();
