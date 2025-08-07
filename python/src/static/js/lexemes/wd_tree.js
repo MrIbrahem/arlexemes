@@ -1,10 +1,5 @@
 
 const treeContainer = document.getElementById("tree");
-const search_Input = document.getElementById("searchInput");
-const loadingDiv = document.getElementById("loading");
-const errorDiv = document.getElementById("error");
-const errorMessageDiv = document.getElementById("errorMessage");
-const noResultsDiv = document.getElementById("noResults");
 
 let treeDataWD = [];
 
@@ -38,7 +33,7 @@ async function most_used_properties(data_source) {
             ORDER BY DESC(?usage)
     `;
     // ---
-    let result = await loadsparqlQuery(query);
+    let result = await loadsparqlQuery(query, no_time = true);
     // ---
     return result;
 }
@@ -46,17 +41,18 @@ async function most_used_properties(data_source) {
 async function find_wd_result(to_group_by = "categoryLabel", data_source = "all", limit = 100) {
     // ---
     let props_in = [
-        "P31",
+        // "P31",
     ]
     // ---
-    let add_group = "";
-    let add_group_optional = "";
+    let add_group = " ?P31Label ";
+    let add_group_optional = " OPTIONAL { ?item wdt:P31 ?P31. } ";
     // ---
     if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
         // TODO: this has no sense
         // to_group_by = to_group_by.replace("P", "");
         add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
-        add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
+        // add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
+        add_group_optional = `?item wdt:${to_group_by} ?${to_group_by}_z. `;
 
     }
     // ---
@@ -67,7 +63,7 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
         VALUES = `VALUES ?category { wd:${data_source} }`;
     }
     // ---
-    const sparqlQuery = `
+    const sparqlQueryOld = `
         SELECT
             ?item
             (SAMPLE(?lemma1) AS ?lemma)
@@ -93,7 +89,30 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
         GROUP BY ?item ?category ?categoryLabel ?P31Label
         limit ${limit}
     `;
+    // ---
+    const sparqlQuery = `
+        SELECT
+            ?item
+            (SAMPLE(?lemma1) AS ?lemma)
+            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
+            ?category ?categoryLabel
+            ${add_group}
+        WHERE {
+            ${VALUES}
+            ?item rdf:type ontolex:LexicalEntry;
+                wikibase:lemma ?lemma1;
+                wikibase:lexicalCategory ?category;
+                dct:language wd:Q13955.
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
 
+            ${add_group_optional}
+        }
+        GROUP BY ?item ?category ?categoryLabel ?P31Label
+        limit ${limit}
+    `;
+    // ---
+    add_sparql_url(sparqlQuery);
+    // ---
     let result = await loadsparqlQuery(sparqlQuery);
 
     let wd_result = {};
@@ -118,24 +137,15 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
     return wd_result;
 }
 
-function showLoading() {
-    treeContainer.innerHTML = "";
-    loadingDiv.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
-    errorDiv.classList.add("d-none");     // Bootstrap 5: use d-none for hidden
-    noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-}
-
 function renderTree(data, all_open) {
-    loadingDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
     treeContainer.innerHTML = "";
-
+    // ---
+    HandelDataError(data);
+    // ---
     if (!data.length) {
-        noResultsDiv.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
         return;
     }
-
-    noResultsDiv.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-
+    // ---
     data.forEach((category, index) => {
         if (!category.items || category.items.length === 0) return;
 
@@ -177,7 +187,7 @@ function renderTree(data, all_open) {
 
         const ul = document.createElement("ul");
 
-        const d_class = (data.length === 1 || all_open) ? '' : 'd-none';
+        const d_class = (data.length === 1 || all_open) ? '' : "d-none";
 
         ul.className = `list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end ${d_class}`; // d-none for hidden initially
 
@@ -215,12 +225,6 @@ function filterTreeData(term) {
     }));
 }
 
-function get_param_from_window_location1(key, defaultvalue) {
-    // ---
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(key) || defaultvalue;
-}
-
 async function fetchData(limit, data_source, group_by) {
     // ---
     const treeMap = await find_wd_result(group_by, data_source, limit);
@@ -235,8 +239,75 @@ async function fetchData(limit, data_source, group_by) {
     renderTree(treeDataWD);
 }
 
-search_Input.addEventListener("input", e => {
-    const term = e.target.value;
-    const filtered = filterTreeData(term);
-    renderTree(filtered, true);
-});
+async function add_options_to_select(data_source, group_by) {
+    let select = document.getElementById('group_by');
+    // ---
+    let data = await most_used_properties(data_source);
+    // ---
+    // console.log(data);
+    // { "prop": "P5238", "propLabel": "يجمع بين وحدات معجمية", "usage": "10463" }
+    // ---
+    for (let i = 0; i < data.length; i++) {
+        let option = document.createElement('option');
+        option.value = data[i].prop;
+        option.text = `${data[i].propLabel} (${data[i].usage})`;
+        select.appendChild(option);
+    }
+    // ---
+    $("#group_by").val(group_by);
+}
+
+async function loadfetchData() {
+    // ---
+    treeContainer.innerHTML = "";
+    showLoading();
+    // ---
+    let group_by = get_param_from_window_location("group_by", "P31Label")
+    let custom_group_by = get_param_from_window_location("custom_group_by", "")
+    let limit = get_param_from_window_location("limit", 100)
+    let data_source = get_param_from_window_location("data_source", "all");
+    // ---
+    // let group_by_item = document.getElementById('group_by');
+    // if (group_by_item) group_by_item.value = group_by;
+    // ---
+    $("#limit").val(limit);
+    $("#data_source").val(data_source);
+    // ---
+    if (custom_group_by !== "" && group_by === "custom") {
+        $("#custom_group_by").val(custom_group_by);
+        group_by = custom_group_by;
+        document.getElementById('custom_group_by').style.display = 'block';
+    }
+    // ---
+    await add_options_to_select(data_source, group_by);
+    // ---
+    await fetchData(limit, data_source, group_by);
+    // ---
+    await find_labels();
+}
+
+function toggleCustomInput() {
+    let select = document.getElementById('group_by');
+    const customInput = document.getElementById('custom_group_by');
+    if (select.value === 'custom') {
+        customInput.style.display = 'block';
+    } else {
+        customInput.style.display = 'none';
+    }
+}
+
+async function load_tree() {
+
+    const search_Input = document.getElementById("searchInput");
+    // ---
+    search_Input.addEventListener("input", e => {
+        const term = e.target.value;
+        const filtered = filterTreeData(term);
+        renderTree(filtered, true);
+    });
+    // ---
+    await loadfetchData();
+    // ---
+    toggleCustomInput();
+    // ---
+}

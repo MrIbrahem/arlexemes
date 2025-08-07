@@ -1,15 +1,62 @@
 
-const loadingEl = document.getElementById("loading");
-const errorEl = document.getElementById("error");
-const errorMessageEl = document.getElementById("errorMessage");
-const noResultsEl = document.getElementById("noResults");
-
 let treeData = [];
 
-function showLoading() {
-    loadingEl.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
-    errorEl.classList.add("d-none");     // Bootstrap 5: use d-none for hidden
-    noResultsEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+async function make_wd_result_for_list(limit, data_source, sort_by) {
+    const sparqlQuery1 = `
+        VALUES ?category {
+            wd:Q111029	# جذر
+            wd:Q1084	# اسم
+            wd:Q24905	# فعل
+            wd:Q34698	# صفة
+        }
+    `;
+    // ---
+    let VALUES = ``;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
+    let ORDER = "ORDER BY DESC(?count)";
+    // ---
+    if (sort_by === "id") {
+        ORDER = "ORDER BY DESC(xsd:integer(STRAFTER(STR(?item), '/entity/L')))";
+    }
+    // ---
+    let sparqlQuery = `
+        SELECT DISTINCT
+            ?item
+            (SAMPLE(?lemma1) AS ?lemma)
+            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
+            ?category ?categoryLabel
+            ?P31 ?P31Label
+            (count(?form) as ?count)
+        WHERE {
+            ${VALUES}
+            ?item rdf:type ontolex:LexicalEntry;
+                wikibase:lemma ?lemma1;
+                wikibase:lexicalCategory ?category;
+                dct:language wd:Q13955.
+
+            optional {?item ontolex:lexicalForm ?form}
+            optional {?item wdt:P31 ?P31}
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
+        }
+        group by ?item ?category ?categoryLabel ?P31 ?P31Label
+        ${ORDER}
+    `;
+    if (limit && isFinite(limit)) {
+        sparqlQuery += ` LIMIT ${limit} `;
+    }
+    // ---
+    add_sparql_url(sparqlQuery);
+    // ---
+    let result = await loadsparqlQuery(sparqlQuery);
+
+    let wd_result = parse_results_group_by(result);
+
+    return wd_result;
 }
 
 function make_switch_nav(title, count, n) {
@@ -58,13 +105,13 @@ function make_switch_nav(title, count, n) {
 }
 
 function renderTree(data) {
-    loadingEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
-
+    // ---
+    HandelDataError(data);
+    // ---
     if (!data.length) {
-        noResultsEl.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
         return;
     }
-    noResultsEl.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+    // ---
     let cat_number = 0;
 
     data.forEach(category => {
@@ -108,45 +155,9 @@ function renderTree(data) {
     });
 }
 
-function slice_data(wd_result) {
-
-    // تحويل الكائن إلى مصفوفة وترتيبها حسب عدد العناصر في كل مجموعة
-    let grouped = Object.values(wd_result).sort((a, b) => b.items.length - a.items.length);
-
-    // أخذ أول 10 فقط
-    let top10 = grouped.slice(0, 10);
-
-    // الباقي
-    let others = grouped.slice(10);
-
-    // إعادة بناء الكائن الجديد
-    let new_wd_result = {};
-
-    // إدراج العشرة الأوائل
-    for (const group of top10) {
-        new_wd_result[group.group_by] = group;
-    }
-
-    // دمج الباقي في مجموعة "أخرى"
-    if (others.length > 0) {
-        new_wd_result["أخرى"] = {
-            group_by: "أخرى",
-            qid: "",
-            items: others.flatMap(group => group.items)
-        };
-    }
-
-    return new_wd_result;
-}
-function get_param_from_window_location(key, defaultvalue) {
-    // ---
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(key) || defaultvalue;
-}
-
 async function fetchListData(limit, data_source, sort_by) {
     // ---
-    let treeMap = await make_wd_result(limit, data_source, sort_by);
+    let treeMap = await make_wd_result_for_list(limit, data_source, sort_by);
 
     treeMap = slice_data(treeMap);
 
@@ -154,8 +165,47 @@ async function fetchListData(limit, data_source, sort_by) {
     let count = Object.values(treeMap).reduce((sum, obj) => sum + obj.items.length, 0);
 
     // add total to the page
-    document.getElementById("total").textContent = `(${count})`;
+    document.getElementById("total").textContent = `الإجمالي: (${count})`;
 
     treeData = Object.values(treeMap);
     renderTree(treeData);
+}
+
+function loadfetchData() {
+    // ---
+    showLoading();
+    // ---
+    let limit = get_param_from_window_location("limit", 100);
+    let data_source = get_param_from_window_location("data_source", "all");
+    let custom_data_source = get_param_from_window_location("custom_data_source", "");
+    // ---
+    // document.getElementById('custom_data_source').value = custom_data_source;
+    // ---
+    $("#limit").val(limit);
+    $("#data_source").val(data_source);
+    // ---
+    if (custom_data_source !== "" && data_source === "custom") {
+        $("#custom_data_source").val(custom_data_source);
+        data_source = custom_data_source;
+        document.getElementById('custom_data_source').style.display = 'block';
+    }
+    // ---
+    fetchListData(limit, data_source);
+}
+
+function toggleCustomInput() {
+    let select = document.getElementById('data_source');
+    const customInput = document.getElementById('custom_data_source');
+    if (select.value === 'custom') {
+        customInput.style.display = 'block';
+    } else {
+        customInput.style.display = 'none';
+    }
+}
+async function load_list() {
+    // ---
+    loadfetchData();
+    // ---
+    toggleCustomInput();
+    // ---
 }

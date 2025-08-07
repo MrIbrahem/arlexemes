@@ -6,25 +6,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="https://www.mediawiki.org/static/images/icons/mediawikiwiki.svg" type="image/svg+xml">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'><path fill='%23900' d='M24.656,5.203 H 60.656 L 24.656,67.179Z'/><path fill='%23396' d='M24.656,67.179 V 144.797 L 60.656,82.486 V 5.203Z M83.630,117.797 H 125.344 V 144.797 H 68.273Z'/><path fill='%230063BF' d='M60.656,82.486 V 117.797 H 83.630 L 68.273,144.797 H 24.656Z'/></svg>">
+
     {% block title %}
     <title>قائمة المفردات العربية - ويكي بيانات</title>
     {% endblock %}
 
     <script src="{{ cdn_base }}/jquery/3.7.0/jquery.min.js"></script>
     <script src="{{ cdn_base }}/popper.js/2.11.8/umd/popper.min.js"></script>
-    <script src="{{ cdn_base }}/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="{{ cdn_base }}/bootstrap/5.3.7/js/bootstrap.min.js"></script>
     <script src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
     <script src="{{ url_for('static', filename='js/sparql.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/render.js') }}"></script>
     <script src="{{ url_for('static', filename='js/random.js') }}"></script>
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
     <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
 
     <!-- Bootstrap 5 -->
-    <link href="{{ cdn_base }}/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="{{ cdn_base }}/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{{ cdn_base }}/bootstrap/5.3.7/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link href="{{ cdn_base }}/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel='stylesheet' type='text/css'>
     <link href="{{ cdn_base }}/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
@@ -68,8 +72,8 @@
                             <i class="bi bi-journal-text ms-1"></i> مفردات مكررة
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd.php' else '' }}">
-                        <a class="nav-link" href="/wd.php">
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd_tree.php' else '' }}">
+                        <a class="nav-link" href="/wd_tree.php">
                             <i class="bi bi-tree ms-1"></i> مخطط شجري
                         </a>
                     </li>

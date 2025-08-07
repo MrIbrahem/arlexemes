@@ -1,4 +1,72 @@
 
+function slice_data(wd_result) {
+
+    // تحويل الكائن إلى مصفوفة وترتيبها حسب عدد العناصر في كل مجموعة
+    let grouped = Object.values(wd_result).sort((a, b) => b.items.length - a.items.length);
+
+    // أخذ أول 10 فقط
+    let top10 = grouped.slice(0, 10);
+
+    // الباقي
+    let others = grouped.slice(10);
+
+    // إعادة بناء الكائن الجديد
+    let new_wd_result = {};
+
+    // إدراج العشرة الأوائل
+    for (const group of top10) {
+        new_wd_result[group.group_by] = group;
+    }
+
+    // دمج الباقي في مجموعة "أخرى"
+    if (others.length > 0) {
+        new_wd_result["أخرى"] = {
+            group_by: "أخرى",
+            qid: "",
+            items: others.flatMap(group => group.items)
+        };
+    }
+
+    return new_wd_result;
+}
+
+function add_sparql_url(sparqlQuery) {
+    // ---
+    let sparql_url = $("#sparql_url");
+    // ---
+    if (sparql_url) {
+        var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
+        // ---
+        sparql_url.attr("href", url1);
+        // remove disabled from class
+        sparql_url.removeClass("disabled");
+    }
+    // ---
+}
+
+function parse_results_group_by(result) {
+    let wd_result = {};
+
+    for (const item of result) {
+        let to_group = item['categoryLabel'] || '!';
+
+        if (!wd_result[to_group]) {
+            // ---
+            wd_result[to_group] = {
+                group_by: to_group,
+                qid: item['category'],
+                items: []
+            };
+        }
+        // ---
+        wd_result[to_group].items.push(item);
+    }
+    // ---
+    wd_result = Object.fromEntries(Object.entries(wd_result).sort(([, a], [, b]) => b.items.length - a.items.length));
+    // ---
+    return wd_result;
+}
+
 function parse_sparql_results(result) {
     let vars = result.head.vars;
 
@@ -45,13 +113,24 @@ async function _loadsparqlQuery(sparqlQuery) {
     }
 }
 
-async function loadsparqlQuery(sparqlQuery) {
-
+async function loadsparqlQuery(sparqlQuery, notime = false) {
+    // ---
+    let start_time = performance.now();
+    // ---
     const data = await _loadsparqlQuery(sparqlQuery);
     // ---
-    if (data) {
-        return parse_sparql_results(data);
+    let end_time = performance.now();
+    // ---
+    let query_time = (end_time - start_time) / 1000;
+    // ---
+    if (!notime) {
+        $('#query_time').text('(' + query_time.toFixed(3) + ' ث)');
     }
     // ---
-    return {};
+    if (!data) {
+        return {};
+    }
+    // ---
+    return parse_sparql_results(data);
+
 }
