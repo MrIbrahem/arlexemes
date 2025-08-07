@@ -73,13 +73,19 @@ function renderTree(data) {
             let href = `lex.php?lex=${item.item}`;
             let lemma = `${item.lemma} (${item.count})`;
             // ---
+            let P31Label = item?.P31Label || "";
+            // ---
             if (!to_lex.includes(item.category)) {
                 href = `http://www.wikidata.org/entity/${item.item}`;
-                lemma = (item?.P31Label && item?.P31Label != "") ? `${item.lemma} (${item.P31Label})` : item.lemma;
+                lemma = (P31Label != "") ? `${item.lemma} (${P31Label})` : item.lemma;
             }
             // ---
             if (category.group_by == "أخرى") {
                 lemma = (item.categoryLabel != "") ? `${item.lemma} (${item.categoryLabel})` : item.lemma;
+            }
+            // ---
+            if (to_lex.includes(item.category) && P31Label != "") {
+                lemma = `<span title="P31: ${P31Label}">${lemma}</span>`;
             }
             // ---
             let divcol = `

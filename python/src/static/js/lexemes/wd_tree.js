@@ -16,6 +16,8 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
     // ---
     let sparqlQuery = wg_tree_query(data_source, to_group_by, limit);
     // ---
+    console.log(`to_group_by: ${to_group_by}`);
+    // ---
     add_sparql_url(sparqlQuery);
     // ---
     let result = await loadsparqlQuery(sparqlQuery);
@@ -24,11 +26,15 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
 
     for (const item of result) {
         let to_group = item[to_group_by] || 'غير محدد';
-
+        // ---
+        let to_group_Label = item[`${to_group_by}_zLabel`] || "";
+        to_group_Label = (to_group_Label === to_group_Label) ? "" : to_group_Label;
+        // ---
         if (!wd_result[to_group]) {
             // ---
             wd_result[to_group] = {
                 group_by: to_group,
+                group_by_label: to_group_Label,
                 items: []
             };
         }
@@ -72,16 +78,19 @@ function render_wd_tree(data, all_open) {
             icon.className = `bi ${isOpen ? "bi-chevron-double-down" : "bi-chevron-double-left"} arrow-icon`;
         };
         // ---
-        let label = category.group_by;
+        let qid = category.group_by || "";
+        let label = category.group_by_label || "";
         // ---
-        if (label !== "" && (label.match(/Q\d+/) || label.match(/L\d+/))) {
-            label = `<span find-label="${label}" find-label-both="true">${label}</span>`;
+        let category_str = (label !== "") ? `${label} (${qid})` : qid
+        // ---
+        if (label === "" && (qid.match(/Q\d+/) || qid.match(/L\d+/))) {
+            category_str = `<span find-label="${qid}" find-label-both="true">${qid}</span>`;
         }
         // ---
         // محتوى الزر عند الإنشاء
         button.innerHTML = `
             <span class="fw-medium text-black">
-                ${label}
+                ${category_str}
             </span>
             <span class="text-muted ms-2">
                 (${category.items.length})
@@ -89,12 +98,11 @@ function render_wd_tree(data, all_open) {
             <i class="bi bi-chevron-double-left arrow-icon"></i>
         `;
 
-
         const ul = document.createElement("ul");
 
         const d_class = (data.length === 1 || all_open) ? '' : "d-none";
 
-        ul.className = `list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end ${d_class}`; // d-none for hidden initially
+        ul.className = `list-group list-group-flush mt-2 pe-4 border-dashed border-secondary border-start text-start ${d_class}`;
 
         category.items.forEach(item => {
             const liItem = document.createElement("li");
@@ -107,7 +115,6 @@ function render_wd_tree(data, all_open) {
             a.rel = "noopener noreferrer";
             // Bootstrap 5: block link class
             a.className = "d-block w-100 h-100 text-decoration-none text-body";
-            // a.textContent = `${item.lemma} (${item.item})`;
             a.textContent = `${item.lemmas} (${item.item})`;
 
             liItem.appendChild(a);
@@ -167,9 +174,9 @@ async function loadfetchData() {
     treeContainer.innerHTML = "";
     showLoading();
     // ---
-    let group_by = get_param_from_window_location("group_by", "P31Label")
+    let group_by = get_param_from_window_location("group_by", "categoryLabel")
     let custom_group_by = get_param_from_window_location("custom_group_by", "")
-    let limit = get_param_from_window_location("limit", 100)
+    let limit = get_param_from_window_location("limit", 1000)
     let data_source = get_param_from_window_location("data_source", "all");
     // ---
     // let group_by_item = document.getElementById('group_by');
