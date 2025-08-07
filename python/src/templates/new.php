@@ -79,7 +79,6 @@
     </div>
 </div>
 <script src="{{ url_for('static', filename='js/lexemes/new.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lexemes/list_lexemes.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         load_new();
