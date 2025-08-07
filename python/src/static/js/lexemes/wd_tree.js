@@ -225,12 +225,6 @@ function filterTreeData(term) {
     }));
 }
 
-function get_param_from_window_location1(key, defaultvalue) {
-    // ---
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(key) || defaultvalue;
-}
-
 async function fetchData(limit, data_source, group_by) {
     // ---
     const treeMap = await find_wd_result(group_by, data_source, limit);
@@ -268,10 +262,10 @@ async function loadfetchData() {
     treeContainer.innerHTML = "";
     showLoading();
     // ---
-    let group_by = get_param_from_window_location1("group_by", "P31Label")
-    let custom_group_by = get_param_from_window_location1("custom_group_by", "")
-    let limit = get_param_from_window_location1("limit", 100)
-    let data_source = get_param_from_window_location1("data_source", "all");
+    let group_by = get_param_from_window_location("group_by", "P31Label")
+    let custom_group_by = get_param_from_window_location("custom_group_by", "")
+    let limit = get_param_from_window_location("limit", 100)
+    let data_source = get_param_from_window_location("data_source", "all");
     // ---
     // let group_by_item = document.getElementById('group_by');
     // if (group_by_item) group_by_item.value = group_by;

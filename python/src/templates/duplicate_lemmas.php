@@ -23,15 +23,9 @@
                             <span id="query_time"></span>
                         </div>
                         <div class="col-md-4 col-sm-12 mb-2 mb-md-0">
-                            <div class="input-group">
-                                <span class="input-group-text">التصنيف</span>
-                                <select name="data_source" id="data_source" class="form-select d-inline-block">
-                                    <option value="all">الكل</option>
-                                    <option value="Q34698">صفة</option>
-                                    <option value="Q24905">فعل</option>
-                                    <option value="Q1084">اسم</option>
-                                    <option value="Q111029">جذر</option>
-                                </select>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1">
+                                <label class="check-label" for="same_category">نفس التصنيف النحوي</label>
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-12 text-center">
