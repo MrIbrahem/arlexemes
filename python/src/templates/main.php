@@ -46,7 +46,7 @@
         <div class="container-fluid">
             <div class="nav_title">
                 <a class="navbar-brand fw-bold" href="/">
-                    <span class="tool_icon me-2"></span> المفردات العربية
+                    <span class="tool_icon ms-2"></span> المفردات العربية
                 </a>
             </div>
             <button class="navbar-toggler me_ms_by_dir" type="button" data-bs-toggle="collapse"
@@ -58,35 +58,35 @@
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav navbar-default">
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/list.php' else '' }}">
                         <a class="nav-link" href="/list.php"><i
-                                class="bi bi-journal-text ms-1"></i>
+                                class="bi bi-journal-text me-1"></i>
                             قائمة المفردات
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/new.php' else '' }}">
                         <a class="nav-link" href="/new.php">
-                            <i class="bi bi-journal-text ms-1"></i> أحدث المفردات
+                            <i class="bi bi-journal-text me-1"></i> أحدث المفردات
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/duplicate_lemmas.php' else '' }}">
                         <a class="nav-link" href="/duplicate_lemmas.php">
-                            <i class="bi bi-journal-text ms-1"></i> مفردات مكررة
+                            <i class="bi bi-journal-text me-1"></i> مفردات مكررة
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd_tree.php' else '' }}">
                         <a class="nav-link" href="/wd_tree.php">
-                            <i class="bi bi-tree ms-1"></i> مخطط شجري
+                            <i class="bi bi-tree me-1"></i> مخطط شجري
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
                         <a class="nav-link" href="/P11038">
-                            <i class="bi bi-journal-text ms-1"></i> الأنطولوجيا العربية
+                            <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>
                 </ul>
 
             </div>
             <div class="d-flex">
-                <button class="theme-toggle btn btn-link me-ms-auto" aria-label="Toggle theme">
+                <button class="theme-toggle btn btn-link ms-me-auto" aria-label="Toggle theme">
                     <i class="bi bi-moon-stars-fill"></i>
                 </button>
             </div>

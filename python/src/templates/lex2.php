@@ -134,7 +134,7 @@
 <script src="{{ url_for('static', filename='js/lex/toggle_table.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/fetch.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_data.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/lex.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/lex2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_page_claims.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_page.js') }}"></script>
 

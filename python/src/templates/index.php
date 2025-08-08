@@ -10,7 +10,7 @@
             <div class="card card_form">
                 <div class="card-header text-center py-2">
                     <h4 class="card-title mb-0 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-braces-asterisk ms-2"></i> الوظيفة الرئيسية
+                        <i class="bi bi-braces-asterisk me-2"></i> الوظيفة الرئيسية
                     </h4>
                 </div>
                 <div class="card-body p-3">
@@ -21,14 +21,14 @@
                                 <div class="form-group mb-2">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <label for="wd_id" class="form-label fw-bold mb-2">
-                                            <i class="fas fa-link ms-2"></i> ابحث عن مفردة
+                                            <i class="fas fa-link me-2"></i> ابحث عن مفردة
                                             <div class="spinner-border spinner-border-sm" id="autocomplete-loader" role="status"
                                                 style="display: none;">
                                                 <span class="visually-hidden">تحميل...</span>
                                             </div>
                                         </label>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="randomCategory()">
-                                            <i class="bi bi-shuffle ms-1"></i> عشوائي
+                                            <i class="bi bi-shuffle me-1"></i> عشوائي
                                         </button>
                                     </div>
                                     <span id="wikidatasearch_label"></span>
@@ -55,32 +55,32 @@
                     <h5 class="card-title">أمثلة:</h5>
                     <div class="row">
                         <div class="col-md-5">
-                            <span class="me-2">اسم:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <span class="ms-2">اسم:</span><br>
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1473670')">L1473670</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2465')">L2465 -
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2465')">L2465 -
                                 معدود</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1" onclick="setLabel('L2355')">L2355 - غير
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2355')">L2355 - غير
                                 معدود</button>
                         </div>
                         <div class="col-md-4">
-                            <span class="me-2">صفة:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <span class="ms-2">صفة:</span><br>
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1131459')">L1131459</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1473674')">L1473674</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1472818')">L1472818</button>
                         </div>
                         <div class="col-md-3">
-                            <span class="me-2">فعل:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <span class="ms-2">فعل:</span><br>
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1474373')">L1474373</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1474244')">L1474244</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1473584')">L1473584</button>
-                            <button class="btn btn-outline-secondary btn-sm me-1"
+                            <button class="btn btn-outline-secondary btn-sm ms-1"
                                 onclick="setLabel('L1474044')">L1474044</button>
                         </div>
                     </div>
