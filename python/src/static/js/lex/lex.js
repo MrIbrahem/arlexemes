@@ -421,11 +421,10 @@ async function Q24905(entity) {
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
 
-    let display_mt_cells = {};
     for (const verb of verbs_main) {
         tableData[verb] = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
-        display_mt_cells[verb] = false;
     }
+    let display_mt_cells = {};
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {
