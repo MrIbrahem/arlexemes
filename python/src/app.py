@@ -135,6 +135,11 @@ def lex():
     return render_template("lex.php")
 
 
+@app.route("/lex2.php", methods=["GET"])
+def lex2():
+    return render_template("lex2.php")
+
+
 @app.route("/", methods=["GET"])
 def index() -> str:
     username = session.get('username', None)
