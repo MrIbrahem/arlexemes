@@ -41,6 +41,9 @@ function wg_tree_query(data_source, to_group_by, limit) {
         VALUES = `VALUES ?category { wd:${data_source} }`;
     }
     // ---
+	let P31 = "?item wdt:P31 ?P31_z.";
+	let P31_optional = "optional { ?item wdt:P31 ?P31_z. }";
+    // ---
     let sparqlQuery = `
         SELECT
             ?item
@@ -56,7 +59,7 @@ function wg_tree_query(data_source, to_group_by, limit) {
                             wikibase:lemma ?lemma1;
                             wikibase:lexicalCategory ?category;
                             dct:language wd:Q13955.
-                        ?item wdt:P31 ?P31_z.
+                        ${P31_optional}
                     }
                     SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
                 }
@@ -66,6 +69,7 @@ function wg_tree_query(data_source, to_group_by, limit) {
     // ---
     if (to_group_by.startsWith("P") && to_group_by.match(/^P[0-9]+$/) && to_group_by !== "P31") {
         // replace P31
+        sparqlQuery = sparqlQuery.replaceAll(P31_optional, P31);
         sparqlQuery = sparqlQuery.replaceAll("P31", to_group_by);
     }
     // ---
