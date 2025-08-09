@@ -135,6 +135,7 @@
 <script src="{{ url_for('static', filename='js/lex/fetch.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_data.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex2_sub.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lex/lex_example.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex2.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_page_claims.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/lex_page.js') }}"></script>
@@ -145,11 +146,13 @@
         if (!id) return;
         await start_lexeme(id);
         await find_labels();
+        await loadReferencesAfterPageLoad();
     }
     async function setExample(lexeme) {
         document.getElementById('lexemeId').value = lexeme;
         await start_lexeme(lexeme);
         await find_labels();
+        await loadReferencesAfterPageLoad();
     }
 
     $(document).ready(async function() {

@@ -163,6 +163,54 @@ function entryFormatter(form) {
     return link;
 }
 
+function entryFormatterNew(form, rowspan) {
+    // ---
+    const formId = form?.id || "L000-F0";
+    // ---
+    // ar-x-Q775724
+    let values = Object.values(form.representations || {})
+        .map(r => r.value)
+        .filter(Boolean)
+        .map(v => `<span word="${v}">${v}</span>`)
+        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
+    // ---
+    // Convert formId to a URL-friendly format for linking to Wikidata
+    const formIdlink = formId.replace("-", "#");
+    const formId_number = formId.split("-")[1]; // Extract F-number part
+    // ---
+    const feats = form.tags || form.grammaticalFeatures || [];
+    let attr = feats.map(attrFormatter).join("\n");
+    // ---
+    let link = `
+		${values} <a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
+			<small>(${formId_number})</small>
+		</a>`;
+    // ---
+    const lexemeId = formId.split("-")[0];
+    // ---
+    if (lexemeId === "L000") {
+        link = `
+        <span title="${attr}">
+            ${values}
+			<!-- <small>(${formId_number})</small> -->
+        </span>
+        `;
+    }
+    let exampleHTML = "";
+    let form_claims = form.claims || [];
+    let exampleList = form_claims.P5831 || [];
+    exampleHTML = createExampleIconAndModal(exampleList, formId);
+
+    let td = `
+        <td rowspan="${rowspan}" style="position:relative;">
+            ${link}
+            ${exampleHTML}
+        </td>
+    `;
+
+    return td;
+}
+
 function make_thead(first_rows, second_rows, first_person, dual, display_mt_cells) {
     // ---
     let thead = `
@@ -354,14 +402,11 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     // ---
                     if (nocolor) {
                         td += entries.map(entryFormatterNoColor).join("<br>") || "";
+                        td += `</td>`;
                     } else {
-                        td += entries.map(entryFormatter).join("<br>") || "";
+                        td = entries.map(entry => entryFormatterNew(entry, 1)).join("<br>") || "";
                     }
                     // ---
-                    td += `
-                        </td>
-                    `;
-
                     gender_tds += td
                 }
                 add_to_tbody += gender_tds;

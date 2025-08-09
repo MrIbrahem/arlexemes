@@ -29,7 +29,10 @@ function table_filter() {
         repeatedWords.forEach(([word, elements], index) => {
             const color = generateColor(index, repeatedWords.length);
             elements.forEach(el => {
-                let td = el.parentElement.parentElement;
+                // ---
+                // let td = el.parentElement.parentElement;
+                let td = el.closest('td');
+                // ---
                 const wordInSameTd = td.querySelectorAll('[word]');
 
                 if (wordInSameTd.length > 1) {
