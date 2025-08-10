@@ -77,9 +77,9 @@
         </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='js/lexemes/queries.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lexemes/list_and_new.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lexemes/list_lexemes.js') }}"></script>
+<script src="/static/js/lexemes/queries.js"></script>
+<script src="/static/js/lexemes/list_and_new.js"></script>
+<script src="/static/js/lexemes/list_lexemes.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         await load_list();

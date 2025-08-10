@@ -80,7 +80,7 @@
     </div>
 </div>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
-<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+<script src="/static/js/chart.js"></script>
 
 <script>
     // بدء العملية عند تحميل الصفحة بالكامل

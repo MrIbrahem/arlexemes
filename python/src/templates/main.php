@@ -45,11 +45,11 @@
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
-    <script src="{{ url_for('static', filename='js/sparql.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/render.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/random.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+    <script src="/static/js/sparql.js"></script>
+    <script src="/static/js/render.js"></script>
+    <script src="/static/js/random.js"></script>
+    <script src="/static/js/theme.js"></script>
+    <script src="/static/js/autocomplete.js"></script>
 
     <!-- Bootstrap 5 -->
     <!-- <link href="{{ cdn_base }}/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -61,9 +61,9 @@
     <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
     <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
 
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/theme.css" rel="stylesheet">
+    <link href="/static/css/style2.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
