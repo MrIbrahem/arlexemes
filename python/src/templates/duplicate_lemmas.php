@@ -49,9 +49,9 @@
         </div>
     </div>
 </div>
-<script src="js/lex/find_labels.js"></script>
-<script src="js/lexemes/queries.js"></script>
-<script src="js/lexemes/duplicate_lemmas.js"></script>
+<script src="/static/js/lex/find_labels.js"></script>
+<script src="/static/js/lexemes/queries.js"></script>
+<script src="/static/js/lexemes/duplicate_lemmas.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => load_duplicate());
 </script>

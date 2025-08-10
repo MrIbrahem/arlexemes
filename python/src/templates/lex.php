@@ -98,16 +98,16 @@
     <div id="output"></div>
 
 </div>
-<script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/data.js') }}"></script>
-<script src="{{ url_for('static', filename='js/table_filter2.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/toggle_table.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/fetch.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/lex_data.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/lex_example.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/lex.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/lex_page_claims.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/lex_page.js') }}"></script>
+<script src="/static/js/lex/find_labels.js"></script>
+<script src="/static/js/lex/data.js"></script>
+<script src="/static/js/table_filter2.js"></script>
+<script src="/static/js/lex/toggle_table.js"></script>
+<script src="/static/js/lex/fetch.js"></script>
+<script src="/static/js/lex/lex_data.js"></script>
+<script src="/static/js/lex/lex_example.js"></script>
+<script src="/static/js/lex/lex.js"></script>
+<script src="/static/js/lex/lex_page_claims.js"></script>
+<script src="/static/js/lex/lex_page.js"></script>
 
 <script>
     async function start_lexeme_wrap() {
