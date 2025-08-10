@@ -14,28 +14,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div class="list-group">
-                    <div class="list-group-item">
-                        <span class="fw-bold me-2">اسم:</span>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1473670')">صَهْيُونِيّ</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L2465')">لَبَن</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L2355')">حَلِيب</button>
-                    </div>
-                    <div class="list-group-item">
-                        <span class="fw-bold me-2">صفة:</span>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1131459')">ماهِر</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1473674')">مُنَزَّل</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1472818')">رَائِع</button>
-                    </div>
-                    <div class="list-group-item">
-                        <span class="fw-bold me-2">فعل:</span>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1474373')">عَزَمَ</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1474244')">هَلَّلَ</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1473584')">أَرْعَبَ</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1478621')">اِسْتَحْيَا</button>
-                        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1478647')">ضَرَبَ</button>
-                    </div>
-                </div>
+                {{ examples_block() }}
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>

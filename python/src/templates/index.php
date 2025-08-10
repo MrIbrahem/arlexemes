@@ -53,29 +53,7 @@
                 </div>
                 <div class="card-footer">
                     <h5 class="card-title">أمثلة:</h5>
-
-                    <div class="list-group">
-                        <div class="list-group-item">
-                            <span class="fw-bold me-2">اسم:</span>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1473670')">صَهْيُونِيّ</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2465')">لَبَن</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2355')">حَلِيب</button>
-                        </div>
-                        <div class="list-group-item">
-                            <span class="fw-bold me-2">صفة:</span>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1131459')">ماهِر</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1473674')">مُنَزَّل</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1472818')">رَائِع</button>
-                        </div>
-                        <div class="list-group-item">
-                            <span class="fw-bold me-2">فعل:</span>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1474373')">عَزَمَ</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1474244')">هَلَّلَ</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1473584')">أَرْعَبَ</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1478621')">اِسْتَحْيَا</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1478647')">ضَرَبَ</button>
-                        </div>
-                    </div>
+                    {{ examples_block() }}
                 </div>
             </div>
             <div class="card mb-2">
@@ -109,11 +87,11 @@
     window.onload = initializeCharts;
 </script>
 <script>
-    function setLabel(lexeme) {
+    function setExample(lexeme) {
         $("#wd_id").val(lexeme);
     }
     $(function() {
-        load_search(setLabel, 'wd_id', 'autocomplete-results');
+        load_search(setExample, 'wd_id', 'autocomplete-results');
     });
 </script>
 {% endblock %}
