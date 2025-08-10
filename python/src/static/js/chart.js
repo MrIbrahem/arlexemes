@@ -13,6 +13,7 @@ const queries = {
                     SELECT ?category (COUNT(?item) AS ?c) WHERE {
                         ?item dct:language wd:Q13955;
                         wikibase:lexicalCategory ?category.
+                    hint:Prior hint:rangeSafe "true"^^xsd:boolean.
                     }
                     GROUP BY ?category
                     ORDER BY DESC (?c)
@@ -28,7 +29,10 @@ const queries = {
     lexemesPerLanguage: `
                 SELECT ?language ?languageLabel ?c ?ISO WHERE {
                 {
-                    SELECT ?language (COUNT(?lexeme) AS ?c) WHERE { ?lexeme dct:language ?language. }
+                    SELECT ?language (COUNT(?lexeme) AS ?c) WHERE {
+                    ?lexeme dct:language ?language.
+                    hint:Prior hint:rangeSafe "true"^^xsd:boolean.
+                    }
                     GROUP BY ?language
                     ORDER BY DESC (?c)
                     LIMIT 9
@@ -40,6 +44,7 @@ const queries = {
                         wd:Q13955
                     }
                     ?lexeme dct:language ?language.
+                    hint:Prior hint:rangeSafe "true"^^xsd:boolean.
                     }
                     GROUP BY ?language
                 }
