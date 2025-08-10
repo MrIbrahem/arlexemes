@@ -159,34 +159,27 @@ function createChart(ctx, {
     });
 }
 
-/**
- * الدالة الرئيسية لتشغيل العملية عند تحميل الصفحة
- */
+async function one_chart(n, query, labelKey, labelKey2) {
+    // ---
+    let char1Data = await fetchWikidata(query, labelKey, labelKey2);
+    // ---
+    const loader = document.getElementById(`loader${n}`);
+    const ctx = document.getElementById(`chart${n}`).getContext('2d');
+    // ---
+    // رسم المخطط وإخفاء مؤشر التحميل الخاص به
+    if (char1Data.labels.length > 0) {
+        createChart(ctx, char1Data, 'الفئات المعجمية في اللغة العربية');
+    }
+    // ---
+    loader.style.opacity = '0';
+    // ---
+    setTimeout(() => loader.style.display = 'none', 300);
+    // ---
+}
+
 async function initializeCharts() {
-    // DOM Elements
-    const loader1 = document.getElementById('loader1');
-    const loader2 = document.getElementById('loader2');
-
-    const ctx1 = document.getElementById('chart1').getContext('2d');
-    const ctx2 = document.getElementById('chart2').getContext('2d');
-    // جلب البيانات لكلا المخططين بالتوازي
-    const [chart1Data, chart2Data] = await Promise.all([
-        fetchWikidata(queries.lexicalCategoriesArabic, 'categoryLabel', "c"),
-        fetchWikidata(queries.lexemesPerLanguage, 'languageLabel', "ISO")
+    await Promise.all([
+        one_chart(1, queries.lexicalCategoriesArabic, 'categoryLabel', "c"),
+        one_chart(2, queries.lexemesPerLanguage, 'languageLabel', "ISO")
     ]);
-
-    // رسم المخطط الأول وإخفاء مؤشر التحميل الخاص به
-    if (chart1Data.labels.length > 0) {
-        createChart(ctx1, chart1Data, 'الفئات المعجمية في اللغة العربية');
-    }
-    loader1.style.opacity = '0';
-    setTimeout(() => loader1.style.display = 'none', 300);
-
-
-    // رسم المخطط الثاني وإخفاء مؤشر التحميل الخاص به
-    if (chart2Data.labels.length > 0) {
-        createChart(ctx2, chart2Data, 'أفضل 9 لغات + العربية حسب عدد المفردات');
-    }
-    loader2.style.opacity = '0';
-    setTimeout(() => loader2.style.display = 'none', 300);
 }
