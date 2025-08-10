@@ -20,7 +20,7 @@
                     <span class="card-title mb-0 d-flex align-items-center justify-content-center h4">
                         استخدام خاصية:
                         <a href="https://www.wikidata.org/wiki/Property:P11038" target="_blank"
-                            class="text-primary me-2">
+                            class="text-primary ms-2">
                             مدخل معجمي في موقع الأنطولوجيا العربية
                         </a>
                     </span>
@@ -108,7 +108,7 @@
                                 </div>
                             </div>
                             <div class="col-md-1">
-                                <button class="btn btn-primary ms-3" type="submit"
+                                <button class="btn btn-primary me-3" type="submit"
                                     onclick1="applySettings()">بدء</button>
                             </div>
                         </div>

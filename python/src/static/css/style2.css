@@ -70,16 +70,37 @@ a {
 
 }
 
-:root[data-bs-theme="dark"] {
-    .autocomplete-results {
-        background-color: darkslategray;
-    }
-
-}
-
 .navbar-nav .nav-item.active {
     /* border-radius: 4px; */
     /* display: block; */
     background-color: #c2c5c8;
     /* font-weight: bold; */
+}
+
+:root[data-bs-theme="dark"] {
+    .autocomplete-results {
+        background-color: darkslategray;
+    }
+
+    .navbar-nav .nav-item.active {
+        background-color: #3a3f44;
+    }
+
+    .navbar-nav .nav-item.active>a {
+        color: #ffffff;
+    }
+}
+
+:root[data-bs-theme="dark"] {
+    canvas {
+        filter: invert(1) hue-rotate(180deg);
+        /* Inverts colors for a quick dark mode */
+    }
+}
+
+:root[data-bs-theme="light"] {
+    canvas {
+        filter: invert(0) hue-rotate(0deg);
+        /* Inverts colors for a quick dark mode */
+    }
 }

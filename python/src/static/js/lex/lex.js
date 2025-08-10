@@ -163,6 +163,54 @@ function entryFormatter(form) {
     return link;
 }
 
+function entryFormatterNew(form, rowspan) {
+    // ---
+    const formId = form?.id || "L000-F0";
+    // ---
+    // ar-x-Q775724
+    let values = Object.values(form.representations || {})
+        .map(r => r.value)
+        .filter(Boolean)
+        .map(v => `<span word="${v}">${v}</span>`)
+        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
+    // ---
+    // Convert formId to a URL-friendly format for linking to Wikidata
+    const formIdlink = formId.replace("-", "#");
+    const formId_number = formId.split("-")[1]; // Extract F-number part
+    // ---
+    const feats = form.tags || form.grammaticalFeatures || [];
+    let attr = feats.map(attrFormatter).join("\n");
+    // ---
+    let link = `
+		${values} <a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
+			<small>(${formId_number})</small>
+		</a>`;
+    // ---
+    const lexemeId = formId.split("-")[0];
+    // ---
+    if (lexemeId === "L000") {
+        link = `
+        <span title="${attr}">
+            ${values}
+			<!-- <small>(${formId_number})</small> -->
+        </span>
+        `;
+    }
+    let exampleHTML = "";
+    let form_claims = form.claims || [];
+    let exampleList = form_claims.P5831 || [];
+    exampleHTML = createExampleIconAndModal(exampleList, formId);
+
+    let td = `
+        <td rowspan="${rowspan}" style="position:relative;">
+            ${link}
+            ${exampleHTML}
+        </td>
+    `;
+
+    return td;
+}
+
 function make_thead(first_rows, second_rows, first_person, dual, display_mt_cells) {
     // ---
     let thead = `
@@ -316,13 +364,15 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     // ---
                     if (!show_empty_cells && col === "") continue;
                     // ---
-                    let td = `<td>`;
                     let entries = number_data[row][col][gender] || [];
                     // ---
                     let check_1 = col === first_person && (gender === singular || gender === plural);
                     let check_2 = col === second_person && gender === dual;
                     // ---
+                    let rowspan = 1;
+                    // ---
                     if (check_1 || check_2) {
+                        // ---
                         if (singular_fixed[gender]) continue;
                         // ---
                         let fem_entries = number_data[Feminine][col][gender] || [];
@@ -337,19 +387,12 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                             // ---
                             singular_fixed[gender] = true;
                             // ---
-                            let rowspan = (show_empty_cells) ? 3 : 2;
-                            // ---
-                            td = `
-                                <td rowspan="${rowspan}">
-                            `;
+                            rowspan = (show_empty_cells) ? 3 : 2;
                         }
                     };
                     // ---
-                    td += entries.map(entryFormatter).join("<br>") || "";
-                    td += `
-                        </td>
-                    `;
-
+                    let td = entries.map(entry => entryFormatterNew(entry, rowspan)).join("<br>") || "";
+                    // ---
                     gender_tds += td
                 }
                 add_to_tbody += gender_tds;
@@ -421,11 +464,10 @@ async function Q24905(entity) {
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
 
-    let display_mt_cells = {};
     for (const verb of verbs_main) {
         tableData[verb] = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
-        display_mt_cells[verb] = false;
     }
+    let display_mt_cells = {};
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {

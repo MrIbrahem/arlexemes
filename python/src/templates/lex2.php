@@ -104,8 +104,9 @@
 <script src="/static/js/lex/toggle_table.js"></script>
 <script src="/static/js/lex/fetch.js"></script>
 <script src="/static/js/lex/lex_data.js"></script>
+<script src="/static/js/lex/lex2_sub.js"></script>
 <script src="/static/js/lex/lex_example.js"></script>
-<script src="/static/js/lex/lex.js"></script>
+<script src="/static/js/lex/lex2.js"></script>
 <script src="/static/js/lex/lex_page_claims.js"></script>
 <script src="/static/js/lex/lex_page.js"></script>
 

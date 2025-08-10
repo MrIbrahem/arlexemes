@@ -1,4 +1,29 @@
 {% set cdn_base = "https://tools-static.wmflabs.org/cdnjs/ajax/libs" %}
+
+{% macro examples_block() %}
+<div class="list-group">
+    <div class="list-group-item">
+        <span class="fw-bold me-2">فعل:</span>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1474373')">عَزَمَ</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1474244')">هَلَّلَ</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1473584')">أَرْعَبَ</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1478621')">اِسْتَحْيَا</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1478647')">ضَرَبَ</button>
+    </div>
+    <div class="list-group-item">
+        <span class="fw-bold me-2">اسم:</span>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1473670')">صَهْيُونِيّ</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L2465')">لَبَن</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L2355')">حَلِيب</button>
+    </div>
+    <div class="list-group-item">
+        <span class="fw-bold me-2">صفة:</span>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1131459')">ماهِر</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1473674')">مُنَزَّل</button>
+        <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setExample('L1472818')">رَائِع</button>
+    </div>
+</div>
+{% endmacro %}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-bs-theme="light">
 
@@ -20,11 +45,11 @@
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
 
-    <script src="{{ url_for('static', filename='js/sparql.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/render.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/random.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+    <script src="/static/js/sparql.js"></script>
+    <script src="/static/js/render.js"></script>
+    <script src="/static/js/random.js"></script>
+    <script src="/static/js/theme.js"></script>
+    <script src="/static/js/autocomplete.js"></script>
 
     <!-- Bootstrap 5 -->
     <!-- <link href="{{ cdn_base }}/bootstrap/5.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -36,9 +61,34 @@
     <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
     <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
 
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/theme.css" rel="stylesheet">
+    <link href="/static/css/style2.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* تطبيق الخط على كامل الصفحة */
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* تصميم مخصص لمؤشر التحميل */
+        .loader {
+            display: flex;
+            /* يظهر بشكل افتراضي، ويتم إخفاؤه عبر JS */
+            position: absolute;
+            inset: 0;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: 10;
+            border-radius: 0.75rem;
+            /* نفس استدارة الحاوية */
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
 </head>
 
 <body>
@@ -46,7 +96,7 @@
         <div class="container-fluid">
             <div class="nav_title">
                 <a class="navbar-brand fw-bold" href="/">
-                    <span class="tool_icon me-2"></span> المفردات العربية
+                    <span class="tool_icon ms-2"></span> المفردات العربية
                 </a>
             </div>
             <button class="navbar-toggler me_ms_by_dir" type="button" data-bs-toggle="collapse"
@@ -58,35 +108,40 @@
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav navbar-default">
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/list.php' else '' }}">
                         <a class="nav-link" href="/list.php"><i
-                                class="bi bi-journal-text ms-1"></i>
+                                class="bi bi-journal-text me-1"></i>
                             قائمة المفردات
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/new.php' else '' }}">
                         <a class="nav-link" href="/new.php">
-                            <i class="bi bi-journal-text ms-1"></i> أحدث المفردات
+                            <i class="bi bi-journal-text me-1"></i> أحدث المفردات
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/duplicate_lemmas.php' else '' }}">
                         <a class="nav-link" href="/duplicate_lemmas.php">
-                            <i class="bi bi-journal-text ms-1"></i> مفردات مكررة
+                            <i class="bi bi-journal-text me-1"></i> مفردات مكررة
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd_tree.php' else '' }}">
                         <a class="nav-link" href="/wd_tree.php">
-                            <i class="bi bi-tree ms-1"></i> مخطط شجري
+                            <i class="bi bi-tree me-1"></i> مخطط شجري
+                        </a>
+                    </li>
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/chart.php' else '' }}">
+                        <a class="nav-link" href="/chart.php"><i class="bi bi-bar-chart-line me-1"></i>
+                            مخطط بياني
                         </a>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
                         <a class="nav-link" href="/P11038">
-                            <i class="bi bi-journal-text ms-1"></i> الأنطولوجيا العربية
+                            <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>
                 </ul>
 
             </div>
             <div class="d-flex">
-                <button class="theme-toggle btn btn-link me-ms-auto" aria-label="Toggle theme">
+                <button class="theme-toggle btn btn-link ms-me-auto" aria-label="Toggle theme">
                     <i class="bi bi-moon-stars-fill"></i>
                 </button>
             </div>

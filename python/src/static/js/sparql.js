@@ -48,6 +48,8 @@ function parse_results_group_by(result) {
     let wd_result = {};
 
     for (const item of result) {
+        // console.table(item);
+        // { "item": "L1478434", "lemmas": "شَنْق", "category": "Q1084", "categoryLabel": "اسم", "P31": "", "P31Label": "", "count": "12" }
         let to_group = item['categoryLabel'] || '!';
 
         if (!wd_result[to_group]) {

@@ -55,7 +55,7 @@ fi
 
 echo "______________________________"
 
-ls -R "$CLONE_DIR"
+# ls -R "$CLONE_DIR"
 
 cp -rf "$CLONE_DIR/sh/"* "$HOME/sh/"
 

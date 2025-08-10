@@ -26,7 +26,7 @@
                             <div class="input-group">
                                 <div class="form-control d-flex flex-column">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1">
+                                        <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1" checked>
                                         <label class="check-label" for="same_category">نفس التصنيف المعجمي</label>
                                     </div>
                                 </div>
@@ -49,8 +49,9 @@
         </div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
-<script src="{{ url_for('static', filename='js/duplicate_lemmas.js') }}"></script>
+<script src="/static/js/lex/find_labels.js"></script>
+<script src="/static/js/lexemes/queries.js"></script>
+<script src="/static/js/lexemes/duplicate_lemmas.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => load_duplicate());
 </script>

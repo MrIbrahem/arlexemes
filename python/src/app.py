@@ -120,6 +120,11 @@ def not_in_db1():
     return render_template("not_in_db.html", data={}, limit=0)
 
 
+@app.route("/chart.php", methods=["GET"])
+def chart():
+    return render_template("chart.php")
+
+
 @app.route("/wd_tree.php", methods=["GET"])
 def wd_tree():
     return render_template("wd_tree.php")
@@ -133,6 +138,11 @@ def duplicate_lemmas():
 @app.route("/lex.php", methods=["GET"])
 def lex():
     return render_template("lex.php")
+
+
+@app.route("/lex2.php", methods=["GET"])
+def lex2():
+    return render_template("lex2.php")
 
 
 @app.route("/", methods=["GET"])

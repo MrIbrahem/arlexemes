@@ -4,34 +4,8 @@ const treeContainer = document.getElementById("tree");
 let treeDataWD = [];
 
 async function most_used_properties(data_source) {
-    let VALUES = ``;
     // ---
-    // if data_source match Q\d+
-    if (data_source !== "" && data_source.match(/Q\d+/)) {
-        VALUES = `VALUES ?category { wd:${data_source} }`;
-    }
-    // ---
-    let query = `
-        SELECT ?prop ?propLabel (COUNT(?item) AS ?usage)
-            WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                    wikibase:lemma ?lemma1;
-                    wikibase:lexicalCategory ?category;   # الفئة: فعل
-                    dct:language wd:Q13955.               # اللغة: العربية
-
-            # اختيار خصائص من مساحة بيانات Wikidata فقط
-            ?item ?wdtProp ?value.
-            FILTER(STRSTARTS(STR(?wdtProp), STR(wdt:)))
-
-            # تحويل URI للخاصية إلى عنصر الـProperty نفسه (Pxxxx)
-            BIND(IRI(REPLACE(STR(?wdtProp), STR(wdt:), STR(wd:))) AS ?prop)
-
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-            }
-            GROUP BY ?prop ?propLabel
-            ORDER BY DESC(?usage)
-    `;
+    let query = most_used_properties_query(data_source);
     // ---
     let result = await loadsparqlQuery(query, no_time = true);
     // ---
@@ -40,76 +14,9 @@ async function most_used_properties(data_source) {
 
 async function find_wd_result(to_group_by = "categoryLabel", data_source = "all", limit = 100) {
     // ---
-    let props_in = [
-        // "P31",
-    ]
+    let sparqlQuery = wg_tree_query(data_source, to_group_by, limit);
     // ---
-    let add_group = " ?P31Label ";
-    let add_group_optional = " OPTIONAL { ?item wdt:P31 ?P31. } ";
-    // ---
-    if (to_group_by.startsWith("P") && !props_in.includes(to_group_by) && to_group_by.match(/^P[0-9]+$/)) {
-        // TODO: this has no sense
-        // to_group_by = to_group_by.replace("P", "");
-        add_group = `(GROUP_CONCAT(DISTINCT ?${to_group_by}_z; separator=", ") AS ?${to_group_by})`;
-        // add_group_optional = `OPTIONAL { ?item wdt:${to_group_by} ?${to_group_by}_z. }`;
-        add_group_optional = `?item wdt:${to_group_by} ?${to_group_by}_z. `;
-
-    }
-    // ---
-    let VALUES = ``;
-    // ---
-    // if data_source match Q\d+
-    if (data_source !== "" && data_source.match(/Q\d+/)) {
-        VALUES = `VALUES ?category { wd:${data_source} }`;
-    }
-    // ---
-    const sparqlQueryOld = `
-        SELECT
-            ?item
-            (SAMPLE(?lemma1) AS ?lemma)
-            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
-            ?category ?categoryLabel ?P31Label
-            (GROUP_CONCAT(DISTINCT ?P6771_z; separator=", ") AS ?P6771)
-            (GROUP_CONCAT(DISTINCT ?P11038_z; separator=", ") AS ?P11038)
-            (GROUP_CONCAT(DISTINCT ?P12451_z; separator=", ") AS ?P12451)
-            ${add_group}
-        WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                wikibase:lemma ?lemma1;
-                wikibase:lexicalCategory ?category;
-                dct:language wd:Q13955.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-            OPTIONAL { ?item wdt:P31 ?P31. }
-            OPTIONAL { ?item wdt:P6771 ?P6771_z. }
-            OPTIONAL { ?item wdt:P11038 ?P11038_z. }
-            OPTIONAL { ?item wdt:P12451 ?P12451_z. }
-            ${add_group_optional}
-        }
-        GROUP BY ?item ?category ?categoryLabel ?P31Label
-        limit ${limit}
-    `;
-    // ---
-    const sparqlQuery = `
-        SELECT
-            ?item
-            (SAMPLE(?lemma1) AS ?lemma)
-            (GROUP_CONCAT(DISTINCT ?lemma1; separator=' / ') AS ?lemmas)
-            ?category ?categoryLabel
-            ${add_group}
-        WHERE {
-            ${VALUES}
-            ?item rdf:type ontolex:LexicalEntry;
-                wikibase:lemma ?lemma1;
-                wikibase:lexicalCategory ?category;
-                dct:language wd:Q13955.
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
-
-            ${add_group_optional}
-        }
-        GROUP BY ?item ?category ?categoryLabel ?P31Label
-        limit ${limit}
-    `;
+    console.log(`to_group_by: ${to_group_by}`);
     // ---
     add_sparql_url(sparqlQuery);
     // ---
@@ -119,11 +26,15 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
 
     for (const item of result) {
         let to_group = item[to_group_by] || 'غير محدد';
-
+        // ---
+        let to_group_Label = item[`${to_group_by}_zLabel`] || "";
+        to_group_Label = (to_group_Label === to_group_Label) ? "" : to_group_Label;
+        // ---
         if (!wd_result[to_group]) {
             // ---
             wd_result[to_group] = {
                 group_by: to_group,
+                group_by_label: to_group_Label,
                 items: []
             };
         }
@@ -137,7 +48,7 @@ async function find_wd_result(to_group_by = "categoryLabel", data_source = "all"
     return wd_result;
 }
 
-function renderTree(data, all_open) {
+function render_wd_tree(data, all_open) {
     treeContainer.innerHTML = "";
     // ---
     HandelDataError(data);
@@ -167,16 +78,19 @@ function renderTree(data, all_open) {
             icon.className = `bi ${isOpen ? "bi-chevron-double-down" : "bi-chevron-double-left"} arrow-icon`;
         };
         // ---
-        let label = category.group_by;
+        let qid = category.group_by || "";
+        let label = category.group_by_label || "";
         // ---
-        if (label !== "" && (label.match(/Q\d+/) || label.match(/L\d+/))) {
-            label = `<span find-label="${label}" find-label-both="true">${label}</span>`;
+        let category_str = (label !== "") ? `${label} (${qid})` : qid
+        // ---
+        if (label === "" && (qid.match(/Q\d+/) || qid.match(/L\d+/))) {
+            category_str = `<span find-label="${qid}" find-label-both="true">${qid}</span>`;
         }
         // ---
         // محتوى الزر عند الإنشاء
         button.innerHTML = `
             <span class="fw-medium text-black">
-                ${label}
+                ${category_str}
             </span>
             <span class="text-muted ms-2">
                 (${category.items.length})
@@ -184,12 +98,11 @@ function renderTree(data, all_open) {
             <i class="bi bi-chevron-double-left arrow-icon"></i>
         `;
 
-
         const ul = document.createElement("ul");
 
         const d_class = (data.length === 1 || all_open) ? '' : "d-none";
 
-        ul.className = `list-group list-group-flush mt-2 pe-4 border-end border-dashed border-secondary text-end ${d_class}`; // d-none for hidden initially
+        ul.className = `list-group list-group-flush mt-2 pe-4 border-dashed border-secondary border-start text-start ${d_class}`;
 
         category.items.forEach(item => {
             const liItem = document.createElement("li");
@@ -202,7 +115,6 @@ function renderTree(data, all_open) {
             a.rel = "noopener noreferrer";
             // Bootstrap 5: block link class
             a.className = "d-block w-100 h-100 text-decoration-none text-body";
-            // a.textContent = `${item.lemma} (${item.item})`;
             a.textContent = `${item.lemmas} (${item.item})`;
 
             liItem.appendChild(a);
@@ -236,7 +148,7 @@ async function fetchData(limit, data_source, group_by) {
     document.getElementById("total").textContent = `(${count})`;
 
     treeDataWD = Object.values(treeMap);
-    renderTree(treeDataWD);
+    render_wd_tree(treeDataWD);
 }
 
 async function add_options_to_select(data_source, group_by) {
@@ -262,9 +174,9 @@ async function loadfetchData() {
     treeContainer.innerHTML = "";
     showLoading();
     // ---
-    let group_by = get_param_from_window_location("group_by", "P31Label")
+    let group_by = get_param_from_window_location("group_by", "categoryLabel")
     let custom_group_by = get_param_from_window_location("custom_group_by", "")
-    let limit = get_param_from_window_location("limit", 100)
+    let limit = get_param_from_window_location("limit", 1000)
     let data_source = get_param_from_window_location("data_source", "all");
     // ---
     // let group_by_item = document.getElementById('group_by');
@@ -279,9 +191,13 @@ async function loadfetchData() {
         document.getElementById('custom_group_by').style.display = 'block';
     }
     // ---
-    await add_options_to_select(data_source, group_by);
+    // await add_options_to_select(data_source, group_by);
+    // await fetchData(limit, data_source, group_by);
     // ---
-    await fetchData(limit, data_source, group_by);
+    await Promise.all([
+        add_options_to_select(data_source, group_by),
+        fetchData(limit, data_source, group_by)
+    ]);
     // ---
     await find_labels();
 }
@@ -303,7 +219,7 @@ async function load_tree() {
     search_Input.addEventListener("input", e => {
         const term = e.target.value;
         const filtered = filterTreeData(term);
-        renderTree(filtered, true);
+        render_wd_tree(filtered, true);
     });
     // ---
     await loadfetchData();
