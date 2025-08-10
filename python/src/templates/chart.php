@@ -70,7 +70,6 @@
 <!-- <script src='{  { cdn_base }  }/Chart.js/4.4.1/chart.min.js'></script> -->
 <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lex/find_labels.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lexemes/queries.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lexemes/wd_tree.js') }}"></script>
 <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
