@@ -67,6 +67,8 @@
         </div>
     </div>
 </div>
+<!-- <script src='{  { cdn_base }  }/Chart.js/4.4.1/chart.min.js'></script> -->
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 <script src="/js/chart.js"></script>
 <script src="/js/lex/find_labels.js"></script>
 <script src="/js/lexemes/queries.js"></script>

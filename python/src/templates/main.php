@@ -19,8 +19,6 @@
     <script src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
-    <script src='{{ cdn_base }}/Chart.js/4.4.1/chart.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 
     <script src="{{ url_for('static', filename='js/sparql.js') }}"></script>
     <script src="{{ url_for('static', filename='js/render.js') }}"></script>
