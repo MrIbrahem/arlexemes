@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-sm-12">
-            <div class="card card_form">
+            <div class="card card_form mb-3">
                 <div class="card-header text-center py-2">
                     <h4 class="card-title mb-0 d-flex align-items-center justify-content-center">
                         <i class="bi bi-braces-asterisk me-2"></i> ابحث عن مفردة أو جرب مثالًا
@@ -78,9 +78,36 @@
                     </div>
                 </div>
             </div>
+            <div class="card mb-2">
+                <div class="card-header">
+                    <h2 class="card-title h4 fw-bold text-center">
+                        الفئات المعجمية لمفردات اللغة العربية
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="position-relative" style="max-height: 250px;">
+                        <div id="loader1" class="loader">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <span class="ms-3 h5 fw-semibold text-secondary">جاري تحميل البيانات...</span>
+                            </div>
+                        </div>
+                        <canvas id="chart1"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+
+<script>
+    // بدء العملية عند تحميل الصفحة بالكامل
+    window.onload = initializeCharts;
+</script>
 <script>
     function setLabel(lexeme) {
         $("#wd_id").val(lexeme);

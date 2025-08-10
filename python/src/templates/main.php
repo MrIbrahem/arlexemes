@@ -39,6 +39,31 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* تطبيق الخط على كامل الصفحة */
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* تصميم مخصص لمؤشر التحميل */
+        .loader {
+            display: flex;
+            /* يظهر بشكل افتراضي، ويتم إخفاؤه عبر JS */
+            position: absolute;
+            inset: 0;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: 10;
+            border-radius: 0.75rem;
+            /* نفس استدارة الحاوية */
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
 </head>
 
 <body>
