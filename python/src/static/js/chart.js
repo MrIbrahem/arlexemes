@@ -140,15 +140,15 @@ function createChart(ctx, {
                     labels: {
                         color: 'var(--bs-body-color)',
                         font: {
-                            // family: "'Cairo', sans-serif",
+                            family: "'Cairo', sans-serif",
                             size: 16
                         },
-                        usePointStyle: true
+                        // usePointStyle: true
                     }
                 },
                 tooltip: {
-                    // bodyFont: { family: "'Cairo', sans-serif" },
-                    // titleFont: { family: "'Cairo', sans-serif" },
+                    bodyFont: { family: "'Cairo', sans-serif" },
+                    titleFont: { family: "'Cairo', sans-serif" },
                     // callbacks: { label: context => `${context.label || ''}: ${context.parsed}` }
                 },
                 title: {
@@ -161,19 +161,29 @@ function createChart(ctx, {
 
 async function one_chart(n, query, labelKey, labelKey2) {
     // ---
-    let char1Data = await fetchWikidata(query, labelKey, labelKey2);
+    let titles = [
+        'الفئات المعجمية لمفردات اللغة العربية',
+        'أفضل 9 لغات + العربية حسب عدد المفردات'
+    ]
     // ---
     const loader = document.getElementById(`loader${n}`);
-    const ctx = document.getElementById(`chart${n}`).getContext('2d');
+    let ctx = document.getElementById(`chart${n}`);
+    // ---
+    if (!ctx) return;
+    // ---
+    let char1Data = await fetchWikidata(query, labelKey, labelKey2);
+    // ---
+    let ctx2d = ctx.getContext('2d');
     // ---
     // رسم المخطط وإخفاء مؤشر التحميل الخاص به
     if (char1Data.labels.length > 0) {
-        createChart(ctx, char1Data, 'الفئات المعجمية في اللغة العربية');
+        createChart(ctx2d, char1Data, titles[n - 1]);
     }
     // ---
-    loader.style.opacity = '0';
-    // ---
-    setTimeout(() => loader.style.display = 'none', 300);
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 300);
+    }
     // ---
 }
 

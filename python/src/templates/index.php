@@ -10,7 +10,7 @@
             <div class="card card_form">
                 <div class="card-header text-center py-2">
                     <h4 class="card-title mb-0 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-braces-asterisk me-2"></i> الوظيفة الرئيسية
+                        <i class="bi bi-braces-asterisk me-2"></i> ابحث عن مفردة أو جرب مثالًا
                     </h4>
                 </div>
                 <div class="card-body p-3">
@@ -53,35 +53,27 @@
                 </div>
                 <div class="card-footer">
                     <h5 class="card-title">أمثلة:</h5>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <span class="ms-2">اسم:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1473670')">L1473670</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2465')">L2465 -
-                                معدود</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2355')">L2355 - غير
-                                معدود</button>
+
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="fw-bold me-2">اسم:</span>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1473670')">صَهْيُونِيّ</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2465')">لَبَن</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L2355')">حَلِيب</button>
                         </div>
-                        <div class="col-md-4">
-                            <span class="ms-2">صفة:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1131459')">L1131459</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1473674')">L1473674</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1472818')">L1472818</button>
+                        <div class="list-group-item">
+                            <span class="fw-bold me-2">صفة:</span>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1131459')">ماهِر</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1473674')">مُنَزَّل</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1472818')">رَائِع</button>
                         </div>
-                        <div class="col-md-3">
-                            <span class="ms-2">فعل:</span><br>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1474373')">L1474373</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1474244')">L1474244</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1473584')">L1473584</button>
-                            <button class="btn btn-outline-secondary btn-sm ms-1"
-                                onclick="setLabel('L1474044')">L1474044</button>
+                        <div class="list-group-item">
+                            <span class="fw-bold me-2">فعل:</span>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1474373')">عَزَمَ</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1474244')">هَلَّلَ</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1473584')">أَرْعَبَ</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1478621')">اِسْتَحْيَا</button>
+                            <button class="btn btn-outline-secondary btn-sm ms-1" onclick="setLabel('L1478647')">ضَرَبَ</button>
                         </div>
                     </div>
                 </div>

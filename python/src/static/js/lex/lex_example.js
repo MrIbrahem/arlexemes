@@ -1,4 +1,21 @@
 
+function get_body(html) {
+    // ---
+    const parser = new DOMParser();
+    // ---
+    const doc = parser.parseFromString(html, 'text/html');
+    // ---
+    // any href="./سورة_البقرة" should be like: https://ar.wikipedia.org/سورة_البقرة
+    // ---
+    doc.querySelectorAll('a[href^="./"]').forEach(link => {
+        const href = link.getAttribute('href');
+        link.setAttribute('href', `https://ar.wikipedia.org/wiki/${href}`);
+    });
+    // ---
+    let body = doc.body.innerHTML; // أو doc.body.outerHTML
+    // ---
+    return body;
+}
 async function convertContent(input) {
     let endPoint = 'https://ar.wikipedia.org/w/rest.php/v1/transform/wikitext/to/html/Sandbox';
 
@@ -74,7 +91,9 @@ async function render_source(qid, form_id, index) {
     // ---
     let html = await convertContent(newwikitext);
     // ---
-    if (html === "") return newwikitext;
+    if (!html || html === "") return newwikitext;
+    // ---
+    html = get_body(html);
     // ---
     return html;
 }
