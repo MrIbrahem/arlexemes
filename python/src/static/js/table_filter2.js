@@ -38,10 +38,13 @@ function table_filter() {
                 if (wordInSameTd.length > 1) {
                     // أكثر من عنصر word داخل نفس td → نلوّن el فقط
                     el.classList.add("highlighted-word");
+                    el.classList.add("hide-highlight");
+                    // el.style.setProperty('--highlight-color', color);
                     el.style.setProperty('background-color', color);
                 } else {
                     // عنصر word وحيد داخل td → نلوّن td
                     td.classList.add("highlighted-word");
+                    td.classList.add("hide-highlight");
                     // td.style.setProperty('--highlight-color', color);
                     td.style.setProperty('background-color', color);
                 }
