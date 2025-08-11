@@ -21,7 +21,7 @@ endpoint_url = 'https://query.wikidata.org/sparql'
 def safe_sparql_query(query):
 
     if query in sparql_cache:
-        err_bot.log_error("SPARQL Cache Hit", f"تم استرجاع الاستعلام من الكاش: {query}")
+        err_bot.log_error("SPARQL Cache Hit", f"Query retrieved from cache: {query}")
         return sparql_cache[query], ""
 
     user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
@@ -40,7 +40,7 @@ def safe_sparql_query(query):
         return data, ""
 
     except socket.timeout:
-        err_bot.log_error("SPARQL Timeout", f"انتهت مهلة الاتصال بـ {endpoint_url}")
+        err_bot.log_error("SPARQL Timeout", f"Connection to {endpoint_url} timed out")
         return {}, "SPARQL Timeout"
 
     except urllib.error.HTTPError as e:
@@ -48,15 +48,15 @@ def safe_sparql_query(query):
         return {}, "SPARQL HTTP Error"
 
     except urllib.error.URLError as e:
-        err_bot.log_error("SPARQL URL Error", f"فشل الوصول إلى {endpoint_url}: {e.reason}")
+        err_bot.log_error("SPARQL URL Error", f"Failed to reach {endpoint_url}: {e.reason}")
         return {}, "SPARQL URL Error"
 
     except ValueError as e:
-        err_bot.log_error("SPARQL JSON Error", f"خطأ في تحويل النتيجة إلى JSON: {e}")
+        err_bot.log_error("SPARQL JSON Error", f"Error converting result to JSON: {e}")
         return {}, "SPARQL JSON Error"
 
     except Exception as e:
-        err_bot.log_error("SPARQL Unknown Error", f"خطأ غير متوقع: {str(e)}")
+        err_bot.log_error("SPARQL Unknown Error", f"Unexpected error: {str(e)}")
     # ---
     return {}, "SPARQL Unknown Error"
 
