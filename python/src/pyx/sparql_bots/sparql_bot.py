@@ -21,6 +21,7 @@ endpoint_url = 'https://query.wikidata.org/sparql'
 def safe_sparql_query(query):
 
     if query in sparql_cache:
+        err_bot.log_error("SPARQL Cache Hit", f"تم استرجاع الاستعلام من الكاش: {query}")
         return sparql_cache[query], ""
 
     user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
