@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+import time
 import pymysql
 from .config_db import load_db_config
 
@@ -85,7 +87,8 @@ def init_db():
     # ---
     db_commit(query)
 
-def fetch_all(query, params=None, fetch_one=False):
+
+def _fetch_all(query, params=None, fetch_one=False):
     """جلب بيانات من قاعدة MySQL"""
     conn = None
     cursor = None
@@ -114,7 +117,18 @@ def fetch_all(query, params=None, fetch_one=False):
             conn.close()
 
 
+def fetch_all(query, params=None, fetch_one=False):
+    # ---
+    now = time.time()
+    # ---
+    result = _fetch_all(query, params=params, fetch_one=fetch_one)
+    # ---
+    db_exec_time = time.time() - now
+    # ---
+    return result, db_exec_time
+
+
 # مثال
 if __name__ == "__main__":
-    rows = fetch_all("SELECT COUNT(*) AS total FROM lemmas_p11038")
+    rows, db_exec_time = fetch_all("SELECT COUNT(*) AS total FROM lemmas_p11038")
     print(rows)

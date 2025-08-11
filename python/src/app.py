@@ -69,10 +69,11 @@ def wd_data_api():
 @app.route("/api/wd_not_in_sql", methods=["GET"])
 def api_wd_not_in_sql():
     # ---
-    result, sparql_exec_time = get_not_in_db()
+    result, sparql_exec_time, db_exec_time = get_not_in_db()
     # ---
     data = {
         "sparql_exec_time": sparql_exec_time,
+        "db_exec_time": db_exec_time,
         "result": result,
     }
     # ---
@@ -130,7 +131,7 @@ def not_in_db():
     # ---
     limit = request.args.get('limit', 100, type=int)
     # ---
-    result, sparql_exec_time = get_not_in_db(limit)
+    result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
     # ---
     return render_template("not_in_db.html", data=result, limit=limit, sparql_exec_time=sparql_exec_time)
 

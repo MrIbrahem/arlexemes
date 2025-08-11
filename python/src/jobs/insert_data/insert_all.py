@@ -37,7 +37,7 @@ def get_data():
     # ---
     print(f"len(json_data): {len(json_data)}, len(tab): {len(tab)}")
     # ---
-    insql_lemma, insql_sama = in_sql()
+    insql_lemma, insql_sama, db_exec_time = in_sql()
     # ---
     to_add = {lemma_id : y for lemma_id, y in tab.items() if str(lemma_id) not in insql_lemma}
     # ---

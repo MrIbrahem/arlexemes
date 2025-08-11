@@ -6,6 +6,7 @@ from .logs_db.bot import fetch_all
 """
 from .db_mysql import fetch_all
 
+
 def add_order_limit_offset(query, params, order_by, order, limit, offset):
     # ---
     if order not in ["ASC", "DESC"]:
@@ -35,7 +36,7 @@ def count_all(table_name="lemmas_p11038"):
     FROM {table_name}
     """
     # ---
-    result = fetch_all(query, [], fetch_one=True)
+    result, db_exec_time = fetch_all(query, [], fetch_one=True)
     # ---
     if not result:
         return 0
@@ -62,7 +63,7 @@ def get_logs(per_page=0, offset=0, order="DESC", order_by="timestamp", table_nam
     # ---
     params.extend([per_page, offset])
     # ---
-    logs = fetch_all(query, params)
+    logs, db_exec_time = fetch_all(query, params)
     # ---
     return logs
 
@@ -80,9 +81,9 @@ def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="lemma
     # ---
     query, params = add_order_limit_offset(query, params, order_by, order, per_page, offset)
     # ---
-    logs = fetch_all(query, params)
+    logs, db_exec_time = fetch_all(query, params)
     # ---
-    return logs
+    return logs, db_exec_time
 
 
 def select(data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC", order_by="id"):
@@ -122,6 +123,6 @@ def select(data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC",
     # ---
     query, params = add_order_limit_offset(query, params, order_by, order, limit, offset)
     # ---
-    logs = fetch_all(query, params)
+    logs, db_exec_time = fetch_all(query, params)
     # ---
     return logs

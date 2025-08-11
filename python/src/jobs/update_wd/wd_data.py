@@ -16,7 +16,7 @@ from pyx.sparql_bots.render import render_sparql_P11038_grouped
 from pyx.logs_db import wd_data_table
 
 # wd_data_table.count_all()
-# wd_data_table.get_all()
+# wd_data_table.get_all_wd()
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 
@@ -39,7 +39,7 @@ def insert_new_items(in_wd_data, in_db):
 
 def update_wd():
     # ---
-    in_db = {z['wd_id'] : z for z in wd_data_table.get_all()}
+    in_db = {z['wd_id'] : z for z in wd_data_table.get_all_wd()}
     # ---
     print(f"in_db: {len(in_db)}")
     # ---

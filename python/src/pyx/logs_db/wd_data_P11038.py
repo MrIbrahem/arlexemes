@@ -53,7 +53,7 @@ def count_all():
         ) AS combined
     """
     # ---
-    result = fetch_all(query, [], fetch_one=True)
+    result, db_exec_time = fetch_all(query, [], fetch_one=True)
     # ---
     if not result:
         return {}
@@ -115,6 +115,6 @@ def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with
     # ---
     query, params = add_order_limit_offset(query, params, order_by, order, limit, offset)
     # ---
-    logs = fetch_all(query, params)
+    logs, db_exec_time = fetch_all(query, params)
     # ---
     return logs
