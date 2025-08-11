@@ -59,11 +59,11 @@
             <div class="card mb-2">
                 <div class="card-header">
                     <h2 class="card-title h4 fw-bold text-center">
-                        الفئات المعجمية لمفردات اللغة العربية
+                         الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>
                     </h2>
                 </div>
                 <div class="card-body">
-                    <div class="position-relative" style="max-height: 250px;">
+                    <div class="position-relative" style="max-height: 270px;">
                         <div id="loader1" class="loader">
                             <div class="d-flex align-items-center">
                                 <div class="spinner-border text-primary" role="status">
