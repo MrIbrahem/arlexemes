@@ -43,7 +43,7 @@ def update_wd():
     # ---
     print(f"in_db: {len(in_db)}")
     # ---
-    in_wd_data, exec_time = render_sparql_P11038_grouped()
+    in_wd_data, sparql_exec_time = render_sparql_P11038_grouped()
     # ---
     print(f"in_wd_data: {len(in_wd_data)}")
     # ---

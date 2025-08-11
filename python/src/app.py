@@ -69,11 +69,11 @@ def wd_data_api():
 @app.route("/api/wd_not_in_sql", methods=["GET"])
 def api_wd_not_in_sql():
     # ---
-    result, _exec_time = get_not_in_db()
+    result, sparql_exec_time = get_not_in_db()
     # ---
     data = {
+        "sparql_exec_time": sparql_exec_time,
         "result": result,
-        "exec_time": _exec_time,
     }
     # ---
     return jsonify(data)
@@ -114,14 +114,14 @@ def P11038_wd():
     # ---
     wd_count, _ = sparql_bot.count_arabic_with_P11038()
     # ---
-    split_by_category, exec_time = render_all_arabic_by_category(limit)
+    split_by_category, sparql_exec_time = render_all_arabic_by_category(limit)
     # ---
     return render_template(
         "P11038_wd.html",
         limit=limit,
         result=split_by_category,
         wd_count=wd_count,
-        exec_time=exec_time,
+        sparql_exec_time=sparql_exec_time,
     )
 
 
@@ -130,9 +130,9 @@ def not_in_db():
     # ---
     limit = request.args.get('limit', 100, type=int)
     # ---
-    result, exec_time = get_not_in_db(limit)
+    result, sparql_exec_time = get_not_in_db(limit)
     # ---
-    return render_template("not_in_db.html", data=result, limit=limit, exec_time=exec_time)
+    return render_template("not_in_db.html", data=result, limit=limit, sparql_exec_time=sparql_exec_time)
 
 
 @app.route("/not_in_db1", methods=["GET"])

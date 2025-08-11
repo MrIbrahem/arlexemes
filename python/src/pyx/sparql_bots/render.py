@@ -9,14 +9,14 @@ from . import sparql_bot
 
 def render_sparql_P11038_grouped():
     # ---
-    # ab_P11038, exec_time = render_sparql_P11038_grouped()
+    # ab_P11038, sparql_exec_time = render_sparql_P11038_grouped()
     # ---
     print("def render_sparql_P11038_grouped():")
     # ---
     dup = 0
     # ---
     # ?item ?lemma ?category ?categoryLabel ?P11038_values
-    result, exec_time = sparql_bot.all_arabic_with_P11038_grouped()
+    result, sparql_exec_time = sparql_bot.all_arabic_with_P11038_grouped()
     # ---
     tab_P11038 = {}
     # ---
@@ -34,14 +34,14 @@ def render_sparql_P11038_grouped():
     # ---
     print(f"\t render_sparql_P11038_grouped: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}")
     # ---
-    return tab_P11038, exec_time
+    return tab_P11038, sparql_exec_time
 
 
 def render_all_arabic_by_category(limit):
     # ---
-    # split_by_category, exec_time = render_all_arabic_by_category(limit)
+    # split_by_category, sparql_exec_time = render_all_arabic_by_category(limit)
     # ---
-    result, exec_time = sparql_bot.all_arabic(limit)
+    result, sparql_exec_time = sparql_bot.all_arabic(limit)
     # ---
     split_by_category = {}
     # ---
@@ -57,4 +57,4 @@ def render_all_arabic_by_category(limit):
         # ---
         split_by_category[category]['members'].append(item)
     # ---
-    return split_by_category, exec_time
+    return split_by_category, sparql_exec_time

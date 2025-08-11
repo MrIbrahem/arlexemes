@@ -12,17 +12,17 @@ ERROR_LOG_FILE = os.path.join(LOGS_DIR, "errors.log")
 os.makedirs(LOGS_DIR, exist_ok=True)
 
 
-def log_error(title, message, exec_time=None):
+def log_error(title, message, sparql_exec_time=None):
     """
     يسجل الأخطاء في ملف logs/errors.log
     :param title: عنوان الخطأ
     :param message: تفاصيل الخطأ
-    :param exec_time: مدة التنفيذ (ثوانٍ) - اختياري
+    :param sparql_exec_time: مدة التنفيذ (ثوانٍ) - اختياري
     """
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_entry = f"[{timestamp}] {title} - {message}"
-    if exec_time is not None:
-        log_entry += f" | Execution time: {exec_time:.3f} sec"
+    if sparql_exec_time is not None:
+        log_entry += f" | Execution time: {sparql_exec_time:.3f} sec"
     log_entry += "\n"
 
     try:

@@ -17,7 +17,7 @@ def test():
 
     """
 
-    data, exec_time = get_results(sparql_query)
+    data, sparql_exec_time = get_results(sparql_query)
 
     print(data)
-    print(exec_time)
+    print(sparql_exec_time)
