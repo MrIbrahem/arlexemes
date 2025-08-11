@@ -2,14 +2,35 @@
 import sys
 from flask import Flask, render_template, request, Response, session
 import json
+import time
+from flask import g
 
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
+
 import logs_bot_new
 from bots import sparql_bot
 from bots.match_sparql import get_wd_not_in_sql
 # from logs_db import wd_data_table  # count_all, get_all
 from logs_db import wd_data_P11038
+
+
+# تخزين وقت بداية الطلب
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+
+@app.after_request
+def after_request(response):
+    if hasattr(g, 'start_time'):
+        g.load_time = time.time() - g.start_time
+    return response
+
+
+@app.context_processor
+def inject_load_time():
+    return dict(load_time=(getattr(g, 'load_time', 0) or 0))
 
 
 def jsonify(data : dict) -> str:

@@ -271,7 +271,4 @@
         </div>
     </div>
 </div>
-<script>
-    $("#main_title").attr("title", "{{ result.diff }} ثانية")
-</script>
 {% endblock %}
