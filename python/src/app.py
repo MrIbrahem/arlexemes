@@ -15,7 +15,6 @@ from bots.match_sparql import get_wd_not_in_sql
 from logs_db import wd_data_P11038
 
 
-# تخزين وقت بداية الطلب
 @app.before_request
 def before_request():
     g.start_time = time.time()
@@ -30,7 +29,7 @@ def after_request(response):
 
 @app.context_processor
 def inject_load_time():
-    return dict(load_time=(getattr(g, 'load_time', 0) or 0))
+    return dict(load_time=getattr(g, 'load_time', 0))
 
 
 def jsonify(data : dict) -> str:
