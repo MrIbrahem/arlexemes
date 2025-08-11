@@ -1,5 +1,5 @@
 
-from bots.sparql_bot import get_results
+from pyx.bots.sparql_bot import get_results
 
 
 def test():

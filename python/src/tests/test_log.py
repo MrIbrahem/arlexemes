@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import logs_db
+from pyx import logs_db
 
 # python3 I:/milion/arlexemes/python/src/test.py
 # ---
