@@ -162,7 +162,7 @@ function createChart(ctx, {
 async function one_chart(n, query, labelKey, labelKey2) {
     // ---
     let titles = [
-        'الفئات المعجمية لمفردات اللغة العربية',
+        ' الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>',
         'أفضل 9 لغات + العربية حسب عدد المفردات'
     ]
     // ---
@@ -178,6 +178,18 @@ async function one_chart(n, query, labelKey, labelKey2) {
     // رسم المخطط وإخفاء مؤشر التحميل الخاص به
     if (char1Data.labels.length > 0) {
         createChart(ctx2d, char1Data, titles[n - 1]);
+    }
+    // ---
+    const all_lemmas = document.getElementById(`all_lemmas_${n}`);
+    // ---
+    if (all_lemmas) {
+        // sum achar1Data.data
+        let total = char1Data.data.reduce((a, b) => a + b, 0);
+        // ---
+        // format total
+        total = total.toLocaleString();
+        // ---
+        all_lemmas.innerHTML = ` (${total} مفردة) `
     }
     // ---
     if (loader) {
