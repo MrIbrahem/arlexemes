@@ -161,9 +161,7 @@
 </body>
 
 <script>
-{% if load_time is not none %}
     $("#main_title").attr("title", "{{ load_time|round(3) }} ثانية");
-{% endif %}
 </script>
 
 </html>

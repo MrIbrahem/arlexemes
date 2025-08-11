@@ -29,7 +29,11 @@ def after_request(response):
 
 @app.context_processor
 def inject_load_time():
-    return dict(load_time=getattr(g, 'load_time', 0))
+    # نحسب الوقت الحالي - وقت البداية
+    load_time = 0
+    if hasattr(g, 'start_time'):
+        load_time = time.time() - g.start_time
+    return dict(load_time=load_time)
 
 
 def jsonify(data : dict) -> str:
