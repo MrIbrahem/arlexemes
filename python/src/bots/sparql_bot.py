@@ -3,7 +3,10 @@
 
 import sys
 import time
+import socket
+import urllib.error
 from SPARQLWrapper import SPARQLWrapper, JSON
+from . import err_bot
 
 # تخزين الكاش في الذاكرة
 _cache = {}
@@ -12,18 +15,45 @@ CACHE_TTL = 60 * 5  # 5 دقائق
 endpoint_url = 'https://query.wikidata.org/sparql'
 
 
-def make_cache_key(term, data_source):
-    return f"{term.strip()}|{data_source.strip()}"
+def safe_sparql_query(query):
+    # ---
+    user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
+    # ---
+    try:
+        sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
+        sparql.setQuery(query)
+        # ---
+        sparql.setReturnFormat(JSON)
+        sparql.setTimeout(20)
+        # ---
+        data = sparql.query().convert()
+        return data, ""
+
+    except socket.timeout:
+        err_bot.log_error("SPARQL Timeout", f"انتهت مهلة الاتصال بـ {endpoint_url}")
+        return {}, "SPARQL Timeout"
+
+    except urllib.error.HTTPError as e:
+        err_bot.log_error("SPARQL HTTP Error", f"HTTP Error {e.code}: {e.reason}")
+        return {}, "SPARQL HTTP Error"
+
+    except urllib.error.URLError as e:
+        err_bot.log_error("SPARQL URL Error", f"فشل الوصول إلى {endpoint_url}: {e.reason}")
+        return {}, "SPARQL URL Error"
+
+    except ValueError as e:
+        err_bot.log_error("SPARQL JSON Error", f"خطأ في تحويل النتيجة إلى JSON: {e}")
+        return {}, "SPARQL JSON Error"
+
+    except Exception as e:
+        err_bot.log_error("SPARQL Unknown Error", f"خطأ غير متوقع: {str(e)}")
+    # ---
+    return {}, "SPARQL Unknown Error"
 
 
 def get_results(query):
-    user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
-    # TODO adjust user agent; see https://w.wiki/CX6
-    sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
-    sparql.setQuery(query)
-    sparql.setReturnFormat(JSON)
     # ---
-    data = sparql.query().convert()
+    data, err = safe_sparql_query(query)
     # ---
     # تنسيق النتائج
     result = []
@@ -45,6 +75,10 @@ def get_results(query):
         result.append(new_row)
 
     return result
+
+
+def make_cache_key(term, data_source):
+    return f"{term.strip()}|{data_source.strip()}"
 
 
 def search(args):
