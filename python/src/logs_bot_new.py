@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from logs_db import wd_data_P11038
 from types import SimpleNamespace
 
@@ -69,6 +70,8 @@ def make_Pagination(args, total_logs):
 
 def find_logs(request):
     # ---
+    time_start = time.time()
+    # ---
     args = get_args(request)
     # ---
     order_by_types = [
@@ -113,11 +116,15 @@ def find_logs(request):
     # ---
     total_logs_data_formated = {key: f"{value:,}" for key, value in total_logs_data.items()}
     # ---
+    time_end = time.time()
+    diff = time_end - time_start
+    # ---
     result = {
         "logs": log_list,
         "order_by_types": order_by_types,
         "tab": table_new,
         "total_logs_data": total_logs_data_formated,
+        "diff": diff,
         "status_table": [],
     }
     # ---

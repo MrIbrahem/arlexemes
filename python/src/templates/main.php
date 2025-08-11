@@ -95,7 +95,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary shadow mb-4">
         <div class="container-fluid">
             <div class="nav_title">
-                <a class="navbar-brand fw-bold" href="/">
+                <a class="navbar-brand fw-bold" href="/" id="main_title">
                     <span class="tool_icon ms-2"></span> المفردات العربية
                 </a>
             </div>
