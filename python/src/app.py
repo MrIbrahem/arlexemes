@@ -8,11 +8,11 @@ from flask import g
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
 
-import logs_bot_new
-from bots import sparql_bot
-from bots.match_sparql import get_wd_not_in_sql
-# from logs_db import wd_data_table  # count_all, get_all
-from logs_db import wd_data_P11038
+from pyx import logs_bot_new
+from pyx.bots import sparql_bot
+from pyx.bots.match_sparql import get_wd_not_in_sql
+# from pyx.logs_db import wd_data_table  # count_all, get_all
+from pyx.logs_db import wd_data_P11038
 
 
 @app.before_request

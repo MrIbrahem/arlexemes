@@ -4,8 +4,8 @@ from bots.match_sparql import get_wd_not_in_sql
 """
 import tqdm
 
-from logs_db import get_all
-from bots import sparql_bot
+from ..logs_db import get_all
+from . import sparql_bot
 
 
 def in_sql():

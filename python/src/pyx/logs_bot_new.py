@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from logs_db import wd_data_P11038
+from .logs_db import wd_data_P11038
 from types import SimpleNamespace
 
 pos_cat_data = {
