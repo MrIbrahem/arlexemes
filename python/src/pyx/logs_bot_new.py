@@ -87,10 +87,7 @@ def find_logs(request):
     # ---
     order_by = "lemma_id" if args.order_by not in order_by_types else args.order_by
     # ---
-    logs = wd_data_P11038.get_lemmas(args.per_page, args.offset, args.order, order_by=order_by, filter_data=args.filter_data)
-    # ---
-    # Convert to list of dicts
-    log_list = logs
+    logs, db_exec_time = wd_data_P11038.get_lemmas(args.per_page, args.offset, args.order, order_by=order_by, filter_data=args.filter_data)
     # ---
     total_logs_data = wd_data_P11038.count_all()
     # ---
@@ -114,7 +111,8 @@ def find_logs(request):
     total_logs_data_formated = {key: f"{value:,}" for key, value in total_logs_data.items()}
     # ---
     result = {
-        "logs": log_list,
+        "db_exec_time": db_exec_time,
+        "logs": logs,
         "order_by_types": order_by_types,
         "tab": table_new,
         "total_logs_data": total_logs_data_formated,

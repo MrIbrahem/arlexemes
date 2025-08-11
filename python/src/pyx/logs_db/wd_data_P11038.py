@@ -2,7 +2,7 @@
 """
 
 from logs_db import wd_data_P11038
-# all_result = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+# all_result, db_exec_time = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
 # counts = wd_data_P11038.count_all()
 
 """
@@ -117,4 +117,4 @@ def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with
     # ---
     logs, db_exec_time = fetch_all(query, params)
     # ---
-    return logs
+    return logs, db_exec_time

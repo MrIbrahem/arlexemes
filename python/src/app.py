@@ -61,13 +61,21 @@ def wd_data_api():
     order_by = request.args.get("order_by", "id", type=str)
     filter_data = request.args.get("filter_data", "with", type=str)
     # ---
-    all_result = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+    all_result, db_exec_time = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
     # ---
     return jsonify(all_result)
 
 
-@app.route("/api/wd_not_in_sql", methods=["GET"])
-def api_wd_not_in_sql():
+@app.route("/api/logs_new", methods=["GET"])
+def logs_new_api():
+    # ---
+    result = logs_bot_new.find_logs(request)
+    # ---
+    return jsonify(result)
+
+
+@app.route("/api/not_in_db", methods=["GET"])
+def not_in_db_api():
     # ---
     result, sparql_exec_time, db_exec_time = get_not_in_db()
     # ---
