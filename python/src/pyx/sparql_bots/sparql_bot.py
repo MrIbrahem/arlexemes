@@ -6,7 +6,7 @@ import time
 import socket
 import urllib.error
 from SPARQLWrapper import SPARQLWrapper, JSON
-from . import err_bot
+from ..bots import err_bot
 
 # تخزين الكاش في الذاكرة
 _cache = {}
@@ -53,6 +53,8 @@ def safe_sparql_query(query):
 
 def get_results(query):
     # ---
+    now = time.time()
+    # ---
     data, err = safe_sparql_query(query)
     # ---
     # تنسيق النتائج
@@ -73,8 +75,17 @@ def get_results(query):
             new_row[var] = value
         # ---
         result.append(new_row)
-
-    return result
+    # ---
+    if err:
+        err_bot.log_error("SPARQL Error", err)
+    # ---
+    exec_time = time.time() - now
+    # ---
+    err_bot.log_error("SPARQL time", exec_time)
+    # ---
+    print(f"SPARQL exec_time: {exec_time}")
+    # ---
+    return result, exec_time
 
 
 def make_cache_key(term, data_source):
@@ -106,10 +117,10 @@ def search(args):
     sparql_query = f"""
         SELECT DISTINCT ?lemma ?item ?categoryLabel (count(?form) as ?count) WHERE {{
             {values}
-            ?item a ontolex:LexicalEntry ;
-                wikibase:lexicalCategory ?category ;
-                dct:language wd:Q13955 ;
-                wikibase:lemma ?lemma .
+            # ?item a ontolex:LexicalEntry ;
+            ?item dct:language wd:Q13955;
+                wikibase:lexicalCategory ?category;
+                wikibase:lemma ?lemma.
             optional {{ ?item ontolex:lexicalForm ?form }}
             FILTER(CONTAINS(STR(?lemma), "{escaped_term}")) .
             SERVICE wikibase:label {{ bd:serviceParam wikibase:language "ar, en". }}
@@ -119,7 +130,7 @@ def search(args):
         LIMIT 50
     """
 
-    data = get_results(sparql_query)
+    data, exec_time = get_results(sparql_query)
 
     # تنسيق النتائج
     result = {
@@ -153,10 +164,10 @@ def all_arabic(limit):
 
     sparql_query = """
         SELECT DISTINCT ?lemma ?item ?category ?categoryLabel ?P11038 WHERE {
-        ?item a ontolex:LexicalEntry ;
-                wikibase:lexicalCategory ?category ;
-                dct:language wd:Q13955 ;
-                wikibase:lemma ?lemma .
+        # ?item a ontolex:LexicalEntry;
+        ?item dct:language wd:Q13955;
+                wikibase:lexicalCategory ?category;
+                wikibase:lemma ?lemma.
         SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
         optional { ?item wdt:P11038 ?P11038 }
         }
@@ -165,44 +176,22 @@ def all_arabic(limit):
     if limit > 0:
         sparql_query += f" limit {limit}"
 
-    data = get_results(sparql_query)
+    data, exec_time = get_results(sparql_query)
 
-    return data
-
-
-def all_arabic_with_P11038(limit):
-
-    sparql_query = """
-        SELECT DISTINCT ?lemma ?item ?category ?categoryLabel ?P11038 WHERE {
-        ?item a ontolex:LexicalEntry ;
-                wikibase:lexicalCategory ?category ;
-                dct:language wd:Q13955 ;
-                wikibase:lemma ?lemma .
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
-        ?item wdt:P11038 ?P11038
-        }
-
-    """
-    if limit > 0:
-        sparql_query += f" limit {limit}"
-
-    data = get_results(sparql_query)
-
-    return data
+    return data, exec_time
 
 
 def all_arabic_with_P11038_grouped(limit=0):
 
     sparql_query = """
         SELECT DISTINCT ?item ?lemma ?category ?categoryLabel
-            (GROUP_CONCAT(DISTINCT ?P11038; separator=", ") AS ?P11038_values)
+        (GROUP_CONCAT(DISTINCT ?P11038; separator=", ") AS ?P11038_values)
         WHERE {
-            ?item a ontolex:LexicalEntry ;
+        ?item dct:language wd:Q13955 ;
                 wikibase:lexicalCategory ?category ;
-                dct:language wd:Q13955 ;
                 wikibase:lemma ?lemma ;
                 wdt:P11038 ?P11038 .
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
         }
         GROUP BY ?item ?lemma ?category ?categoryLabel
 
@@ -210,7 +199,7 @@ def all_arabic_with_P11038_grouped(limit=0):
     if limit > 0:
         sparql_query += f" limit {limit}"
 
-    data = get_results(sparql_query)
+    data, exec_time = get_results(sparql_query)
     # ---
     new_data = []
     # ---
@@ -219,11 +208,10 @@ def all_arabic_with_P11038_grouped(limit=0):
         x["P11038_values"] = P11038_values
         new_data.append(x)
     # ---
-    return new_data
+    return new_data, exec_time
 
 
 def count_arabic_with_P11038():
-
     sparql_query = """
         SELECT (count(DISTINCT ?item) as ?count)
         WHERE {
@@ -232,11 +220,11 @@ def count_arabic_with_P11038():
         ?item wdt:P11038 ?P11038
         }
     """
-    data = get_results(sparql_query)
+    data, exec_time = get_results(sparql_query)
     count = 0
     # [ { "count": "1632" } ]
     # ---
     if data:
         count = data[0]['count']
     # ---
-    return count
+    return count, exec_time

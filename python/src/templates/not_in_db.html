@@ -39,7 +39,7 @@
                         <div class="col-md-12">
                             <table class="table table-striped table-hover table-bordered soro">
                                 <thead>
-                                    <!-- { "lemma": "حَقّ", "item": "L1258248", "category": "Q1084", "categoryLabel": "اسم", "P11038_list": [ "3033140400" ] } -->
+                                    <!-- { "lemma": "حَقّ", "item": "L1258248", "category": "Q1084", "categoryLabel": "اسم", "P11038_values": [ "3033140400" ] } -->
                                     <tr data-dt-order="disable">
                                         <th></th>
                                         <th colspan="3">ويكي بيانات</th>
@@ -82,12 +82,12 @@
                                             {%endif%}
                                         </td>
                                         <td>
-                                            {{ log.P11038_list|length }}
+                                            {{ log.P11038_values|length }}
                                         </td>
                                         <td>
                                             <div class="w-100">
                                                 <div class="list-group list-group-horizontal">
-                                                    {%for item in log.P11038_list%}
+                                                    {%for item in log.P11038_values%}
                                                     <div class="list-group-item m-1">
                                                         <a href="https://ontology.birzeit.edu/lemma/{{item}}"
                                                             target="_blank">
@@ -110,4 +110,5 @@
         </div>
     </div>
 </div>
+<span>SPARQL time: {{ exec_time }} </span>
 {% endblock %}

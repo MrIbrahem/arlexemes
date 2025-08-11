@@ -1,5 +1,5 @@
 
-from pyx.bots.sparql_bot import get_results
+from pyx.sparql_bots.sparql_bot import get_results
 
 
 def test():
@@ -7,9 +7,9 @@ def test():
     sparql_query = """
         SELECT DISTINCT ?lemma ?item ?category ?categoryLabel ?P11038 WHERE {
         values ?item {wd:L1450900}
-        ?item a ontolex:LexicalEntry ;
+        # ?item a ontolex:LexicalEntry ;
+        ?item dct:language wd:Q13955 ;
                 wikibase:lexicalCategory ?category ;
-                dct:language wd:Q13955 ;
                 wikibase:lemma ?lemma .
         SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
         ?item wdt:P11038 ?P11038
@@ -17,6 +17,7 @@ def test():
 
     """
 
-    data = get_results(sparql_query)
+    data, exec_time = get_results(sparql_query)
 
     print(data)
+    print(exec_time)

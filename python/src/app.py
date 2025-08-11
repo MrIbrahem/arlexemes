@@ -5,14 +5,15 @@ import json
 import time
 from flask import g
 
+from pyx import logs_bot_new
+from pyx.logs_db import wd_data_P11038
+from pyx.sparql_bots import sparql_bot
+from pyx.sparql_bots.render import render_all_arabic_by_category
+from pyx.bots.not_in_db_bot import get_not_in_db
+
+
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
-
-from pyx import logs_bot_new
-from pyx.bots import sparql_bot
-from pyx.bots.match_sparql import get_wd_not_in_sql
-# from pyx.logs_db import wd_data_table  # count_all, get_all
-from pyx.logs_db import wd_data_P11038
 
 
 @app.before_request
@@ -44,9 +45,9 @@ def jsonify(data : dict) -> str:
 @app.route("/api/wd_data_count", methods=["GET"])
 def wd_data_api_count():
     # ---
-    filter_data = request.args.get("filter_data", "all", type=str)
+    _filter_data = request.args.get("filter_data", "all", type=str)
     # ---
-    counts = wd_data_P11038.count_all(filter_data)
+    counts = wd_data_P11038.count_all()
     # ---
     return jsonify(counts)
 
@@ -68,9 +69,14 @@ def wd_data_api():
 @app.route("/api/wd_not_in_sql", methods=["GET"])
 def api_wd_not_in_sql():
     # ---
-    result = get_wd_not_in_sql()
+    result, _exec_time = get_not_in_db()
     # ---
-    return jsonify(result)
+    data = {
+        "result": result,
+        "exec_time": _exec_time,
+    }
+    # ---
+    return jsonify(data)
 
 
 @app.route("/logs_new", methods=["GET"])
@@ -103,24 +109,20 @@ def P11038():
 
 @app.route("/P11038_wd", methods=["GET"])
 def P11038_wd():
-    wd_count = sparql_bot.count_arabic_with_P11038()
+    # ---
     limit = request.args.get('limit', 100, type=int)
-
-    result = sparql_bot.all_arabic(limit)
-    split_by_category = {}
-    for item in result:
-        category = item['category']
-        # ---
-        if category not in split_by_category:
-            split_by_category[category] = {
-                'category': category,
-                'categoryLabel': item['categoryLabel'],
-                'members': []
-            }
-        # ---
-        split_by_category[category]['members'].append(item)
-
-    return render_template("P11038_wd.html", limit=limit, result=split_by_category, wd_count=wd_count)
+    # ---
+    wd_count, _ = sparql_bot.count_arabic_with_P11038()
+    # ---
+    split_by_category, exec_time = render_all_arabic_by_category(limit)
+    # ---
+    return render_template(
+        "P11038_wd.html",
+        limit=limit,
+        result=split_by_category,
+        wd_count=wd_count,
+        exec_time=exec_time,
+    )
 
 
 @app.route("/not_in_db", methods=["GET"])
@@ -128,15 +130,9 @@ def not_in_db():
     # ---
     limit = request.args.get('limit', 100, type=int)
     # ---
-    result = get_wd_not_in_sql()
+    result, exec_time = get_not_in_db(limit)
     # ---
-    # sort result by len of P11038_list
-    result = sorted(result, key=lambda x: len(x['P11038_list']), reverse=True)
-    # ---
-    if limit > 0:
-        result = result[:limit]
-    # ---
-    return render_template("not_in_db.html", data=result, limit=limit)
+    return render_template("not_in_db.html", data=result, limit=limit, exec_time=exec_time)
 
 
 @app.route("/not_in_db1", methods=["GET"])

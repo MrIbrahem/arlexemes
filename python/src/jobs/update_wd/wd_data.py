@@ -12,40 +12,13 @@ from pathlib import Path
 path_1 = Path(__file__).parent.parent.parent
 sys.path.append(str(path_1))
 
-from pyx.bots import sparql_bot
+from pyx.sparql_bots.render import render_sparql_P11038_grouped
 from pyx.logs_db import wd_data_table
 
 # wd_data_table.count_all()
 # wd_data_table.get_all()
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
-
-
-def get_sparql_data():
-    print("sparql_bot.start all_arabic_with_P11038..")
-    # ---
-    dup = 0
-    # ---
-    # ?item ?lemma ?category ?categoryLabel ?P11038_values
-    result = sparql_bot.all_arabic_with_P11038_grouped()
-    # ---
-    tab_P11038 = {}
-    # ---
-    for x in result:
-        item = x.get("item", "")
-        P11038_values = x.get("P11038_values", [])
-        # ---
-        if not item or not P11038_values:
-            continue
-        # ---
-        if item not in tab_P11038:
-            tab_P11038[x['item']] = x
-        else:
-            dup += 1
-    # ---
-    print(f"\t get_sparql_data: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}")
-    # ---
-    return tab_P11038
 
 
 def insert_new_items(in_wd_data, in_db):
@@ -70,7 +43,7 @@ def update_wd():
     # ---
     print(f"in_db: {len(in_db)}")
     # ---
-    in_wd_data = get_sparql_data()
+    in_wd_data, exec_time = render_sparql_P11038_grouped()
     # ---
     print(f"in_wd_data: {len(in_wd_data)}")
     # ---

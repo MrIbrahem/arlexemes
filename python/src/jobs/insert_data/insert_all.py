@@ -13,8 +13,8 @@ path_1 = Path(__file__).parent.parent.parent
 
 sys.path.append(str(path_1))
 
-from pyx.logs_db.bot import get_all
 from pyx.logs_db.insert import insert_multi_lemmas
+from pyx.bots.match_sparql import in_sql
 
 json_file = Path(__file__).parent / "Qabas-dataset_with_SAMA.json"
 json_file2 = Path(__file__).parent / "Qabas_data_2.json"
@@ -28,20 +28,8 @@ def instert_multi(data):
     return insert_multi_lemmas(data)
 
 
-def in_sql():
-    # {'id': 2, 'lemma_id': 0, 'lemma': '', 'pos': '', 'pos_cat': '', 'sama_lemma_id': 0, 'sama_lemma': ''}
-    # ---
-    result = get_all(table_name="lemmas_p11038")
-    # ---
-    tab = {x.get('lemma_id', "") : x for x in result if x.get('lemma_id', "")}
-    # ---
-    print(f"len(result): {len(result)}, len(tab): {len(tab)}")
-    # ---
-    return tab
-
-
 def get_data():
-
+    # ---
     json_data = json.load(open(json_file, encoding="utf-8"))
     json_data.extend(json.load(open(json_file2, encoding="utf-8")))
     # ---
@@ -49,9 +37,9 @@ def get_data():
     # ---
     print(f"len(json_data): {len(json_data)}, len(tab): {len(tab)}")
     # ---
-    insql = in_sql()
+    insql_lemma, insql_sama = in_sql()
     # ---
-    to_add = {lemma_id : y for lemma_id, y in tab.items() if lemma_id not in insql}
+    to_add = {lemma_id : y for lemma_id, y in tab.items() if str(lemma_id) not in insql_lemma}
     # ---
     # sort to_add by sama_lemma_id
     to_add = {x : y for x, y in sorted(to_add.items(), key=lambda item: (item[1].get('sama_lemma', "") or ""), reverse=True)}
