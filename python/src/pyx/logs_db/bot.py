@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 
-from .logs_db.bot import fetch_all
-
 """
 from .db_mysql import fetch_all
 
@@ -51,21 +49,6 @@ def count_all(table_name="lemmas_p11038"):
     }
     # ---
     return data
-
-
-def get_logs(per_page=0, offset=0, order="DESC", order_by="timestamp", table_name="lemmas_p11038"):
-    # ---
-    query = f"SELECT * FROM {table_name} "
-    # ---
-    params = []
-    # ---
-    query, params = add_order_limit_offset(query, params, order_by, order, per_page, offset)
-    # ---
-    params.extend([per_page, offset])
-    # ---
-    logs, db_exec_time = fetch_all(query, params)
-    # ---
-    return logs
 
 
 def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="lemmas_p11038", filter_data="all"):

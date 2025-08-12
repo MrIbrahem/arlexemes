@@ -3,7 +3,7 @@
 from pyx.bots.match_sparql import in_sql
 """
 
-from ..logs_db import get_all
+from ..logs_db.bot import get_all
 
 
 def in_sql():

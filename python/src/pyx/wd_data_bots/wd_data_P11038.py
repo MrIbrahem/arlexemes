@@ -55,12 +55,12 @@ def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with
     """
     # ---
     query_without = """
-    SELECT
-        l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma
+        SELECT
+            l.id, l.lemma_id, l.lemma, l.pos, l.pos_cat, l.sama_lemma_id, l.sama_lemma
 
-        FROM lemmas_p11038 AS l
-        where l.sama_lemma_id not in (select value from wd_data_p11038)
-        and l.lemma_id not in (select value from wd_data_p11038)
+            FROM lemmas_p11038 AS l
+            where l.sama_lemma_id not in (select value from wd_data_p11038)
+            and l.lemma_id not in (select value from wd_data_p11038)
     """
     # ---
     if filter_data == "without":
