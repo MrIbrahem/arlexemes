@@ -41,7 +41,7 @@ def get_args(request):
 
 def make_Pagination(args, total_logs):
     # ---
-    number_of_pages = 10
+    number_of_pages = 6
     # ---
     number_start = number_of_pages - 2
     number_end = number_start // 2
