@@ -52,9 +52,31 @@
 <script src="/static/js/lex/find_labels.js"></script>
 <script src="/static/js/lexemes/queries.js"></script>
 <script src="/static/js/lexemes/duplicate_lemmas.js"></script>
+
+<!-- نافذة ملء الشاشة -->
+<div id="splitViewOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:9999;">
+    <div style="display:flex; height:100%;">
+        <iframe id="iframe1" style="width:50%; height:100%; border:none;"></iframe>
+        <iframe id="iframe2" style="width:50%; height:100%; border:none;"></iframe>
+    </div>
+    <button onclick="closeSplitView()"
+        style="position:absolute; top:10px; right:10px; z-index:10000;"
+        class="btn btn-danger btn-sm">
+        إغلاق ✖
+    </button>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => load_duplicate());
-</script>
+    function openSplitView(id1, id2) {
+        document.getElementById("iframe1").src = "/lex.php?wd_id=" + id1;
+        document.getElementById("iframe2").src = "/lex.php?wd_id=" + id2;
+        document.getElementById("splitViewOverlay").style.display = "block";
+    }
 
+    function closeSplitView() {
+        document.getElementById("splitViewOverlay").style.display = "none";
+    }
+</script>
 
 {% endblock %}

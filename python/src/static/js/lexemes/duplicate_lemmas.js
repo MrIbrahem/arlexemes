@@ -194,12 +194,16 @@ async function render_tables_container(data) {
                     <td>${val2}</td>
                 </tr>`;
         });
-
         // --- HTML النهائي
         const html = `
             <div class="card mb-3">
                 <div class="card-header">
-                    <h2>${groupIndex} - ${lemma}</h2>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>${groupIndex} - ${lemma}</h2>
+                        <button class="btn btn-sm btn-outline-primary" onclick="openSplitView('${item1Id}', '${item2Id}')">
+                            <i class="bi bi-columns"></i> استعرض التصريفات
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table compact table-striped table-bordered table_header_right display w-100">
@@ -207,10 +211,10 @@ async function render_tables_container(data) {
                             <tr>
                                 <th class="w-25">خاصية</th>
                                 <th>الأول:
-                                    <a href="https://www.wikidata.org/entity/${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
+                                    <a href="/lex.php?wd_id=${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
                                 </th>
                                 <th>الثاني:
-                                    <a href="https://www.wikidata.org/entity/${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
+                                    <a href="/lex.php?wd_id=${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
                                 </th>
                             </tr>
                         </thead>
@@ -248,5 +252,6 @@ async function load_duplicate() {
             details: true
             // display: $.fn.dataTable.Responsive.display.modal()
         },
+        order: []
     });
 }
