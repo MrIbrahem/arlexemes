@@ -94,7 +94,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow mb-4">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow mb-4" id="main_navbar">
         <div class="container-fluid">
             <div class="nav_title">
                 <a class="navbar-brand fw-bold" href="/" id="main_title">
