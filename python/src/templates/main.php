@@ -163,5 +163,10 @@
 <script>
     $("#main_title").attr("title", "{{ load_time|round(3) }} ثانية");
 </script>
+{% if time_tab %}
+    {% for name, exec_time in time_tab.items() %}
+    <span>{{ name }}: {{ exec_time }} s</span><br>
+    {% endfor %}
+{% endif %}
 
 </html>
