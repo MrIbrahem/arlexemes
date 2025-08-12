@@ -200,7 +200,9 @@ async function render_tables_container(data) {
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2>${groupIndex} - ${lemma}</h2>
-                        <button class="btn btn-sm btn-outline-primary" onclick="openSplitView('${item1Id}', '${item2Id}')">
+                            <button class="btn btn-sm btn-outline-primary"
+                                onclick="openSplitView1('${item1Id}', '${item2Id}')"
+                                data-bs-toggle="modal" data-bs-target="#splitViewModal">
                             <i class="bi bi-columns"></i> استعرض التصريفات
                         </button>
                     </div>

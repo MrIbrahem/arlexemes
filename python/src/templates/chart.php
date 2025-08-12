@@ -25,7 +25,7 @@
                     <div class="card mb-2">
                         <div class="card-header">
                             <h2 class="card-title h4 fw-bold text-center">
-                                 الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>
+                                الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>
                             </h2>
                         </div>
                         <div class="card-body">

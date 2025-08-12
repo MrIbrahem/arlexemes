@@ -53,29 +53,33 @@
 <script src="/static/js/lexemes/queries.js"></script>
 <script src="/static/js/lexemes/duplicate_lemmas.js"></script>
 
-<!-- نافذة ملء الشاشة -->
-<div id="splitViewOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:9999;">
-    <div style="display:flex; height:100%;">
-        <iframe id="iframe1" style="width:50%; height:100%; border:none;"></iframe>
-        <iframe id="iframe2" style="width:50%; height:100%; border:none;"></iframe>
+<!-- نافذة Modal fullscreen -->
+<div class="modal fade" id="splitViewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">عرض الصفحتين</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="row g-0" style="height: 100%;">
+                    <div class="col-6">
+                        <iframe id="iframe1x" style="width:100%; height:100%; border:none;"></iframe>
+                    </div>
+                    <div class="col-6">
+                        <iframe id="iframe2x" style="width:100%; height:100%; border:none;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <button onclick="closeSplitView()"
-        style="position:absolute; top:10px; right:10px; z-index:10000;"
-        class="btn btn-danger btn-sm">
-        إغلاق ✖
-    </button>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => load_duplicate());
-    function openSplitView(id1, id2) {
-        document.getElementById("iframe1").src = "/lex.php?wd_id=" + id1;
-        document.getElementById("iframe2").src = "/lex.php?wd_id=" + id2;
-        document.getElementById("splitViewOverlay").style.display = "block";
-    }
 
-    function closeSplitView() {
-        document.getElementById("splitViewOverlay").style.display = "none";
+    function openSplitView1(id1, id2) {
+        document.getElementById("iframe1x").src = "/lex_just_table.php?wd_id=" + id1;
+        document.getElementById("iframe2x").src = "/lex_just_table.php?wd_id=" + id2;
     }
 </script>
 

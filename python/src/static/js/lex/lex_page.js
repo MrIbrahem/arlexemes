@@ -163,7 +163,7 @@ function count_dup_forms(forms) {
     return duplicates;
 }
 
-async function fetchLexemeById(id, entity) {
+async function fetchLexemeById(id, entity, no_head = false) {
 
     let lemma = entity.lemma || "(غير متوفر)";
     if (entity.lemmas) {
@@ -230,7 +230,7 @@ async function fetchLexemeById(id, entity) {
     }
     // ---
     let html = `
-        <div class="row mb-4">
+        <div class="row mb-4" id="sub_header">
             ${header_main}
             ${claims_row}
             <div class="col">
@@ -245,7 +245,9 @@ async function fetchLexemeById(id, entity) {
             </div>
         </div>
     `;
-
+    if (no_head) {
+        html = '';
+    }
     let table_html = "";
     if (Category === "Q1084") {             // nouns
         table_html = await Q1084(entity);
@@ -271,7 +273,7 @@ async function fetchLexemeById(id, entity) {
     return html;
 }
 
-async function start_lexeme(id) {
+async function start_lexeme(id, no_head = false) {
     // const id = document.getElementById("lexemeId").value.trim();
     // if (!id) return;
 
@@ -280,7 +282,7 @@ async function start_lexeme(id) {
 
     let entity = await getentity(id);
 
-    let html = await fetchLexemeById(id, entity);
+    let html = await fetchLexemeById(id, entity, no_head = no_head);
 
     output.innerHTML = html;
 
