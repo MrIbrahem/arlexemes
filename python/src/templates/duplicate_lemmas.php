@@ -55,10 +55,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => load_duplicate());
 </script>
-{% if time_tab %}
-    {% for name, exec_time in time_tab.items() %}
-    <span>{{ name }}: {{ exec_time }} s</span><br>
-    {% endfor %}
-{% endif %}
+
 
 {% endblock %}
