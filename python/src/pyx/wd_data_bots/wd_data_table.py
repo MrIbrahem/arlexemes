@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-from .logs_db import wd_data_table
+from wd_data_bots import wd_data_table
 # wd_data_table.count_all_wd_data()
 # wd_data_table.get_all_wd()
 # wd_data_table.get_all_by_value()  # [value,wd_id,wd_id_category,lemma]
@@ -10,7 +10,7 @@ from .logs_db import wd_data_table
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 
 """
-from .db_mysql import fetch_all, init_db, db_commit
+from ..logs_db.db_mysql import fetch_all, init_db, db_commit
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):

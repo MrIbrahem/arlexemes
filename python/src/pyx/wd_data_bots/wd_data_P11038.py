@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 
-from logs_db import wd_data_P11038
+from wd_data_bots import wd_data_P11038
 # all_result, db_exec_time = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
 # counts, db_exec_time = wd_data_P11038.count_all_p11038()
 
 """
-from .db_mysql import fetch_all
+from ..logs_db.db_mysql import fetch_all
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):

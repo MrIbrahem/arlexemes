@@ -13,7 +13,7 @@ path_1 = Path(__file__).parent.parent.parent
 sys.path.append(str(path_1))
 
 from pyx.sparql_bots.render import render_sparql_P11038_grouped
-from pyx.logs_db import wd_data_table
+from pyx.wd_data_bots import wd_data_table
 
 # wd_data_table.count_all_wd_data()
 # wd_data_table.get_all_wd()

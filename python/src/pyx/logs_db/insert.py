@@ -6,7 +6,7 @@ from .insert import insert_lemma
 """
 from .db_mysql import db_commit, init_db
 
-from . import wd_data_table
+from ..wd_data_bots import wd_data_table
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 

@@ -6,7 +6,7 @@ import time
 from flask import g
 
 from pyx import logs_bot_new
-from pyx.logs_db import wd_data_P11038
+from pyx.wd_data_bots import wd_data_P11038
 from pyx.sparql_bots import sparql_bot
 from pyx.sparql_bots.render import render_all_arabic_by_category
 from pyx.bots.not_in_db_bot import get_not_in_db
