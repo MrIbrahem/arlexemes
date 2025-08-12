@@ -59,7 +59,7 @@
                             target="_blank">{{ data.categoryLabel }}</a>
                     </h2>
 
-                    <table class="P11038_table table display table-striped table-bordered">
+                    <table class="P11038_table table display table-striped table-bordered table_header_right">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -123,6 +123,10 @@
             lang: "ar",
             paging: true,
             searching: true,
+            responsive: {
+                details: true
+                // display: $.fn.dataTable.Responsive.display.modal()
+            },
             pageLength: 100
 
         })

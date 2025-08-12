@@ -183,7 +183,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table class="table table-striped table-hover table-bordered soro">
+                            <table class="table table-striped table-hover table-bordered table_responsive table_header_right">
                                 <thead>
                                     <tr data-dt-order="disable">
                                         <th></th>

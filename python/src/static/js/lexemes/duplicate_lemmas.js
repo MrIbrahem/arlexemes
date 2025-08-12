@@ -202,7 +202,7 @@ async function render_tables_container(data) {
                     <h2>${groupIndex} - ${lemma}</h2>
                 </div>
                 <div class="card-body">
-                    <table class="table compact table-striped table-bordered table_text_right display w-100">
+                    <table class="table compact table-striped table-bordered table_header_right display w-100">
                         <thead>
                             <tr>
                                 <th class="w-25">خاصية</th>
@@ -244,6 +244,9 @@ async function load_duplicate() {
         searching: false,
         paging: false,
         info: false,
-        responsive: false
+        responsive: {
+            details: true
+            // display: $.fn.dataTable.Responsive.display.modal()
+        },
     });
 }

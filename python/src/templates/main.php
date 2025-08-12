@@ -44,6 +44,7 @@
     <script src="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/js/bootstrap-select.min.js"></script>
     <script src='{{ cdn_base }}/datatables.net/2.2.2/dataTables.js'></script>
     <script src='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.min.js'></script>
+    <script src='{{ cdn_base }}/datatables-responsive/3.0.4/dataTables.responsive.js'></script>
 
     <script src="/static/js/sparql.js"></script>
     <script src="/static/js/render.js"></script>
@@ -59,6 +60,7 @@
 
     <!-- DataTables Bootstrap 5 -->
     <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-bs5/2.2.2/dataTables.bootstrap5.css'>
+    <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css'>
     <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
 
     <link href="/static/css/style.css" rel="stylesheet">
@@ -155,6 +157,16 @@
             searching: false,
             order: []
         })
+        $('.table_responsive').DataTable({
+            paging: false,
+            info: false,
+            searching: false,
+            responsive: {
+                details: true
+                // display: $.fn.dataTable.Responsive.display.modal()
+            },
+            order: []
+        });
     </script>
     <footer class="footer mt-5 py-0">
     </footer>
@@ -164,9 +176,9 @@
     $("#main_title").attr("title", "{{ load_time|round(3) }} ثانية");
 </script>
 {% if time_tab %}
-    {% for name, exec_time in time_tab.items() %}
-    <span>{{ name }}: {{ exec_time }} s</span><br>
-    {% endfor %}
+{% for name, exec_time in time_tab.items() %}
+<span>{{ name }}: {{ exec_time }} s</span><br>
+{% endfor %}
 {% endif %}
 
 </html>

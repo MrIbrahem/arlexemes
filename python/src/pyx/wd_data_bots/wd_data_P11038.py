@@ -28,6 +28,24 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
     return query, params
 
 
+def count_lemmas_p11038():
+    # Fast
+    # ---
+    query = "SELECT COUNT(*) AS total_rows FROM lemmas_p11038"
+    # ---
+    result, db_exec_time = fetch_all(query, [], fetch_one=True)
+    # ---
+    if not result:
+        return {}, db_exec_time
+    # ---
+    if isinstance(result, list):
+        result = result[0]
+    # ---
+    total_rows = int(result["total_rows"])
+    # ---
+    return total_rows, db_exec_time
+
+
 def count_all_p11038():
     # ---
     query = """
