@@ -110,5 +110,11 @@
         </div>
     </div>
 </div>
-<span>SPARQL time: {{ sparql_exec_time }} </span>
+{% if time_tab %}
+    {% for name, exec_time in time_tab.items() %}
+    <span>{{ name }}: {{ exec_time }} s</span>
+    {% endfor %}
+{% endif %}
+
+
 {% endblock %}

@@ -79,14 +79,6 @@ def wd_data_api():
     return jsonify(all_result, db_exec_time=db_exec_time)
 
 
-@app.route("/api/logs_new", methods=["GET"])
-def logs_new_api():
-    # ---
-    result = logs_bot_new.find_logs(request)
-    # ---
-    return jsonify(result)
-
-
 @app.route("/api/not_in_db", methods=["GET"])
 def not_in_db_api():
     # ---
@@ -95,12 +87,24 @@ def not_in_db_api():
     return jsonify(result, db_exec_time=db_exec_time, sparql_exec_time=sparql_exec_time)
 
 
+@app.route("/api/logs_new", methods=["GET"])
+def logs_new_api():
+    # ---
+    result, db_exec_time = logs_bot_new.find_logs(request)
+    # ---
+    return jsonify(result, db_exec_time=db_exec_time)
+
+
 @app.route("/logs_new", methods=["GET"])
 def view_logs_new():
     # ---
-    result = logs_bot_new.find_logs(request)
+    result, db_exec_time = logs_bot_new.find_logs(request)
     # ---
-    return render_template("logs_new.php", result=result)
+    time_tab = {
+        "db_exec_time": db_exec_time
+    }
+    # ---
+    return render_template("logs_new.php", result=result, time_tab=time_tab)
 
 
 @app.route("/autocomplete.php", methods=["GET"])
@@ -132,12 +136,16 @@ def P11038_wd():
     # ---
     split_by_category, sparql_exec_time = render_all_arabic_by_category(limit)
     # ---
+    time_tab = {
+        "sparql_exec_time": sparql_exec_time,
+    }
+    # ---
     return render_template(
         "P11038_wd.html",
         limit=limit,
         result=split_by_category,
         wd_count=wd_count,
-        sparql_exec_time=sparql_exec_time,
+        time_tab=time_tab,
     )
 
 
@@ -148,7 +156,12 @@ def not_in_db():
     # ---
     result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
     # ---
-    return render_template("not_in_db.html", data=result, limit=limit, sparql_exec_time=sparql_exec_time)
+    time_tab = {
+        "db_exec_time": db_exec_time,
+        "sparql_exec_time": sparql_exec_time,
+    }
+    # ---
+    return render_template("not_in_db.html", data=result, limit=limit, time_tab=time_tab)
 
 
 @app.route("/not_in_db1", methods=["GET"])
