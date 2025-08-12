@@ -89,7 +89,7 @@ def find_logs(request):
     # ---
     logs, db_exec_time = wd_data_P11038.get_lemmas(args.per_page, args.offset, args.order, order_by=order_by, filter_data=args.filter_data)
     # ---
-    total_logs_data = wd_data_P11038.count_all()
+    total_logs_data, _db_exec_time = wd_data_P11038.count_all_p11038()
     # ---
     all_logs = total_logs_data.get("all", 0)
     # ---

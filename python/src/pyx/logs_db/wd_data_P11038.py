@@ -3,7 +3,7 @@
 
 from logs_db import wd_data_P11038
 # all_result, db_exec_time = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
-# counts = wd_data_P11038.count_all()
+# counts, db_exec_time = wd_data_P11038.count_all_p11038()
 
 """
 from .db_mysql import fetch_all
@@ -28,7 +28,7 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
     return query, params
 
 
-def count_all():
+def count_all_p11038():
     # ---
     query = """
         SELECT
@@ -56,7 +56,7 @@ def count_all():
     result, db_exec_time = fetch_all(query, [], fetch_one=True)
     # ---
     if not result:
-        return {}
+        return {}, db_exec_time
     # ---
     if isinstance(result, list):
         result = result[0]
@@ -71,7 +71,7 @@ def count_all():
     # ---
     print(data)
     # ---
-    return data
+    return data, db_exec_time
 
 
 def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with"):

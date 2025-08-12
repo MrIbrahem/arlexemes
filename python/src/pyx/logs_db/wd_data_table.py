@@ -2,7 +2,7 @@
 """
 
 from .logs_db import wd_data_table
-# wd_data_table.count_all()
+# wd_data_table.count_all_wd_data()
 # wd_data_table.get_all_wd()
 # wd_data_table.get_all_by_value()  # [value,wd_id,wd_id_category,lemma]
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
@@ -32,7 +32,7 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
     return query, params
 
 
-def count_all():
+def count_all_wd_data():
     # ---
     query = """
         SELECT

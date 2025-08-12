@@ -37,8 +37,21 @@ def inject_load_time():
     return dict(load_time=load_time)
 
 
-def jsonify(data : dict) -> str:
-    response_json = json.dumps(data, ensure_ascii=False, indent=4)
+def jsonify(data : dict, **kwargs) -> str:
+    diff = 0
+    if hasattr(g, 'start_time'):
+        diff = time.time() - g.start_time
+    # ---
+    result = {
+        'load_time' : round(diff, 3),
+    }
+    # ---
+    result.update(kwargs)
+    # ---
+    result["data"] = data
+    # ---
+    response_json = json.dumps(result, ensure_ascii=False, indent=4)
+    # ---
     return Response(response=response_json, content_type="application/json; charset=utf-8")
 
 
@@ -47,9 +60,9 @@ def wd_data_api_count():
     # ---
     _filter_data = request.args.get("filter_data", "all", type=str)
     # ---
-    counts = wd_data_P11038.count_all()
+    counts, db_exec_time = wd_data_P11038.count_all_p11038()
     # ---
-    return jsonify(counts)
+    return jsonify(counts, db_exec_time=db_exec_time)
 
 
 @app.route("/api/wd_data", methods=["GET"])
@@ -63,7 +76,7 @@ def wd_data_api():
     # ---
     all_result, db_exec_time = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
     # ---
-    return jsonify(all_result)
+    return jsonify(all_result, db_exec_time=db_exec_time)
 
 
 @app.route("/api/logs_new", methods=["GET"])
@@ -79,13 +92,7 @@ def not_in_db_api():
     # ---
     result, sparql_exec_time, db_exec_time = get_not_in_db()
     # ---
-    data = {
-        "sparql_exec_time": sparql_exec_time,
-        "db_exec_time": db_exec_time,
-        "result": result,
-    }
-    # ---
-    return jsonify(data)
+    return jsonify(result, db_exec_time=db_exec_time, sparql_exec_time=sparql_exec_time)
 
 
 @app.route("/logs_new", methods=["GET"])
