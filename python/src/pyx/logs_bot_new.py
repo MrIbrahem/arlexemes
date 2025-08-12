@@ -111,6 +111,7 @@ def find_logs(request):
     total_logs_data_formated = {key: f"{value:,}" for key, value in total_logs_data.items()}
     # ---
     result = {
+        "count_all_p11038_db_time": _db_exec_time,
         "logs": logs,
         "order_by_types": order_by_types,
         "tab": table_new,

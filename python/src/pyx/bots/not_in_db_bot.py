@@ -61,6 +61,9 @@ def get_not_in_db(limit=0):
     # ---
     insql_lemma, insql_sama, db_exec_time = in_sql()
     # ---
+    if not insql_lemma or not insql_sama:
+        return result, sparql_exec_time, db_exec_time
+    # ---
     print(f"SPARQL exec_time: {sparql_exec_time}")
     print(f"DB exec_time: {db_exec_time}")
     # ---
