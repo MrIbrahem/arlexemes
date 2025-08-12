@@ -2,7 +2,6 @@
 """
 
 from wd_data_bots import wd_data_table
-# wd_data_table.count_all_wd_data()
 # wd_data_table.get_all_wd()
 # wd_data_table.get_all_by_value()  # [value,wd_id,wd_id_category,lemma]
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")
@@ -33,18 +32,17 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
 
 
 def count_all_wd_data():
+    # Fast
     # ---
     query = """
         SELECT
             COUNT(*) AS total_items,
-            COUNT(CASE WHEN has_data > 0 THEN 1 END) AS with_P11038,
-            COUNT(CASE WHEN has_data = 0 THEN 1 END) AS without_P11038
-        FROM (
-            SELECT d.wd_id, COUNT(p.id) AS has_data
-            FROM wd_data d
-            LEFT JOIN wd_data_p11038 p ON d.wd_id = p.wd_data_id
-            GROUP BY d.wd_id
-        );
+            SUM(CASE WHEN p.wd_data_id IS NOT NULL THEN 1 ELSE 0 END) AS with_P11038,
+            SUM(CASE WHEN p.wd_data_id IS NULL THEN 1 ELSE 0 END) AS without_P11038
+        FROM
+            wd_data d
+        LEFT JOIN
+            wd_data_p11038 p ON d.wd_id = p.wd_data_id;
     """
     # ---
     result, db_exec_time = fetch_all(query, [], fetch_one=True)
@@ -65,6 +63,7 @@ def count_all_wd_data():
 
 
 def get_all_wd():
+    # Fast
     # ---
     query = """
         SELECT
@@ -97,6 +96,7 @@ def get_all_wd():
 
 
 def get_all_by_value():
+    # Fast
     # ---
     query = """
         SELECT DISTINCT

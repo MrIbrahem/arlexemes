@@ -28,53 +28,8 @@ def add_order_limit_offset(query, params, order_by, order, limit, offset):
     return query, params
 
 
-def count_all_p11038():
-    # ---
-    query = """
-        SELECT
-            SUM(total_rows) AS total_rows,
-            SUM(count_has_value) AS count_has_value
-        FROM (
-            SELECT
-                COUNT(*) AS total_rows,
-                COUNT(CASE WHEN wdp.value IS NOT NULL AND wdp.value != '' THEN 1 END) AS count_has_value
-            FROM lemmas_p11038 AS l
-            LEFT JOIN wd_data_p11038 AS wdp
-                ON l.lemma_id = wdp.value
-
-            UNION ALL
-
-            SELECT
-                COUNT(*) AS total_rows,
-                COUNT(CASE WHEN wdp.value IS NOT NULL AND wdp.value != '' THEN 1 END) AS count_has_value
-            FROM lemmas_p11038 AS l
-            LEFT JOIN wd_data_p11038 AS wdp
-                ON l.sama_lemma_id = wdp.value
-        ) AS combined
-    """
-    # ---
-    result, db_exec_time = fetch_all(query, [], fetch_one=True)
-    # ---
-    if not result:
-        return {}, db_exec_time
-    # ---
-    if isinstance(result, list):
-        result = result[0]
-    # ---
-    total_rows = int(result["total_rows"]) // 2
-    # ---
-    data = {
-        "all": total_rows,
-        "with": int(result["count_has_value"]),
-        "without": total_rows - int(result["count_has_value"]),
-    }
-    # ---
-    print(data)
-    # ---
-    return data, db_exec_time
-
-
 def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with"):
+    # Fast
     # ---
     query = """
         SELECT
@@ -118,3 +73,71 @@ def get_lemmas(limit=0, offset=0, order="DESC", order_by="id", filter_data="with
     logs, db_exec_time = fetch_all(query, params)
     # ---
     return logs, db_exec_time
+
+
+def count_lemmas_p11038():
+    # Slow
+    # ---
+    query = "SELECT COUNT(*) AS total_rows FROM lemmas_p11038"
+    # ---
+    result, db_exec_time = fetch_all(query, [], fetch_one=True)
+    # ---
+    if not result:
+        return {}, db_exec_time
+    # ---
+    if isinstance(result, list):
+        result = result[0]
+    # ---
+    total_rows = int(result["total_rows"])
+    # ---
+    return total_rows, db_exec_time
+
+
+def count_has_values():
+    # FAST
+    # ---
+    query = """
+        SELECT
+            COUNT(value) AS count_has_value
+        FROM (
+            -- استعلام للربط على lemma_id
+            SELECT wdp.value FROM lemmas_p11038 AS l
+                JOIN wd_data_p11038 AS wdp ON l.lemma_id = wdp.value
+
+            UNION ALL
+            -- استعلام للربط على sama_lemma_id
+            SELECT wdp.value FROM lemmas_p11038 AS l
+                JOIN wd_data_p11038 AS wdp ON l.sama_lemma_id = wdp.value
+        ) AS combined_results
+    """
+    # ---
+    result, db_exec_time = fetch_all(query, [], fetch_one=True)
+    # ---
+    if not result:
+        return {}, db_exec_time
+    # ---
+    if isinstance(result, list):
+        result = result[0]
+    # ---
+    has_value = int(result["count_has_value"])
+    # ---
+    return has_value, db_exec_time
+
+
+def count_all_p11038():
+    # ---
+    total_rows, db_exec_time_1 = count_lemmas_p11038()
+    # ---
+    has_value, db_exec_time_2 = count_has_values()
+    # ---
+    db_exec_time = db_exec_time_1 + db_exec_time_2
+    # ---
+    total_rows = total_rows // 2
+    # ---
+    data = {
+        "all": total_rows,
+        "with": has_value,
+        "without": total_rows - has_value,
+    }
+    # ---
+    return data, db_exec_time
