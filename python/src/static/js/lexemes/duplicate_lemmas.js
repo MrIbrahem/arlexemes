@@ -231,12 +231,10 @@ async function render_tables_container(data) {
 
 async function load_duplicate() {
     // ---
-    let same_category = get_param_from_window_location("same_category", false);
+    // let same_category = get_param_from_window_location("same_category", false);
+    // if (same_category) $("#same_category").prop("checked", true);
     // ---
-    if (same_category) {
-        // <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1"></input>
-        $("#same_category").prop("checked", true);
-    }
+    let same_category = true;
     // ---
     let data = await get_data_dup(same_category);
     // ---

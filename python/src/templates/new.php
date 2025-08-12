@@ -20,7 +20,7 @@
                                 استعلام
                             </span>
                         </a>
-                        <span id="query_time"></span>
+                        <span id="query_time" class="ms-3"></span>
 
                     </div>
                     <div class="col-md-6 col-sm-12">
