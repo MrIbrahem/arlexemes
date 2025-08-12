@@ -169,6 +169,11 @@ def not_in_db1():
     return render_template("not_in_db.html", data={}, limit=0)
 
 
+@app.route("/lex_just_table.php", methods=["GET"])
+def lex_just_table():
+    return render_template("lex_just_table.php")
+
+
 @app.route("/chart.php", methods=["GET"])
 def chart():
     return render_template("chart.php")
