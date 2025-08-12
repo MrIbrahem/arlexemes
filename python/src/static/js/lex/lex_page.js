@@ -285,5 +285,14 @@ async function start_lexeme(id) {
     output.innerHTML = html;
 
     table_filter();
-
+    // ---
+    $(`.pages_table_x`).DataTable({
+        searching: false,
+        paging: false,
+        info: false,
+        responsive: {
+            details: true
+            // display: $.fn.dataTable.Responsive.display.modal()
+        },
+    });
 }

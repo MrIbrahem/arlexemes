@@ -21,3 +21,4 @@ public_html/web.config
 /public_html
 python/src/static/js/duplicate_lemmas2.js
 python/src/static/js/‏‏duplicate_lemmas - نسخة.js
+python/src/logs/errors.log

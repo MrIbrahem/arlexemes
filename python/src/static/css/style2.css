@@ -6,9 +6,18 @@
     background-color: transparent !important;
 }
 
-.table_text_right,
-.table_text_right>thead>tr>th {
-    text-align: right
+.table_header_right,
+.table_header_right>thead>tr>th {
+    text-align: right !important;
+}
+
+.table_header_center,
+.table_header_center>thead>tr>th {
+    text-align: center !important;
+}
+
+.text_center {
+    text-align: center !important;
 }
 
 a {

@@ -30,10 +30,16 @@
                                         <span class="input-group-text">التصنيف</span>
                                         <select name="data_source" id="data_source" class="form-select d-inline-block" onchange="toggleCustomInput()">
                                             <option value="all">الكل</option>
-                                            <option value="Q34698">صفة</option>
+                                            <option value="Q111029">جذر</option>
                                             <option value="Q24905">فعل</option>
                                             <option value="Q1084">اسم</option>
-                                            <option value="Q111029">جذر</option>
+                                            <option value="Q34698">صفة</option>
+                                            <option value="Q4833830">حرف جر</option>
+                                            <option value="Q147276">اسم علم</option>
+                                            <option value="Q9788">حرف</option>
+                                            <option value="Q36484">حرف ربط</option>
+                                            <option value="Q468801">ضمير شخصي</option>
+                                            <option value="Q63116">اسم عدد</option>
                                             <option value="custom">إدخال مخصص</option>
                                         </select>
                                     </div>
@@ -85,5 +91,6 @@
         await load_list();
     });
 </script>
+
 
 {% endblock %}

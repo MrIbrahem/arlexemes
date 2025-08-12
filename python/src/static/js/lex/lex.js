@@ -163,7 +163,7 @@ function entryFormatter(form) {
     return link;
 }
 
-function entryFormatterNew(form, rowspan) {
+function entryFormatterNew(form) {
     // ---
     const formId = form?.id || "L000-F0";
     // ---
@@ -202,10 +202,8 @@ function entryFormatterNew(form, rowspan) {
     exampleHTML = createExampleIconAndModal(exampleList, formId);
 
     let td = `
-        <td rowspan="${rowspan}" style="position:relative;">
-            ${link}
-            ${exampleHTML}
-        </td>
+        ${link}
+        ${exampleHTML}
     `;
 
     return td;
@@ -391,7 +389,12 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                         }
                     };
                     // ---
-                    let td = entries.map(entry => entryFormatterNew(entry, rowspan)).join("<br>") || "";
+                    let td = (rowspan > 1) ? `<td rowspan="${rowspan}" style="position:relative;">` : `<td style="position:relative;">`;
+                    // ---
+                    // td += entries.map(entryFormatter).join("<br>") || "";
+                    td += entries.map(entryFormatterNew).join("<br>") || "";
+                    // ---
+                    td += `</td>`;
                     // ---
                     gender_tds += td
                 }
@@ -464,10 +467,11 @@ async function Q24905(entity) {
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
 
+    let display_mt_cells = {};
     for (const verb of verbs_main) {
         tableData[verb] = make_tableData(numberKeys, rowKeys, colKeys, genderKeys);
+        display_mt_cells[verb] = false;
     }
-    let display_mt_cells = {};
 
     // Populate the tableData with forms based on their grammatical features
     for (const form of forms) {

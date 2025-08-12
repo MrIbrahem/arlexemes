@@ -5,4 +5,4 @@ cd $HOME
 
 source $HOME/www/python/venv/bin/activate
 
-python3 www/python/src/update_wd/wd_data.py
+python3 www/python/src/jobs/update_wd/wd_data.py

@@ -94,4 +94,5 @@
         load_search(setExample, 'wd_id', 'autocomplete-results');
     });
 </script>
+
 {% endblock %}

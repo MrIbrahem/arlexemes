@@ -2,29 +2,67 @@
 import sys
 from flask import Flask, render_template, request, Response, session
 import json
+import time
+from flask import g
+
+from pyx import logs_bot_new
+from pyx.wd_data_bots import wd_data_P11038
+from pyx.sparql_bots import sparql_bot
+from pyx.sparql_bots.render import render_all_arabic_by_category
+from pyx.bots.not_in_db_bot import get_not_in_db
+
 
 app = Flask(__name__)
 # CORS(app)  # ← لتفعيل CORS
-import logs_bot_new
-from bots import sparql_bot
-from bots.match_sparql import get_wd_not_in_sql
-# from logs_db import wd_data_table  # count_all, get_all
-from logs_db import wd_data_P11038
 
 
-def jsonify(data : dict) -> str:
-    response_json = json.dumps(data, ensure_ascii=False, indent=4)
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+
+@app.after_request
+def after_request(response):
+    if hasattr(g, 'start_time'):
+        g.load_time = time.time() - g.start_time
+    return response
+
+
+@app.context_processor
+def inject_load_time():
+    # نحسب الوقت الحالي - وقت البداية
+    load_time = 0
+    if hasattr(g, 'start_time'):
+        load_time = time.time() - g.start_time
+    return dict(load_time=load_time)
+
+
+def jsonify(data : dict, **kwargs) -> str:
+    diff = 0
+    if hasattr(g, 'start_time'):
+        diff = time.time() - g.start_time
+    # ---
+    result = {
+        'load_time' : round(diff, 3),
+    }
+    # ---
+    result.update(kwargs)
+    # ---
+    result["data"] = data
+    # ---
+    response_json = json.dumps(result, ensure_ascii=False, indent=4)
+    # ---
     return Response(response=response_json, content_type="application/json; charset=utf-8")
 
 
 @app.route("/api/wd_data_count", methods=["GET"])
 def wd_data_api_count():
     # ---
-    filter_data = request.args.get("filter_data", "all", type=str)
+    _filter_data = request.args.get("filter_data", "all", type=str)
     # ---
-    counts = wd_data_P11038.count_all(filter_data)
+    counts, db_exec_time = wd_data_P11038.count_all_p11038()
     # ---
-    return jsonify(counts)
+    return jsonify(counts, db_exec_time=db_exec_time)
 
 
 @app.route("/api/wd_data", methods=["GET"])
@@ -36,25 +74,37 @@ def wd_data_api():
     order_by = request.args.get("order_by", "id", type=str)
     filter_data = request.args.get("filter_data", "with", type=str)
     # ---
-    all_result = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
+    all_result, db_exec_time = wd_data_P11038.get_lemmas(limit=limit, offset=offset, order=order, order_by=order_by, filter_data=filter_data)
     # ---
-    return jsonify(all_result)
+    return jsonify(all_result, db_exec_time=db_exec_time)
 
 
-@app.route("/api/wd_not_in_sql", methods=["GET"])
-def api_wd_not_in_sql():
+@app.route("/api/not_in_db", methods=["GET"])
+def not_in_db_api():
     # ---
-    result = get_wd_not_in_sql()
+    result, sparql_exec_time, db_exec_time = get_not_in_db()
     # ---
-    return jsonify(result)
+    return jsonify(result, db_exec_time=db_exec_time, sparql_exec_time=sparql_exec_time)
+
+
+@app.route("/api/logs_new", methods=["GET"])
+def logs_new_api():
+    # ---
+    result, db_exec_time = logs_bot_new.find_logs(request)
+    # ---
+    return jsonify(result, db_exec_time=db_exec_time)
 
 
 @app.route("/logs_new", methods=["GET"])
 def view_logs_new():
     # ---
-    result = logs_bot_new.find_logs(request)
+    result, db_exec_time = logs_bot_new.find_logs(request)
     # ---
-    return render_template("logs_new.php", result=result)
+    time_tab = {
+        "db_exec_time": db_exec_time
+    }
+    # ---
+    return render_template("logs_new.php", result=result, time_tab=time_tab)
 
 
 @app.route("/autocomplete.php", methods=["GET"])
@@ -79,24 +129,24 @@ def P11038():
 
 @app.route("/P11038_wd", methods=["GET"])
 def P11038_wd():
-    wd_count = sparql_bot.count_arabic_with_P11038()
+    # ---
     limit = request.args.get('limit', 100, type=int)
-
-    result = sparql_bot.all_arabic(limit)
-    split_by_category = {}
-    for item in result:
-        category = item['category']
-        # ---
-        if category not in split_by_category:
-            split_by_category[category] = {
-                'category': category,
-                'categoryLabel': item['categoryLabel'],
-                'members': []
-            }
-        # ---
-        split_by_category[category]['members'].append(item)
-
-    return render_template("P11038_wd.html", limit=limit, result=split_by_category, wd_count=wd_count)
+    # ---
+    wd_count, _ = sparql_bot.count_arabic_with_P11038()
+    # ---
+    split_by_category, sparql_exec_time = render_all_arabic_by_category(limit)
+    # ---
+    time_tab = {
+        "sparql_exec_time": sparql_exec_time,
+    }
+    # ---
+    return render_template(
+        "P11038_wd.html",
+        limit=limit,
+        result=split_by_category,
+        wd_count=wd_count,
+        time_tab=time_tab,
+    )
 
 
 @app.route("/not_in_db", methods=["GET"])
@@ -104,15 +154,14 @@ def not_in_db():
     # ---
     limit = request.args.get('limit', 100, type=int)
     # ---
-    result = get_wd_not_in_sql()
+    result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
     # ---
-    # sort result by len of P11038_list
-    result = sorted(result, key=lambda x: len(x['P11038_list']), reverse=True)
+    time_tab = {
+        "db_exec_time": db_exec_time,
+        "sparql_exec_time": sparql_exec_time,
+    }
     # ---
-    if limit > 0:
-        result = result[:limit]
-    # ---
-    return render_template("not_in_db.html", data=result, limit=limit)
+    return render_template("not_in_db.html", data=result, limit=limit, time_tab=time_tab)
 
 
 @app.route("/not_in_db1", methods=["GET"])
