@@ -33,7 +33,7 @@ def insert_new_items(in_wd_data, in_db):
         # ---
         wd_data_table.insert_wd_id(wd_id=item, wd_id_category=wd_id_category, lemma=lemma)
     # ---
-    print(f"in_wd_data_new: {in_wd_data_new}")
+    print(f"in_wd_data_new: {len(in_wd_data_new):,}")
 
 
 def update_wd():
