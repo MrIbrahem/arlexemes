@@ -213,10 +213,10 @@ async function render_tables_container(data) {
                             <tr>
                                 <th class="w-25">خاصية</th>
                                 <th>الأول:
-                                    <a href="/lex.php?wd_id=${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
+                                    <a href="https://wikidata.org/entity/${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
                                 </th>
                                 <th>الثاني:
-                                    <a href="/lex.php?wd_id=${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
+                                    <a href="https://wikidata.org/entity/${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
                                 </th>
                             </tr>
                         </thead>
