@@ -20,7 +20,7 @@ endpoint_url = 'https://query.wikidata.org/sparql'
 
 def safe_sparql_query(query):
 
-    if query in sparql_cache:
+    if query in sparql_cache and "nocahe" not in sys.argv:
         err_bot.log_error("SPARQL Cache Hit", f"Query retrieved from cache: {query}")
         return sparql_cache[query], ""
 

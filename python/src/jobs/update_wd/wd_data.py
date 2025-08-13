@@ -9,6 +9,7 @@ import tqdm
 import sys
 from pathlib import Path
 
+sys.argv.append("nocahe")
 path_1 = Path(__file__).parent.parent.parent
 sys.path.append(str(path_1))
 
