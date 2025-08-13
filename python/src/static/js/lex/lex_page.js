@@ -230,7 +230,7 @@ async function fetchLexemeById(id, entity, no_head = false) {
     }
     // ---
     let html = `
-        <div class="row mb-4" id="sub_header">
+        <div class="row mb-4">
             ${header_main}
             ${claims_row}
             <div class="col">
@@ -246,7 +246,11 @@ async function fetchLexemeById(id, entity, no_head = false) {
         </div>
     `;
     if (no_head) {
-        html = '';
+        html = `
+        <div class="row mb-4">
+            ${header_main}
+        </div>
+    `;
     }
     let table_html = "";
     if (Category === "Q1084") {             // nouns

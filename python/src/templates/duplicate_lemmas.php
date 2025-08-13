@@ -2,6 +2,18 @@
 
 {% block content %}
 
+<style>
+    /* حد عمودي بين الإطارين */
+    .border-between {
+        border-left: 3px solid #ccc;
+    }
+
+    /* إذا الوضع عمودي نغير الحد ليكون أفقي */
+    .flex-column .border-between {
+        border-left: none;
+        border-bottom: 3px solid #ccc;
+    }
+</style>
 <div class="container my-4">
     <div class="d-flex align-items-center justify-content-center">
         <div class="row col-md-10 border rounded">
@@ -59,30 +71,58 @@
 <div class="modal fade" id="splitViewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">عرض الصفحتين</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+            <div class="modal-headerx" style="padding: 1rem 1rem">
+                <!-- جزء العنوان مع أيقونة التبديل بجانبه -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="modal-title h5 me-2">عرض الصفحتين</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                        onclick="toggleViewMode()" title="تبديل العرض">
+                        <i class="bi bi-layout-split"></i>
+                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <!-- زر الإغلاق في أقصى اليمين -->
             </div>
             <div class="modal-body p-0">
-                <div class="row g-0" style="height: 100%;">
-                    <div class="col-6">
-                        <iframe id="iframe1x" style="width:100%; height:100%; border:none;"></iframe>
+                <div id="splitContainer" class="row g-0 flex-nowrap" style="height: 100%;">
+                    <div class="col border-between" style="flex: 1 1 50%;">
+                        <iframe id="iframe1" style="width:100%; height:100%; border:none;"></iframe>
                     </div>
-                    <div class="col-6">
-                        <iframe id="iframe2x" style="width:100%; height:100%; border:none;"></iframe>
+                    <div class="col" style="flex: 1 1 50%;">
+                        <iframe id="iframe2" style="width:100%; height:100%; border:none;"></iframe>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', () => load_duplicate());
+    let isHorizontal = true;
 
-    function openSplitView1(id1, id2) {
-        document.getElementById("iframe1x").src = "/lex_just_table.php?wd_id=" + id1;
-        document.getElementById("iframe2x").src = "/lex_just_table.php?wd_id=" + id2;
+    function openSplitView(id1, id2) {
+        document.getElementById("iframe1").src = "/lex_just_table.php?wd_id=" + id1;
+        document.getElementById("iframe2").src = "/lex_just_table.php?wd_id=" + id2;
     }
+
+    function toggleViewMode() {
+        const container = document.getElementById("splitContainer");
+        const icon = document.getElementById("toggleIcon");
+
+        if (isHorizontal) {
+            // تحويل لعرض عمودي
+            container.classList.remove("flex-nowrap");
+            container.classList.add("flex-column");
+            icon.style.transform = "rotate(90deg)";
+        } else {
+            // تحويل لعرض أفقي
+            container.classList.remove("flex-column");
+            container.classList.add("flex-nowrap");
+            icon.style.transform = "rotate(0deg)";
+        }
+        isHorizontal = !isHorizontal;
+    }
+    document.addEventListener('DOMContentLoaded', () => load_duplicate());
 </script>
 
 {% endblock %}
