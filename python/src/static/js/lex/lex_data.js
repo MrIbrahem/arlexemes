@@ -20,6 +20,7 @@ const first_second_third_person = [
 const gender_Keys_global = ["Q499327", "Q1775415", ""];
 
 let numberKeys_verb = [
+    "Q1994301", // past
     "Q23663136", // past
     "Q56649265", // imperfective
     "Q473746", // subjunctive
@@ -54,3 +55,7 @@ let adj_and_nouns_keys = {};
 
 adj_and_nouns_keys["Q34698"] = singular_plural_dual;
 adj_and_nouns_keys["Q1084"] = singular_plural_dual;
+
+
+let past_qid = "Q1994301"
+let past_perfect_qid = "Q23663136"

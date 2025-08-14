@@ -478,7 +478,9 @@ async function Q24905(entity) {
     let rowKeys = first_second_third_person;
 
     let verbs_main = verbs_main_g; // معلوم ومجهول
-    let numberKeys = numberKeys_verb; // ماضي مضارع
+
+    // let numberKeys = numberKeys_verb; // ماضي مضارع
+    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [past_qid, past_perfect_qid]);
 
     let spd = singular_plural_dual;// مفرد مثنى جمع
     // remove "" from spd

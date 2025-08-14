@@ -452,7 +452,8 @@ async function Q24905(entity) {
 
     let verbs_main = verbs_main_g;
 
-    let numberKeys = numberKeys_verb;
+    // let numberKeys = numberKeys_verb;
+    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [past_qid, past_perfect_qid]);
 
     let rowKeys = gender_Keys_global;
 

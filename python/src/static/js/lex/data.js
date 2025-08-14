@@ -87,6 +87,7 @@ const grammaticalFeatures = {
     "passive": { qid: "Q1194697", ar: "فعل مبني للمجهول" },
 
     // الأزمنة
+    // "past": { qid: "Q1994301", ar: "ماضي" },
     "past": { qid: "Q23663136", ar: "ماضي تام" },
     "imperfective": { qid: "Q56649265", ar: "مضارع ناقص" },
     "subjunctive": { qid: "Q473746", ar: "مضارع منصوب" },
@@ -106,3 +107,5 @@ for (const [en, { qid, ar }] of Object.entries(grammaticalFeatures)) {
     en2qid[en] = qid;
     en2ar[en] = ar;
 }
+
+keyLabels["Q1994301"] = "ماضي";
