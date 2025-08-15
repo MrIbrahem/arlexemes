@@ -53,9 +53,9 @@ const grammaticalFeatures = {
     "non-past": { qid: "Q16916993", ar: "ليس ماضي" },
 
     // الأعداد
-    "plural": { qid: "Q146786", ar: "جمع" },
-    "dual": { qid: "Q110022", ar: "مثنى" },
-    "singular": { qid: "Q110786", ar: "مفرد" },
+    "plural": { qid: "Q146786", ar: "جَمْع" },
+    "dual": { qid: "Q110022", ar: "مُثَنَّى" },
+    "singular": { qid: "Q110786", ar: "مُفْرَد" },
 
     // أشكال العدد المتقدمة
     "singulative": { qid: "Q28936290", ar: "صيغة المفرد الفردي" },  // Singulative number
@@ -63,19 +63,20 @@ const grammaticalFeatures = {
     "paucal": { qid: "Q158933", ar: "صيغة القلة" },           // Paucal number
 
     // الحالات الإعرابية
-    "genitive": { qid: "Q146233", ar: "إضافة" },
-    "accusative": { qid: "Q146078", ar: "نصب" },
-    "nominative": { qid: "Q131105", ar: "رفع" },
+    "genitive!": { qid: "Q146233", ar: "إضافة" },
+	"genitive": { qid: "Q1095813", ar: "مَجْرُور" },
+    "accusative": { qid: "Q146078", ar: "مَنْصُوب" },
+    "nominative": { qid: "Q131105", ar: "مَرْفُوع" },
     "informal": { qid: "Q117262361", ar: "الوقف" },
 
     // التعريف
-    "indefinite": { qid: "Q53997857", ar: "نكرة" },
-    "definite": { qid: "Q53997851", ar: "معرفة" },
+    "indefinite": { qid: "Q53997857", ar: "نَكِرَة" },
+    "definite": { qid: "Q53997851", ar: "مَعْرِفَة" },
     "construct": { qid: "Q1641446", ar: "مركب" }, // Compound
 
     // الجنس
-    "masculine": { qid: "Q499327", ar: "مذكر" },
-    "feminine": { qid: "Q1775415", ar: "مؤنث" },
+    "masculine": { qid: "Q499327", ar: "مُذَكَّر" },
+    "feminine": { qid: "Q1775415", ar: "مُؤَنَّث" },
 
     // الأشخاص
     "first-person": { qid: "Q21714344", ar: "متكلم" },

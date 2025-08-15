@@ -4,6 +4,7 @@ let Pausal_Forms = [
     "Q131105",
     "Q146078",
     "Q146233",
+    "Q1095813",
     ""
 ];
 
@@ -22,10 +23,10 @@ const gender_Keys_global = ["Q499327", "Q1775415", ""];
 let numberKeys_verb = [
     "Q1994301", // past
     "Q23663136", // past
-	
+
     "Q56649265", // imperfective	مضارع ناقص
     "Q12230930", // fi'il muḍāri'
-	
+
     "Q473746", // subjunctive
 
     "Q462367", // jussive
