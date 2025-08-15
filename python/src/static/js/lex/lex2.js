@@ -537,7 +537,7 @@ async function adj_and_nouns(entity_type, entity) {
     const forms = entity.forms || [];
 
     // ---
-    let row_Keys = removeKeysIfNotFound([...Pausal_Forms], forms, ["Q146233", "Q1095813"]);
+    let row_Keys = removeKeysIfNotFound([...Pausal_Forms], forms, ["Q146233", "Q1095813", "Q117262361"]);
     let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
 
     let colKeys = indefinite_definite_construct;
