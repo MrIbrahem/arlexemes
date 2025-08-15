@@ -5,14 +5,18 @@ python3 I:/milion/arlexemes/python/src/jobs/update_wd/wd_data.py
 python3 www/python/src/jobs/update_wd/wd_data.py
 
 """
-import tqdm
 import sys
 from pathlib import Path
 
 sys.argv.append("nocahe")
+Dir_main = Path("www/python/venv/lib/python3.11/site-packages")
+if Dir_main.exists():
+    sys.path.append(str(Dir_main))
+
 path_1 = Path(__file__).parent.parent.parent
 sys.path.append(str(path_1))
 
+import tqdm
 from pyx.sparql_bots.render import render_sparql_P11038_grouped
 from pyx.wd_data_bots import wd_data_table
 
