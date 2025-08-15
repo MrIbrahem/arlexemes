@@ -50,7 +50,7 @@ let Feminine = "Q1775415";
 let verbs_main_g = ["Q1317831", "Q1194697", ""];
 
 
-let indefinite_definite_construct = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
+let indefinite_definite_construct = ["Q53997857", "Q53997851",  "Q118465097", ""];
 
 let construct_contextform = ["Q1641446", "Q118465097"];
 
