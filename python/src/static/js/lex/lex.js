@@ -60,8 +60,8 @@ function wdlink_2(key) {
 
     ];
     // ---
-    let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
-    // let to_find = [];
+    // let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
+    let to_find = [];
     // ---
     if (to_find.includes(key)) {
         label = `${label}<br>${key}`
