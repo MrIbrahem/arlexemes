@@ -83,8 +83,8 @@ const grammaticalFeatures = {
     "third-person": { qid: "Q51929074", ar: "غائب" },
 
     // البناء
-    "active": { qid: "Q1317831", ar: "فعل مبني للمعلوم" },
-    "passive": { qid: "Q1194697", ar: "فعل مبني للمجهول" },
+    "active": { qid: "Q1317831", ar: "مبني للمعلوم" },
+    "passive": { qid: "Q1194697", ar: "مبني للمجهول" },
 
     // الأزمنة
     "past": { qid: "Q1994301", ar: "ماضي" },
@@ -92,8 +92,8 @@ const grammaticalFeatures = {
     "imperfective": { qid: "Q56649265", ar: "مضارع ناقص" },
     "subjunctive": { qid: "Q473746", ar: "مضارع منصوب" },
     "jussive": { qid: "Q462367", ar: "مضارع مجزوم" },
-    "imperative": { qid: "Q22716", ar: "فعل أمر" },
-    "fi'il muḍāri'": { qid: "Q12230930", ar: "فعل مضارع" },
+    "imperative": { qid: "Q22716", ar: "أمر" },
+    "fi'il muḍāri'": { qid: "Q12230930", ar: "مضارع" },
 
     // أخرى
     "performative": { qid: "Q124351233", ar: "أدائي" }, // إنجازي
