@@ -72,9 +72,12 @@
 
     <style>
         /* تطبيق الخط على كامل الصفحة */
-        body {
+        body :not(.words) {
             font-family: 'Cairo', sans-serif;
         }
+		.words {
+			font-family: "" !important;
+		}
 
         /* تصميم مخصص لمؤشر التحميل */
         .loader {

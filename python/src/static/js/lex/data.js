@@ -87,8 +87,8 @@ const grammaticalFeatures = {
     "passive": { qid: "Q1194697", ar: "فعل مبني للمجهول" },
 
     // الأزمنة
-    // "past": { qid: "Q1994301", ar: "ماضي" },
-    "past": { qid: "Q23663136", ar: "ماضي تام" },
+    "past": { qid: "Q1994301", ar: "ماضي" },
+    "past perfect": { qid: "Q23663136", ar: "ماضي تام" },
     "imperfective": { qid: "Q56649265", ar: "مضارع ناقص" },
     "subjunctive": { qid: "Q473746", ar: "مضارع منصوب" },
     "jussive": { qid: "Q462367", ar: "مضارع مجزوم" },

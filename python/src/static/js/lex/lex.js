@@ -133,8 +133,8 @@ function entryFormatter(form) {
     let values = Object.values(form.representations || {})
         .map(r => r.value)
         .filter(Boolean)
-        .map(v => `<span word="${v}">${v}</span>`)
-        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
+        .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
+        .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
     // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
@@ -171,8 +171,8 @@ function entryFormatterNew(form) {
     let values = Object.values(form.representations || {})
         .map(r => r.value)
         .filter(Boolean)
-        .map(v => `<span word="${v}">${v}</span>`)
-        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
+        .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
+        .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
     // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
