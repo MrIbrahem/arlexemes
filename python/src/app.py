@@ -112,6 +112,11 @@ def autocomplete():
     return sparql_bot.search(request.args)
 
 
+@app.route("/features_chart.php", methods=["GET"])
+def features_chart():
+    return render_template("features_chart.php")
+
+
 @app.route("/list.php", methods=["GET"])
 def list_lexemes():
     return render_template("list.php")
