@@ -75,9 +75,10 @@
         body :not(.words) {
             font-family: 'Cairo', sans-serif;
         }
-		.words {
-			font-family: "" !important;
-		}
+
+        .words {
+            font-family: "" !important;
+        }
 
         /* تصميم مخصص لمؤشر التحميل */
         .loader {
@@ -140,6 +141,11 @@
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
                         <a class="nav-link" href="/P11038">
                             <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
+                        </a>
+                    </li>
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/features_chart') else '' }}">
+                        <a class="nav-link" href="/features_chart.php"><i class="bi bi-bar-chart-line me-1"></i>
+                            الميزات النحوية
                         </a>
                     </li>
                 </ul>

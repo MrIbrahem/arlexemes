@@ -62,7 +62,7 @@ const queries = {
  * @param {string} labelKey - المفتاح الذي يحتوي على التسمية (مثل 'categoryLabel' أو 'languageLabel')
  * @returns {Promise<object>} - كائن يحتوي على العناوين والبيانات
  */
-async function fetchWikidata(sparqlQuery, labelKey, labelKey2) {
+async function fetchWikidata(sparqlQuery, labelKey, labelKey2, countKey) {
     const fullUrl = `${WIKIDATA_ENDPOINT}?query=${encodeURIComponent(sparqlQuery)}`;
 
     try {
@@ -79,7 +79,7 @@ async function fetchWikidata(sparqlQuery, labelKey, labelKey2) {
         const labels = bindings.map(b =>
             b[labelKey2]?.value ? `${b[labelKey]?.value} (${b[labelKey2]?.value})` : b[labelKey]?.value
         );
-        const data = bindings.map(b => parseInt(b.c.value, 10));
+        const data = bindings.map(b => parseInt(b[countKey].value, 10));
 
         return {
             labels,
@@ -103,10 +103,7 @@ async function fetchWikidata(sparqlQuery, labelKey, labelKey2) {
  * @param {number[]} data - مصفوفة البيانات المقابلة للشرائح
  * @param {string} title - عنوان المخطط
  */
-function createChart(ctx, {
-    labels,
-    data
-}, title) {
+function createChart(ctx, { labels, data }, title) {
     const chartColors = [
         'rgba(54, 162, 235, 0.8)', 'rgba(255, 99, 132, 0.8)',
         'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)',
@@ -159,7 +156,7 @@ function createChart(ctx, {
     });
 }
 
-async function one_chart(n, query, labelKey, labelKey2) {
+async function one_chart(n, query, labelKey, labelKey2, countKey) {
     // ---
     let titles = [
         ' الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>',
@@ -171,7 +168,7 @@ async function one_chart(n, query, labelKey, labelKey2) {
     // ---
     if (!ctx) return;
     // ---
-    let char1Data = await fetchWikidata(query, labelKey, labelKey2);
+    let char1Data = await fetchWikidata(query, labelKey, labelKey2, countKey);
     // ---
     let ctx2d = ctx.getContext('2d');
     // ---
@@ -201,7 +198,7 @@ async function one_chart(n, query, labelKey, labelKey2) {
 
 async function initializeCharts() {
     await Promise.all([
-        one_chart(1, queries.lexicalCategoriesArabic, 'categoryLabel', "c"),
-        one_chart(2, queries.lexemesPerLanguage, 'languageLabel', "ISO")
+        one_chart(1, queries.lexicalCategoriesArabic, 'categoryLabel', "c", "c"),
+        one_chart(2, queries.lexemesPerLanguage, 'languageLabel', "ISO", "c")
     ]);
 }
