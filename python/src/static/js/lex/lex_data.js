@@ -24,6 +24,7 @@ let numberKeys_verb = [
     "Q1994301", // past
     "Q23663136", // past
 
+    "Q192613", // 	مضارع
     "Q56649265", // imperfective	مضارع ناقص
     "Q12230930", // fi'il muḍāri'
 

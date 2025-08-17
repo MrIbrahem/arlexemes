@@ -64,7 +64,7 @@ const grammaticalFeatures = {
 
     // الحالات الإعرابية
     "genitive!": { qid: "Q146233", ar: "إضافة" },
-	"genitive": { qid: "Q1095813", ar: "مَجْرُور" },
+    "genitive": { qid: "Q1095813", ar: "مَجْرُور" },
     "accusative": { qid: "Q146078", ar: "مَنْصُوب" },
     "nominative": { qid: "Q131105", ar: "مَرْفُوع" },
     "informal": { qid: "Q117262361", ar: "الوقف" },
@@ -95,6 +95,7 @@ const grammaticalFeatures = {
     "jussive": { qid: "Q462367", ar: "مضارع مجزوم" },
     "imperative": { qid: "Q22716", ar: "أمر" },
     "fi'il muḍāri'": { qid: "Q12230930", ar: "مضارع" },
+    "Q192613": { qid: "Q192613", ar: "مضارع" },
 
     // أخرى
     "performative": { qid: "Q124351233", ar: "أدائي" }, // إنجازي
