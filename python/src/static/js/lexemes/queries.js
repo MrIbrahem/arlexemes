@@ -215,6 +215,10 @@ function duplicate_lemmas_query(same_category) {
                                 wikibase:lexicalCategory ?2_category;
                                 dct:language wd:Q13955 .
                         FILTER(?1_item != ?2_item && STR(?1_item) < STR(?2_item))
+
+                        FILTER NOT EXISTS { ?1_item wdt:P5402 ?2_item.}
+                        FILTER NOT EXISTS { ?2_item wdt:P5402 ?1_item.}
+
                         ${same_category_filter}
                         {
                             ?1_item ?pz ?1_p_value.

@@ -200,7 +200,9 @@ async function render_tables_container(data) {
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2>${groupIndex} - ${lemma}</h2>
-                        <button class="btn btn-sm btn-outline-primary" onclick="openSplitView('${item1Id}', '${item2Id}')">
+                            <button class="btn btn-sm btn-outline-primary"
+                                onclick="openSplitView('${item1Id}', '${item2Id}')"
+                                data-bs-toggle="modal" data-bs-target="#splitViewModal">
                             <i class="bi bi-columns"></i> استعرض التصريفات
                         </button>
                     </div>
@@ -211,10 +213,10 @@ async function render_tables_container(data) {
                             <tr>
                                 <th class="w-25">خاصية</th>
                                 <th>الأول:
-                                    <a href="/lex.php?wd_id=${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
+                                    <a href="https://wikidata.org/entity/${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
                                 </th>
                                 <th>الثاني:
-                                    <a href="/lex.php?wd_id=${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
+                                    <a href="https://wikidata.org/entity/${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
                                 </th>
                             </tr>
                         </thead>
@@ -229,12 +231,10 @@ async function render_tables_container(data) {
 
 async function load_duplicate() {
     // ---
-    let same_category = get_param_from_window_location("same_category", false);
+    // let same_category = get_param_from_window_location("same_category", false);
+    // if (same_category) $("#same_category").prop("checked", true);
     // ---
-    if (same_category) {
-        // <input class="form-check-input" type="checkbox" id="same_category" name="same_category" value="1"></input>
-        $("#same_category").prop("checked", true);
-    }
+    let same_category = true;
     // ---
     let data = await get_data_dup(same_category);
     // ---

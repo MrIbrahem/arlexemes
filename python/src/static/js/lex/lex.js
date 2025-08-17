@@ -60,7 +60,8 @@ function wdlink_2(key) {
 
     ];
     // ---
-    let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
+    // let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
+    let to_find = [];
     // ---
     if (to_find.includes(key)) {
         label = `${label}<br>${key}`
@@ -133,8 +134,8 @@ function entryFormatter(form) {
     let values = Object.values(form.representations || {})
         .map(r => r.value)
         .filter(Boolean)
-        .map(v => `<span word="${v}">${v}</span>`)
-        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
+        .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
+        .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
     // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
@@ -171,8 +172,8 @@ function entryFormatterNew(form) {
     let values = Object.values(form.representations || {})
         .map(r => r.value)
         .filter(Boolean)
-        .map(v => `<span word="${v}">${v}</span>`)
-        .join(" / ") || `<span word="${form?.form}">${form?.form}</span>` || "";
+        .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
+        .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
     // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
@@ -452,7 +453,8 @@ async function Q24905(entity) {
 
     let verbs_main = verbs_main_g;
 
-    let numberKeys = numberKeys_verb;
+    // let numberKeys = numberKeys_verb;
+    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [past_qid, past_perfect_qid]);
 
     let rowKeys = gender_Keys_global;
 
@@ -515,7 +517,7 @@ async function adj_and_nouns(entity_type, entity) {
     const forms = entity.forms || [];
 
     // ---
-    let row_Keys = Pausal_Forms;
+    let row_Keys = removeKeysIfNotFound([...Pausal_Forms], forms, ["Q146233", "Q1095813", "Q117262361"]);
     let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
 
     let colKeys = indefinite_definite_construct;

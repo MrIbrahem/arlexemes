@@ -53,9 +53,9 @@ const grammaticalFeatures = {
     "non-past": { qid: "Q16916993", ar: "ليس ماضي" },
 
     // الأعداد
-    "plural": { qid: "Q146786", ar: "جمع" },
-    "dual": { qid: "Q110022", ar: "مثنى" },
-    "singular": { qid: "Q110786", ar: "مفرد" },
+    "plural": { qid: "Q146786", ar: "جَمْع" },
+    "dual": { qid: "Q110022", ar: "مُثَنَّى" },
+    "singular": { qid: "Q110786", ar: "مُفْرَد" },
 
     // أشكال العدد المتقدمة
     "singulative": { qid: "Q28936290", ar: "صيغة المفرد الفردي" },  // Singulative number
@@ -63,19 +63,20 @@ const grammaticalFeatures = {
     "paucal": { qid: "Q158933", ar: "صيغة القلة" },           // Paucal number
 
     // الحالات الإعرابية
-    "genitive": { qid: "Q146233", ar: "إضافة" },
-    "accusative": { qid: "Q146078", ar: "نصب" },
-    "nominative": { qid: "Q131105", ar: "رفع" },
+    "genitive!": { qid: "Q146233", ar: "مَجْرُور" },
+    "genitive": { qid: "Q1095813", ar: "مَجْرُور" },
+    "accusative": { qid: "Q146078", ar: "مَنْصُوب" },
+    "nominative": { qid: "Q131105", ar: "مَرْفُوع" },
     "informal": { qid: "Q117262361", ar: "الوقف" },
 
     // التعريف
-    "indefinite": { qid: "Q53997857", ar: "نكرة" },
-    "definite": { qid: "Q53997851", ar: "معرفة" },
-    "construct": { qid: "Q1641446", ar: "مركب" }, // Compound
+    "indefinite": { qid: "Q53997857", ar: "نَكِرَة" },
+    "definite": { qid: "Q53997851", ar: "مَعْرِفَة" },
+    "construct": { qid: "Q1641446", ar: "إضافة" }, // Compound
 
     // الجنس
-    "masculine": { qid: "Q499327", ar: "مذكر" },
-    "feminine": { qid: "Q1775415", ar: "مؤنث" },
+    "masculine": { qid: "Q499327", ar: "مُذَكَّر" },
+    "feminine": { qid: "Q1775415", ar: "مُؤَنَّث" },
 
     // الأشخاص
     "first-person": { qid: "Q21714344", ar: "متكلم" },
@@ -83,16 +84,18 @@ const grammaticalFeatures = {
     "third-person": { qid: "Q51929074", ar: "غائب" },
 
     // البناء
-    "active": { qid: "Q1317831", ar: "فعل مبني للمعلوم" },
-    "passive": { qid: "Q1194697", ar: "فعل مبني للمجهول" },
+    "active": { qid: "Q1317831", ar: "مبني للمعلوم" },
+    "passive": { qid: "Q1194697", ar: "مبني للمجهول" },
 
     // الأزمنة
-    "past": { qid: "Q23663136", ar: "ماضي تام" },
+    "past": { qid: "Q1994301", ar: "ماضي" },
+    "past perfect": { qid: "Q23663136", ar: "ماضي تام" },
     "imperfective": { qid: "Q56649265", ar: "مضارع ناقص" },
     "subjunctive": { qid: "Q473746", ar: "مضارع منصوب" },
     "jussive": { qid: "Q462367", ar: "مضارع مجزوم" },
-    "imperative": { qid: "Q22716", ar: "فعل أمر" },
-    "fi'il muḍāri'": { qid: "Q12230930", ar: "فعل مضارع" },
+    "imperative": { qid: "Q22716", ar: "أمر" },
+    "fi'il muḍāri'": { qid: "Q12230930", ar: "مضارع" },
+    "Q192613": { qid: "Q192613", ar: "مضارع" },
 
     // أخرى
     "performative": { qid: "Q124351233", ar: "أدائي" }, // إنجازي
@@ -106,3 +109,5 @@ for (const [en, { qid, ar }] of Object.entries(grammaticalFeatures)) {
     en2qid[en] = qid;
     en2ar[en] = ar;
 }
+
+keyLabels["Q1994301"] = "ماضي";

@@ -72,8 +72,12 @@
 
     <style>
         /* تطبيق الخط على كامل الصفحة */
-        body {
+        body :not(.words) {
             font-family: 'Cairo', sans-serif;
+        }
+
+        .words {
+            font-family: "" !important;
         }
 
         /* تصميم مخصص لمؤشر التحميل */
@@ -94,7 +98,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow mb-4">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow mb-4" id="main_navbar">
         <div class="container-fluid">
             <div class="nav_title">
                 <a class="navbar-brand fw-bold" href="/" id="main_title">
@@ -137,6 +141,11 @@
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
                         <a class="nav-link" href="/P11038">
                             <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
+                        </a>
+                    </li>
+                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/features_chart') else '' }}">
+                        <a class="nav-link" href="/features_chart.php"><i class="bi bi-bar-chart-line me-1"></i>
+                            الميزات النحوية
                         </a>
                     </li>
                 </ul>

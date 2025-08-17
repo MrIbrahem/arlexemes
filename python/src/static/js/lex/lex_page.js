@@ -5,7 +5,7 @@ let to_dis_tags = {
     "اِسْم الْمَفْعُول": ["Q72249544"],
     "اِسْم الْفَاعِل": ["Q72249355"],
     "المضارع": ["non-past"],
-    "مركب": ["construct"],
+    "إضافة": ["construct"],
     "مؤنث": ["Q1775415"],
     "مذكر": ["Q499327"],
     "بديل": ["alternative"],
@@ -163,7 +163,7 @@ function count_dup_forms(forms) {
     return duplicates;
 }
 
-async function fetchLexemeById(id, entity) {
+async function fetchLexemeById(id, entity, no_head = false) {
 
     let lemma = entity.lemma || "(غير متوفر)";
     if (entity.lemmas) {
@@ -245,7 +245,13 @@ async function fetchLexemeById(id, entity) {
             </div>
         </div>
     `;
-
+    if (no_head) {
+        html = `
+        <div class="row mb-4">
+            ${header_main}
+        </div>
+    `;
+    }
     let table_html = "";
     if (Category === "Q1084") {             // nouns
         table_html = await Q1084(entity);
@@ -271,7 +277,7 @@ async function fetchLexemeById(id, entity) {
     return html;
 }
 
-async function start_lexeme(id) {
+async function start_lexeme(id, no_head = false) {
     // const id = document.getElementById("lexemeId").value.trim();
     // if (!id) return;
 
@@ -280,7 +286,7 @@ async function start_lexeme(id) {
 
     let entity = await getentity(id);
 
-    let html = await fetchLexemeById(id, entity);
+    let html = await fetchLexemeById(id, entity, no_head = no_head);
 
     output.innerHTML = html;
 
