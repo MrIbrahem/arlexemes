@@ -9,7 +9,7 @@ const queries = {
             ?categoryLabel
             ?count
             {
-            service <https://qlever.cs.uni-freiburg.de/api/wikidata>
+            # service <https://qlever.cs.uni-freiburg.de/api/wikidata>
                 {
                     SELECT ?Feature ?category (count(?form) as ?count) WHERE {
                     ?item dct:language wd:Q13955;

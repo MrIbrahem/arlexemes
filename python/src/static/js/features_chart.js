@@ -9,7 +9,7 @@ const queries = {
             ?categoryLabel
             ?count
             {
-            service <https://qlever.cs.uni-freiburg.de/api/wikidata>
+            # service <https://qlever.cs.uni-freiburg.de/api/wikidata>
                 {
                     SELECT ?Feature ?category (count(?form) as ?count) WHERE {
                     ?item dct:language wd:Q13955;
@@ -329,6 +329,8 @@ async function initializeCharts() {
     let title = ' إجمالي استخدامات الميزات النحوية في المفردات العربية <span id="all_lemmas_00"></span>';
     // ---
     let json = await loadsparqlQuery(queries.lexicalCategoriesArabic, true);
+    // ---
+    add_sparql_url(queries.lexicalCategoriesArabic);
     // ---
     json = change_labels(json);
     // ---
