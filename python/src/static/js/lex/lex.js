@@ -35,37 +35,29 @@ function wdlink_2(key) {
     // if key start With Q
     if (key.startsWith("Q")) {
         qid = key;
-        label = keyLabels[qid] ? keyLabels[qid] : "";
+        label = keyLabels[qid] ? keyLabels[qid] : qid;
     } else {
         qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
         label = grammaticalFeatures[key] ? grammaticalFeatures[key]["ar"] : key;
     }
     // ---
-    let numberKeys = [
-        "singular",     // مفرد
-        "dual",         // مثنى
-        "plural",       // جمع
-        "singulative",  // صيغة المفرد الفردي
-        "collective",   // صيغة الجمع الجماعي
-        "paucal",       // صيغة القلة
-        "perfective",   // تام
+    return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
+}
 
-        "broken-form",  // جمع تكسير
-        "sound-form",    // جمع سالم
-        "plural-sound-form", // جمع سالم
-        "plural-broken-form", // جمع تكسير
-
-        "singular invariable",
-        "plural invariable",
-
-    ];
+function wdlink(key) {
     // ---
-    // let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
-    let to_find = [];
+    if (!key || key === "") return "";
     // ---
-    if (to_find.includes(key)) {
-        label = `${label}<br>${key}`
+    let qid = "";
+    // ---
+    // if key start With Q
+    if (key.startsWith("Q")) {
+        qid = key;
+    } else {
+        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
     }
+    // ---
+    let label = keyLabels[qid] ? `${keyLabels[qid]} (${key})` : qid;
     // ---
     return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
 }
@@ -92,24 +84,6 @@ function make_tableData(number_Keys, row_Keys, col_Keys, gender_Keys) {
     return tableData;
 }
 
-function wdlink(key) {
-    // ---
-    if (!key || key === "") return "";
-    // ---
-    let qid = "";
-    // ---
-    // if key start With Q
-    if (key.startsWith("Q")) {
-        qid = key;
-    } else {
-        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
-    }
-    // ---
-    let label = keyLabels[qid] ? `${keyLabels[qid]} (${key})` : qid;
-    // ---
-    return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
-}
-
 function attrFormatter(key) {
     // ---
     if (!key || key === "") return "";
@@ -124,44 +98,6 @@ function attrFormatter(key) {
     }
     // ---
     return (keyLabels[qid]) ? `${key} - ${keyLabels[qid]}` : key;
-}
-
-function entryFormatter(form) {
-    // ---
-    const formId = form?.id || "L000-F0";
-    // ---
-    // ar-x-Q775724
-    let values = Object.values(form.representations || {})
-        .map(r => r.value)
-        .filter(Boolean)
-        .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
-        .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
-    // ---
-    // Convert formId to a URL-friendly format for linking to Wikidata
-    const formIdlink = formId.replace("-", "#");
-    const formId_number = formId.split("-")[1]; // Extract F-number part
-    // ---
-    const feats = form.tags || form.grammaticalFeatures || [];
-    let attr = feats.map(attrFormatter).join("\n");
-    // ---
-    let link = `
-		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
-            ${values}
-			<small>(${formId_number})</small>
-		</a>`;
-    // ---
-    const lexemeId = formId.split("-")[0];
-    // ---
-    if (lexemeId === "L000") {
-        link = `
-        <span title="${attr}">
-            ${values}
-			<!-- <small>(${formId_number})</small> -->
-        </span>
-        `;
-    }
-    // ---
-    return link;
 }
 
 function entryFormatterNew(form) {
@@ -390,9 +326,9 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                         }
                     };
                     // ---
-                    let td = (rowspan > 1) ? `<td rowspan="${rowspan}" style="position:relative;">` : `<td style="position:relative;">`;
+                    let span_a = (rowspan > 1) ? `rowspan="${rowspan}"` : ``;
+                    let td = `<td ${span_a} style="position:relative;" class="">`;
                     // ---
-                    // td += entries.map(entryFormatter).join("<br>") || "";
                     td += entries.map(entryFormatterNew).join("<br>") || "";
                     // ---
                     td += `</td>`;
@@ -427,7 +363,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         `;
     // ---
     let card = `
-        <div class="card mb-3">
+        <div class="card mb-3" align="center">
             <div class="card-header">
                 <div class="card-title">
                     ${title_header || ""}
@@ -525,7 +461,6 @@ async function adj_and_nouns(entity_type, entity) {
     colKeys = removeKeysIfNotFound([...colKeys], forms, construct_contextform);
     // ---
     let number_Keys = adj_and_nouns_keys[entity_type] || [];
-    // ---
     // ---
     const tableData = make_tableData(number_Keys, row_Keys, colKeys, genderKeys);
     // ---

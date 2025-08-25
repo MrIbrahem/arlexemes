@@ -63,8 +63,8 @@ const grammaticalFeatures = {
     "paucal": { qid: "Q158933", ar: "صيغة القلة" },           // Paucal number
 
     // الحالات الإعرابية
-    "genitive!": { qid: "Q146233", ar: "مَجْرُور" },
-    "genitive": { qid: "Q1095813", ar: "مَجْرُور" },
+    "genitive": { qid: "Q146233", ar: "مَجْرُور" },
+    "genitive!": { qid: "Q1095813", ar: "إضافة عربي" },
     "accusative": { qid: "Q146078", ar: "مَنْصُوب" },
     "nominative": { qid: "Q131105", ar: "مَرْفُوع" },
     "informal": { qid: "Q117262361", ar: "الوقف" },
