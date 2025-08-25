@@ -103,6 +103,24 @@ const grammaticalFeaturesLabels = {
     "Q72249544": { en: "passive participle", ar: "اِسْم الْمَفْعُول" },
     "Q72249355": { en: "active participle", ar: "اِسْم الْفَاعِل" },
 
+    //tense
+    "Q113326559": { en: "non-remote", ar: "non-remote tense" },
+    "Q113326099": { en: "remote", ar: "remote tense" },
+    // "Q192613": { en: "present", ar: "المضارع" },
+    "Q113326922": { en: "non-remote past", ar: "non-remote past tense" },
+    "Q113326813": { en: "remote past", ar: "remote past tense" },
+    "Q501405": { en: "future", ar: "مستقبل مستمر" },
+    "Q104872742": { en: "non-remote future", ar: "non-remote future tense" },
+    "Q113565070": { en: "remote future", ar: "remote future tense" },
+    "Q442485": { en: "preterite", ar: "الماضي البسيط" },
+    "Q3502553": { en: "present subjunctive", ar: "المضارع الشرطي" },
+    "Q3502544": { en: "past subjunctive", ar: "past subjunctive" },
+    "Q7240943": { en: "present continuous", ar: "مضارع مستمر" },
+    "Q12547192": { en: "past imperfect", ar: "الماضي غير التام" },
+    "Q18088230": { en: "future imperfect", ar: "future imperfect" },
+    "Q3910936": { en: "simple present", ar: "مضارع بسيط" },
+    "Q1392475": { en: "simple past", ar: "ماضي بسيط" },
+
 }
 for (const [qid, { en, ar }] of Object.entries(grammaticalFeaturesLabels)) {
     keyLabels[qid] = ar;

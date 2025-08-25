@@ -53,6 +53,8 @@ let additional_tenses = [
     "Q18088230", //future imperfect
     "Q3910936", // مضارع بسيط
     "Q1392475", // ماضي بسيط
+    "Q1230649", //
+    "Q10345583", //
 ];
 
 numberKeys_verb = numberKeys_verb.concat(additional_tenses);

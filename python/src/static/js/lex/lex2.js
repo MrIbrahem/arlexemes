@@ -427,7 +427,7 @@ async function Q24905(entity) {
     // remove "" from spd
     spd = spd.filter(item => item !== "");
     // ---
-    genderKeys = removeKeysIfNotFound([...genderKeys], forms, spd);
+    genderKeys = removeKeysIfNotFound([...genderKeys], forms, [...spd, "Q1775461", "Q1305037"]);
 
     // Initialize tableData structure: tableData[number][row][col][gender]
     const tableData = {}; // Q1317831
