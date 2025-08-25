@@ -25,26 +25,7 @@ function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
     return colKeys;
 }
 
-function wdlink_2(key) {
-    // ---
-    if (!key || key === "") return "";
-    // ---
-    let qid = "";
-    let label = "";
-    // ---
-    // if key start With Q
-    if (key.startsWith("Q")) {
-        qid = key;
-        label = keyLabels[qid] ? keyLabels[qid] : qid;
-    } else {
-        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
-        label = grammaticalFeatures[key] ? grammaticalFeatures[key]["ar"] : key;
-    }
-    // ---
-    return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
-}
-
-function wdlink(key) {
+function wdlink_2(key, add_qid = false) {
     // ---
     if (!key || key === "") return "";
     // ---
@@ -57,7 +38,9 @@ function wdlink(key) {
         qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
     }
     // ---
-    let label = keyLabels[qid] ? `${keyLabels[qid]} (${key})` : qid;
+    let label = keyLabels[qid] ?
+        ((add_qid) ? `${keyLabels[qid]} (${key})` : keyLabels[qid]) :
+        qid;
     // ---
     return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
 }
@@ -150,7 +133,7 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
     // ---
     let thead = `
         <tr data-dt-order="disable">
-            <th colspan="2"></th>
+            <th colspan="2" class=""></th>
     `;
 
     // الصف الأول من الرؤوس
@@ -171,15 +154,24 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
         if (!display_mt_cells && gender === "" && first_rows.length > 1) continue;
         // ---
         thead += `
-            <th colspan="${colspan}">${headerText}</th>
+            <th colspan="${colspan}" class="">
+            <span class="">
+                ${headerText}
+            </span>
+            </th>
         `;
     }
 
     thead += `
         </tr>
         <tr>
-            <th data-dt-order="disable"></th> <!-- Top-left empty cell, spans two rows -->
-            <th data-dt-order="disable">الحالة</th> <!-- Case header (الحالة), spans two rows -->
+            <th scope="col" data-dt-order="disable" class="">
+            </th> <!-- Top-left empty cell, spans two rows -->
+            <th scope="col" data-dt-order="disable" class="">
+                <span class="">
+                    الحالة
+                </span>
+            </th>
     `;
 
     // الصف الثاني من الرؤوس
@@ -199,7 +191,11 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
             let text = wdlink_2(col);
             // ---
             thead += `
-                <th>${text}</th>
+                <th scope="col" class="">
+                    <span class="">
+                        ${text}
+                    </span>
+                </th>
             `;
         }
     }
@@ -226,7 +222,11 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
         };
         // ---
         let add_th = `
-            <th rowspan="${rowspan}" class="table-light">${text}</th>
+            <th rowspan="${rowspan}" class="table-light" scope="row">
+                <span class="">
+                    ${text}
+                </span>
+            </th>
         `;
         // ---
         if (!display_mt_cells && number === "") add_th = "";
@@ -237,7 +237,11 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     let text2 = wdlink_2(row);
     // ---
     let add_th2 = `
-        <th>${text2}</th>
+        <th scope="row" class="">
+            <span class="">
+                ${text2}
+            </span>
+        </th>
     `;
     // ---
     if (!display_mt_cells && row === "") add_th2 = "";
@@ -247,7 +251,7 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     // ---
     return add_to_tbody;
 }
-// Function to generate the HTML table from structured data
+
 function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
     // ---
     let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
@@ -390,11 +394,11 @@ async function Q24905(entity) {
     let verbs_main = verbs_main_g;
 
     // let numberKeys = numberKeys_verb;
-    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [past_qid, past_perfect_qid]);
+    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [...additional_tenses, past_qid, past_perfect_qid]);
 
-    let rowKeys = gender_Keys_global;
+    let rowKeys = removeKeysIfNotFound([...gender_Keys_global], forms, ["Q1775461", "Q1305037"]);
 
-    let colKeys = first_second_third_person; // Q21714344
+    let colKeys = removeKeysIfNotFound([...first_second_third_person], forms, ["Q88778575"]); // Q21714344
 
     let spd = singular_plural_dual;
     // remove "" from spd
@@ -437,7 +441,7 @@ async function Q24905(entity) {
     // ---
     for (let verb of verbs_main) {
         let verb2 = (verb !== "") ? verb : "فعل آخر";
-        let verb_lab = wdlink(verb2);
+        let verb_lab = wdlink_2(verb2, add_qid = true);
         let caption = `<div class="text-center"><h3>${verb_lab}</h3></div>`;
         // Call the shared HTML generation function
         let mt_cells = display_mt_cells[verb]; // || false;
@@ -454,7 +458,7 @@ async function adj_and_nouns(entity_type, entity) {
 
     // ---
     let row_Keys = removeKeysIfNotFound([...Pausal_Forms], forms, ["Q146233", "Q1095813", "Q117262361"]);
-    let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
+    let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine, "Q1775461", "Q1305037"]);
 
     let colKeys = indefinite_definite_construct;
     // ---

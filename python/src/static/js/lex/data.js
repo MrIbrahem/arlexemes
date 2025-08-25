@@ -37,74 +37,74 @@ let difinitions = {
 
 }
 
-const grammaticalFeatures = {
+const grammaticalFeaturesLabels = {
 
-    "sound-form": { qid: "Q20386151", ar: "جمع سالم" },
-    "broken-form": { qid: "Q1098772", ar: "جمع تكسير" },
+    "Q20386151": { en: "sound-form", ar: "جمع سالم" },
+    "Q1098772": { en: "broken-form", ar: "جمع تكسير" },
 
-    "plural-sound-form": { qid: "Q20386151", ar: "جمع سالم" },
-    "plural-broken-form": { qid: "Q1098772", ar: "جمع تكسير" },
+    // "Q20386151": { en: "plural-sound-form", ar: "جمع سالم" },
+    // "Q1098772": { en: "plural-broken-form", ar: "جمع تكسير" },
 
-    "singular invariable": { qid: "", ar: "مفرد ثابت الشكل" },
-    "plural invariable": { qid: "", ar: "جمع ثابت الشكل" },
+    "": { en: "singular invariable", ar: "مفرد ثابت الشكل" },
+    "": { en: "plural invariable", ar: "جمع ثابت الشكل" },
 
-    "perfective": { qid: "Q1424306", ar: "تام" },
-    "indicative": { qid: "Q682111", ar: "الصيغة الخبرية" },
-    "non-past": { qid: "Q16916993", ar: "ليس ماضي" },
+    "Q1424306": { en: "perfective", ar: "تام" },
+    "Q682111": { en: "indicative", ar: "الصيغة الخبرية" },
+    "Q16916993": { en: "non-past", ar: "ليس ماضي" },
 
     // الأعداد
-    "plural": { qid: "Q146786", ar: "جَمْع" },
-    "dual": { qid: "Q110022", ar: "مُثَنَّى" },
-    "singular": { qid: "Q110786", ar: "مُفْرَد" },
+    "Q146786": { en: "plural", ar: "جَمْع" },
+    "Q110022": { en: "dual", ar: "مُثَنَّى" },
+    "Q110786": { en: "singular", ar: "مُفْرَد" },
 
     // أشكال العدد المتقدمة
-    "singulative": { qid: "Q28936290", ar: "صيغة المفرد الفردي" },  // Singulative number
-    "collective": { qid: "Q1311051", ar: "صيغة الجمع الجماعي" }, // Collective noun
-    "paucal": { qid: "Q158933", ar: "صيغة القلة" },           // Paucal number
+    "Q28936290": { en: "singulative", ar: "صيغة المفرد الفردي" },  // Singulative number
+    "Q1311051": { en: "collective", ar: "صيغة الجمع الجماعي" }, // Collective noun
+    "Q158933": { en: "paucal", ar: "صيغة القلة" },           // Paucal number
 
     // الحالات الإعرابية
-    "genitive": { qid: "Q146233", ar: "مَجْرُور" },
-    "genitive!": { qid: "Q1095813", ar: "إضافة عربي" },
-    "accusative": { qid: "Q146078", ar: "مَنْصُوب" },
-    "nominative": { qid: "Q131105", ar: "مَرْفُوع" },
-    "informal": { qid: "Q117262361", ar: "الوقف" },
+    "Q146233": { en: "genitive", ar: "مَجْرُور" },
+    "Q1095813": { en: "genitive!", ar: "إضافة عربي" },
+    "Q146078": { en: "accusative", ar: "مَنْصُوب" },
+    "Q131105": { en: "nominative", ar: "مَرْفُوع" },
+    "Q117262361": { en: "informal", ar: "الوقف" },
 
     // التعريف
-    "indefinite": { qid: "Q53997857", ar: "نَكِرَة" },
-    "definite": { qid: "Q53997851", ar: "مَعْرِفَة" },
-    "construct": { qid: "Q1641446", ar: "إضافة" }, // Compound
+    "Q53997857": { en: "indefinite", ar: "نَكِرَة" },
+    "Q53997851": { en: "definite", ar: "مَعْرِفَة" },
+    "Q1641446": { en: "construct", ar: "إضافة" }, // Compound
 
     // الجنس
-    "masculine": { qid: "Q499327", ar: "مُذَكَّر" },
-    "feminine": { qid: "Q1775415", ar: "مُؤَنَّث" },
+    "Q499327": { en: "masculine", ar: "مُذَكَّر" },
+    "Q1775415": { en: "feminine", ar: "مُؤَنَّث" },
 
     // الأشخاص
-    "first-person": { qid: "Q21714344", ar: "متكلم" },
-    "second-person": { qid: "Q51929049", ar: "مخاطب" },
-    "third-person": { qid: "Q51929074", ar: "غائب" },
+    "Q21714344": { en: "first-person", ar: "متكلم" },
+    "Q51929049": { en: "second-person", ar: "مخاطب" },
+    "Q51929074": { en: "third-person", ar: "غائب" },
 
     // البناء
-    "active": { qid: "Q1317831", ar: "مبني للمعلوم" },
-    "passive": { qid: "Q1194697", ar: "مبني للمجهول" },
+    "Q1317831": { en: "active", ar: "مبني للمعلوم" },
+    "Q1194697": { en: "passive", ar: "مبني للمجهول" },
 
     // الأزمنة
-    "past": { qid: "Q1994301", ar: "ماضي" },
-    "past perfect": { qid: "Q23663136", ar: "ماضي تام" },
-    "imperfective": { qid: "Q56649265", ar: "مضارع ناقص" },
-    "subjunctive": { qid: "Q473746", ar: "مضارع منصوب" },
-    "jussive": { qid: "Q462367", ar: "مضارع مجزوم" },
-    "imperative": { qid: "Q22716", ar: "أمر" },
-    "fi'il muḍāri'": { qid: "Q12230930", ar: "مضارع" },
-    "Q192613": { qid: "Q192613", ar: "مضارع" },
+    "Q1994301": { en: "past", ar: "ماضي" },
+    "Q23663136": { en: "past perfect", ar: "ماضي تام" },
+    "Q56649265": { en: "imperfective", ar: "مضارع ناقص" },
+    "Q473746": { en: "subjunctive", ar: "مضارع منصوب" },
+    "Q462367": { en: "jussive", ar: "مضارع مجزوم" },
+    "Q22716": { en: "imperative", ar: "أمر" },
+    "Q12230930": { en: "fi'il muḍāri'", ar: "مضارع" },
+    "Q192613": { en: "Q192613", ar: "مضارع" },
 
     // أخرى
-    "performative": { qid: "Q124351233", ar: "أدائي" }, // إنجازي
+    "Q124351233": { en: "performative", ar: "أدائي" }, // إنجازي
 
-    "passive participle": { qid: "Q72249544", ar: "اِسْم الْمَفْعُول" },
-    "active participle": { qid: "Q72249355", ar: "اِسْم الْفَاعِل" },
+    "Q72249544": { en: "passive participle", ar: "اِسْم الْمَفْعُول" },
+    "Q72249355": { en: "active participle", ar: "اِسْم الْفَاعِل" },
 
 }
-for (const [en, { qid, ar }] of Object.entries(grammaticalFeatures)) {
+for (const [qid, { en, ar }] of Object.entries(grammaticalFeaturesLabels)) {
     keyLabels[qid] = ar;
     en2qid[en] = qid;
     en2ar[en] = ar;

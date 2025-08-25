@@ -12,17 +12,18 @@ let Pausal_Forms = [
 const singular_plural_dual = ["Q110786", "Q110022", "Q146786", ""];
 
 const first_second_third_person = [
+    "Q88778575",
     "Q21714344",
     "Q51929049",
     "Q51929074",
     ""
 ];
 
-const gender_Keys_global = ["Q499327", "Q1775415", ""];
+const gender_Keys_global = ["Q499327", "Q1775415", "Q1775461", "Q1305037", ""];
 
 let numberKeys_verb = [
     "Q1994301", // past
-    "Q23663136", // past
+    "Q23663136", // past perfect
 
     "Q192613", // 	مضارع
     "Q56649265", // imperfective	مضارع ناقص
@@ -32,11 +33,29 @@ let numberKeys_verb = [
 
     "Q462367", // jussive
     "Q22716",  // imperative
-
-
     "Q124351233", // أدائي
-    ""
+    "",
 ];
+
+let additional_tenses = [
+    "Q113326559", //non-remote
+    "Q113326099", //remote
+    "Q113326922", //non-remote past
+    "Q113326813", //remote past
+    "Q501405", //future
+    "Q104872742", //non-remote future
+    "Q113565070", //remote future
+    "Q442485", //preterite
+    "Q3502553", //present subjunctive
+    "Q3502544", //past subjunctive
+    "Q7240943", //present continuous
+    "Q12547192", //past imperfect
+    "Q18088230", //future imperfect
+    "Q3910936", // مضارع بسيط
+    "Q1392475", // ماضي بسيط
+];
+
+numberKeys_verb = numberKeys_verb.concat(additional_tenses);
 
 let first_person = "Q21714344";
 let second_person = "Q51929049";
@@ -59,7 +78,6 @@ let adj_and_nouns_keys = {};
 
 adj_and_nouns_keys["Q34698"] = singular_plural_dual;
 adj_and_nouns_keys["Q1084"] = singular_plural_dual;
-
 
 let past_qid = "Q1994301"
 let past_perfect_qid = "Q23663136"

@@ -179,8 +179,8 @@ async function fetchLexemeById(id, entity, no_head = false) {
     // ---
 
     // ---
-    const lexicalCategorylink = (Category) ? wdlink(Category) : "";
-    const language = entity.language ? wdlink(entity.language) : "";
+    const lexicalCategorylink = (Category) ? wdlink_2(Category, add_qid = true) : "";
+    const language = entity.language ? wdlink_2(entity.language, add_qid = true) : "";
     // ---
     let forms = entity.forms || [];
     // ---
