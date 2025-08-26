@@ -94,6 +94,20 @@ function entryFormatterNew(form) {
         .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
         .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
     // ---
+    let form_claims = form.claims || [];
+    let lemma_item = form_claims.P6254 || [];
+    // ---
+    // "claims": { "P6254": [ { "mainsnak": { "snaktype": "value", "property": "P6254", "hash": "af059ae26aed43ea15031db491c9697fa273d0c9", "datavalue": { "value": { "entity-type": "lexeme", "numeric-id": 1490749, "id": "L1490749" }, "type": "wikibase-entityid" }, "datatype": "wikibase-lexeme" }, "type": "statement", "id": "L1485952-F112$51f8aa30-4921-906e-2839-86d2c7c3fc63", "rank": "normal" } ] }
+    if (lemma_item) {
+        let lemma_id = lemma_item.map(item => item.mainsnak.datavalue.value.id)[0];
+        if (lemma_id) {
+            values = `
+            <a href="https://www.wikidata.org/entity/${lemma_id}" target="_blank">
+                ${values}
+            </a>&nbsp;`;
+        }
+    }
+    // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
     const formId_number = formId.split("-")[1]; // Extract F-number part
@@ -117,7 +131,6 @@ function entryFormatterNew(form) {
         `;
     }
     let exampleHTML = "";
-    let form_claims = form.claims || [];
     let exampleList = form_claims.P5831 || [];
     exampleHTML = createExampleIconAndModal(exampleList, formId);
 

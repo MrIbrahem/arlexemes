@@ -10,6 +10,7 @@ let to_dis_tags = {
     "مذكر": ["Q499327"],
     "بديل": ["alternative"],
     "جمع": ["Q146786"],
+    "فعل مشتق": ["Q106614340"],
     "جمع مؤنث": ["Q1775415", "Q146786"],
     "جمع مذكر": ["Q499327", "Q146786"],
 };
@@ -28,6 +29,19 @@ function make_to_display(formsToProcess) {
     for (const form of formsToProcess) {
         // ---
         let value = Object.values(form.representations || {}).map(r => r.value).filter(Boolean).join(" / ") || form?.form || "";
+        // ---
+        let lemma_item = form.claims.P6254 || [];
+        // ---
+        if (lemma_item) {
+            let lemma_id = lemma_item.map(item => item.mainsnak.datavalue.value.id)[0];
+            if (lemma_id) {
+                value = `
+                <a href="https://www.wikidata.org/entity/${lemma_id}" target="_blank">
+                    ${value}
+                </a>
+            `;
+            }
+        }
         // ---
         const feats = (form.tags || form.grammaticalFeatures || []).slice().sort();
 

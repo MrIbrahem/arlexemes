@@ -39,6 +39,8 @@ let difinitions = {
 
 const grammaticalFeaturesLabels = {
 
+    "Q106614340": { en: "nominal verb", ar: "فعل مشتق" },
+
     "Q20386151": { en: "sound-form", ar: "جمع سالم" },
     "Q1098772": { en: "broken-form", ar: "جمع تكسير" },
 
