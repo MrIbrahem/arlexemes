@@ -8,7 +8,7 @@ from flask import g
 from pyx import logs_bot_new
 from pyx.wd_data_bots import wd_data_P11038
 from pyx.sparql_bots import sparql_bot
-from pyx.sparql_bots.render import render_duplicate_by_category, render_sparql_P11038_grouped
+from pyx.sparql_bots.render import render_duplicate_by_category, render_duplicate, render_sparql_P11038_grouped
 from pyx.bots.not_in_db_bot import get_not_in_db
 
 
@@ -53,6 +53,14 @@ def jsonify(data : dict, **kwargs) -> str:
     response_json = json.dumps(result, ensure_ascii=False, indent=4)
     # ---
     return Response(response=response_json, content_type="application/json; charset=utf-8")
+
+
+@app.route("/api/duplicate2", methods=["GET"])
+def duplicate2_api():
+    # ---
+    data, sparql_exec_time = render_duplicate()
+    # ---
+    return jsonify(data, sparql_exec_time=sparql_exec_time, len_result=len(data))
 
 
 @app.route("/api/wd_data_count", methods=["GET"])
@@ -154,10 +162,28 @@ def P11038_wd():
     )
 
 
+@app.route("/duplicate2.html", methods=["GET"])
+def duplicate2():
+    # ---
+    limit = request.args.get('limit', 10000, type=int)
+    # ---
+    data, sparql_exec_time = render_duplicate(limit)
+    # ---
+    time_tab = {
+        "sparql_exec_time": sparql_exec_time,
+    }
+    # ---
+    return render_template(
+        "duplicate2.html",
+        result=data,
+        time_tab=time_tab,
+    )
+
+
 @app.route("/duplicate.html", methods=["GET"])
 def duplicate():
     # ---
-    limit = request.args.get('limit', 10000, type=int)
+    limit = request.args.get('limit', 50000, type=int)
     # ---
     data, sparql_exec_time = render_duplicate_by_category(limit)
     # ---

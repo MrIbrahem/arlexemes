@@ -84,7 +84,7 @@ def render_sparql_P11038_grouped(limit=0, group_it=False):
     return tab_P11038, sparql_exec_time
 
 
-def find_duplicates(members):
+def duplicates_work(members):
     # ---
     duplicates = defaultdict(list)
     # ---
@@ -115,7 +115,7 @@ def render_duplicate_by_category(limit):
     # ---
     for cat, tab in split_by_category.items():
         # ---
-        members = find_duplicates(tab["members"])
+        members = duplicates_work(tab["members"])
         # ---
         if members:
             tab["lemmas"] = members
@@ -123,3 +123,25 @@ def render_duplicate_by_category(limit):
             new[cat] = tab
     # ---
     return new, sparql_exec_time
+
+
+def render_duplicate(limit):
+    # ---
+    result, sparql_exec_time, err = sparql_bot.find_duplicates()
+    # # ---
+    # result = {x['item']: x for x in result}
+    # # ---
+    # split_by_category = split_data_by_category_dict(result)
+    # # ---
+    # new = {}
+    # # ---
+    # for cat, tab in split_by_category.items():
+    #     # ---
+    #     members = duplicates_work(tab["members"])
+    #     # ---
+    #     if members:
+    #         tab["lemmas"] = members
+    #         # ---
+    #         new[cat] = tab
+    # # ---
+    return result, sparql_exec_time

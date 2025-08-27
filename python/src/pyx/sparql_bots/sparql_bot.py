@@ -18,7 +18,7 @@ CACHE_TTL = 60 * 5  # 5 m
 endpoint_url = 'https://query.wikidata.org/sparql'
 
 
-def safe_sparql_query(query):
+def safe_sparql_query(query, time_out=10):
 
     if query in sparql_cache and "nocahe" not in sys.argv:
         err_bot.log_error("SPARQL Cache Hit", f"Query retrieved from cache: {query}")
@@ -31,7 +31,7 @@ def safe_sparql_query(query):
         sparql.setQuery(query)
         # ---
         sparql.setReturnFormat(JSON)
-        sparql.setTimeout(10)
+        sparql.setTimeout(time_out)
         # ---
         data = sparql.query().convert()
         # ---
@@ -61,11 +61,11 @@ def safe_sparql_query(query):
     return {}, "SPARQL Unknown Error"
 
 
-def get_results(query):
+def get_results(query, time_out=10, get_err=False):
     # ---
     now = time.time()
     # ---
-    data, err = safe_sparql_query(query)
+    data, err = safe_sparql_query(query, time_out=time_out)
     # ---
     # تنسيق النتائج
     result = []
@@ -94,6 +94,9 @@ def get_results(query):
     err_bot.log_error("SPARQL time", sparql_exec_time)
     # ---
     print(f"SPARQL sparql_exec_time: {sparql_exec_time}")
+    # ---
+    if get_err:
+        return result, sparql_exec_time, err
     # ---
     return result, sparql_exec_time
 
@@ -236,23 +239,26 @@ def count_arabic_with_P11038():
     return count, sparql_exec_time
 
 
-def find_duplicates():
+def find_duplicates(LIMIT=100):
     sparql_query = """
-        SELECT ?lemma_1 ?category
-        (GROUP_CONCAT(?1_item; separator=", ") AS ?items)
+        SELECT ?lemma_fixed ?category
+        (GROUP_CONCAT(strafter(str(?1_item),"/entity/"); separator=", ") AS ?items)
         (GROUP_CONCAT(?lemma; separator=", ") AS ?lemmas)
         WHERE {
         #service <https://qlever.cs.uni-freiburg.de/api/wikidata> {
             ?1_item dct:language wd:Q13955;
                     wikibase:lemma ?lemma;
                     wikibase:lexicalCategory ?category.
-            BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]", "") AS ?lemma_1)
+            BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]", "") AS ?lemma_fixed)
         #}
         }
-        GROUP BY ?lemma_1 ?category
+        GROUP BY ?lemma_fixed ?category
         HAVING(COUNT(?1_item) > 1)
-        #LIMIT 10
     """
-    data, sparql_exec_time = get_results(sparql_query)
     # ---
-    return data, sparql_exec_time
+    if LIMIT > 0:
+        sparql_query += f" LIMIT {LIMIT}"
+    # ---
+    data, sparql_exec_time, err = get_results(sparql_query, time_out=35, get_err=True)
+    # ---
+    return data, sparql_exec_time, err
