@@ -41,8 +41,8 @@ function wg_tree_query(data_source, to_group_by, limit) {
         VALUES = `VALUES ?category { wd:${data_source} }`;
     }
     // ---
-	let P31 = "?item wdt:P31 ?P31_z.";
-	let P31_optional = "optional { ?item wdt:P31 ?P31_z. }";
+    let P31 = "?item wdt:P31 ?P31_z.";
+    let P31_optional = "optional { ?item wdt:P31 ?P31_z. }";
     // ---
     let sparqlQuery = `
         SELECT
@@ -243,6 +243,43 @@ function duplicate_lemmas_query(same_category) {
             SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
             }
             ORDER BY ?lemma
+    `;
+    // ---
+    return sparqlQuery;
+}
+
+
+function qids_data_query(qids) {
+    // ---
+    let qids_str = qids.map(qid => `wd:${qid}`).join(" ");
+    // ---
+    let VALUES = `VALUES ?item { ${qids_str} }`;
+    // ---
+    const sparqlQuery = `
+    SELECT
+        ?lemma ?item ?categoryLabel ?p ?pLabel ?p_value ?p_valueLabel
+
+        WHERE {
+        {
+            SELECT DISTINCT *
+            WHERE
+            {
+            ${VALUES}
+            ?item dct:language wd:Q13955;
+                    wikibase:lemma ?lemma ;
+                    wikibase:lexicalCategory ?category.
+
+            OPTIONAL {
+                ?item ?pz ?p_value.
+                FILTER(STRSTARTS(STR(?pz), STR(wdt:)))
+                BIND(IRI(REPLACE(STR(?pz), STR(wdt:), STR(wd:))) AS ?p)
+            }
+            }
+        }
+
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+        }
+        ORDER BY ?lemma
     `;
     // ---
     return sparqlQuery;
