@@ -1,13 +1,57 @@
 """
 
-from pyx.sparql_bots.render import render_sparql_P11038_grouped, render_all_arabic_by_category
+from pyx.sparql_bots.render import render_sparql_P11038_grouped
 
 """
-
+import re
+import copy
+from collections import defaultdict
 from . import sparql_bot
 
 
-def render_sparql_P11038_grouped():
+def split_data_by_category_list(data):
+    # ---
+    split_by_category = {}
+    # ---
+    for item in data:
+        # ---
+        category = item['category']
+        # ---
+        if category not in split_by_category:
+            split_by_category[category] = {
+                'category': category,
+                'categoryLabel': item['categoryLabel'],
+                'members': []
+            }
+        # ---
+        members = split_by_category[category]['members']
+        # ---
+        members.append(item)
+    # ---
+    return split_by_category
+
+
+def split_data_by_category_dict(data):
+    # ---
+    split_by_category = {}
+    # ---
+    for key, item in data.items():
+        # ---
+        category = item['category']
+        # ---
+        if category not in split_by_category:
+            split_by_category[category] = {
+                'category': category,
+                'categoryLabel': item['categoryLabel'],
+                'members': {}
+            }
+        # ---
+        split_by_category[category]['members'][key] = item
+    # ---
+    return split_by_category
+
+
+def render_sparql_P11038_grouped(limit=0, group_it=False):
     # ---
     # ab_P11038, sparql_exec_time = render_sparql_P11038_grouped()
     # ---
@@ -16,7 +60,7 @@ def render_sparql_P11038_grouped():
     dup = 0
     # ---
     # ?item ?lemma ?category ?categoryLabel ?P11038_values
-    result, sparql_exec_time = sparql_bot.all_arabic_with_P11038_grouped()
+    result, sparql_exec_time = sparql_bot.all_arabic_with_P11038_grouped(limit=limit)
     # ---
     tab_P11038 = {}
     # ---
@@ -34,27 +78,48 @@ def render_sparql_P11038_grouped():
     # ---
     print(f"\t render_sparql_P11038_grouped: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}")
     # ---
+    if group_it:
+        tab_P11038 = split_data_by_category_dict(tab_P11038)
+    # ---
     return tab_P11038, sparql_exec_time
 
 
-def render_all_arabic_by_category(limit):
+def find_duplicates(members):
     # ---
-    # split_by_category, sparql_exec_time = render_all_arabic_by_category(limit)
+    duplicates = defaultdict(list)
+    # ---
+    members = copy.deepcopy(members)
+    # ---
+    for qid, x in members.items():
+        # ---
+        lemma = re.sub(r"[\u064B-\u065F\u066A-\u06EF]", "", x['lemma'])
+        # ---
+        if x not in duplicates[lemma]:
+            # ---
+            duplicates[lemma].append(x)
+    # ---
+    duplicates = {k: v for k, v in duplicates.items() if len(v) > 1}
+    # ---
+    return duplicates
+
+
+def render_duplicate_by_category(limit):
     # ---
     result, sparql_exec_time = sparql_bot.all_arabic(limit)
     # ---
-    split_by_category = {}
+    result = {x['item']: x for x in result}
     # ---
-    for item in result:
-        category = item['category']
-        # ---
-        if category not in split_by_category:
-            split_by_category[category] = {
-                'category': category,
-                'categoryLabel': item['categoryLabel'],
-                'members': []
-            }
-        # ---
-        split_by_category[category]['members'].append(item)
+    split_by_category = split_data_by_category_dict(result)
     # ---
-    return split_by_category, sparql_exec_time
+    new = {}
+    # ---
+    for cat, tab in split_by_category.items():
+        # ---
+        members = find_duplicates(tab["members"])
+        # ---
+        if members:
+            tab["lemmas"] = members
+            # ---
+            new[cat] = tab
+    # ---
+    return new, sparql_exec_time

@@ -10,17 +10,18 @@ function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
         const feats = form.tags || form.grammaticalFeatures || [];
         feats.forEach(f => featuresSet.add(f));
     }
-
+    let removed = [];
     // تحقق لكل مفتاح: هل موجود في أي grammaticalFeatures؟
     for (const key of keysToRemove) {
         if (!featuresSet.has(key)) {
             const index = colKeys.indexOf(key);
             if (index > -1) {
                 colKeys.splice(index, 1);
-                console.log("removeKeysIfNotFound removed:", key);
+                removed.push(key);
             }
         }
     }
+    console.log("removeKeysIfNotFound removed:", removed.join(", "));
 
     return colKeys;
 }
