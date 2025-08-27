@@ -10,6 +10,7 @@ let to_dis_tags = {
     "مذكر": ["Q499327"],
     "بديل": ["alternative"],
     "جمع": ["Q146786"],
+    "فعل مشتق": ["Q106614340"],
     "جمع مؤنث": ["Q1775415", "Q146786"],
     "جمع مذكر": ["Q499327", "Q146786"],
 };
@@ -28,6 +29,19 @@ function make_to_display(formsToProcess) {
     for (const form of formsToProcess) {
         // ---
         let value = Object.values(form.representations || {}).map(r => r.value).filter(Boolean).join(" / ") || form?.form || "";
+        // ---
+        let lemma_item = form.claims.P6254 || [];
+        // ---
+        if (lemma_item) {
+            let lemma_id = lemma_item.map(item => item.mainsnak.datavalue.value.id)[0];
+            if (lemma_id) {
+                value = `
+                <a href="https://www.wikidata.org/entity/${lemma_id}" target="_blank">
+                    ${value}
+                </a>
+            `;
+            }
+        }
         // ---
         const feats = (form.tags || form.grammaticalFeatures || []).slice().sort();
 
@@ -179,8 +193,8 @@ async function fetchLexemeById(id, entity, no_head = false) {
     // ---
 
     // ---
-    const lexicalCategorylink = (Category) ? wdlink(Category) : "";
-    const language = entity.language ? wdlink(entity.language) : "";
+    const lexicalCategorylink = (Category) ? wdlink_2(Category, add_qid = true) : "";
+    const language = entity.language ? wdlink_2(entity.language, add_qid = true) : "";
     // ---
     let forms = entity.forms || [];
     // ---
@@ -217,12 +231,16 @@ async function fetchLexemeById(id, entity, no_head = false) {
     let lemma_link_tag = $("#lemma_link");
     let lemma_link_en = $("#lemma_link_en");
     // ---
+    let en = `(<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)`;
+    // ---
+    // if (no_head) en = ``;
+    // ---
     if (lemma_link_tag.length === 0 && lemma_link_en.length === 0) {
         header_main = `
             <div class="col-md-4">
                 <span class="mb-4 h1" id="header_main">
-                ${lemma}
-                (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
+                <a href="https://wikidata.org/entity/${id}" target="_blank" class="text-primary font-sm">${lemma}</a>
+                ${en}
                 </span>
                 <span class="h4">المفردات: ${forms_len} ${dup_forms}</span>
             </div>

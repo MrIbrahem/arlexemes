@@ -8,7 +8,7 @@ from flask import g
 from pyx import logs_bot_new
 from pyx.wd_data_bots import wd_data_P11038
 from pyx.sparql_bots import sparql_bot
-from pyx.sparql_bots.render import render_all_arabic_by_category
+from pyx.sparql_bots.render import render_duplicate_by_category, render_sparql_P11038_grouped
 from pyx.bots.not_in_db_bot import get_not_in_db
 
 
@@ -139,7 +139,7 @@ def P11038_wd():
     # ---
     wd_count, _ = sparql_bot.count_arabic_with_P11038()
     # ---
-    split_by_category, sparql_exec_time = render_all_arabic_by_category(limit)
+    split_by_cat, sparql_exec_time = render_sparql_P11038_grouped(limit=limit, group_it=True)
     # ---
     time_tab = {
         "sparql_exec_time": sparql_exec_time,
@@ -148,8 +148,26 @@ def P11038_wd():
     return render_template(
         "P11038_wd.html",
         limit=limit,
-        result=split_by_category,
+        result=split_by_cat,
         wd_count=wd_count,
+        time_tab=time_tab,
+    )
+
+
+@app.route("/duplicate.html", methods=["GET"])
+def duplicate():
+    # ---
+    limit = request.args.get('limit', 10000, type=int)
+    # ---
+    data, sparql_exec_time = render_duplicate_by_category(limit)
+    # ---
+    time_tab = {
+        "sparql_exec_time": sparql_exec_time,
+    }
+    # ---
+    return render_template(
+        "duplicate.html",
+        result=data,
         time_tab=time_tab,
     )
 
@@ -187,6 +205,16 @@ def chart():
 @app.route("/wd_tree.php", methods=["GET"])
 def wd_tree():
     return render_template("wd_tree.php")
+
+
+@app.route("/compare.php", methods=["GET"])
+def compare():
+    # ---
+    qids = request.args.get('qids', "", type=str)
+    # ---
+    qids = [x.strip() for x in qids.split(",") if x.strip()]
+    # ---
+    return render_template("compare.php", qids=qids)
 
 
 @app.route("/duplicate_lemmas.php", methods=["GET"])

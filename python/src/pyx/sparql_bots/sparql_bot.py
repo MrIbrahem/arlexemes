@@ -171,17 +171,13 @@ def search(args):
 
 
 def all_arabic(limit):
-
     sparql_query = """
-        SELECT DISTINCT ?lemma ?item ?category ?categoryLabel ?P11038 WHERE {
-        # ?item a ontolex:LexicalEntry;
+        SELECT DISTINCT ?lemma ?item ?category ?categoryLabel WHERE {
         ?item dct:language wd:Q13955;
                 wikibase:lexicalCategory ?category;
                 wikibase:lemma ?lemma.
         SERVICE wikibase:label { bd:serviceParam wikibase:language "ar, en". }
-        optional { ?item wdt:P11038 ?P11038 }
         }
-
     """
     if limit > 0:
         sparql_query += f" limit {limit}"
@@ -238,3 +234,25 @@ def count_arabic_with_P11038():
         count = data[0]['count']
     # ---
     return count, sparql_exec_time
+
+
+def find_duplicates():
+    sparql_query = """
+        SELECT ?lemma_1 ?category
+        (GROUP_CONCAT(?1_item; separator=", ") AS ?items)
+        (GROUP_CONCAT(?lemma; separator=", ") AS ?lemmas)
+        WHERE {
+        #service <https://qlever.cs.uni-freiburg.de/api/wikidata> {
+            ?1_item dct:language wd:Q13955;
+                    wikibase:lemma ?lemma;
+                    wikibase:lexicalCategory ?category.
+            BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]", "") AS ?lemma_1)
+        #}
+        }
+        GROUP BY ?lemma_1 ?category
+        HAVING(COUNT(?1_item) > 1)
+        #LIMIT 10
+    """
+    data, sparql_exec_time = get_results(sparql_query)
+    # ---
+    return data, sparql_exec_time

@@ -10,62 +10,38 @@ function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
         const feats = form.tags || form.grammaticalFeatures || [];
         feats.forEach(f => featuresSet.add(f));
     }
-
+    let removed = [];
     // تحقق لكل مفتاح: هل موجود في أي grammaticalFeatures؟
     for (const key of keysToRemove) {
         if (!featuresSet.has(key)) {
             const index = colKeys.indexOf(key);
             if (index > -1) {
                 colKeys.splice(index, 1);
-                console.log("removeKeysIfNotFound removed:", key);
+                removed.push(key);
             }
         }
     }
 
+    console.log("removeKeysIfNotFound removed:", removed.join(", "));
     return colKeys;
 }
 
-function wdlink_2(key) {
+function wdlink_2(key, add_qid = false) {
     // ---
     if (!key || key === "") return "";
     // ---
     let qid = "";
-    let label = "";
     // ---
     // if key start With Q
     if (key.startsWith("Q")) {
         qid = key;
-        label = keyLabels[qid] ? keyLabels[qid] : "";
     } else {
         qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
-        label = grammaticalFeatures[key] ? grammaticalFeatures[key]["ar"] : key;
     }
     // ---
-    let numberKeys = [
-        "singular",     // مفرد
-        "dual",         // مثنى
-        "plural",       // جمع
-        "singulative",  // صيغة المفرد الفردي
-        "collective",   // صيغة الجمع الجماعي
-        "paucal",       // صيغة القلة
-        "perfective",   // تام
-
-        "broken-form",  // جمع تكسير
-        "sound-form",    // جمع سالم
-        "plural-sound-form", // جمع سالم
-        "plural-broken-form", // جمع تكسير
-
-        "singular invariable",
-        "plural invariable",
-
-    ];
-    // ---
-    // let to_find = (ty === "verb") ? numberKeys_verb : numberKeys;
-    let to_find = [];
-    // ---
-    if (to_find.includes(key)) {
-        label = `${label}<br>${key}`
-    }
+    let label = keyLabels[qid] ?
+        ((add_qid) ? `${keyLabels[qid]} (${key})` : keyLabels[qid]) :
+        qid;
     // ---
     return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
 }
@@ -92,24 +68,6 @@ function make_tableData(number_Keys, row_Keys, col_Keys, gender_Keys) {
     return tableData;
 }
 
-function wdlink(key) {
-    // ---
-    if (!key || key === "") return "";
-    // ---
-    let qid = "";
-    // ---
-    // if key start With Q
-    if (key.startsWith("Q")) {
-        qid = key;
-    } else {
-        qid = en2qid[key.toLowerCase()] ? en2qid[key.toLowerCase()] : key;
-    }
-    // ---
-    let label = keyLabels[qid] ? `${keyLabels[qid]} (${key})` : qid;
-    // ---
-    return `<a href="https://www.wikidata.org/entity/${qid}" target="_blank" class="text-primary">${label}</a>`
-}
-
 function attrFormatter(key) {
     // ---
     if (!key || key === "") return "";
@@ -126,44 +84,6 @@ function attrFormatter(key) {
     return (keyLabels[qid]) ? `${key} - ${keyLabels[qid]}` : key;
 }
 
-function entryFormatter(form) {
-    // ---
-    const formId = form?.id || "L000-F0";
-    // ---
-    // ar-x-Q775724
-    let values = Object.values(form.representations || {})
-        .map(r => r.value)
-        .filter(Boolean)
-        .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
-        .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
-    // ---
-    // Convert formId to a URL-friendly format for linking to Wikidata
-    const formIdlink = formId.replace("-", "#");
-    const formId_number = formId.split("-")[1]; // Extract F-number part
-    // ---
-    const feats = form.tags || form.grammaticalFeatures || [];
-    let attr = feats.map(attrFormatter).join("\n");
-    // ---
-    let link = `
-		<a title="${attr}" href="https://www.wikidata.org/entity/${formIdlink}" target="_blank">
-            ${values}
-			<small>(${formId_number})</small>
-		</a>`;
-    // ---
-    const lexemeId = formId.split("-")[0];
-    // ---
-    if (lexemeId === "L000") {
-        link = `
-        <span title="${attr}">
-            ${values}
-			<!-- <small>(${formId_number})</small> -->
-        </span>
-        `;
-    }
-    // ---
-    return link;
-}
-
 function entryFormatterNew(form) {
     // ---
     const formId = form?.id || "L000-F0";
@@ -174,6 +94,20 @@ function entryFormatterNew(form) {
         .filter(Boolean)
         .map(v => `<span class="words fs-4" word="${v}">${v}</span>`)
         .join(" / ") || `<span class="words fs-4" word="${form?.form}">${form?.form}</span>` || "";
+    // ---
+    let form_claims = form.claims || [];
+    let lemma_item = form_claims.P6254 || [];
+    // ---
+    // "claims": { "P6254": [ { "mainsnak": { "snaktype": "value", "property": "P6254", "hash": "af059ae26aed43ea15031db491c9697fa273d0c9", "datavalue": { "value": { "entity-type": "lexeme", "numeric-id": 1490749, "id": "L1490749" }, "type": "wikibase-entityid" }, "datatype": "wikibase-lexeme" }, "type": "statement", "id": "L1485952-F112$51f8aa30-4921-906e-2839-86d2c7c3fc63", "rank": "normal" } ] }
+    if (lemma_item) {
+        let lemma_id = lemma_item.map(item => item.mainsnak.datavalue.value.id)[0];
+        if (lemma_id) {
+            values = `
+            <a href="https://www.wikidata.org/entity/${lemma_id}" target="_blank">
+                ${values}
+            </a>&nbsp;`;
+        }
+    }
     // ---
     // Convert formId to a URL-friendly format for linking to Wikidata
     const formIdlink = formId.replace("-", "#");
@@ -198,7 +132,6 @@ function entryFormatterNew(form) {
         `;
     }
     let exampleHTML = "";
-    let form_claims = form.claims || [];
     let exampleList = form_claims.P5831 || [];
     exampleHTML = createExampleIconAndModal(exampleList, formId);
 
@@ -214,7 +147,7 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
     // ---
     let thead = `
         <tr data-dt-order="disable">
-            <th colspan="2"></th>
+            <th colspan="2" class=""></th>
     `;
 
     // الصف الأول من الرؤوس
@@ -235,15 +168,24 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
         if (!display_mt_cells && gender === "" && first_rows.length > 1) continue;
         // ---
         thead += `
-            <th colspan="${colspan}">${headerText}</th>
+            <th colspan="${colspan}" class="">
+            <span class="">
+                ${headerText}
+            </span>
+            </th>
         `;
     }
 
     thead += `
         </tr>
         <tr>
-            <th data-dt-order="disable"></th> <!-- Top-left empty cell, spans two rows -->
-            <th data-dt-order="disable">الحالة</th> <!-- Case header (الحالة), spans two rows -->
+            <th scope="col" data-dt-order="disable" class="">
+            </th> <!-- Top-left empty cell, spans two rows -->
+            <th scope="col" data-dt-order="disable" class="">
+                <span class="">
+                    الحالة
+                </span>
+            </th>
     `;
 
     // الصف الثاني من الرؤوس
@@ -263,7 +205,11 @@ function make_thead(first_rows, second_rows, first_person, dual, display_mt_cell
             let text = wdlink_2(col);
             // ---
             thead += `
-                <th>${text}</th>
+                <th scope="col" class="">
+                    <span class="">
+                        ${text}
+                    </span>
+                </th>
             `;
         }
     }
@@ -290,7 +236,11 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
         };
         // ---
         let add_th = `
-            <th rowspan="${rowspan}" class="table-light">${text}</th>
+            <th rowspan="${rowspan}" class="table-light" scope="row">
+                <span class="">
+                    ${text}
+                </span>
+            </th>
         `;
         // ---
         if (!display_mt_cells && number === "") add_th = "";
@@ -301,7 +251,11 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     let text2 = wdlink_2(row);
     // ---
     let add_th2 = `
-        <th>${text2}</th>
+        <th scope="row" class="">
+            <span class="">
+                ${text2}
+            </span>
+        </th>
     `;
     // ---
     if (!display_mt_cells && row === "") add_th2 = "";
@@ -311,7 +265,7 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     // ---
     return add_to_tbody;
 }
-// Function to generate the HTML table from structured data
+
 function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
     // ---
     let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
@@ -390,9 +344,9 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                         }
                     };
                     // ---
-                    let td = (rowspan > 1) ? `<td rowspan="${rowspan}" style="position:relative;">` : `<td style="position:relative;">`;
+                    let span_a = (rowspan > 1) ? `rowspan="${rowspan}"` : ``;
+                    let td = `<td ${span_a} style="position:relative;" class="">`;
                     // ---
-                    // td += entries.map(entryFormatter).join("<br>") || "";
                     td += entries.map(entryFormatterNew).join("<br>") || "";
                     // ---
                     td += `</td>`;
@@ -427,7 +381,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         `;
     // ---
     let card = `
-        <div class="card mb-3">
+        <div class="card mb-3" align="center">
             <div class="card-header">
                 <div class="card-title">
                     ${title_header || ""}
@@ -454,11 +408,11 @@ async function Q24905(entity) {
     let verbs_main = verbs_main_g;
 
     // let numberKeys = numberKeys_verb;
-    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [past_qid, past_perfect_qid]);
+    let numberKeys = removeKeysIfNotFound([...numberKeys_verb], forms, [...additional_tenses, past_qid, past_perfect_qid]);
 
-    let rowKeys = gender_Keys_global;
+    let rowKeys = removeKeysIfNotFound([...gender_Keys_global], forms, ["Q1775461", "Q1305037"]);
 
-    let colKeys = first_second_third_person; // Q21714344
+    let colKeys = removeKeysIfNotFound([...first_second_third_person], forms, ["Q88778575"]); // Q21714344
 
     let spd = singular_plural_dual;
     // remove "" from spd
@@ -501,7 +455,7 @@ async function Q24905(entity) {
     // ---
     for (let verb of verbs_main) {
         let verb2 = (verb !== "") ? verb : "فعل آخر";
-        let verb_lab = wdlink(verb2);
+        let verb_lab = wdlink_2(verb2, add_qid = true);
         let caption = `<div class="text-center"><h3>${verb_lab}</h3></div>`;
         // Call the shared HTML generation function
         let mt_cells = display_mt_cells[verb]; // || false;
@@ -518,14 +472,13 @@ async function adj_and_nouns(entity_type, entity) {
 
     // ---
     let row_Keys = removeKeysIfNotFound([...Pausal_Forms], forms, ["Q146233", "Q1095813", "Q117262361"]);
-    let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine]);
+    let genderKeys = removeKeysIfNotFound([...gender_Keys_global], forms, [Masculine, Feminine, "Q1775461", "Q1305037"]);
 
     let colKeys = indefinite_definite_construct;
     // ---
     colKeys = removeKeysIfNotFound([...colKeys], forms, construct_contextform);
     // ---
     let number_Keys = adj_and_nouns_keys[entity_type] || [];
-    // ---
     // ---
     const tableData = make_tableData(number_Keys, row_Keys, colKeys, genderKeys);
     // ---

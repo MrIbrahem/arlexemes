@@ -69,7 +69,7 @@
                             </tr>
                         </thead>
                         <tbody id="table_body">
-                            {%for item in data.members%}
+                            {%for k, item in data.members.items() %}
                             <tr>
                                 <td>{{loop.index}}</td>
                                 <td>{{item.lemma}}</td>
@@ -78,8 +78,17 @@
                                         {{item.item}} </a>
                                 </td>
                                 <td>
-                                    <a href="https://ontology.birzeit.edu/lemma/{{item.P11038}}"
-                                        target="_blank">{{item.P11038}}</a>
+                                    <div class="w-100">
+                                        <div class="list-group list-group-horizontal">
+                                            {%for vav in item.P11038_values %}
+                                            <div class="list-group-item m-1">
+                                                <a href="https://ontology.birzeit.edu/lemma/{{vav}}" target="_blank">
+                                                    {{vav}}
+                                                </a>
+                                            </div>
+                                            {%endfor%}
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             {%endfor%}

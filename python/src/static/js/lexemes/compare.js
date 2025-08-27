@@ -10,35 +10,29 @@ let LocalpropLabels = {
     "P12901": "الهوراماني",
 }
 
-function convertData(data) {
+function convertDataNew(data) {
+    // ?lemma ?item ?categoryLabel ?p ?pLabel ?p_value ?p_valueLabel
     const newData = {};
 
     for (const x of data) {
-        const lemma = x["lemma"] || "";
+        let lemma = x["lemma"] || "";
+        // ---
+        lemma = lemma.replace(/[\u064B-\u065F\u066A-\u06EF]/g, '')
         // ---
         if (!newData[lemma]) {
             newData[lemma] = { items: {}, proplabels: {} };
         }
         // ---
-        const item1 = x["1_item"] || "";
-        const item2 = x["2_item"] || "";
+        const item1 = x["item"] || "";
         // ---
         if (!newData[lemma]["items"][item1]) {
             newData[lemma]["items"][item1] = { category: {}, props: {} };
         }
-        if (!newData[lemma]["items"][item2]) {
-            newData[lemma]["items"][item2] = { category: {}, props: {} };
-        }
         // ---
-        const item1Category = x["1_categoryLabel"] || "";
-        const item2Category = x["2_categoryLabel"] || "";
+        const item1Category = x["categoryLabel"] || "";
         // ---
         if (item1Category) {
             newData[lemma]["items"][item1]["category"] = item1Category;
-        }
-        // ---
-        if (item2Category) {
-            newData[lemma]["items"][item2]["category"] = item2Category;
         }
         // ---
         const p = x["p"] || "";
@@ -57,12 +51,8 @@ function convertData(data) {
         if (!newData[lemma]["items"][item1]["props"][p]) {
             newData[lemma]["items"][item1]["props"][p] = { value: "", valuelabel: "" };
         }
-        if (!newData[lemma]["items"][item2]["props"][p]) {
-            newData[lemma]["items"][item2]["props"][p] = { value: "", valuelabel: "" };
-        }
-        // ---
-        const propValue1 = x["1_p_value"] || "";
-        const propValue1Label = x["1_p_valueLabel"] || "";
+        const propValue1 = x["p_value"] || "";
+        const propValue1Label = x["p_valueLabel"] || "";
         // ---
         if (propValue1) {
             newData[lemma]["items"][item1]["props"][p]["value"] = propValue1;
@@ -71,23 +61,13 @@ function convertData(data) {
         if (propValue1Label) {
             newData[lemma]["items"][item1]["props"][p]["valuelabel"] = propValue1Label;
         }
-        // ---
-        const propValue2 = x["2_p_value"] || "";
-        const propValue2Label = x["2_p_valueLabel"] || "";
-        if (propValue2) {
-            newData[lemma]["items"][item2]["props"][p]["value"] = propValue2;
-        }
-        // ---
-        if (propValue2Label) {
-            newData[lemma]["items"][item2]["props"][p]["valuelabel"] = propValue2Label;
-        }
     }
     // ---
     return newData;
 }
 
-async function get_wdresult(same_category = false) {
-    const sparqlQuery = duplicate_lemmas_query(same_category);
+async function get_wdresult(qids) {
+    const sparqlQuery = qids_data_query(qids);
     // ---
     add_sparql_url(sparqlQuery);
     // ---
@@ -96,12 +76,13 @@ async function get_wdresult(same_category = false) {
     return result;
 }
 
-async function get_data_dup(same_category) {
-    let wdresult = await get_wdresult(same_category);
+async function get_qids_data(qids) {
     // ---
-    // console.table(wdresult);
+    let wdresult = await get_wdresult(qids);
     // ---
-    wdresult = convertData(wdresult);
+    wdresult = convertDataNew(wdresult);
+    // ---
+    console.table(wdresult);
     // ---
     const sortedData = {};
     // ---
@@ -262,14 +243,13 @@ async function render_tables_container(data) {
     });
 }
 
-async function load_duplicate() {
+async function load_compare() {
     // ---
-    // let same_category = get_param_from_window_location("same_category", false);
-    // if (same_category) $("#same_category").prop("checked", true);
+    let qids = get_param_from_window_location("qids", "");
     // ---
-    let same_category = true;
+    qids = qids.split(",");
     // ---
-    let data = await get_data_dup(same_category);
+    let data = await get_qids_data(qids);
     // ---
     HandelDataError(data);
     // ---

@@ -23,6 +23,14 @@
                         <span class="text-2xl font-bold text-center h2">
                             مقارنة المفردات:
                         </span>
+                        ({%for qid in qids %}
+                        {%if not loop.first%} - {%endif%}
+                        <a href="https://www.wikidata.org/entity/{{qid}}" target="_blank">
+                            <span class="fs-5">
+                                <span find-label="{{qid}}" find-label-both="true">{{qid}}</span>
+                            </span>
+                        </a>
+                        {%endfor%})
                     </div>
                     <div class="col-md-2 col-sm-2 mb-2 mb-md-0">
                         <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled" role="button">
@@ -48,11 +56,11 @@
 </div>
 <script src="/static/js/lex/find_labels.js"></script>
 <script src="/static/js/lexemes/queries.js"></script>
-<script src="/static/js/lexemes/duplicate_lemmas.js"></script>
+<script src="/static/js/lexemes/compare.js"></script>
 <script src="/static/js/toggleView_compare.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => load_duplicate());
+    document.addEventListener('DOMContentLoaded', () => load_compare());
 </script>
 
 {% endblock %}
