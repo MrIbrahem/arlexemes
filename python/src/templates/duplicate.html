@@ -1,0 +1,115 @@
+{% extends "main.php" %}
+{% block title %}
+<title>المفردات المتشابهة</title>
+{% endblock %}
+
+{% block content %}
+<div class="container my-2">
+    <div class="card shadow rounded-4">
+        <div class="card-header">
+            <div class="d-flex align-items-center justify-content-between m-1 p-1">
+                <h2 class="mb-4" id="header_main">
+                    مقارنة وجود مفردات مكررة
+                </h2>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content row list-group mt-3" id="myTabContent">
+
+                <table class="P11038_table table display table-striped table-bordered table_header_right">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>lemma</th>
+                            <th>الفئة</th>
+                            <th>العدد</th>
+                            <th>المفردات</th>
+                            <th>مقارنة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table_body">
+                        {%for category, data in result.items() %}
+                        {% for lemma, members in data.lemmas.items() %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{lemma}}</td>
+                            <td>
+                                <a href="https://www.wikidata.org/entity/{{ data.category }}"
+                                    target="_blank">{{ data.categoryLabel }}</a>
+                            </td>
+                            <td>
+                                {{ members|length }}
+                            </td>
+                            <td>
+                                <div class="w-100">
+                                    <div class="list-group list-group-horizontal">
+                                        {%for item in members %}
+                                        <div class="list-group-item m-1">
+                                            <a href="https://www.wikidata.org/entity/{{item.item}}" target="_blank">
+                                                <span class="fs-2">
+                                                    {{item.lemma}}
+                                                </span>
+                                            </a>
+                                        </div>
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="compare.php?qids={{ members | map(attribute='item') | join(',') }}"
+                                    target="_blank">
+                                    مقارنة
+                                </a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/lex/data.js"></script>
+<script src="/static/js/table_filter2.js"></script>
+<script src="/static/js/lex/lex_data.js"></script>
+<script src="/static/js/lex/lex_example.js"></script>
+<script src="/static/js/lex/lex.js"></script>
+<script src="/static/js/lex/fetch.js"></script>
+<script src="/static/js/lex/lex_page.js"></script>
+<script>
+
+    function setExample(lexeme) {
+        document.getElementById('lexemeId').value = lexeme;
+        start_lexeme(lexeme);
+    }
+
+    $(document).ready(function () {
+        // if ?lex=324 in url then load it setExample
+        const urlParams = new URLSearchParams(window.location.search);
+        const lex = urlParams.get('wd_id');
+        if (lex) {
+            setExample(lex);
+        }
+        load_search(setExample, 'wd_id', 'autocomplete-results');
+        // ---
+        $(".P11038_table").DataTable({
+            order: [
+                [3, "desc"]
+            ],
+            pending: true,
+            lang: "ar",
+            paging: true,
+            searching: true,
+            responsive: {
+                details: true
+                // display: $.fn.dataTable.Responsive.display.modal()
+            },
+            pageLength: 100
+
+        })
+    });
+</script>
+
+
+{% endblock %}
