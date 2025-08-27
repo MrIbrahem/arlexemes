@@ -28,22 +28,21 @@
                         </tr>
                     </thead>
                     <tbody id="table_body">
-                        {%for category, data in result.items() %}
-                        {% for lemma, members in data.lemmas.items() %}
+                        {% for lemma, tab in result.items() %}
                         <tr>
                             <td>{{loop.index}}</td>
                             <td>{{lemma}}</td>
                             <td>
-                                <a href="https://www.wikidata.org/entity/{{ data.category }}"
-                                    target="_blank">{{ data.categoryLabel }}</a>
+                                <a href="https://www.wikidata.org/entity/{{ tab.category }}"
+                                    target="_blank">{{ tab.categoryLabel }}</a>
                             </td>
                             <td>
-                                {{ members|length }}
+                                {{ tab.members|length }}
                             </td>
                             <td>
                                 <div class="w-100">
                                     <div class="list-group list-group-horizontal">
-                                        {%for item in members %}
+                                        {%for item in tab.members %}
                                         <div class="list-group-item m-1">
                                             <a href="https://www.wikidata.org/entity/{{item.item}}" target="_blank">
                                                 <span class="fs-2">
@@ -56,13 +55,12 @@
                                 </div>
                             </td>
                             <td>
-                                <a href="compare.php?qids={{ members | map(attribute='item') | join(',') }}"
+                                <a href="compare.php?qids={{ tab.members | map(attribute='item') | join(',') }}"
                                     target="_blank">
                                     مقارنة
                                 </a>
                             </td>
                         </tr>
-                        {%endfor%}
                         {%endfor%}
                     </tbody>
                 </table>

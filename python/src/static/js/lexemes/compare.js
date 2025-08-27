@@ -67,6 +67,7 @@ function convertDataNew(data) {
 }
 
 async function get_wdresult(qids) {
+    // ---
     const sparqlQuery = qids_data_query(qids);
     // ---
     add_sparql_url(sparqlQuery);
@@ -243,11 +244,7 @@ async function render_tables_container(data) {
     });
 }
 
-async function load_compare() {
-    // ---
-    let qids = get_param_from_window_location("qids", "");
-    // ---
-    qids = qids.split(",");
+async function load_compare(qids) {
     // ---
     let data = await get_qids_data(qids);
     // ---
