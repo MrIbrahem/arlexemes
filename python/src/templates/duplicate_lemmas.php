@@ -46,30 +46,6 @@
         </div>
     </div>
 </div>
-<!-- نافذة Modal fullscreen -->
-<div class="modal fade" id="splitViewModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
-            <div class="modal-headerx" style="padding: 1rem 1rem">
-                <!-- جزء العنوان مع أيقونة التبديل بجانبه -->
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <span class="modal-title h5 me-2">مقارنة الصفحات</span>
-                    <button type="button" id="toggleIcon" class="btn btn-sm btn-outline-secondary"
-                        onclick="toggleViewMode()" title="تبديل العرض">
-                        <i class="bi bi-layout-split"></i>
-                    </button>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
-                </div>
-                <!-- زر الإغلاق في أقصى اليمين -->
-            </div>
-            <div class="modal-body p-0">
-                <div id="splitContainer" class="d-flex flex-nowrap" style="height: 100%; overflow-x: auto;">
-                    <!-- الأقسام سيتم توليدها ديناميكيًا هنا -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <script src="/static/js/lex/find_labels.js"></script>
 <script src="/static/js/lexemes/queries.js"></script>
 <script src="/static/js/lexemes/duplicate_lemmas.js"></script>
