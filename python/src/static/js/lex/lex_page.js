@@ -231,12 +231,16 @@ async function fetchLexemeById(id, entity, no_head = false) {
     let lemma_link_tag = $("#lemma_link");
     let lemma_link_en = $("#lemma_link_en");
     // ---
+    let en = `(<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)`;
+    // ---
+    // if (no_head) en = ``;
+    // ---
     if (lemma_link_tag.length === 0 && lemma_link_en.length === 0) {
         header_main = `
             <div class="col-md-4">
                 <span class="mb-4 h1" id="header_main">
-                ${lemma}
-                (<a href="https://en.wiktionary.org/wiki/${lemma2}#Arabic" target="_blank" class="text-primary font-sm">en</a>)
+                <a href="https://wikidata.org/entity/${id}" target="_blank" class="text-primary font-sm">${lemma}</a>
+                ${en}
                 </span>
                 <span class="h4">المفردات: ${forms_len} ${dup_forms}</span>
             </div>

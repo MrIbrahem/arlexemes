@@ -153,6 +153,94 @@ function getVal(props, p) {
     // ---
     return result;
 }
+
+function make_html(lemma, group, groupIndex) {
+    // ---
+    const propLabels = group.proplabels || {};
+
+    // كل المفاتيح الموجودة في أي عنصر
+    const sharedProps = [
+        ...new Set(
+            Object.values(group.items)
+                .flatMap(item => Object.keys(item.props))
+        )
+    ];
+
+    const items = Object.keys(group.items);
+    const htmlRows = [];
+
+    // بناء صفوف الجدول
+    sharedProps.forEach(p => {
+        const plabel = LocalpropLabels[p] || propLabels[p] || "";
+        const label = plabel ? `${plabel} (${p})` : p;
+
+        // لكل عنصر، استخرج القيمة
+        const vals = items.map(id => {
+            const item = group.items[id];
+            return getVal(item.props[p], p);
+        });
+
+        // دمج القيم في أعمدة
+        const tdHtml = vals.map(v => `<td>${v}</td>`).join("");
+
+        htmlRows.push(`
+            <tr>
+                <th>
+                    <a target="_blank" href="https://wikidata.org/entity/${p}">${label}</a>
+                </th>
+                ${tdHtml}
+            </tr>
+        `);
+    });
+
+    // بناء ترويسة الجدول ديناميكيًا
+    const theadCols = items.map(id => {
+        const item = group.items[id];
+        return `
+            <th>
+                <a href="https://wikidata.org/entity/${id}" target="_blank">${id}</a> (${item.category || ''})
+            </th>
+        `;
+    }).join("");
+
+    const ids = items.map(id => {
+        return `'${id}'`;
+    }).join(", ");
+
+    const button = `
+        <button class="btn btn-sm btn-outline-primary"
+                onclick="openSplitView([${ids}])"
+                data-bs-toggle="modal" data-bs-target="#splitViewModal">
+            <i class="bi bi-columns"></i> استعرض التصريفات
+        </button>
+    `;
+    const html = `
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>${groupIndex} - ${lemma}</h2>
+                    ${button}
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table compact table-striped table-bordered table_header_right display w-100">
+                    <thead>
+                        <tr>
+                            <th class="w-25">خاصية</th>
+                            ${theadCols}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${htmlRows.join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    return html;
+}
+
 async function render_tables_container(data) {
     $('#tables_container').html('');
     let groupIndex = 0;
@@ -165,66 +253,11 @@ async function render_tables_container(data) {
 
         const group = data[lemma];
         const items = Object.keys(group.items);
-        if (items.length < 2) return; // تأكد من وجود عنصرين على الأقل
-
-        const item1Id = items[0];
-        const item2Id = items[1];
-
-        const item1 = group.items[item1Id];
-        const item2 = group.items[item2Id];
-
-        const sharedProps = Object.keys(item1.props).filter(p => item2.props[p]);
-
-        // --- إعداد التسميات
-        const propLabels = group.proplabels || {};
-        // --- بناء صفوف الجدول
-        let rows = '';
         // ---
-        sharedProps.forEach(p => {
-            const plabel = LocalpropLabels[p] || propLabels[p] || "";
-            const label = plabel ? `${plabel} (${p})` : p;
-            const val1 = getVal(item1.props[p], p);
-            const val2 = getVal(item2.props[p], p);
-            rows += `
-                <tr>
-                    <th>
-                        <a target="_blank" href="https://wikidata.org/entity/${p}">${label}</a>
-                    </th>
-                    <td>${val1}</td>
-                    <td>${val2}</td>
-                </tr>`;
-        });
-        // --- HTML النهائي
-        const html = `
-            <div class="card mb-3">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2>${groupIndex} - ${lemma}</h2>
-                            <button class="btn btn-sm btn-outline-primary"
-                                onclick="openSplitView('${item1Id}', '${item2Id}')"
-                                data-bs-toggle="modal" data-bs-target="#splitViewModal">
-                            <i class="bi bi-columns"></i> استعرض التصريفات
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <table class="table compact table-striped table-bordered table_header_right display w-100">
-                        <thead>
-                            <tr>
-                                <th class="w-25">خاصية</th>
-                                <th>الأول:
-                                    <a href="https://wikidata.org/entity/${item1Id}" target="_blank">${item1Id}</a> (${item1.category || ''})
-                                </th>
-                                <th>الثاني:
-                                    <a href="https://wikidata.org/entity/${item2Id}" target="_blank">${item2Id}</a> (${item2.category || ''})
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>${rows}</tbody>
-                    </table>
-                </div>
-            </div>`;
-
+        if (items.length < 2) return; // تأكد من وجود عنصرين على الأقل
+        // ---
+        const html = make_html(lemma, group, groupIndex);
+        // ---
         $('#tables_container').append(html);
     });
 }

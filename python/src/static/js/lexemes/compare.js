@@ -135,7 +135,7 @@ function getVal(props, p) {
     return result;
 }
 
-function make_html(group) {
+function make_html(lemma, group, groupIndex) {
     // ---
     const propLabels = group.proplabels || {};
 
@@ -177,13 +177,32 @@ function make_html(group) {
     // بناء ترويسة الجدول ديناميكيًا
     const theadCols = items.map(id => {
         const item = group.items[id];
-        return `<th>
-                    <a href="https://wikidata.org/entity/${id}" target="_blank">${id}</a> (${item.category || ''})
-                </th>`;
+        return `
+            <th>
+                <a href="https://wikidata.org/entity/${id}" target="_blank">${id}</a> (${item.category || ''})
+            </th>
+        `;
     }).join("");
 
+    const ids = items.map(id => {
+        return `'${id}'`;
+    }).join(", ");
+
+    const button = `
+        <button class="btn btn-sm btn-outline-primary"
+                onclick="openSplitView([${ids}])"
+                data-bs-toggle="modal" data-bs-target="#splitViewModal">
+            <i class="bi bi-columns"></i> استعرض التصريفات
+        </button>
+    `;
     const html = `
         <div class="card mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>${groupIndex} - ${lemma}</h2>
+                    ${button}
+                </div>
+            </div>
             <div class="card-body">
                 <table class="table compact table-striped table-bordered table_header_right display w-100">
                     <thead>
@@ -215,9 +234,10 @@ async function render_tables_container(data) {
 
         const group = data[lemma];
         const items = Object.keys(group.items);
+        // ---
         if (items.length < 2) return; // تأكد من وجود عنصرين على الأقل
         // ---
-        let html = make_html(group);
+        const html = make_html(lemma, group, groupIndex);
         // ---
         $('#tables_container').append(html);
     });

@@ -54,19 +54,15 @@
         </div>
     </div>
 </div>
-<script src="/static/js/lex/find_labels.js"></script>
-<script src="/static/js/lexemes/queries.js"></script>
-<script src="/static/js/lexemes/compare.js"></script>
-
 <!-- نافذة Modal fullscreen -->
 <div class="modal fade" id="splitViewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-headerx" style="padding: 1rem 1rem">
                 <!-- جزء العنوان مع أيقونة التبديل بجانبه -->
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="modal-title h5 me-2">عرض الصفحتين</span>
-                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <span class="modal-title h5 me-2">مقارنة الصفحات</span>
+                    <button type="button" id="toggleIcon" class="btn btn-sm btn-outline-secondary"
                         onclick="toggleViewMode()" title="تبديل العرض">
                         <i class="bi bi-layout-split"></i>
                     </button>
@@ -75,44 +71,19 @@
                 <!-- زر الإغلاق في أقصى اليمين -->
             </div>
             <div class="modal-body p-0">
-                <div id="splitContainer" class="row g-0 flex-nowrap" style="height: 100%;">
-                    <div class="col border-between" style="flex: 1 1 50%;">
-                        <iframe id="iframe1" style="width:100%; height:100%; border:none;"></iframe>
-                    </div>
-                    <div class="col" style="flex: 1 1 50%;">
-                        <iframe id="iframe2" style="width:100%; height:100%; border:none;"></iframe>
-                    </div>
+                <div id="splitContainer" class="d-flex flex-nowrap" style="height: 100%; overflow-x: auto;">
+                    <!-- الأقسام سيتم توليدها ديناميكيًا هنا -->
                 </div>
             </div>
-
         </div>
     </div>
 </div>
+<script src="/static/js/lex/find_labels.js"></script>
+<script src="/static/js/lexemes/queries.js"></script>
+<script src="/static/js/lexemes/compare.js"></script>
+<script src="/static/js/toggleView_compare.js"></script>
+
 <script>
-    let isHorizontal = true;
-
-    function openSplitView(id1, id2) {
-        document.getElementById("iframe1").src = "/lex_just_table.php?wd_id=" + id1;
-        document.getElementById("iframe2").src = "/lex_just_table.php?wd_id=" + id2;
-    }
-
-    function toggleViewMode() {
-        const container = document.getElementById("splitContainer");
-        const icon = document.getElementById("toggleIcon");
-
-        if (isHorizontal) {
-            // تحويل لعرض عمودي
-            container.classList.remove("flex-nowrap");
-            container.classList.add("flex-column");
-            icon.style.transform = "rotate(90deg)";
-        } else {
-            // تحويل لعرض أفقي
-            container.classList.remove("flex-column");
-            container.classList.add("flex-nowrap");
-            icon.style.transform = "rotate(0deg)";
-        }
-        isHorizontal = !isHorizontal;
-    }
     document.addEventListener('DOMContentLoaded', () => load_compare());
 </script>
 
