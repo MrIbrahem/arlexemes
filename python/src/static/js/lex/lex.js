@@ -266,6 +266,52 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     return add_to_tbody;
 }
 
+function create_gender_tds(col_Keys, gender, show_empty_cells, number_data, row, singular_fixed) {
+    let gender_tds = "";
+    for (const col of col_Keys) {
+        if (col === first_person && gender === dual) continue;
+
+        // ---
+        if (!show_empty_cells && col === "") continue;
+        // ---
+        let entries = number_data[row][col][gender] || [];
+        // ---
+        let check_1 = col === first_person && (gender === singular || gender === plural);
+        let check_2 = col === second_person && gender === dual;
+        // ---
+        let rowspan = 1;
+        // ---
+        if (check_1 || check_2) {
+            // ---
+            if (singular_fixed[gender]) continue;
+            // ---
+            let fem_entries = number_data[Feminine][col][gender] || [];
+            let third_entries = number_data[""][col][gender] || [];
+            // ---
+            let male_is_empty = third_entries.length > 0 && entries.length == 0;
+            let third_is_empty = entries.length > 0 && third_entries.length == 0;
+            // ---
+            if (row === Masculine && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
+                // ---
+                entries = (male_is_empty) ? third_entries : entries;
+                // ---
+                singular_fixed[gender] = true;
+                // ---
+                rowspan = (show_empty_cells) ? 3 : 2;
+            }
+        };
+        // ---
+        let span_a = (rowspan > 1) ? `rowspan="${rowspan}"` : ``;
+        let td = `<td ${span_a} style="position:relative;" class="">`;
+        // ---
+        td += entries.map(entryFormatterNew).join("<br>") || "";
+        // ---
+        td += `</td>`;
+        // ---
+        gender_tds += td;
+    }
+    return gender_tds;
+}
 
 function make_tbody(number_Keys, tableData, show_empty_cells, row_Keys, gender_Keys, col_Keys) {
     let tbody = "";
@@ -302,50 +348,7 @@ function make_tbody(number_Keys, tableData, show_empty_cells, row_Keys, gender_K
                 // ---
                 if (!show_empty_cells && gender === "" && gender_Keys.length > 1) continue;
                 // ---
-                let gender_tds = "";
-                for (const col of col_Keys) {
-
-                    if (col === first_person && gender === dual) continue;
-
-                    // ---
-                    if (!show_empty_cells && col === "") continue;
-                    // ---
-                    let entries = number_data[row][col][gender] || [];
-                    // ---
-                    let check_1 = col === first_person && (gender === singular || gender === plural);
-                    let check_2 = col === second_person && gender === dual;
-                    // ---
-                    let rowspan = 1;
-                    // ---
-                    if (check_1 || check_2) {
-                        // ---
-                        if (singular_fixed[gender]) continue;
-                        // ---
-                        let fem_entries = number_data[Feminine][col][gender] || [];
-                        let third_entries = number_data[""][col][gender] || [];
-                        // ---
-                        let male_is_empty = third_entries.length > 0 && entries.length == 0;
-                        let third_is_empty = entries.length > 0 && third_entries.length == 0;
-                        // ---
-                        if (row === Masculine && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
-                            // ---
-                            entries = (male_is_empty) ? third_entries : entries;
-                            // ---
-                            singular_fixed[gender] = true;
-                            // ---
-                            rowspan = (show_empty_cells) ? 3 : 2;
-                        }
-                    };
-                    // ---
-                    let span_a = (rowspan > 1) ? `rowspan="${rowspan}"` : ``;
-                    let td = `<td ${span_a} style="position:relative;" class="">`;
-                    // ---
-                    td += entries.map(entryFormatterNew).join("<br>") || "";
-                    // ---
-                    td += `</td>`;
-                    // ---
-                    gender_tds += td;
-                }
+                let gender_tds = create_gender_tds(col_Keys, gender, show_empty_cells, number_data, row, singular_fixed);
                 add_to_tbody += gender_tds;
             }
             if (add_to_tbody !== "") {
