@@ -266,17 +266,8 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     return add_to_tbody;
 }
 
-function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
-    // ---
-    let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
-    // ---
-    let number_Keys = first_collumn;
-    let gender_Keys = first_rows;
-    let col_Keys = second_rows;
-    let row_Keys = second_collumn;
-    // ---
-    let thead = make_thead(gender_Keys, col_Keys, first_person, dual, show_empty_cells);
-    // ---
+
+function make_tbody(number_Keys, tableData, show_empty_cells, row_Keys, gender_Keys, col_Keys) {
     let tbody = "";
 
     // Iterate through number categories (مفرد, جمع)
@@ -287,9 +278,11 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         if (!show_empty_cells && number === "") continue;
         // ---
         // Check if there is any data for this number category to avoid empty sections
-        let hasNumberData = row_Keys.some(row =>
-            gender_Keys.some(gender =>
-                col_Keys.some(col => (number_data[row][col][gender] || []).length > 0)
+        let hasNumberData = row_Keys.some(
+            row => gender_Keys.some(
+                gender => col_Keys.some(
+                    col => (number_data[row][col][gender] || []).length > 0
+                )
             )
         );
 
@@ -351,7 +344,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                     // ---
                     td += `</td>`;
                     // ---
-                    gender_tds += td
+                    gender_tds += td;
                 }
                 add_to_tbody += gender_tds;
             }
@@ -364,6 +357,21 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
             }
         }
     }
+    return tbody;
+}
+
+function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
+    // ---
+    let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
+    // ---
+    let number_Keys = first_collumn;
+    let gender_Keys = first_rows;
+    let col_Keys = second_rows;
+    let row_Keys = second_collumn;
+    // ---
+    let thead = make_thead(gender_Keys, col_Keys, first_person, dual, show_empty_cells);
+    // ---
+    let tbody = make_tbody(number_Keys, tableData, show_empty_cells, row_Keys, gender_Keys, col_Keys);
 
     if (tbody === "") return "";
 
@@ -394,6 +402,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
     `
     return card;
 }
+
 
 /*
 
