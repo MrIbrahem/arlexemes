@@ -22,7 +22,6 @@ function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
         }
     }
     console.log("removeKeysIfNotFound removed:", removed.join(", "));
-
     return colKeys;
 }
 
@@ -263,17 +262,64 @@ function right_side_th(i, number, row, row_Keys, display_mt_cells) {
     return add_to_tbody;
 }
 
-function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
-    // ---
-    let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
-    // ---
-    let number_Keys = first_collumn;
-    let gender_Keys = first_rows;
-    let col_Keys = second_rows;
-    let row_Keys = second_collumn;
-    // ---
-    let thead = make_thead(gender_Keys, col_Keys, first_person, dual, show_empty_cells);
-    // ---
+function create_gender_tds(col_Keys, show_empty_cells, number_data, row, gender, singular_fixed) {
+    let gender_tds = "";
+    for (const col of col_Keys) {
+
+        // if (row === first_person && col === dual) continue;
+        // ---
+        if (!show_empty_cells && col === "") continue;
+        // ---
+        let entries = number_data[row][col][gender] || [];
+        // ---
+        let check_1 = row === first_person && (col === singular || col === plural);
+        let check_2 = row === second_person && col === dual;
+        // ---
+        let nocolor = false;
+        // ---
+        let rowspan = 1;
+        // ---
+        if (check_1 || check_2) {
+            // ---
+            if (singular_fixed[gender]) continue;
+            // ---
+            let fem_entries = number_data[row][col][Feminine] || [];
+            let third_entries = number_data[row][col][""] || [];
+            // ---
+            let male_is_empty = third_entries.length > 0 && entries.length == 0;
+            let third_is_empty = entries.length > 0 && third_entries.length == 0;
+            // ---
+            if ((gender === Masculine || gender === Feminine) && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
+                // ---
+                entries = (male_is_empty) ? third_entries : entries;
+                // ---
+                // singular_fixed[gender] = true;
+                // ---
+                // rowspan = (show_empty_cells) ? 3 : 2;
+                // ---
+                // let color = get_color(entries[0]);
+                // ---
+                // nocolor = true;
+                // td = ` <td style="background-color:${color}; border-radius: 4px; padding: 2px 4px;"> `;
+            }
+        }
+        // ---
+        let td = (rowspan > 1) ? `<td rowspan="${rowspan}" style="position:relative;">` : `<td style="position:relative;">`;
+        // ---
+        if (nocolor) {
+            td += entries.map(entryFormatterNoColor).join("<br>") || "";
+        } else {
+            td += entries.map(entryFormatterNew).join("<br>") || "";
+        }
+        // ---
+        td += `</td>`;
+        // ---
+        gender_tds += td;
+    }
+    return gender_tds;
+}
+
+function make_tbody(number_Keys, tableData, show_empty_cells, row_Keys, gender_Keys, col_Keys) {
     let tbody = "";
 
     // Iterate through number categories (مفرد, جمع)
@@ -284,9 +330,11 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
         if (!show_empty_cells && number === "") continue;
         // ---
         // Check if there is any data for this number category to avoid empty sections
-        let hasNumberData = row_Keys.some(row =>
-            gender_Keys.some(gender =>
-                col_Keys.some(col => (number_data[row][col][gender] || []).length > 0)
+        let hasNumberData = row_Keys.some(
+            row => gender_Keys.some(
+                gender => col_Keys.some(
+                    col => (number_data[row][col][gender] || []).length > 0
+                )
             )
         );
 
@@ -313,59 +361,7 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
                 // ---
                 if (!show_empty_cells && gender === "" && gender_Keys.length > 1) continue;
                 // ---
-                let gender_tds = "";
-                for (const col of col_Keys) {
-
-                    // if (row === first_person && col === dual) continue;
-
-                    // ---
-                    if (!show_empty_cells && col === "") continue;
-                    // ---
-                    let entries = number_data[row][col][gender] || [];
-                    // ---
-                    let check_1 = row === first_person && (col === singular || col === plural);
-                    let check_2 = row === second_person && col === dual;
-                    // ---
-                    let nocolor = false;
-                    // ---
-                    let rowspan = 1;
-                    // ---
-                    if (check_1 || check_2) {
-                        if (singular_fixed[gender]) continue;
-                        // ---
-                        let fem_entries = number_data[row][col][Feminine] || [];
-                        let third_entries = number_data[row][col][""] || [];
-                        // ---
-                        let male_is_empty = third_entries.length > 0 && entries.length == 0;
-                        let third_is_empty = entries.length > 0 && third_entries.length == 0;
-                        // ---
-                        if ((gender === Masculine || gender === Feminine) && fem_entries.length == 0 && (male_is_empty || third_is_empty)) {
-                            // ---
-                            entries = (male_is_empty) ? third_entries : entries;
-                            // ---
-                            // singular_fixed[gender] = true;
-                            // ---
-                            // rowspan = (show_empty_cells) ? 3 : 2;
-                            // ---
-                            // let color = get_color(entries[0]);
-                            // ---
-                            // nocolor = true;
-                            // td = ` <td style="background-color:${color}; border-radius: 4px; padding: 2px 4px;"> `;
-                        }
-                    }
-                    // ---
-                    let td = (rowspan > 1) ? `<td rowspan="${rowspan}" style="position:relative;">` : `<td style="position:relative;">`;
-                    // ---
-                    if (nocolor) {
-                        td += entries.map(entryFormatterNoColor).join("<br>") || "";
-                    } else {
-                        td += entries.map(entryFormatterNew).join("<br>") || "";
-                    }
-                    // ---
-                    td += `</td>`;
-                    // ---
-                    gender_tds += td
-                }
+                let gender_tds = create_gender_tds(col_Keys, show_empty_cells, number_data, row, gender, singular_fixed);
                 add_to_tbody += gender_tds;
             }
             if (add_to_tbody !== "") {
@@ -377,6 +373,21 @@ function _generateHtmlTable(tableData, first_collumn, second_collumn, second_row
             }
         }
     }
+    return tbody;
+}
+
+function _generateHtmlTable(tableData, first_collumn, second_collumn, second_rows, first_rows, title_header, display_mt_cells) {
+    // ---
+    let show_empty_cells = (display_mt_cells === false || display_mt_cells === true) ? display_mt_cells : display_empty_cells;
+    // ---
+    let number_Keys = first_collumn;
+    let gender_Keys = first_rows;
+    let col_Keys = second_rows;
+    let row_Keys = second_collumn;
+    // ---
+    let thead = make_thead(gender_Keys, col_Keys, first_person, dual, show_empty_cells);
+    // ---
+    let tbody = make_tbody(number_Keys, tableData, show_empty_cells, row_Keys, gender_Keys, col_Keys);
 
     if (tbody === "") return "";
 

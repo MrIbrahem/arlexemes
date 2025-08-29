@@ -21,7 +21,6 @@ function removeKeysIfNotFound(colKeys, forms, keysToRemove) {
             }
         }
     }
-
     console.log("removeKeysIfNotFound removed:", removed.join(", "));
     return colKeys;
 }
