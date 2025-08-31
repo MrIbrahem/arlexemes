@@ -249,7 +249,7 @@ def find_duplicates(LIMIT=100):
             ?1_item dct:language wd:Q13955;
                     wikibase:lemma ?lemma;
                     wikibase:lexicalCategory ?category.
-            BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]", "") AS ?lemma_fixed)
+            BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]$", "") AS ?lemma_fixed)
         #}
         }
         GROUP BY ?lemma_fixed ?category

@@ -106,7 +106,7 @@ def duplicates_work(members):
     # ---
     for qid, x in members.items():
         # ---
-        lemma = re.sub(r"[\u064B-\u065F\u066A-\u06EF]", "", x['lemma'])
+        lemma = re.sub(r"[\u064B-\u065F\u066A-\u06EF]$", "", x['lemma'])
         # ---
         if x not in duplicates[lemma]:
             # ---
