@@ -5,7 +5,7 @@ import logging
 from contextlib import contextmanager
 import pymysql
 from pymysql import MySQLError
-from typing import Optional, Tuple, List, Union
+from typing import Optional, Tuple, List, Union, Sequence, Any
 from .config_db import load_db_config
 
 # Configure logging
@@ -34,9 +34,11 @@ def get_connection():
         conn = pymysql.connect(**DB_CONFIG)
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         yield conn, cursor
+
     except MySQLError as e:
         logger.error(f"Database connection error: {e}")
-        raise DatabaseConnectionError(f"Failed to connect to database: {e}")
+        raise DatabaseConnectionError("Failed to connect to database") from e
+
     finally:
         if cursor is not None:
             cursor.close()
@@ -44,19 +46,19 @@ def get_connection():
             conn.close()
 
 
-def db_commit(query: str, params: Optional[Tuple] = None, many: bool = False) -> bool:
+def db_commit(
+    query: str,
+    params: Optional[Union[Tuple[Any, ...], Sequence[Tuple[Any, ...]]]] = None,
+    many: bool = False,
+) -> bool:
     """Execute INSERT / UPDATE / DELETE queries with proper error handling"""
-    if params is None:
-        params = ()
-
     try:
-        with get_connection() as (_, cursor):
+        with get_connection() as (conn, cursor):
             if many:
-                cursor.executemany(query, params)
+                cursor.executemany(query, params or [])
             else:
-                cursor.execute(query, params)
-
-            cursor.connection.commit()
+                cursor.execute(query, params or ())
+            conn.commit()
             return True
     except MySQLError as e:
         logger.error(f"Database query error: {e}")
@@ -72,7 +74,7 @@ def init_db() -> bool:
         {
             "name": "lemmas_p11038",
             "query": """
-            CREATE TABLE `lemmas_p11038` (
+            CREATE TABLE IF NOT EXISTS `lemmas_p11038` (
                 `id` int NOT NULL AUTO_INCREMENT,
                 `lemma_id` int NOT NULL,
                 `lemma` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -90,7 +92,7 @@ def init_db() -> bool:
         {
             "name": "wd_data",
             "query": """
-            CREATE TABLE `wd_data` (
+            CREATE TABLE IF NOT EXISTS `wd_data` (
                 `id` int NOT NULL AUTO_INCREMENT,
                 `wd_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                 `wd_id_category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -104,7 +106,7 @@ def init_db() -> bool:
         {
             "name": "wd_data_p11038",
             "query": """
-            CREATE TABLE `wd_data_p11038` (
+            CREATE TABLE IF NOT EXISTS `wd_data_p11038` (
                 `id` int NOT NULL AUTO_INCREMENT,
                 `wd_data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                 `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,

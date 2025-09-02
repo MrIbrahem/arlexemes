@@ -44,42 +44,42 @@ class SPARQLBot:
 
     def __init__(self):
         self.user_agent = f"WDQS-example Python/{sys.version_info[0]}.{sys.version_info[1]}"
-        self.cache_enabled = "nocahe" not in sys.argv
+        self.cache_enabled = "nocache" not in sys.argv
 
-    def _create_sparql_wrapper(self, query: str) -> SPARQLWrapper:
+    def _create_sparql_wrapper(self, query: str, timeout: int = TIMEOUT) -> SPARQLWrapper:
         """Create and configure SPARQLWrapper instance"""
         sparql = SPARQLWrapper(ENDPOINT_URL, agent=self.user_agent)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
-        sparql.setTimeout(TIMEOUT)
+        sparql.setTimeout(timeout)
         return sparql
 
-    def _execute_query(self, query: str) -> Dict[str, Any]:
+    def _execute_query(self, query: str, timeout: int = TIMEOUT) -> Dict[str, Any]:
         """Execute SPARQL query with proper error handling"""
         try:
-            sparql = self._create_sparql_wrapper(query)
+            sparql = self._create_sparql_wrapper(query, timeout=timeout)
             data = sparql.query().convert()
             return data
         except socket.timeout:
             error_msg = f"Connection to {ENDPOINT_URL} timed out"
             logger.error(error_msg)
-            raise SPARQLConnectionError(error_msg)
+            raise SPARQLConnectionError(error_msg) from None
         except urllib.error.HTTPError as e:
             error_msg = f"HTTP Error {e.code}: {e.reason}"
             logger.error(error_msg)
-            raise SPARQLQueryError(error_msg)
+            raise SPARQLQueryError(error_msg) from e
         except urllib.error.URLError as e:
             error_msg = f"Failed to reach {ENDPOINT_URL}: {e.reason}"
             logger.error(error_msg)
-            raise SPARQLConnectionError(error_msg)
+            raise SPARQLConnectionError(error_msg) from e
         except ValueError as e:
             error_msg = f"Error converting result to JSON: {e}"
             logger.error(error_msg)
-            raise SPARQLQueryError(error_msg)
+            raise SPARQLQueryError(error_msg) from e
         except Exception as e:
             error_msg = f"Unexpected error: {str(e)}"
             logger.error(error_msg)
-            raise SPARQLQueryError(error_msg)
+            raise SPARQLQueryError(error_msg) from e
 
     def safe_sparql_query(self, query: str, timeout: int = TIMEOUT) -> Tuple[Dict[str, Any], str]:
         """Execute SPARQL query with caching and error handling"""
@@ -90,7 +90,7 @@ class SPARQLBot:
             return sparql_cache[query], ""
 
         try:
-            data = self._execute_query(query)
+            data = self._execute_query(query, timeout=timeout)
             sparql_cache[query] = data
             return data, ""
         except (SPARQLConnectionError, SPARQLQueryError) as e:

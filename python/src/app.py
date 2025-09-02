@@ -6,14 +6,14 @@ Main entry point for the web application
 
 import sys
 import time
-from typing import Dict, Tuple, Any, Optional
+from typing import Dict, Tuple, Any
 from dataclasses import dataclass
 from functools import wraps
 from flask import Flask, render_template, request, Response, session, g
 import json
 
 from pyx import logs_bot_new
-from pyx.wd_data_bots import wd_data_P11038
+from pyx.wd_data_bots import get_lemmas, count_all_p11038
 from pyx.sparql_bots import sparql_bot
 from pyx.sparql_bots.render import render_duplicate_by_category, render_duplicate, render_sparql_P11038_grouped
 from pyx.bots.not_in_db_bot import get_not_in_db
@@ -108,7 +108,7 @@ def duplicate2_api() -> Response:
 def wd_data_api_count() -> Response:
     """API endpoint for WD data counts"""
     _filter_data = request.args.get("filter_data", "all", type=str)
-    counts, db_exec_time = wd_data_P11038.count_all_p11038()
+    counts, db_exec_time = count_all_p11038()
     return jsonify(counts, db_exec_time=db_exec_time)
 
 
@@ -124,7 +124,7 @@ def wd_data_api() -> Response:
         filter_data=request.args.get("filter_data", AppConfig.DEFAULT_FILTER_DATA)
     )
 
-    all_result, db_exec_time = wd_data_P11038.get_lemmas(
+    all_result, db_exec_time = get_lemmas(
         limit=params.limit,
         offset=params.offset,
         order=params.order,

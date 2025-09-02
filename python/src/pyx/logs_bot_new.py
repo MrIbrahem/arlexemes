@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from flask import Request
 # from types import SimpleNamespace
 
-from pyx.wd_data_bots import wd_data_P11038
+from pyx.wd_data_bots import get_lemmas, count_all_p11038
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -29,7 +29,7 @@ class LogQueryParams:
     page: int = 1
     per_page: int = 200
     order: str = "DESC"
-    order_by: str = "response_count"
+    order_by: str = "lemma_id"
     filter_data: str = "with"
 
     def __post_init__(self):
@@ -48,18 +48,25 @@ class LogsBot:
     def __init__(self):
         self.valid_order_fields = [
             "id", "lemma_id", "lemma", "pos", "pos_cat",
-            "sama_lemma_id", "sama_lemma", "response_count"
+            "sama_lemma_id", "sama_lemma", "lemma_id"
         ]
         self.pos_cat_data = POS_CAT_DATA
+
+    def _safe_int(self, value, default=0):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
 
     def get_query_params(self, request: Request) -> LogQueryParams:
         """Extract and validate query parameters from request"""
         params = LogQueryParams(
-            page=int(request.args.get("page", 1)),
-            per_page=int(request.args.get("per_page", 200)),
+            page=self._safe_int(request.args.get("page", 1), 1),
+            per_page=self._safe_int(request.args.get("per_page", 200), 200),
             order=request.args.get("order", "DESC"),
-            order_by=request.args.get("order_by", "response_count"),
+            order_by=request.args.get("order_by", "lemma_id"),
             filter_data=request.args.get("filter_data", "with")
+
         )
         return params
 
@@ -98,7 +105,7 @@ class LogsBot:
         """Get lemmas with specified parameters"""
         validated_order_by = self.validate_order_by(params.order_by)
 
-        logs, db_exec_time = wd_data_P11038.get_lemmas(
+        logs, db_exec_time = get_lemmas(
             limit=params.per_page,
             offset=(params.page - 1) * params.per_page,
             order=params.order,
@@ -120,7 +127,7 @@ class LogsBot:
         logs, db_exec_time = self.get_lemmas_with_params(params)
 
         # Get total counts
-        total_logs_data, _db_exec_time = wd_data_P11038.count_all_p11038()
+        total_logs_data, _db_exec_time = count_all_p11038()
 
         # Get total logs for current filter
         all_logs = total_logs_data.get("all", 0)

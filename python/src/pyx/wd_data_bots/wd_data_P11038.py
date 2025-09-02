@@ -4,9 +4,8 @@ Data bot for handling WD data operations
 Provides database operations for lemmas and P11038 data
 """
 
-import time
 import logging
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Any
 from dataclasses import dataclass
 from ..logs_db.db_mysql import fetch_all
 
@@ -52,8 +51,8 @@ class WDDataBot:
             return order, "id"
 
     def add_order_limit_offset(self, query: str, params: List,
-                                order_by: str, order: str,
-                                limit: int, offset: int) -> Tuple[str, List]:
+                               order_by: str, order: str,
+                               limit: int, offset: int) -> Tuple[str, List]:
         """Add ORDER BY, LIMIT, and OFFSET to query"""
         order, valid_order_by = self._validate_order_params(order, order_by)
 
@@ -85,7 +84,7 @@ class WDDataBot:
         total_rows = int(result["total_rows"])
         return total_rows, db_exec_time
 
-    def count_all_p11038(self) -> Dict[str, int]:
+    def count_all_p11038(self) -> Tuple[Dict[str, int], float]:
         """Count all P11038 data with different filters"""
         query = """
             SELECT
@@ -108,10 +107,10 @@ class WDDataBot:
             ) AS combined
         """
 
-        result, db_exec_time = fetch_all(query, [], fetch_one=True)
+        result, _db_exec_time = fetch_all(query, [], fetch_one=True)
 
         if not result:
-            return {}
+            return {}, _db_exec_time
 
         # Handle different result formats
         if isinstance(result, list):
@@ -127,7 +126,8 @@ class WDDataBot:
         }
 
         logger.info(f"Counts - All: {total_rows}, With: {count_has_value}, Without: {data['without']}")
-        return data
+
+        return data, _db_exec_time
 
     def get_lemmas(self, limit: int = 0, offset: int = 0,
                    order: str = "DESC", order_by: str = "id",
