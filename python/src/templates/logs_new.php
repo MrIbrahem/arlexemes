@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label for="order_by" class="form-label">ترتيب</label>
                                             <select name="order_by" id="order_by" class="form-select w-100">
-                                                {% for order_type in result.order_by_types %}
+                                                {% for order_type in result.valid_order_fields %}
                                                 <option value="{{ order_type }}"
                                                     {% if result.tab.order_by == order_type %}selected{% endif %}>
                                                     {{ order_type }}
@@ -131,7 +131,7 @@
                                     <!-- Previous page -->
                                     <li class="page-item {% if result.tab.page == 1 %}disabled{% endif %}">
                                         <a class="page-link"
-                                            href="{{ url_for('view_logs_new', page=result.tab.page-1, **common_args) }}"
+                                            href="{{ url_for('view_logs_new', page=result.tab.page - 1, **common_args) }}"
                                             aria-label="Previous Page">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>

@@ -8,7 +8,7 @@ python3 www/python/src/jobs/update_wd/wd_data.py
 import sys
 from pathlib import Path
 
-sys.argv.append("nocahe")
+sys.argv.append("nocache")
 Dir_main = Path("www/python/venv/lib/python3.11/site-packages")
 if Dir_main.exists():
     sys.path.append(str(Dir_main))
@@ -33,10 +33,10 @@ def insert_new_items(in_wd_data, in_db):
         # ?item ?lemma ?category ?categoryLabel
         # ---
         item = y.get("item", "") or ""
-        wd_id_category = y.get("categoryLabel", "") or ""
+        category = y.get("categoryLabel", "") or ""
         lemma = y.get("lemma", "") or ""
         # ---
-        wd_data_table.insert_wd_id(wd_id=item, wd_id_category=wd_id_category, lemma=lemma)
+        wd_data_table.insert_wd_id(wd_id=item, wd_id_category=category, lemma=lemma)
     # ---
     print(f"in_wd_data_new: {len(in_wd_data_new):,}")
 

@@ -18,11 +18,11 @@ def select(key, value):
 
 def test():
 
-    insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="صفة", pos_cat="اسم", sama_lemma_id="", sama_lemma="", wd_id="")
+    insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="صفة", pos_cat="اسم", sama_lemma_id="", sama_lemma="")
     print(select(key="lemma_id", value="202000713"))
 
-    insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="", pos_cat="", sama_lemma_id=390010035, sama_lemma="آخَر", wd_id="")
+    insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="", pos_cat="", sama_lemma_id=390010035, sama_lemma="آخَر")
     print(select(key="sama_lemma_id", value="390010035"))
 
-    insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="", pos_cat="", sama_lemma_id="", sama_lemma="", wd_id="L13303")
-    print(select(key="wd_id", value="L13303"))
+    insert_lemma(lemma_id=202000713, lemma="آخَرُ", pos="", pos_cat="", sama_lemma_id="", sama_lemma="")
+    print(select(key="lemma_id", value="202000713"))
