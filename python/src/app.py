@@ -36,8 +36,6 @@ class AppConfig:
     DEFAULT_ORDER = "desc"
     DEFAULT_ORDER_BY = "id"
     DEFAULT_FILTER_DATA = "with"
-    DEBUG_PORT = 3000
-    ADMINER_PORT = 9001
 
 
 def track_performance(func):
@@ -327,4 +325,4 @@ if __name__ == "__main__":
         # ---
         print("Sample: http://localhost:9001/adminer.php?server=localhost&username=root&db=arlexemes")
     # ---
-    app.run(debug=debug, port=AppConfig.DEBUG_PORT)
+    app.run(debug=debug)
