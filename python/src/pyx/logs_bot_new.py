@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-
+from flask import Request
 from .wd_data_bots import wd_data_P11038
 from types import SimpleNamespace
+from typing import Dict, Tuple, Any
 
 pos_cat_data = {
     "اسم": 45168,
@@ -10,7 +11,7 @@ pos_cat_data = {
 }
 
 
-def get_args(request):
+def get_args(request: Request) -> SimpleNamespace:
     # ---
     page = request.args.get("page", 1, type=int)
     # ---
@@ -39,24 +40,20 @@ def get_args(request):
     return SimpleNamespace(**args)
 
 
-def make_Pagination(args, total_logs):
-    # ---
-    number_of_pages = 6
-    # ---
-    number_start = number_of_pages - 2
-    number_end = number_start // 2
-    # ---
+def create_pagination_data(args: SimpleNamespace, total_logs: int) -> Dict[str, int]:
+    """
+    Creates pagination data based on the request arguments and total number of logs.
+    """
     total_pages = (total_logs + args.per_page - 1) // args.per_page
     start_log = (args.page - 1) * args.per_page + 1
     end_log = min(args.page * args.per_page, total_logs)
-    # ---
-    # start_page = max(1, args.page - 4)
-    # end_page = min(start_page + 8, total_pages)
-    # start_page = max(1, end_page - 8)
-    # ---
-    start_page = max(1, args.page - number_end)
-    end_page = min(start_page + number_start, total_pages)
-    start_page = max(1, end_page - number_start)
+
+    num_displayed_pages = 5
+    half_displayed = num_displayed_pages // 2
+
+    start_page = max(1, args.page - half_displayed)
+    end_page = min(total_pages, start_page + num_displayed_pages - 1)
+    start_page = max(1, end_page - num_displayed_pages + 1)
 
     return {
         "total_pages": total_pages,
@@ -67,7 +64,7 @@ def make_Pagination(args, total_logs):
     }
 
 
-def find_logs(request):
+def find_logs(request: Request) -> Tuple[Dict[str, Any], float]:
     # ---
     args = get_args(request)
     # ---
@@ -96,7 +93,7 @@ def find_logs(request):
     if args.filter_data in total_logs_data:
         all_logs = total_logs_data[args.filter_data]
     # ---
-    table_new = {
+    request_and_pagination_params = {
         "order": args.order,
         "order_by": order_by,
         "per_page": args.per_page,
@@ -104,9 +101,9 @@ def find_logs(request):
         "filter_data": args.filter_data,
     }
     # ---
-    Pagination = make_Pagination(args, all_logs)
+    pagination_data = create_pagination_data(args, all_logs)
     # ---
-    table_new.update(Pagination)
+    request_and_pagination_params.update(pagination_data)
     # ---
     total_logs_data_formated = {key: f"{value:,}" for key, value in total_logs_data.items()}
     # ---
@@ -114,7 +111,7 @@ def find_logs(request):
         "count_all_p11038_db_time": _db_exec_time,
         "logs": logs,
         "order_by_types": order_by_types,
-        "tab": table_new,
+        "tab": request_and_pagination_params,
         "total_logs_data": total_logs_data_formated,
         "status_table": [],
     }

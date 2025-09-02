@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, Response, session
 import json
 import time
 from flask import g
+from typing import Dict, Tuple
 
 from pyx import logs_bot_new
 from pyx.wd_data_bots import wd_data_P11038
@@ -17,27 +18,27 @@ app = Flask(__name__)
 
 
 @app.before_request
-def before_request():
+def before_request() -> None:
     g.start_time = time.time()
 
 
 @app.after_request
-def after_request(response):
+def after_request(response: Response) -> Response:
     if hasattr(g, 'start_time'):
         g.load_time = time.time() - g.start_time
     return response
 
 
 @app.context_processor
-def inject_load_time():
+def inject_load_time() -> Dict[str, float]:
     # نحسب الوقت الحالي - وقت البداية
-    load_time = 0
+    load_time = 0.0
     if hasattr(g, 'start_time'):
         load_time = time.time() - g.start_time
     return dict(load_time=load_time)
 
 
-def jsonify(data : dict, **kwargs) -> str:
+def jsonify(data : dict, **kwargs) -> Response:
     diff = 0
     if hasattr(g, 'start_time'):
         diff = time.time() - g.start_time
@@ -56,7 +57,7 @@ def jsonify(data : dict, **kwargs) -> str:
 
 
 @app.route("/api/duplicate2", methods=["GET"])
-def duplicate2_api():
+def duplicate2_api() -> Response:
     # ---
     data, sparql_exec_time = render_duplicate()
     # ---
@@ -64,7 +65,7 @@ def duplicate2_api():
 
 
 @app.route("/api/wd_data_count", methods=["GET"])
-def wd_data_api_count():
+def wd_data_api_count() -> Response:
     # ---
     _filter_data = request.args.get("filter_data", "all", type=str)
     # ---
@@ -74,7 +75,7 @@ def wd_data_api_count():
 
 
 @app.route("/api/wd_data", methods=["GET"])
-def wd_data_api():
+def wd_data_api() -> Response:
     # ---
     limit = request.args.get('limit', 10000, type=int)
     offset = request.args.get('offset', 0, type=int)
@@ -88,7 +89,7 @@ def wd_data_api():
 
 
 @app.route("/api/not_in_db", methods=["GET"])
-def not_in_db_api():
+def not_in_db_api() -> Response:
     # ---
     result, sparql_exec_time, db_exec_time = get_not_in_db()
     # ---
@@ -96,7 +97,7 @@ def not_in_db_api():
 
 
 @app.route("/api/logs_new", methods=["GET"])
-def logs_new_api():
+def logs_new_api() -> Response:
     # ---
     result, db_exec_time = logs_bot_new.find_logs(request)
     # ---
@@ -104,7 +105,7 @@ def logs_new_api():
 
 
 @app.route("/logs_new", methods=["GET"])
-def view_logs_new():
+def view_logs_new() -> str:
     # ---
     result, db_exec_time = logs_bot_new.find_logs(request)
     # ---
@@ -116,32 +117,32 @@ def view_logs_new():
 
 
 @app.route("/autocomplete.php", methods=["GET"])
-def autocomplete():
+def autocomplete() -> Response:
     return sparql_bot.search(request.args)
 
 
 @app.route("/features_chart.php", methods=["GET"])
-def features_chart():
+def features_chart() -> str:
     return render_template("features_chart.php")
 
 
 @app.route("/list.php", methods=["GET"])
-def list_lexemes():
+def list_lexemes() -> str:
     return render_template("list.php")
 
 
 @app.route("/new.php", methods=["GET"])
-def new_lexemes():
+def new_lexemes() -> str:
     return render_template("new.php")
 
 
 @app.route("/P11038", methods=["GET"])
-def P11038():
+def P11038() -> str:
     return render_template("P11038.html")
 
 
 @app.route("/P11038_wd", methods=["GET"])
-def P11038_wd():
+def P11038_wd() -> str:
     # ---
     limit = request.args.get('limit', 100, type=int)
     # ---
@@ -163,7 +164,7 @@ def P11038_wd():
 
 
 @app.route("/duplicate2.html", methods=["GET"])
-def duplicate2():
+def duplicate2() -> str:
     # ---
     limit = request.args.get('limit', 10000, type=int)
     # ---
@@ -181,7 +182,7 @@ def duplicate2():
 
 
 @app.route("/duplicate.html", methods=["GET"])
-def duplicate():
+def duplicate() -> str:
     # ---
     limit = request.args.get('limit', 50000, type=int)
     # ---
@@ -199,7 +200,7 @@ def duplicate():
 
 
 @app.route("/not_in_db", methods=["GET"])
-def not_in_db():
+def not_in_db() -> str:
     # ---
     limit = request.args.get('limit', 100, type=int)
     # ---
@@ -214,27 +215,27 @@ def not_in_db():
 
 
 @app.route("/not_in_db1", methods=["GET"])
-def not_in_db1():
+def not_in_db1() -> str:
     return render_template("not_in_db.html", data={}, limit=0)
 
 
 @app.route("/lex_just_table.php", methods=["GET"])
-def lex_just_table():
+def lex_just_table() -> str:
     return render_template("lex_just_table.php")
 
 
 @app.route("/chart.php", methods=["GET"])
-def chart():
+def chart() -> str:
     return render_template("chart.php")
 
 
 @app.route("/wd_tree.php", methods=["GET"])
-def wd_tree():
+def wd_tree() -> str:
     return render_template("wd_tree.php")
 
 
 @app.route("/compare.php", methods=["GET"])
-def compare():
+def compare() -> str:
     # ---
     qids = request.args.get('qids', "", type=str)
     # ---
@@ -244,17 +245,17 @@ def compare():
 
 
 @app.route("/duplicate_lemmas.php", methods=["GET"])
-def duplicate_lemmas():
+def duplicate_lemmas() -> str:
     return render_template("duplicate_lemmas.php")
 
 
 @app.route("/lex.php", methods=["GET"])
-def lex():
+def lex() -> str:
     return render_template("lex.php")
 
 
 @app.route("/lex2.php", methods=["GET"])
-def lex2():
+def lex2() -> str:
     return render_template("lex2.php")
 
 
@@ -265,12 +266,12 @@ def index() -> str:
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(e) -> Tuple[str, int]:
     return render_template("error.html", tt="invalid_url", error=str(e)), 404
 
 
 @app.errorhandler(500)
-def internal_server_error(e):
+def internal_server_error(e) -> Tuple[str, int]:
     return render_template("error.html", tt="unexpected_error", error=str(e)), 500
 
 
