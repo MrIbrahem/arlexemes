@@ -106,7 +106,18 @@ class WDDataBot:
                 LEFT JOIN wd_data_p11038 AS wdp ON l.sama_lemma_id = wdp.value
             ) AS combined
         """
-
+        # _query_2 has less result
+        _query_2 = """
+            SELECT
+                (SELECT COUNT(*) FROM lemmas_p11038) AS total_rows,
+                (
+                  SELECT COUNT(DISTINCT l.id)
+                  FROM lemmas_p11038 AS l
+                  LEFT JOIN wd_data_p11038 AS w1 ON l.lemma_id = w1.value
+                  LEFT JOIN wd_data_p11038 AS w2 ON l.sama_lemma_id = w2.value
+                  WHERE w1.value IS NOT NULL OR w2.value IS NOT NULL
+                ) AS count_has_value
+        """
         result, _db_exec_time = fetch_all(query, [], fetch_one=True)
 
         if not result:

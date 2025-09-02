@@ -261,18 +261,17 @@ class SPARQLBot:
         """Find duplicate lemmas"""
         sparql_query = """
             SELECT ?lemma_fixed ?category
-            (GROUP_CONCAT(strafter(str(?1_item),"/entity/"); separator=", ") AS ?items)
+            (GROUP_CONCAT(strafter(str(?item1),"/entity/"); separator=", ") AS ?items)
             (GROUP_CONCAT(?lemma; separator=", ") AS ?lemmas)
             WHERE {
-                ?1_item dct:language wd:Q13955;
+                ?item1 dct:language wd:Q13955;
                     wikibase:lemma ?lemma;
                     wikibase:lexicalCategory ?category.
                 BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]$", "") AS ?lemma_fixed)
             }
             GROUP BY ?lemma_fixed ?category
-            HAVING(COUNT(?1_item) > 1)
+            HAVING(COUNT(?item1) > 1)
         """
-
         if limit > 0:
             sparql_query += f" LIMIT {limit}"
 
