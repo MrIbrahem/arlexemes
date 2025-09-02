@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-
+from flask import Request
 from .wd_data_bots import wd_data_P11038
 from types import SimpleNamespace
+from typing import Dict, Tuple, Any
 
 pos_cat_data = {
     "اسم": 45168,
@@ -10,7 +11,7 @@ pos_cat_data = {
 }
 
 
-def get_args(request):
+def get_args(request: Request) -> SimpleNamespace:
     # ---
     page = request.args.get("page", 1, type=int)
     # ---
@@ -39,7 +40,7 @@ def get_args(request):
     return SimpleNamespace(**args)
 
 
-def make_Pagination(args, total_logs):
+def make_Pagination(args: SimpleNamespace, total_logs: int) -> Dict[str, int]:
     # ---
     number_of_pages = 6
     # ---
@@ -67,7 +68,7 @@ def make_Pagination(args, total_logs):
     }
 
 
-def find_logs(request):
+def find_logs(request: Request) -> Tuple[Dict[str, Any], float]:
     # ---
     args = get_args(request)
     # ---
