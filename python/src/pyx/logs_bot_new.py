@@ -9,8 +9,7 @@ from dataclasses import dataclass
 from flask import Request
 # from types import SimpleNamespace
 
-from pyx.wd_data_bots import get_lemmas, count_all_p11038
-
+from pyx.wd_data_bots.wd_data_P11038 import get_lemmas, count_all_p11038
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
