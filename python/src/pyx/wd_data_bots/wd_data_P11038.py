@@ -190,9 +190,9 @@ class WDDataBot:
 
 
 # Global instance for backward compatibility
-wd_data_P11038 = WDDataBot()
+wd_bot = WDDataBot()
 
-add_order_limit_offset = wd_data_P11038.add_order_limit_offset
-count_lemmas_p11038 = wd_data_P11038.count_lemmas_p11038
-count_all_p11038 = wd_data_P11038.count_all_p11038
-get_lemmas = wd_data_P11038.get_lemmas
+add_order_limit_offset = wd_bot.add_order_limit_offset
+count_lemmas_p11038 = wd_bot.count_lemmas_p11038
+count_all_p11038 = wd_bot.count_all_p11038
+get_lemmas = wd_bot.get_lemmas

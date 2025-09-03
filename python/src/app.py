@@ -13,7 +13,7 @@ from flask import Flask, render_template, request, Response, session, g
 import json
 
 from pyx import logs_bot_new
-from pyx.wd_data_bots import get_lemmas, count_all_p11038
+from pyx.wd_data_bots.wd_data_P11038 import get_lemmas, count_all_p11038
 from pyx.sparql_bots import sparql_bot
 from pyx.sparql_bots.render import render_duplicate_by_category, render_duplicate, render_sparql_P11038_grouped
 from pyx.bots.not_in_db_bot import get_not_in_db
