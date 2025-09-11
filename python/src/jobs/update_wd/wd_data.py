@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-python3 I:/milion/arlexemes/python/src/jobs/update_wd/wd_data.py
+python3 D:/arlexemes/python/src/jobs/update_wd/wd_data.py
 python3 www/python/src/jobs/update_wd/wd_data.py
 
 """

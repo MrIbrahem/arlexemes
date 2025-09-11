@@ -1,6 +1,6 @@
 """
 
-python3 I:/milion/arlexemes/python/src/tests/testx.py
+python3 D:/arlexemes/python/src/tests/testx.py
 
 """
 import sys

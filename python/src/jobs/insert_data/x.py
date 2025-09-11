@@ -1,6 +1,6 @@
 """
 
-python I:/milion/arlexemes/python/src/insert_data/x.py
+python D:/arlexemes/python/src/insert_data/x.py
 
 """
 from pathlib import Path
