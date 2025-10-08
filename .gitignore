@@ -12,15 +12,16 @@ python/src/insert_data/Qabas-dataset_with_SAMA.json
 /python/src/insert_data1
 python/src/no_data_tab1.json
 python/src/no_data_tab.json
-/public_html/cache
-
-/public_html/adminer
-/public_html/cssx
-/public_html/jsx
-public_html/web.config
-/public_html
 python/src/static/js/duplicate_lemmas2.js
 python/src/static/js/‏‏duplicate_lemmas - نسخة.js
 python/src/logs/errors.log
 logs/errors.log
 .claude/
+
+# تجاهل مجلد public_html بالكامل
+public_html/
+
+# استثناء المجلدات الفرعية المحددة
+!public_html/edit/
+!public_html/edit1/
+!public_html/edit2/
