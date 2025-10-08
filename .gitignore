@@ -18,10 +18,12 @@ python/src/logs/errors.log
 logs/errors.log
 .claude/
 
-# تجاهل مجلد public_html بالكامل
-public_html/
+public_html/**
 
-# استثناء المجلدات الفرعية المحددة
-!public_html/edit/
-!public_html/edit1/
-!public_html/edit2/
+!public_html/edit
+!public_html/edit1
+!public_html/edit2
+
+!public_html/edit/**
+!public_html/edit1/**
+!public_html/edit2/**
