@@ -267,16 +267,16 @@ function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second
 
     if ($tbody === "") return "";
 
-    $html = "
-        <table idx=\"main_table\" class=\"table table-bordered table-sm table-hover text-center align-middle pages_table\">
-            <thead class=\"table-light\">
+    $html = <<<HTML
+        <table idx="main_table" class="table table-bordered table-sm table-hover text-center align-middle pages_table">
+            <thead class="table-light">
                 $thead
             </thead>
             <tbody>
                 $tbody
             </tbody>
         </table>
-        ";
+    HTML;
 
     $card = "
         <div class=\"card mb-3\" align=\"center\">
