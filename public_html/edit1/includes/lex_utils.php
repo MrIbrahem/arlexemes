@@ -88,10 +88,36 @@ function attrFormatter($key)
 }
 
 
-function entryFormatterNew($form)
+function make_form_id_link($form, $use_aqwas = true)
 {
+
     $formId = $form['id'] ?? "L000-F0";
 
+    // Convert formId to a URL-friendly format for linking to Wikidata
+    $formIdlink = str_replace("-", "#", $formId);
+    $formId_parts = explode("-", $formId);
+    $formId_number = $formId_parts[1] ?? "F0"; // Extract F-number part
+
+    $feats = $form['grammaticalFeatures'] ?? [];
+    $attrArray = [];
+    foreach ($feats as $feat) {
+        $attrArray[] = attrFormatter($feat);
+    }
+    $title_attr = implode("\n", $attrArray);
+
+    $text = $use_aqwas ? "<small>($formId_number)</small>" : $formId_number;
+
+    $form_id_link = <<<HTML
+        <a title="$title_attr" href="https://www.wikidata.org/entity/$formIdlink" target="_blank">
+            $text
+        </a>
+    HTML;
+
+    return $form_id_link;
+}
+
+function entryFormatterNew($form)
+{
     // ar-x-Q775724
     $values = "";
     if (isset($form['representations']) && is_array($form['representations'])) {
@@ -104,12 +130,6 @@ function entryFormatterNew($form)
             }
         }
         $values = implode(" / ", $valueArray);
-    }
-
-    if (empty($values) && isset($form['form'])) {
-        $values = <<<HTML
-            <span class="words fs-4" word="{$form['form']}">{$form['form']}</span>
-        HTML;
     }
 
     $form_claims = $form['claims'] ?? [];
@@ -126,30 +146,10 @@ function entryFormatterNew($form)
         }
     }
 
-    // Convert formId to a URL-friendly format for linking to Wikidata
-    $formIdlink = str_replace("-", "#", $formId);
-    $formId_parts = explode("-", $formId);
-    $formId_number = $formId_parts[1] ?? "F0"; // Extract F-number part
-
-    $feats = $form['tags'] ?? $form['grammaticalFeatures'] ?? [];
-    $attrArray = [];
-    foreach ($feats as $feat) {
-        $attrArray[] = attrFormatter($feat);
-    }
-    $attr = implode("\n", $attrArray);
-
-    $sorted_feats = $feats;
-    $td_id = implode("_", $sorted_feats);
-    // return $attr2;
-
-    $link = <<<HTML
-        $values <a title="$attr" href="https://www.wikidata.org/entity/$formIdlink" target="_blank">
-        <small>($formId_number)</small>
-        </a>
-    HTML;
+    $form_id_link = make_form_id_link($form);
 
     $td = <<<HTML
-        $link
+        $values $form_id_link
     HTML;
 
     return $td;

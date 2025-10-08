@@ -13,7 +13,7 @@ use function Lexeme\Types\generate_verb_table;
 use function Lexeme\Types\generate_noun_adj_table;
 
 
-function fetchLexemeById($id, $entity)
+function fetchLexemeById($id, $entity, $edit)
 {
     $lemma = isset($entity['lemma']) ? $entity['lemma'] : "(غير متوفر)";
     if (isset($entity['lemmas']) && is_array($entity['lemmas'])) {
@@ -64,9 +64,18 @@ function fetchLexemeById($id, $entity)
 
     $table_html = "";
     if ($Category === "Q24905") {     // verbs
-        $table_html = generate_verb_table($entity);
+        $table_html = generate_verb_table($entity, $edit);
     } else {
-        $table_html = generate_noun_adj_table($Category, $entity);
+        $table_html = generate_noun_adj_table($Category, $entity, $edit);
+    }
+
+    if ($edit) {
+        $table_html = <<<HTML
+            <form action="edit.php" method="post">
+                $table_html
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        HTML;
     }
 
     if ($table_html) {
@@ -81,7 +90,7 @@ function fetchLexemeById($id, $entity)
 }
 
 
-function start_lexeme($id)
+function start_lexeme($id, $edit = false)
 {
     $entity = fetch_wikidata_entity($id);
 
@@ -91,7 +100,7 @@ function start_lexeme($id)
         HTML;
     }
 
-    $html = fetchLexemeById($id, $entity);
+    $html = fetchLexemeById($id, $entity, $edit);
 
     return $html;
 }

@@ -1,0 +1,948 @@
+{
+    "pageid": 130150459,
+    "ns": 146,
+    "title": "Lexeme:L1518668",
+    "lastrevid": 2413908798,
+    "modified": "2025-10-08T02:26:16Z",
+    "type": "lexeme",
+    "id": "L1518668",
+    "lemmas": {
+        "ar": {
+            "language": "ar",
+            "value": "مُقْبِس"
+        }
+    },
+    "lexicalCategory": "Q1084",
+    "language": "Q13955",
+    "claims": {
+        "P31": [
+            {
+                "mainsnak": {
+                    "snaktype": "value",
+                    "property": "P31",
+                    "hash": "8e5c255dca3eb0639a25f2827abbce333888f122",
+                    "datavalue": {
+                        "value": {
+                            "entity-type": "item",
+                            "numeric-id": 72249355,
+                            "id": "Q72249355"
+                        },
+                        "type": "wikibase-entityid"
+                    },
+                    "datatype": "wikibase-item"
+                },
+                "type": "statement",
+                "id": "L1518668$55D65AC4-6F54-4DD7-9585-DC7527580B24",
+                "rank": "normal"
+            }
+        ],
+        "P5920": [
+            {
+                "mainsnak": {
+                    "snaktype": "value",
+                    "property": "P5920",
+                    "hash": "7e3d077c62409b962c0c58132f6c0799abde6736",
+                    "datavalue": {
+                        "value": {
+                            "entity-type": "lexeme",
+                            "numeric-id": 1468491,
+                            "id": "L1468491"
+                        },
+                        "type": "wikibase-entityid"
+                    },
+                    "datatype": "wikibase-lexeme"
+                },
+                "type": "statement",
+                "id": "L1518668$319749FA-3CE0-4F51-B402-F17F37D60FE6",
+                "rank": "normal"
+            }
+        ]
+    },
+    "forms": [
+        {
+            "id": "L1518668-F1",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146078",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F2",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَاتُ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q131105",
+                "Q146786",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F3",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَاتِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146078",
+                "Q146786",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F4",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَاتِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146233",
+                "Q146786",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F5",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَانِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q131105",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F6",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَةَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146078",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F7",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَةُ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F8",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَةِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146233",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F9",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَتَانِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q131105",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F10",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَتَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146078",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F11",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَتَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146233",
+                "Q1775415",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F12",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146078",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F13",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146233",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F14",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسُ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F114",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِس"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F15",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسُونَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q131105",
+                "Q146786",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F16",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146233",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F17",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسِينَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146078",
+                "Q146786",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F18",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "المُقْبِسِينَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146233",
+                "Q146786",
+                "Q499327",
+                "Q53997851"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F19",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسًا"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146078",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F20",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مقبس"
+                },
+                "ar-x-Q775724": {
+                    "language": "ar-x-Q775724",
+                    "value": "مُقْبِسٌ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F21",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسٍ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146233",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F22",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146078",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F23",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَا"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q131105",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F24",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَاتٌ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q131105",
+                "Q146786",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F25",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَاتٍ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146078",
+                "Q146786",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F26",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَاتٍ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146233",
+                "Q146786",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F27",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَاتُ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q131105",
+                "Q146786",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F28",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَاتِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146078",
+                "Q146786",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F29",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَاتِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146233",
+                "Q146786",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F30",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَانِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q131105",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F31",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَةً"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146078",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F32",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَةٌ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F33",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَةٍ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146233",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F34",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَةَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146078",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F35",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَةُ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F36",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَةِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146233",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F37",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَتَا"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q131105",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F38",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَتَانِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q131105",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F39",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَتَيْ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146078",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F40",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَتَيْ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146233",
+                "Q1641446",
+                "Q1775415"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F41",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَتَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146078",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F42",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَتَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146233",
+                "Q1775415",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F43",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَيْ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146078",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F44",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَيْ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146233",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F45",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146078",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F46",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسَيْنِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110022",
+                "Q146233",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F47",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": ""
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q131105",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F48",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسُو"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q131105",
+                "Q146786",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F49",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسُونَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q131105",
+                "Q146786",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F50",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسِ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q110786",
+                "Q146233",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F51",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسِي"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146078",
+                "Q146786",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F52",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسِي"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146233",
+                "Q146786",
+                "Q1641446",
+                "Q499327"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F53",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسِينَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146078",
+                "Q146786",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        },
+        {
+            "id": "L1518668-F54",
+            "representations": {
+                "ar": {
+                    "language": "ar",
+                    "value": "مُقْبِسِينَ"
+                }
+            },
+            "grammaticalFeatures": [
+                "Q146233",
+                "Q146786",
+                "Q499327",
+                "Q53997857"
+            ],
+            "claims": {}
+        }
+    ],
+    "senses": []
+}

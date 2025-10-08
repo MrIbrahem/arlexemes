@@ -11,7 +11,7 @@ use function Lexeme\Utils\make_tableData;
 use function Lexeme\Tables\_generateHtmlTable;
 use function Lexeme\Utils\wdlink_2;
 
-function generate_verb_table($entity)
+function generate_verb_table($entity, $edit)
 {
     $forms = $entity['forms'] ?? [];
 
@@ -99,14 +99,14 @@ function generate_verb_table($entity)
         $caption = "<div class=\"text-center\"><h3>$verb_lab</h3></div>";
         // Call the shared HTML generation function
         $mt_cells = $display_mt_cells[$verb] ?? "";
-        $result .= _generateHtmlTable($tableData[$verb], $numberKeys, $rowKeys, $colKeys, $genderKeys, $caption, $mt_cells);
+        $result .= _generateHtmlTable($tableData[$verb], $numberKeys, $rowKeys, $colKeys, $genderKeys, $caption, $mt_cells, $edit);
     }
 
     return $result;
 }
 
 
-function generate_noun_adj_table($entity_type, $entity)
+function generate_noun_adj_table($entity_type, $entity, $edit)
 {
 
     $forms = $entity['forms'] ?? [];
@@ -170,7 +170,7 @@ function generate_noun_adj_table($entity_type, $entity)
     $entity_type_label = wdlink_2($entity_type, true);
     $caption = "<div class=\"text-center\"><h3>$entity_type_label</h3></div>";
 
-    $result .= _generateHtmlTable($tableData, $number_Keys, $row_Keys, $colKeys, $genderKeys, $caption, $display_mt_cells);
+    $result .= _generateHtmlTable($tableData, $number_Keys, $row_Keys, $colKeys, $genderKeys, $caption, $display_mt_cells, $edit);
 
     return $result;
 }

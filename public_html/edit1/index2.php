@@ -60,10 +60,11 @@ error_reporting(E_ALL);
 
         use function Lexeme\Processing\start_lexeme;
 
-        $lex_id = $_GET['lex'] ?? $_GET['wd_id'] ?? null;
+        $lex_id = $_GET['lex'] ?? $_GET['wd_id'] ?? "L1501519";
+        $edit = isset($_GET['edit']) ? true : false;
         $output_html = "";
         if ($lex_id) {
-            $output_html = start_lexeme($lex_id);
+            $output_html = start_lexeme($lex_id, $edit);
         } else {
             $output_html = "<div class='alert alert-info'>الرجاء تحديد معرف المفردة.</div>";
         }

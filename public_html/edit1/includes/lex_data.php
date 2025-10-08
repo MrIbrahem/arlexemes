@@ -274,3 +274,9 @@ $GLOBALS['adj_and_nouns_keys'] = [
 
 $GLOBALS['past_qid'] = "Q1994301";
 $GLOBALS['past_perfect_qid'] = "Q23663136";
+
+
+$GLOBALS['languages_labels'] = [
+    "ar" => "<span title='العربية'>ar</span>",
+    "ar-x-Q775724" => "<span title='العربية مع علامات تشكيل'>ar-x</span>",
+];
