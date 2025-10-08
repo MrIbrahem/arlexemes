@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 // Data arrays migrated from js/data.js and js/lex_data.js
 
 // قاموس لربط مفاتيح ويكيداتا بالتسميات العربية
-$keyLabels = [
+$GLOBALS['keyLabels'] = [
     "Q1098772" => "جمع تكسير",
     "Q13955" => "العربية",
     "Q118465097" => "الصيغة السياقية",
@@ -99,13 +99,13 @@ $keyLabels = [
     "Q1392475" => "ماضي بسيط",
 ];
 
-$en2qid = [];
+$GLOBALS['en2qid'] = [];
 
-$en2ar = [
+$GLOBALS['en2ar'] = [
     "alternative" => "بديل",
 ];
 
-$difinitions = [
+$GLOBALS['difinitions'] = [
     "sound masculine plural" => "جمع مذكر سالم",
     "sound feminine plural" => "جمع مؤنث سالم",
     "basic broken plural triptote" => "جمع تكسير منصرف بسيط",
@@ -116,7 +116,7 @@ $difinitions = [
 ];
 
 // Build en2qid from grammaticalFeaturesLabels
-$grammaticalFeaturesLabels = [
+$GLOBALS['grammaticalFeaturesLabels'] = [
     "Q106614340" => ["en" => "nominal verb", "ar" => "فعل مشتق"],
     "Q20386151" => ["en" => "sound-form", "ar" => "جمع سالم"],
     "Q1098772" => ["en" => "broken-form", "ar" => "جمع تكسير"],
@@ -184,16 +184,16 @@ $grammaticalFeaturesLabels = [
     "Q1392475" => ["en" => "simple past", "ar" => "ماضي بسيط"],
 ];
 
-foreach ($grammaticalFeaturesLabels as $qid => $labels) {
-    $keyLabels[$qid] = $labels["ar"];
-    $en2qid[$labels["en"]] = $qid;
-    $en2ar[$labels["en"]] = $labels["ar"];
+foreach ($GLOBALS['grammaticalFeaturesLabels'] as $qid => $labels) {
+    $GLOBALS['keyLabels'][$qid] = $labels["ar"];
+    $GLOBALS['en2qid'][$labels["en"]] = $qid;
+    $GLOBALS['en2ar'][$labels["en"]] = $labels["ar"];
 }
 
-$keyLabels["Q1994301"] = "ماضي";
+$GLOBALS['keyLabels']["Q1994301"] = "ماضي";
 
 // Data arrays from js/lex_data.js
-$Pausal_Forms = [
+$GLOBALS['Pausal_Forms'] = [
     "Q117262361",
     "Q131105",
     "Q146078",
@@ -203,9 +203,9 @@ $Pausal_Forms = [
 ];
 
 // مفرد مثنى جمع
-$singular_plural_dual = ["Q110786", "Q110022", "Q146786", ""];
+$GLOBALS['singular_plural_dual'] = ["Q110786", "Q110022", "Q146786", ""];
 
-$first_second_third_person = [
+$GLOBALS['first_second_third_person'] = [
     "Q88778575",
     "Q21714344",
     "Q51929049",
@@ -213,9 +213,9 @@ $first_second_third_person = [
     ""
 ];
 
-$gender_Keys_global = ["Q499327", "Q1775415", "Q1775461", "Q1305037", ""];
+$GLOBALS['gender_Keys_global'] = ["Q499327", "Q1775415", "Q1775461", "Q1305037", ""];
 
-$numberKeys_verb = [
+$GLOBALS['numberKeys_verb'] = [
     "Q1994301", // past
     "Q23663136", // past perfect
 
@@ -231,7 +231,7 @@ $numberKeys_verb = [
     "",
 ];
 
-$additional_tenses = [
+$GLOBALS['additional_tenses'] = [
     "Q113326559", //non-remote
     "Q113326099", //remote
     "Q113326922", //non-remote past
@@ -251,22 +251,22 @@ $additional_tenses = [
     "Q10345583", //
 ];
 
-$numberKeys_verb = array_merge($numberKeys_verb, $additional_tenses);
+$GLOBALS['numberKeys_verb'] = array_merge($GLOBALS['numberKeys_verb'], $GLOBALS['additional_tenses']);
 
 // Constants
-$first_person = "Q21714344";
-$second_person = "Q51929049";
-$dual = "Q110022";
-$singular = "Q110786";
-$plural = "Q146786";
-$Masculine = "Q499327";
-$Feminine = "Q1775415";
-$verbs_main_g = ["Q1317831", "Q1194697", ""];
-$indefinite_definite_construct = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
-$construct_contextform = ["Q1641446", "Q118465097"];
-$adj_and_nouns_keys = [
-    "Q34698" => $singular_plural_dual,
-    "Q1084" => $singular_plural_dual
+$GLOBALS['first_person'] = "Q21714344";
+$GLOBALS['second_person'] = "Q51929049";
+$GLOBALS['dual'] = "Q110022";
+$GLOBALS['singular'] = "Q110786";
+$GLOBALS['plural'] = "Q146786";
+$GLOBALS['Masculine'] = "Q499327";
+$GLOBALS['Feminine'] = "Q1775415";
+$GLOBALS['verbs_main_g'] = ["Q1317831", "Q1194697", ""];
+$GLOBALS['indefinite_definite_construct'] = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
+$GLOBALS['construct_contextform'] = ["Q1641446", "Q118465097"];
+$GLOBALS['adj_and_nouns_keys'] = [
+    "Q34698" => $GLOBALS['singular_plural_dual'],
+    "Q1084" => $GLOBALS['singular_plural_dual']
 ];
-$past_qid = "Q1994301";
-$past_perfect_qid = "Q23663136";
+$GLOBALS['past_qid'] = "Q1994301";
+$GLOBALS['past_perfect_qid'] = "Q23663136";
