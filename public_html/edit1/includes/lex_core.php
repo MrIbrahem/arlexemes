@@ -3,11 +3,13 @@
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
+require_once __DIR__ . '/lex_utils.php';
 
 
 
 function fetch_wikidata_entity($id)
 {
+    $entity = null;
     $url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=$id&origin=*";
 
     try {
@@ -64,17 +66,20 @@ function filter_forms($forms)
     // قائمة الوسوم المطلوب استبعادها كأزواج كاملة
     $excludedTags = [];
     foreach ($to_dis_tags as $arr) {
-        sort($arr);
-        $excludedTags[] = json_encode($arr);
+        $sorted_arr = $arr;
+        sort($sorted_arr);
+        $excludedTags[] = json_encode($sorted_arr);
     }
 
     // فلترة النماذج
     $filtered_forms = [];
     foreach ($forms as $form) {
         $feats = $form['tags'] ?? $form['grammaticalFeatures'] ?? [];
-        sort($feats);
+        $feats_sorted = $feats;
+        sort($feats_sorted);
+        $feats_json = json_encode($feats_sorted);
 
-        if (!in_array(json_encode($feats), $excludedTags)) {
+        if (!in_array($feats_json, $excludedTags)) {
             $filtered_forms[] = $form;
         }
     }
