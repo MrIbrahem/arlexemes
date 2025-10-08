@@ -6,49 +6,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/lex_data.php';
 
 /**
- * مigrate wdlink_2 function from JavaScript to PHP
- */
-function wdlink_2($key, $add_qid = false)
-{
-    if (!$key || $key === "") return "";
-
-    $qid = "";
-
-    // if key starts with Q
-    if (substr($key, 0, 1) === "Q") {
-        $qid = $key;
-    } else {
-        $qid = isset($GLOBALS['en2qid'][strtolower($key)]) ? $GLOBALS['en2qid'][strtolower($key)] : $key;
-    }
-
-    $label = isset($GLOBALS['keyLabels'][$qid]) ?
-        (($add_qid) ? $GLOBALS['keyLabels'][$qid] . " (" . $key . ")" : $GLOBALS['keyLabels'][$qid]) :
-        $qid;
-
-    return '<a href="https://www.wikidata.org/entity/' . $qid . '" target="_blank" class="text-primary">' . $label . '</a>';
-}
-
-/**
- * مigrate attrFormatter function from JavaScript to PHP
- */
-function attrFormatter($key)
-{
-    if (!$key || $key === "") return "";
-
-    $qid = "";
-
-    // if key starts with Q
-    if (substr($key, 0, 1) === "Q") {
-        $qid = $key;
-    } else {
-        $qid = isset($GLOBALS['en2qid'][strtolower($key)]) ? $GLOBALS['en2qid'][strtolower($key)] : $key;
-    }
-
-    return (isset($GLOBALS['keyLabels'][$qid])) ? $key . " - " . $GLOBALS['keyLabels'][$qid] : $key;
-}
-
-/**
- * مigrate removeKeysIfNotFound function from JavaScript to PHP
+ * migrate removeKeysIfNotFound function from JavaScript to PHP
  */
 function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 {
@@ -86,9 +44,51 @@ function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 }
 
 
+/**
+ * migrate wdlink_2 function from JavaScript to PHP
+ */
+function wdlink_2($key, $add_qid = false)
+{
+    if (!$key || $key === "") return "";
+
+    $qid = "";
+
+    // if key starts with Q
+    if (substr($key, 0, 1) === "Q") {
+        $qid = $key;
+    } else {
+        $qid = isset($GLOBALS['en2qid'][strtolower($key)]) ? $GLOBALS['en2qid'][strtolower($key)] : $key;
+    }
+
+    $label = isset($GLOBALS['keyLabels'][$qid]) ?
+        (($add_qid) ? $GLOBALS['keyLabels'][$qid] . " (" . $key . ")" : $GLOBALS['keyLabels'][$qid]) :
+        $qid;
+
+    return '<a href="https://www.wikidata.org/entity/' . $qid . '" target="_blank" class="text-primary">' . $label . '</a>';
+}
 
 /**
- * مigrate entryFormatterNew function from JavaScript to PHP
+ * migrate attrFormatter function from JavaScript to PHP
+ */
+function attrFormatter($key)
+{
+    if (!$key || $key === "") return "";
+
+    $qid = "";
+
+    // if key starts with Q
+    if (substr($key, 0, 1) === "Q") {
+        $qid = $key;
+    } else {
+        $qid = isset($GLOBALS['en2qid'][strtolower($key)]) ? $GLOBALS['en2qid'][strtolower($key)] : $key;
+    }
+
+    return (isset($GLOBALS['keyLabels'][$qid])) ? $key . " - " . $GLOBALS['keyLabels'][$qid] : $key;
+}
+
+
+/**
+ * migrate entryFormatterNew function from JavaScript to PHP
  */
 function entryFormatterNew($form)
 {

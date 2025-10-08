@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/lex_utils.php';
 
 /**
- * مigrate make_tableData function from JavaScript to PHP
+ * migrate make_tableData function from JavaScript to PHP
  */
 function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys) {
     $first_persons = ["first-person", "Q21714344"];
@@ -30,7 +30,7 @@ function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys) {
 }
 
 /**
- * مigrate make_thead function from JavaScript to PHP
+ * migrate make_thead function from JavaScript to PHP
  */
 function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt_cells) {
     $thead = '
@@ -107,7 +107,7 @@ function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt
 }
 
 /**
- * مigrate right_side_th function from JavaScript to PHP
+ * migrate right_side_th function from JavaScript to PHP
  */
 function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells) {
     $add_to_tbody = "";
@@ -153,7 +153,7 @@ function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells) {
 }
 
 /**
- * مigrate create_gender_tds function from JavaScript to PHP
+ * migrate create_gender_tds function from JavaScript to PHP
  */
 function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, $row, &$singular_fixed) {
     $gender_tds = "";
@@ -204,7 +204,7 @@ function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, 
 }
 
 /**
- * مigrate make_tbody function from JavaScript to PHP
+ * migrate make_tbody function from JavaScript to PHP
  */
 function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gender_Keys, $col_Keys) {
     $tbody = "";
@@ -258,7 +258,7 @@ function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gen
 }
 
 /**
- * مigrate _generateHtmlTable function from JavaScript to PHP
+ * migrate _generateHtmlTable function from JavaScript to PHP
  */
 function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second_rows, $first_rows, $title_header = "", $display_mt_cells = null) {
     $display_empty_cells = $GLOBALS['display_empty_cells'] ?? true;

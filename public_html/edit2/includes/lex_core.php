@@ -7,7 +7,7 @@ require_once __DIR__ . '/lex_utils.php';
 
 
 /**
- * مigrate getentity function from JavaScript to PHP
+ * migrate getentity function from JavaScript to PHP
  */
 function fetch_wikidata_entity($id)
 {
@@ -51,7 +51,7 @@ function fetch_wikidata_entity($id)
 }
 
 /**
- * مigrate filter_forms function from JavaScript to PHP
+ * migrate filter_forms function from JavaScript to PHP
  */
 function filter_forms($forms)
 {
