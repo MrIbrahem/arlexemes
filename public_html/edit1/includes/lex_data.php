@@ -4,8 +4,6 @@ ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
-// Data arrays migrated from js/data.js and js/lex_data.js
-
 // قاموس لربط مفاتيح ويكيداتا بالتسميات العربية
 $GLOBALS['keyLabels'] = [
     "Q1098772" => "جمع تكسير",
@@ -19,7 +17,6 @@ $GLOBALS['keyLabels'] = [
     "Q1084" => "اسم",
     "Q24905" => "فعل",
     "Q34698" => "صفة",
-
     "Q1350145" => "اسم مصدر",
 
     "Q106614340" => "فعل مشتق",
@@ -100,14 +97,13 @@ $GLOBALS['keyLabels'] = [
 ];
 
 $GLOBALS['en2qid'] = [];
-
 $GLOBALS['en2ar'] = [
     "alternative" => "بديل",
 ];
 
 $GLOBALS['difinitions'] = [
     "sound masculine plural" => "جمع مذكر سالم",
-    "sound feminine plural" => "جمع مؤنث سالم",
+    "sound feminine plural" => "جمع مؤنث سالم",
     "basic broken plural triptote" => "جمع تكسير منصرف بسيط",
     "basic singular diptote" => "اسم مفرد منصرف جزئيًا (غير منصرف بسيط)",
     "singular invariable" => "اسم مفرد غير متصرف (ثابت الشكل)",
@@ -184,10 +180,11 @@ $GLOBALS['grammaticalFeaturesLabels'] = [
     "Q1392475" => ["en" => "simple past", "ar" => "ماضي بسيط"],
 ];
 
-foreach ($GLOBALS['grammaticalFeaturesLabels'] as $qid => $labels) {
-    $GLOBALS['keyLabels'][$qid] = $labels["ar"];
-    $GLOBALS['en2qid'][$labels["en"]] = $qid;
-    $GLOBALS['en2ar'][$labels["en"]] = $labels["ar"];
+// ملء المصفوفات من grammaticalFeaturesLabels
+foreach ($GLOBALS['grammaticalFeaturesLabels'] as $qid => $data) {
+    $GLOBALS['keyLabels'][$qid] = $data['ar'];
+    $GLOBALS['en2qid'][$data['en']] = $qid;
+    $GLOBALS['en2ar'][$data['en']] = $data['ar'];
 }
 
 $GLOBALS['keyLabels']["Q1994301"] = "ماضي";
@@ -218,17 +215,14 @@ $GLOBALS['gender_Keys_global'] = ["Q499327", "Q1775415", "Q1775461", "Q1305037",
 $GLOBALS['numberKeys_verb'] = [
     "Q1994301", // past
     "Q23663136", // past perfect
-
-    "Q192613", // 	مضارع
-    "Q56649265", // imperfective	مضارع ناقص
+    "Q192613", //     مضارع
+    "Q56649265", // imperfective    مضارع ناقص
     "Q12230930", // fi'il muḍāri'
-
     "Q473746", // subjunctive
-
     "Q462367", // jussive
     "Q22716",  // imperative
     "Q124351233", // أدائي
-    "",
+    ""
 ];
 
 $GLOBALS['additional_tenses'] = [
@@ -247,26 +241,34 @@ $GLOBALS['additional_tenses'] = [
     "Q18088230", //future imperfect
     "Q3910936", // مضارع بسيط
     "Q1392475", // ماضي بسيط
-    "Q1230649", //
-    "Q10345583", //
+    "Q1230649",
+    "Q10345583",
 ];
 
+// دمج المصفوفات
 $GLOBALS['numberKeys_verb'] = array_merge($GLOBALS['numberKeys_verb'], $GLOBALS['additional_tenses']);
 
-// Constants
+// تعريف المتغيرات
 $GLOBALS['first_person'] = "Q21714344";
 $GLOBALS['second_person'] = "Q51929049";
+
 $GLOBALS['dual'] = "Q110022";
 $GLOBALS['singular'] = "Q110786";
 $GLOBALS['plural'] = "Q146786";
+
 $GLOBALS['Masculine'] = "Q499327";
 $GLOBALS['Feminine'] = "Q1775415";
+
 $GLOBALS['verbs_main_g'] = ["Q1317831", "Q1194697", ""];
+
 $GLOBALS['indefinite_definite_construct'] = ["Q53997857", "Q53997851", "Q1641446", "Q118465097", ""];
+
 $GLOBALS['construct_contextform'] = ["Q1641446", "Q118465097"];
+
 $GLOBALS['adj_and_nouns_keys'] = [
     "Q34698" => $GLOBALS['singular_plural_dual'],
     "Q1084" => $GLOBALS['singular_plural_dual']
 ];
+
 $GLOBALS['past_qid'] = "Q1994301";
 $GLOBALS['past_perfect_qid'] = "Q23663136";

@@ -3,17 +3,24 @@
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
-// Include all the PHP files we created
+
 require_once __DIR__ . '/lex_data.php';
 require_once __DIR__ . '/lex_utils.php';
 require_once __DIR__ . '/lex_core.php';
-require_once __DIR__ . '/lex_table.php';
+require_once __DIR__ . '/lex_table_generation.php';
 require_once __DIR__ . '/lex_types.php';
 
+/**
+ * Fetches lexeme data and generates HTML
+ * @param string $id The lexeme ID
+ * @param array $entity The entity data
+ * @param bool $no_head Whether to skip header
+ * @return string Generated HTML
+ */
 function fetchLexemeById($id, $entity, $no_head = false)
 {
     $lemma = isset($entity['lemma']) ? $entity['lemma'] : "(غير متوفر)";
-    if (isset($entity['lemmas'])) {
+    if (isset($entity['lemmas']) && is_array($entity['lemmas'])) {
         $lemma_values = [];
         foreach ($entity['lemmas'] as $l) {
             if (isset($l['value']) && $l['value']) {
@@ -34,17 +41,32 @@ function fetchLexemeById($id, $entity, $no_head = false)
 
     $forms_len = count($forms);
 
-    $header_main = '
-                <div class="col">
-                    <span class="h4">المفردات:  ' . $forms_len . '</span>
-                </div>
-            ';
+    $header_main = "
+        <div class=\"col\">
+            <span class=\"h4\">المفردات:  $forms_len</span>
+        </div>
+    ";
 
-    $html = '
-                <div class="row mb-4">
-                    ' . $header_main . '
-                </div>
-            ';
+    // Assuming these elements don't exist in PHP context as they would in JS
+    $lemma_link_tag = false;
+    $lemma_link_en = false;
+
+    if (!$lemma_link_tag && !$lemma_link_en) {
+        $header_main = "
+            <div class=\"col-md-4\">
+                <span class=\"mb-4 h1\" id=\"header_main\">
+                <a href=\"https://wikidata.org/entity/$id\" target=\"_blank\" class=\"text-primary font-sm\">$lemma</a>
+                </span>
+                <span class=\"h4\">المفردات: $forms_len</span>
+            </div>
+        ";
+    }
+
+    $html = "
+        <div class=\"row mb-4\">
+            $header_main
+        </div>
+    ";
 
     $table_html = "";
     if ($Category === "Q24905") {     // verbs
@@ -56,12 +78,18 @@ function fetchLexemeById($id, $entity, $no_head = false)
     if ($table_html) {
         $html .= $table_html;
     } else {
-        $html .= '<div class=\'alert alert-warning\'>لا يوجد بيانات</div>';
+        $html .= "<div class='alert alert-warning'>لا يوجد بيانات</div>";
     }
 
     return $html;
 }
 
+/**
+ * Starts the lexeme processing
+ * @param string $id The lexeme ID
+ * @param bool $no_head Whether to skip header
+ * @return string Generated HTML
+ */
 function start_lexeme($id, $no_head = false)
 {
     $entity = fetch_wikidata_entity($id);

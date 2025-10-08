@@ -9,13 +9,16 @@ $GLOBALS['keyLabels'] = [
     "Q1098772" => "جمع تكسير",
     "Q13955" => "العربية",
     "Q118465097" => "الصيغة السياقية",
-    "NO_GENDER_PLACEHOLDER" => "", // يمكن تركها فارغة أو وضع \"عام\"
+
+    // مفتاح بديل للجنس عندما لا يكون هناك فصل حسب الجنس
+    "NO_GENDER_PLACEHOLDER" => "", // يمكن تركها فارغة أو وضع "عام"
+
     "Q111029" => "جذر",
     "Q1084" => "اسم",
     "Q24905" => "فعل",
     "Q34698" => "صفة",
     "Q1350145" => "اسم مصدر",
-    "Q1994301" => "ماضي", // Overridden after loop
+    "Q1994301" => "ماضي",
 ];
 
 $GLOBALS['en2qid'] = [];
@@ -33,6 +36,7 @@ $GLOBALS['difinitions'] = [
     "broken plural invariable" => "جمع تكسير غير متصرف (ثابت الشكل)",
 ];
 
+// Build en2qid from grammaticalFeaturesLabels
 $GLOBALS['grammaticalFeaturesLabels'] = [
     "Q106614340" => ["en" => "nominal verb", "ar" => "فعل مشتق"],
     "Q20386151" => ["en" => "sound-form", "ar" => "جمع سالم"],
@@ -108,9 +112,9 @@ foreach ($GLOBALS['grammaticalFeaturesLabels'] as $qid => $data) {
     $GLOBALS['en2ar'][$data['en']] = $data['ar'];
 }
 
+$GLOBALS['keyLabels']["Q1994301"] = "ماضي";
 
-
-// مفاتيح العلامات التي يجب استبعادها
+// Data arrays from js/lex_data.js
 $GLOBALS['Pausal_Forms'] = [
     "Q117262361",
     "Q131105",
@@ -136,8 +140,8 @@ $GLOBALS['gender_Keys_global'] = ["Q499327", "Q1775415", "Q1775461", "Q1305037",
 $GLOBALS['numberKeys_verb'] = [
     "Q1994301", // past
     "Q23663136", // past perfect
-    "Q192613", // \tمضارع
-    "Q56649265", // imperfective\tمضارع ناقص
+    "Q192613", //     مضارع
+    "Q56649265", // imperfective    مضارع ناقص
     "Q12230930", // fi'il muḍāri'
     "Q473746", // subjunctive
     "Q462367", // jussive
@@ -186,9 +190,10 @@ $GLOBALS['indefinite_definite_construct'] = ["Q53997857", "Q53997851", "Q1641446
 
 $GLOBALS['construct_contextform'] = ["Q1641446", "Q118465097"];
 
-$GLOBALS['adj_and_nouns_keys'] = [];
-$GLOBALS['adj_and_nouns_keys']["Q34698"] = $GLOBALS['singular_plural_dual']; // صفة
-$GLOBALS['adj_and_nouns_keys']["Q1084"] = $GLOBALS['singular_plural_dual']; // اسم
+$GLOBALS['adj_and_nouns_keys'] = [
+    "Q34698" => $GLOBALS['singular_plural_dual'],
+    "Q1084" => $GLOBALS['singular_plural_dual']
+];
 
 $GLOBALS['past_qid'] = "Q1994301";
 $GLOBALS['past_perfect_qid'] = "Q23663136";

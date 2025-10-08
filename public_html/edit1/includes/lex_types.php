@@ -9,13 +9,19 @@ require_once __DIR__ . '/lex_table_generation.php';
 // Global variable for type
 $GLOBALS['ty'] = "";
 
-/**
- * مigrate Q24905 function for verbs from JavaScript to PHP
- */
-function generate_verb_table($entity) {
-    $GLOBALS['ty'] = "verb";
 
-    $forms = isset($entity['forms']) ? $entity['forms'] : [];
+/**
+ * Generates verb table
+ * @param array $entity Entity data
+ * @return string Generated HTML table
+ */
+function generate_verb_table($entity)
+{
+    global $ty;
+
+    $ty = "verb";
+
+    $forms = $entity['forms'] ?? [];
 
     $verbs_main = $GLOBALS['verbs_main_g'];
 
@@ -23,11 +29,13 @@ function generate_verb_table($entity) {
 
     $rowKeys = removeKeysIfNotFound($GLOBALS['gender_Keys_global'], $forms, ["Q1775461", "Q1305037"]);
 
-    $colKeys = removeKeysIfNotFound($GLOBALS['first_second_third_person'], $forms, ["Q88778575"]);
+    $colKeys = removeKeysIfNotFound($GLOBALS['first_second_third_person'], $forms, ["Q88778575"]); // Q21714344
 
     $spd = $GLOBALS['singular_plural_dual'];
     // remove "" from spd
-    $spd = array_values(array_filter($spd, function($item) { return $item !== ""; }));
+    $spd = array_filter($spd, function ($item) {
+        return $item !== "";
+    });
 
     $genderKeys = removeKeysIfNotFound($GLOBALS['singular_plural_dual'], $forms, $spd);
 
@@ -42,21 +50,21 @@ function generate_verb_table($entity) {
 
     // Populate the tableData with forms based on their grammatical features
     foreach ($forms as $form) {
-        $feats = isset($form['tags']) ? $form['tags'] : (isset($form['grammaticalFeatures']) ? $form['grammaticalFeatures'] : []);
+        $feats = $form['tags'] ?? $form['grammaticalFeatures'] ?? [];
 
         // البحث عن المطابقة، إذا لم يتم العثور عليها، استخدم المفتاح الفارغ ""
         $verb = "";
-        foreach ($verbs_main as $vb) {
-            if (in_array($vb, $feats)) {
-                $verb = $vb;
+        foreach ($verbs_main as $v) {
+            if (in_array($v, $feats)) {
+                $verb = $v;
                 break;
             }
         }
 
         $number = "";
-        foreach ($numberKeys as $num) {
-            if (in_array($num, $feats)) {
-                $number = $num;
+        foreach ($numberKeys as $n) {
+            if (in_array($n, $feats)) {
+                $number = $n;
                 break;
             }
         }
@@ -69,14 +77,6 @@ function generate_verb_table($entity) {
             }
         }
 
-        $col = "";
-        foreach ($colKeys as $c) {
-            if (in_array($c, $feats)) {
-                $col = $c;
-                break;
-            }
-        }
-
         $gender = "";
         foreach ($genderKeys as $g) {
             if (in_array($g, $feats)) {
@@ -85,9 +85,14 @@ function generate_verb_table($entity) {
             }
         }
 
-        if (!isset($tableData[$verb][$number][$row][$col][$gender])) {
-            $tableData[$verb][$number][$row][$col][$gender] = [];
+        $col = "";
+        foreach ($colKeys as $c) {
+            if (in_array($c, $feats)) {
+                $col = $c;
+                break;
+            }
         }
+
         $tableData[$verb][$number][$row][$col][$gender][] = $form;
 
         // if any (number, row, col, gender) is "" set display_mt_cells to true
@@ -99,9 +104,9 @@ function generate_verb_table($entity) {
     foreach ($verbs_main as $verb) {
         $verb2 = ($verb !== "") ? $verb : "فعل آخر";
         $verb_lab = wdlink_2($verb2, true);
-        $caption = '<div class="text-center"><h3>' . $verb_lab . '</h3></div>';
+        $caption = "<div class=\"text-center\"><h3>$verb_lab</h3></div>";
         // Call the shared HTML generation function
-        $mt_cells = isset($display_mt_cells[$verb]) ? $display_mt_cells[$verb] : false;
+        $mt_cells = $display_mt_cells[$verb] ?? false;
         $result .= _generateHtmlTable($tableData[$verb], $numberKeys, $rowKeys, $colKeys, $genderKeys, $caption, $mt_cells);
     }
 
@@ -109,10 +114,15 @@ function generate_verb_table($entity) {
 }
 
 /**
- * مigrate adj_and_nouns function from JavaScript to PHP
+ * Generates noun/adjective table
+ * @param string $entity_type Entity type
+ * @param array $entity Entity data
+ * @return string Generated HTML table
  */
-function generate_noun_adj_table($entity_type, $entity) {
-    $forms = isset($entity['forms']) ? $entity['forms'] : [];
+function generate_noun_adj_table($entity_type, $entity)
+{
+
+    $forms = $entity['forms'] ?? [];
 
     $row_Keys = removeKeysIfNotFound($GLOBALS['Pausal_Forms'], $forms, ["Q146233", "Q1095813", "Q117262361"]);
     $genderKeys = removeKeysIfNotFound($GLOBALS['gender_Keys_global'], $forms, [$GLOBALS['Masculine'], $GLOBALS['Feminine'], "Q1775461", "Q1305037"]);
@@ -120,7 +130,7 @@ function generate_noun_adj_table($entity_type, $entity) {
     $colKeys = $GLOBALS['indefinite_definite_construct'];
     $colKeys = removeKeysIfNotFound($colKeys, $forms, $GLOBALS['construct_contextform']);
 
-    $number_Keys = isset($GLOBALS['adj_and_nouns_keys'][$entity_type]) ? $GLOBALS['adj_and_nouns_keys'][$entity_type] : [];
+    $number_Keys = $GLOBALS['adj_and_nouns_keys'][$entity_type] ?? [];
 
     $tableData = make_tableData($number_Keys, $row_Keys, $colKeys, $genderKeys);
 
@@ -128,12 +138,12 @@ function generate_noun_adj_table($entity_type, $entity) {
 
     // Populate the tableData with forms based on their grammatical features
     foreach ($forms as $form) {
-        $feats = isset($form['tags']) ? $form['tags'] : (isset($form['grammaticalFeatures']) ? $form['grammaticalFeatures'] : []);
+        $feats = $form['tags'] ?? $form['grammaticalFeatures'] ?? [];
 
         $number = "";
-        foreach ($number_Keys as $num) {
-            if (in_array($num, $feats)) {
-                $number = $num;
+        foreach ($number_Keys as $n) {
+            if (in_array($n, $feats)) {
+                $number = $n;
                 break;
             }
         }
@@ -146,14 +156,6 @@ function generate_noun_adj_table($entity_type, $entity) {
             }
         }
 
-        $col = "";
-        foreach ($colKeys as $c) {
-            if (in_array($c, $feats)) {
-                $col = $c;
-                break;
-            }
-        }
-
         $gender = "";
         foreach ($genderKeys as $g) {
             if (in_array($g, $feats)) {
@@ -162,17 +164,26 @@ function generate_noun_adj_table($entity_type, $entity) {
             }
         }
 
-        if (!isset($tableData[$number][$row][$col][$gender])) {
-            $tableData[$number][$row][$col][$gender] = [];
+        $col = "";
+        foreach ($colKeys as $c) {
+            if (in_array($c, $feats)) {
+                $col = $c;
+                break;
+            }
         }
+
         $tableData[$number][$row][$col][$gender][] = $form;
 
         // if any (number, row, col, gender) is "" set display_mt_cells to true
         $display_mt_cells = in_array("", [$number, $row, $col, $gender]);
     }
 
-    // Call the shared HTML generation function
-    return _generateHtmlTable($tableData, $number_Keys, $row_Keys, $colKeys, $genderKeys, "", $display_mt_cells);
-}
+    $result = "";
 
-?>
+    $entity_type_label = wdlink_2($entity_type, true);
+    $caption = "<div class=\"text-center\"><h3>$entity_type_label</h3></div>";
+
+    $result .= _generateHtmlTable($tableData, $number_Keys, $row_Keys, $colKeys, $genderKeys, $caption, $display_mt_cells);
+
+    return $result;
+}
