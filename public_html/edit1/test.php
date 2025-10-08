@@ -23,7 +23,7 @@ $test_lexeme_id = "L3325"; // This is a common Arabic verb "كتب" (to write)
 
 echo "<h2>Testing with lexeme ID: $test_lexeme_id</h2>\n";
 
-$result = start_lexeme($test_lexeme_id, true);
+$result = start_lexeme($test_lexeme_id);
 
 if ($result) {
     echo "<div class=\"alert alert-success\">Successfully processed lexeme!</div>\n";

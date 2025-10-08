@@ -6,17 +6,8 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/lex_core.php';
 require_once __DIR__ . '/lex_table_generation.php';
 
-// Global variable for type
-$GLOBALS['ty'] = "";
-
-
-
 function generate_verb_table($entity)
 {
-    global $ty;
-
-    $ty = "verb";
-
     $forms = $entity['forms'] ?? [];
 
     $verbs_main = $GLOBALS['verbs_main_g'];
@@ -102,7 +93,7 @@ function generate_verb_table($entity)
         $verb_lab = wdlink_2($verb2, true);
         $caption = "<div class=\"text-center\"><h3>$verb_lab</h3></div>";
         // Call the shared HTML generation function
-        $mt_cells = $display_mt_cells[$verb] ?? false;
+        $mt_cells = $display_mt_cells[$verb] ?? "";
         $result .= _generateHtmlTable($tableData[$verb], $numberKeys, $rowKeys, $colKeys, $genderKeys, $caption, $mt_cells);
     }
 

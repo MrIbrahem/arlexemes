@@ -9,8 +9,6 @@ require_once __DIR__ . '/lex_utils.php';
 // Table generation functions migrated from JavaScript
 
 $display_empty_cells = true;
-$ty = "";
-
 
 function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt_cells)
 {

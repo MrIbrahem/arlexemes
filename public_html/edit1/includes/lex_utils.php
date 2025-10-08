@@ -109,7 +109,6 @@ function entryFormatterNew($form)
     $form_claims = $form['claims'] ?? [];
     $lemma_item = $form_claims['P6254'] ?? [];
 
-    // "claims": { "P6254": [ { "mainsnak": { "snaktype": "value", "property": "P6254", "hash": "af059ae26aed43ea15031db491c9697fa273d0c9", "datavalue": { "value": { "entity-type": "lexeme", "numeric-id": 1490749, "id": "L1490749" }, "type": "wikibase-entityid" }, "datatype": "wikibase-lexeme" }, "type": "statement", "id": "L1485952-F112$51f8aa30-4921-906e-2839-86d2c7c3fc63", "rank": "normal" } ] }
     if (!empty($lemma_item)) {
         $lemma_id = $lemma_item[0]['mainsnak']['datavalue']['value']['id'] ?? null;
         if ($lemma_id) {
@@ -132,27 +131,14 @@ function entryFormatterNew($form)
     }
     $attr = implode("\n", $attrArray);
 
-    // $sorted_feats = $feats;
-    // $attr2 = implode("_", $sorted_feats);
+    $sorted_feats = $feats;
+    $td_id = implode("_", $sorted_feats);
     // return $attr2;
 
     $link = "
 		$values <a title=\"$attr\" href=\"https://www.wikidata.org/entity/$formIdlink\" target=\"_blank\">
 			<small>($formId_number)</small>
 		</a>";
-
-    $lexemeId = $formId_parts[0] ?? "L000";
-
-    if ($lexemeId === "L000") {
-        $link = "
-        <span title=\"$attr\">
-            $values
-			<!-- <small>($formId_number)</small> -->
-        </span>
-        ";
-    }
-
-    $exampleList = $form_claims['P5831'] ?? [];
 
     $td = "
         $link

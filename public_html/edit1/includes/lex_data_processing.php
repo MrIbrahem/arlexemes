@@ -11,7 +11,7 @@ require_once __DIR__ . '/lex_table_generation.php';
 require_once __DIR__ . '/lex_types.php';
 
 
-function fetchLexemeById($id, $entity, $no_head = false)
+function fetchLexemeById($id, $entity)
 {
     $lemma = isset($entity['lemma']) ? $entity['lemma'] : "(غير متوفر)";
     if (isset($entity['lemmas']) && is_array($entity['lemmas'])) {
@@ -26,14 +26,12 @@ function fetchLexemeById($id, $entity, $no_head = false)
 
     $Category = isset($entity['lexicalCategory']) ? $entity['lexicalCategory'] : "";
 
-    $forms = isset($entity['forms']) ? $entity['forms'] : [];
-    error_log("len forms: " . count($forms));
+    $entity['forms'] = isset($entity['forms']) ? $entity['forms'] : [];
+    error_log("len forms: " . count($entity['forms']));
 
-    $forms = filter_forms($forms);
+    // $entity['forms'] = filter_forms($entity['forms']);
 
-    $entity['forms'] = $forms;
-
-    $forms_len = count($forms);
+    $forms_len = count($entity['forms']);
 
     $header_main = "
         <div class=\"col\">
@@ -79,7 +77,7 @@ function fetchLexemeById($id, $entity, $no_head = false)
 }
 
 
-function start_lexeme($id, $no_head = false)
+function start_lexeme($id)
 {
     $entity = fetch_wikidata_entity($id);
 
@@ -87,7 +85,7 @@ function start_lexeme($id, $no_head = false)
         return "<div class='alert alert-danger'>لم يتم العثور على الكيان المطلوب.</div>";
     }
 
-    $html = fetchLexemeById($id, $entity, $no_head);
+    $html = fetchLexemeById($id, $entity);
 
     return $html;
 }

@@ -60,7 +60,7 @@ error_reporting(E_ALL);
         $lex_id = $_GET['lex'] ?? $_GET['wd_id'] ?? null;
         $output_html = "";
         if ($lex_id) {
-            $output_html = start_lexeme($lex_id, true);
+            $output_html = start_lexeme($lex_id);
         } else {
             $output_html = "<div class='alert alert-info'>الرجاء تحديد معرف المفردة.</div>";
         }
