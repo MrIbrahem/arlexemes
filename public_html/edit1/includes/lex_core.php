@@ -1,9 +1,10 @@
 <?php
 
+namespace Lexeme\Core;
+
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
-require_once __DIR__ . '/lex_utils.php';
 
 function fetch_wikidata_entity($id)
 {
@@ -36,7 +37,7 @@ function fetch_wikidata_entity($id)
 
         $entities = $data['entities'] ?? [];
         return $entities[$id] ?? null;
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         error_log("Exception in fetch_wikidata_entity: " . $e->getMessage());
         return null;
     }

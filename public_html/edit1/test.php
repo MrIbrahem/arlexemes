@@ -5,7 +5,8 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
 // Simple test script to verify the PHP implementation
-require_once __DIR__ . '/includes/lex_data_processing.php';
+require_once __DIR__ . '/includes/include.php';
+use function Lexeme\Processing\start_lexeme;
 
 echo <<<HTML
 <!DOCTYPE html>

@@ -1,10 +1,15 @@
 <?php
 
+namespace Lexeme\Types;
+
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
-require_once __DIR__ . '/lex_core.php';
-require_once __DIR__ . '/lex_table_generation.php';
+
+use function Lexeme\Utils\removeKeysIfNotFound;
+use function Lexeme\Utils\make_tableData;
+use function Lexeme\Tables\_generateHtmlTable;
+use function Lexeme\Utils\wdlink_2;
 
 function generate_verb_table($entity)
 {

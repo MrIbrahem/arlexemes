@@ -56,7 +56,10 @@ error_reporting(E_ALL);
     <div class="container-fluid my-4">
         <div id="errors"></div>
         <?php
-        require_once __DIR__ . '/includes/lex_data_processing.php';
+        require_once __DIR__ . '/includes/include.php';
+
+        use function Lexeme\Processing\start_lexeme;
+
         $lex_id = $_GET['lex'] ?? $_GET['wd_id'] ?? null;
         $output_html = "";
         if ($lex_id) {

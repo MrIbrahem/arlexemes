@@ -1,10 +1,16 @@
 <?php
 
+namespace Lexeme\Tables;
+
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/lex_utils.php';
+
+use function Lexeme\Utils\wdlink_2;
+use function Lexeme\Utils\entryFormatterNew;
+use function Lexeme\Utils\make_tableData;
+use function Lexeme\Utils\removeKeysIfNotFound;
 
 // Table generation functions migrated from JavaScript
 

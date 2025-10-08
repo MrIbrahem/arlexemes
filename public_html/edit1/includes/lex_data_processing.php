@@ -1,14 +1,16 @@
 <?php
 
+namespace Lexeme\Processing;
+
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/lex_data.php';
-require_once __DIR__ . '/lex_utils.php';
-require_once __DIR__ . '/lex_core.php';
-require_once __DIR__ . '/lex_table_generation.php';
-require_once __DIR__ . '/lex_types.php';
+
+use function Lexeme\Core\fetch_wikidata_entity;
+use function Lexeme\Core\filter_forms;
+use function Lexeme\Types\generate_verb_table;
+use function Lexeme\Types\generate_noun_adj_table;
 
 
 function fetchLexemeById($id, $entity)
