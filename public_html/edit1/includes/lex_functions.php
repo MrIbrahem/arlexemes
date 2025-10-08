@@ -17,7 +17,7 @@ require_once __DIR__ . '/lex_data.php';
  */
 function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 {
-    global $en2qid;
+
 
     $featuresSet = [];
 
@@ -57,7 +57,7 @@ function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
  */
 function wdlink_2($key, $add_qid = false)
 {
-    global $keyLabels, $en2qid;
+
 
     if (!$key || $key === "") return "";
 
@@ -67,11 +67,11 @@ function wdlink_2($key, $add_qid = false)
     if (strpos($key, "Q") === 0) {
         $qid = $key;
     } else {
-        $qid = isset($en2qid[strtolower($key)]) ? $en2qid[strtolower($key)] : $key;
+        $qid = isset($GLOBALS['en2qid'][strtolower($key)]) ? $GLOBALS['en2qid'][strtolower($key)] : $key;
     }
 
-    $label = isset($keyLabels[$qid]) ?
-        (($add_qid) ? $keyLabels[$qid] . " ($key)" : $keyLabels[$qid]) :
+    $label = isset($GLOBALS['keyLabels'][$qid]) ?
+        (($add_qid) ? $GLOBALS['keyLabels'][$qid] . " ($key)" : $GLOBALS['keyLabels'][$qid]) :
         $qid;
 
     return "<a href=\"https://www.wikidata.org/entity/$qid\" target=\"_blank\" class=\"text-primary\">$label</a>";
@@ -84,7 +84,7 @@ function wdlink_2($key, $add_qid = false)
  */
 function attrFormatter($key)
 {
-    global $keyLabels, $en2qid;
+
 
     if (!$key || $key === "") return "";
 
@@ -94,10 +94,10 @@ function attrFormatter($key)
     if (strpos($key, "Q") === 0) {
         $qid = $key;
     } else {
-        $qid = isset($en2qid[strtolower($key)]) ? $en2qid[strtolower($key)] : $key;
+        $qid = isset($GLOBALS['en2qid'][strtolower($key)]) ? $GLOBALS['en2qid'][strtolower($key)] : $key;
     }
 
-    return isset($keyLabels[$qid]) ? "$key - " . $keyLabels[$qid] : $key;
+    return isset($GLOBALS['keyLabels'][$qid]) ? "$key - " . $GLOBALS['keyLabels'][$qid] : $key;
 }
 
 /**
@@ -186,7 +186,7 @@ function entryFormatterNew($form)
  */
 function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys)
 {
-    global $first_person, $dual;
+
 
     $tableData = [];
 
@@ -197,7 +197,7 @@ function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys)
             foreach ($col_Keys as $col) {
                 $tableData[$num][$row][$col] = [];
                 foreach ($gender_Keys as $gender) {
-                    if ($col === $first_person && $gender === $dual) continue;
+                    if ($col === $GLOBALS['first_person'] && $gender === $GLOBALS['dual']) continue;
                     $tableData[$num][$row][$col][$gender] = [];
                 }
             }
