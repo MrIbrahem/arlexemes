@@ -46,7 +46,7 @@ function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 
 function wdlink_2($key, $add_qid = false)
 {
-
+    // return $key;
 
     if (!$key || $key === "") return "";
 
@@ -131,6 +131,10 @@ function entryFormatterNew($form)
         $attrArray[] = attrFormatter($feat);
     }
     $attr = implode("\n", $attrArray);
+
+    // $sorted_feats = $feats;
+    // $attr2 = implode("_", $sorted_feats);
+    // return $attr2;
 
     $link = "
 		$values <a title=\"$attr\" href=\"https://www.wikidata.org/entity/$formIdlink\" target=\"_blank\">
