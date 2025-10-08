@@ -8,13 +8,7 @@ require_once __DIR__ . '/lex_data.php';
 
 // Utility functions migrated from JavaScript
 
-/**
- * Removes keys from colKeys array if they are not found in any form's grammatical features
- * @param array $colKeys Array of column keys
- * @param array $forms Array of forms
- * @param array $keysToRemove Array of keys to check and remove if not found
- * @return array Modified colKeys array
- */
+
 function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 {
 
@@ -49,12 +43,7 @@ function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
     return array_values($colKeys);
 }
 
-/**
- * Creates a Wikidata link with label
- * @param string $key The key to create a link for
- * @param bool $add_qid Whether to add the QID to the label
- * @return string HTML anchor tag
- */
+
 function wdlink_2($key, $add_qid = false)
 {
 
@@ -77,11 +66,7 @@ function wdlink_2($key, $add_qid = false)
     return "<a href=\"https://www.wikidata.org/entity/$qid\" target=\"_blank\" class=\"text-primary\">$label</a>";
 }
 
-/**
- * Formats an attribute key with its label
- * @param string $key The key to format
- * @return string Formatted attribute string
- */
+
 function attrFormatter($key)
 {
 
@@ -100,11 +85,7 @@ function attrFormatter($key)
     return isset($GLOBALS['keyLabels'][$qid]) ? "$key - " . $GLOBALS['keyLabels'][$qid] : $key;
 }
 
-/**
- * Formats a form entry into HTML
- * @param array $form The form data
- * @return string HTML representation of the form
- */
+
 function entryFormatterNew($form)
 {
     $formId = $form['id'] ?? "L000-F0";
@@ -176,14 +157,7 @@ function entryFormatterNew($form)
     return $td;
 }
 
-/**
- * Creates a multi-dimensional table data structure
- * @param array $number_Keys Array of number keys
- * @param array $row_Keys Array of row keys
- * @param array $col_Keys Array of column keys
- * @param array $gender_Keys Array of gender keys
- * @return array Multi-dimensional table data structure
- */
+
 function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys)
 {
 

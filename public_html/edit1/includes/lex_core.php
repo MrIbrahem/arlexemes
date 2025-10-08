@@ -5,11 +5,7 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
 
-/**
- * Fetches entity data from Wikidata API
- * @param string $id The entity ID to fetch
- * @return array|null The entity data or null if not found
- */
+
 function fetch_wikidata_entity($id)
 {
     $url = "https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&ids=$id&origin=*";
@@ -46,11 +42,7 @@ function fetch_wikidata_entity($id)
     }
 }
 
-/**
- * Filters forms based on excluded tags
- * @param array $forms Array of forms to filter
- * @return array Filtered forms array
- */
+
 function filter_forms($forms)
 {
     $to_dis_tags = [

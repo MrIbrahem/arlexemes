@@ -5,9 +5,7 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 require_once __DIR__ . '/lex_data.php';
 
-/**
- * migrate removeKeysIfNotFound function from JavaScript to PHP
- */
+
 function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 {
     $featuresSet = [];
@@ -44,9 +42,7 @@ function removeKeysIfNotFound($colKeys, $forms, $keysToRemove)
 }
 
 
-/**
- * migrate wdlink_2 function from JavaScript to PHP
- */
+
 function wdlink_2($key, $add_qid = false)
 {
     if (!$key || $key === "") return "";
@@ -67,9 +63,7 @@ function wdlink_2($key, $add_qid = false)
     return '<a href="https://www.wikidata.org/entity/' . $qid . '" target="_blank" class="text-primary">' . $label . '</a>';
 }
 
-/**
- * migrate attrFormatter function from JavaScript to PHP
- */
+
 function attrFormatter($key)
 {
     if (!$key || $key === "") return "";
@@ -87,9 +81,7 @@ function attrFormatter($key)
 }
 
 
-/**
- * migrate entryFormatterNew function from JavaScript to PHP
- */
+
 function entryFormatterNew($form)
 {
     $formId = isset($form['id']) ? $form['id'] : "L000-F0";

@@ -11,15 +11,7 @@ require_once __DIR__ . '/lex_utils.php';
 $display_empty_cells = true;
 $ty = "";
 
-/**
- * Creates table header HTML
- * @param array $first_rows Array of first row headers
- * @param array $second_rows Array of second row headers
- * @param string $first_person First person identifier
- * @param string $dual Dual identifier
- * @param bool $display_mt_cells Whether to display empty cells
- * @return string Table header HTML
- */
+
 function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt_cells)
 {
     global $display_empty_cells;
@@ -99,15 +91,7 @@ function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt
     return $thead;
 }
 
-/**
- * Creates right side table header cells
- * @param int $i Row index
- * @param string $number Number identifier
- * @param string $row Row identifier
- * @param array $row_Keys Array of row keys
- * @param bool $display_mt_cells Whether to display empty cells
- * @return string HTML for right side headers
- */
+
 function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells)
 {
     global $display_empty_cells;
@@ -156,16 +140,7 @@ function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells)
     return $add_to_tbody;
 }
 
-/**
- * Creates gender-specific table cells
- * @param array $col_Keys Array of column keys
- * @param string $gender Gender identifier
- * @param bool $show_empty_cells Whether to show empty cells
- * @param array $number_data Number data
- * @param string $row Row identifier
- * @param array $singular_fixed Array to track fixed singular forms
- * @return string HTML for gender cells
- */
+
 function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, $row, &$singular_fixed)
 {
 
@@ -215,16 +190,7 @@ function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, 
     return $gender_tds;
 }
 
-/**
- * Creates table body HTML
- * @param array $number_Keys Array of number keys
- * @param array $tableData Table data structure
- * @param bool $show_empty_cells Whether to show empty cells
- * @param array $row_Keys Array of row keys
- * @param array $gender_Keys Array of gender keys
- * @param array $col_Keys Array of column keys
- * @return string Table body HTML
- */
+
 function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gender_Keys, $col_Keys)
 {
     global $display_empty_cells;
@@ -285,17 +251,7 @@ function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gen
     return $tbody;
 }
 
-/**
- * Generates the complete HTML table
- * @param array $tableData Table data structure
- * @param array $first_collumn Array of first column keys
- * @param array $second_collumn Array of second column keys
- * @param array $second_rows Array of second row keys
- * @param array $first_rows Array of first row keys
- * @param string $title_header Table title
- * @param bool $display_mt_cells Whether to display empty cells
- * @return string Complete HTML table
- */
+
 function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second_rows, $first_rows, $title_header, $display_mt_cells)
 {
 

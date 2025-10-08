@@ -6,9 +6,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/lex_utils.php';
 
 
-/**
- * migrate getentity function from JavaScript to PHP
- */
+
 function fetch_wikidata_entity($id)
 {
     $entity = null;
@@ -50,9 +48,7 @@ function fetch_wikidata_entity($id)
     return $entity;
 }
 
-/**
- * migrate filter_forms function from JavaScript to PHP
- */
+
 function filter_forms($forms)
 {
     $to_dis_tags = [

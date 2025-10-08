@@ -9,9 +9,7 @@ require_once __DIR__ . '/lex_table_generation.php';
 // Global variable for type
 $GLOBALS['ty'] = "";
 
-/**
- * migrate Q24905 function for verbs from JavaScript to PHP
- */
+
 function generate_verb_table($entity) {
     $GLOBALS['ty'] = "verb";
 
@@ -108,9 +106,7 @@ function generate_verb_table($entity) {
     return $result;
 }
 
-/**
- * migrate adj_and_nouns function from JavaScript to PHP
- */
+
 function generate_noun_adj_table($entity_type, $entity) {
     $forms = isset($entity['forms']) ? $entity['forms'] : [];
 

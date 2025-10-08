@@ -10,13 +10,7 @@ require_once __DIR__ . '/lex_core.php';
 require_once __DIR__ . '/lex_table_generation.php';
 require_once __DIR__ . '/lex_types.php';
 
-/**
- * Fetches lexeme data and generates HTML
- * @param string $id The lexeme ID
- * @param array $entity The entity data
- * @param bool $no_head Whether to skip header
- * @return string Generated HTML
- */
+
 function fetchLexemeById($id, $entity, $no_head = false)
 {
     $lemma = isset($entity['lemma']) ? $entity['lemma'] : "(غير متوفر)";
@@ -84,12 +78,7 @@ function fetchLexemeById($id, $entity, $no_head = false)
     return $html;
 }
 
-/**
- * Starts the lexeme processing
- * @param string $id The lexeme ID
- * @param bool $no_head Whether to skip header
- * @return string Generated HTML
- */
+
 function start_lexeme($id, $no_head = false)
 {
     $entity = fetch_wikidata_entity($id);

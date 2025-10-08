@@ -10,11 +10,7 @@ require_once __DIR__ . '/lex_table_generation.php';
 $GLOBALS['ty'] = "";
 
 
-/**
- * Generates verb table
- * @param array $entity Entity data
- * @return string Generated HTML table
- */
+
 function generate_verb_table($entity)
 {
     global $ty;
@@ -113,12 +109,7 @@ function generate_verb_table($entity)
     return $result;
 }
 
-/**
- * Generates noun/adjective table
- * @param string $entity_type Entity type
- * @param array $entity Entity data
- * @return string Generated HTML table
- */
+
 function generate_noun_adj_table($entity_type, $entity)
 {
 

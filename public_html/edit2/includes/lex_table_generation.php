@@ -5,9 +5,7 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 require_once __DIR__ . '/lex_utils.php';
 
-/**
- * migrate make_tableData function from JavaScript to PHP
- */
+
 function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys) {
     $first_persons = ["first-person", "Q21714344"];
     $duals = ["dual", "Q110022"];
@@ -29,9 +27,7 @@ function make_tableData($number_Keys, $row_Keys, $col_Keys, $gender_Keys) {
     return $tableData;
 }
 
-/**
- * migrate make_thead function from JavaScript to PHP
- */
+
 function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt_cells) {
     $thead = '
         <tr data-dt-order="disable">
@@ -106,9 +102,7 @@ function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt
     return $thead;
 }
 
-/**
- * migrate right_side_th function from JavaScript to PHP
- */
+
 function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells) {
     $add_to_tbody = "";
 
@@ -152,9 +146,7 @@ function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells) {
     return $add_to_tbody;
 }
 
-/**
- * migrate create_gender_tds function from JavaScript to PHP
- */
+
 function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, $row, &$singular_fixed) {
     $gender_tds = "";
 
@@ -203,9 +195,7 @@ function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, 
     return $gender_tds;
 }
 
-/**
- * migrate make_tbody function from JavaScript to PHP
- */
+
 function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gender_Keys, $col_Keys) {
     $tbody = "";
 
@@ -257,9 +247,7 @@ function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gen
     return $tbody;
 }
 
-/**
- * migrate _generateHtmlTable function from JavaScript to PHP
- */
+
 function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second_rows, $first_rows, $title_header = "", $display_mt_cells = null) {
     $display_empty_cells = $GLOBALS['display_empty_cells'] ?? true;
     $show_empty_cells = ($display_mt_cells === false || $display_mt_cells === true) ? $display_mt_cells : $display_empty_cells;
