@@ -168,33 +168,32 @@ function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells)
  */
 function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, $row, &$singular_fixed)
 {
-    global $first_person, $dual, $singular, $plural, $Masculine, $Feminine;
+
 
     $gender_tds = "";
 
     foreach ($col_Keys as $col) {
-        if ($col === $first_person && $gender === $dual) continue;
+        if ($col === $GLOBALS['first_person'] && $gender === $GLOBALS['dual']) continue;
 
         if (!$show_empty_cells && $col === "") continue;
 
         $entries = $number_data[$row][$col][$gender] ?? [];
 
-        global $second_person;
-        $check_1 = $col === $first_person && ($gender === $singular || $gender === $plural);
-        $check_2 = $col === $second_person && $gender === $dual;
+        $check_1 = $col === $GLOBALS['first_person'] && ($gender === $GLOBALS['singular'] || $gender === $GLOBALS['plural']);
+        $check_2 = $col === $GLOBALS['second_person'] && $gender === $GLOBALS['dual'];
 
         $rowspan = 1;
 
         if ($check_1 || $check_2) {
             if (isset($singular_fixed[$gender]) && $singular_fixed[$gender]) continue;
 
-            $fem_entries = $number_data[$Feminine][$col][$gender] ?? [];
+            $fem_entries = $number_data[$GLOBALS['Feminine']][$col][$gender] ?? [];
             $third_entries = $number_data[""][$col][$gender] ?? [];
 
             $male_is_empty = !empty($third_entries) && empty($entries);
             $third_is_empty = !empty($entries) && empty($third_entries);
 
-            if ($row === $Masculine && empty($fem_entries) && ($male_is_empty || $third_is_empty)) {
+            if ($row === $GLOBALS['Masculine'] && empty($fem_entries) && ($male_is_empty || $third_is_empty)) {
                 $entries = $male_is_empty ? $third_entries : $entries;
                 $singular_fixed[$gender] = true;
                 $rowspan = $show_empty_cells ? 3 : 2;
@@ -299,7 +298,8 @@ function make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gen
  */
 function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second_rows, $first_rows, $title_header, $display_mt_cells)
 {
-    global $display_empty_cells, $first_person, $dual;
+
+    global $display_empty_cells;
 
     $show_empty_cells = ($display_mt_cells === false || $display_mt_cells === true) ? $display_mt_cells : $display_empty_cells;
 
@@ -308,7 +308,7 @@ function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second
     $col_Keys = $second_rows;
     $row_Keys = $second_collumn;
 
-    $thead = make_thead($gender_Keys, $col_Keys, $first_person, $dual, $show_empty_cells);
+    $thead = make_thead($gender_Keys, $col_Keys, $GLOBALS['first_person'], $GLOBALS['dual'], $show_empty_cells);
     $tbody = make_tbody($number_Keys, $tableData, $show_empty_cells, $row_Keys, $gender_Keys, $col_Keys);
 
     if ($tbody === "") return "";
@@ -347,28 +347,27 @@ function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second
  */
 function generate_verb_table($entity)
 {
-    global $ty, $verbs_main_g, $numberKeys_verb, $gender_Keys_global, $first_second_third_person,
-        $singular_plural_dual, $additional_tenses, $past_qid, $past_perfect_qid, $first_person, $dual;
+    global $ty;
 
     $ty = "verb";
 
     $forms = $entity['forms'] ?? [];
 
-    $verbs_main = $verbs_main_g;
+    $verbs_main = $GLOBALS['verbs_main_g'];
 
-    $numberKeys = removeKeysIfNotFound($numberKeys_verb, $forms, array_merge($additional_tenses, [$past_qid, $past_perfect_qid]));
+    $numberKeys = removeKeysIfNotFound($GLOBALS['numberKeys_verb'], $forms, array_merge($GLOBALS['additional_tenses'], [$GLOBALS['past_qid'], $GLOBALS['past_perfect_qid']]));
 
-    $rowKeys = removeKeysIfNotFound($gender_Keys_global, $forms, ["Q1775461", "Q1305037"]);
+    $rowKeys = removeKeysIfNotFound($GLOBALS['gender_Keys_global'], $forms, ["Q1775461", "Q1305037"]);
 
-    $colKeys = removeKeysIfNotFound($first_second_third_person, $forms, ["Q88778575"]); // Q21714344
+    $colKeys = removeKeysIfNotFound($GLOBALS['first_second_third_person'], $forms, ["Q88778575"]); // Q21714344
 
-    $spd = $singular_plural_dual;
+    $spd = $GLOBALS['singular_plural_dual'];
     // remove "" from spd
     $spd = array_filter($spd, function ($item) {
         return $item !== "";
     });
 
-    $genderKeys = removeKeysIfNotFound($singular_plural_dual, $forms, $spd);
+    $genderKeys = removeKeysIfNotFound($GLOBALS['singular_plural_dual'], $forms, $spd);
 
     // Initialize tableData structure: tableData[number][row][col][gender]
     $tableData = [];
@@ -452,18 +451,16 @@ function generate_verb_table($entity)
  */
 function generate_noun_adj_table($entity_type, $entity)
 {
-    global $Pausal_Forms, $gender_Keys_global, $indefinite_definite_construct, $construct_contextform,
-        $adj_and_nouns_keys, $Masculine, $Feminine;
 
     $forms = $entity['forms'] ?? [];
 
-    $row_Keys = removeKeysIfNotFound($Pausal_Forms, $forms, ["Q146233", "Q1095813", "Q117262361"]);
-    $genderKeys = removeKeysIfNotFound($gender_Keys_global, $forms, [$Masculine, $Feminine, "Q1775461", "Q1305037"]);
+    $row_Keys = removeKeysIfNotFound($GLOBALS['Pausal_Forms'], $forms, ["Q146233", "Q1095813", "Q117262361"]);
+    $genderKeys = removeKeysIfNotFound($GLOBALS['gender_Keys_global'], $forms, [$GLOBALS['Masculine'], $GLOBALS['Feminine'], "Q1775461", "Q1305037"]);
 
-    $colKeys = $indefinite_definite_construct;
-    $colKeys = removeKeysIfNotFound($colKeys, $forms, $construct_contextform);
+    $colKeys = $GLOBALS['indefinite_definite_construct'];
+    $colKeys = removeKeysIfNotFound($colKeys, $forms, $GLOBALS['construct_contextform']);
 
-    $number_Keys = $adj_and_nouns_keys[$entity_type] ?? [];
+    $number_Keys = $GLOBALS['adj_and_nouns_keys'][$entity_type] ?? [];
 
     $tableData = make_tableData($number_Keys, $row_Keys, $colKeys, $genderKeys);
 
