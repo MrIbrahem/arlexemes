@@ -7,31 +7,41 @@ error_reporting(E_ALL);
 // Simple test script to verify the PHP implementation
 require_once __DIR__ . '/includes/lex_data_processing.php';
 
-echo "<!DOCTYPE html>\n";
-echo "<html lang=\"ar\" dir=\"rtl\">\n";
-echo "<head>\n";
-echo "    <meta charset=\"UTF-8\">\n";
-echo "    <title>Test PHP Lexeme Implementation</title>\n";
-echo "    <link href=\"https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.3.7/css/bootstrap.rtl.min.css\" rel=\"stylesheet\">\n";
-echo "</head>\n";
-echo "<body>\n";
-echo "<div class=\"container my-4\">\n";
-echo "<h1>Test PHP Lexeme Implementation</h1>\n";
+echo <<<HTML
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Test PHP Lexeme Implementation</title>
+    <link href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap/5.3.7/css/bootstrap.rtl.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container my-4">
+<h1>Test PHP Lexeme Implementation</h1>
+HTML;
 
 // Test with a known lexeme ID
 $test_lexeme_id = "L3325"; // This is a common Arabic verb "كتب" (to write)
 
-echo "<h2>Testing with lexeme ID: $test_lexeme_id</h2>\n";
+echo <<<HTML
+<h2>Testing with lexeme ID: $test_lexeme_id</h2>
+HTML;
 
 $result = start_lexeme($test_lexeme_id);
 
 if ($result) {
-    echo "<div class=\"alert alert-success\">Successfully processed lexeme!</div>\n";
+    echo <<<HTML
+    <div class="alert alert-success">Successfully processed lexeme!</div>
+HTML;
     echo $result;
 } else {
-    echo "<div class=\"alert alert-danger\">Failed to process lexeme</div>\n";
+    echo <<<HTML
+    <div class="alert alert-danger">Failed to process lexeme</div>
+HTML;
 }
 
-echo "</div>\n";
-echo "</body>\n";
-echo "</html>\n";
+echo <<<HTML
+</div>
+</body>
+</html>
+HTML;

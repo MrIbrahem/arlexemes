@@ -16,10 +16,10 @@ function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt
 
     $show_empty_cells = ($display_mt_cells === false || $display_mt_cells === true) ? $display_mt_cells : $display_empty_cells;
 
-    $thead = "
-        <tr data-dt-order=\"disable\">
-            <th colspan=\"2\" class=\"\"></th>
-    ";
+    $thead = <<<HTML
+        <tr data-dt-order="disable">
+            <th colspan="2" class=""></th>
+    HTML;
 
     // الصف الأول من الرؤوس
     foreach ($first_rows as $gender) {
@@ -37,26 +37,26 @@ function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt
 
         if (!$show_empty_cells && $gender === "" && count($first_rows) > 1) continue;
 
-        $thead .= "
-            <th colspan=\"$colspan\" class=\"\">
-            <span class=\"\">
+        $thead .= <<<HTML
+            <th colspan="$colspan" class="">
+            <span class="">
                 $headerText
             </span>
             </th>
-        ";
+        HTML;
     }
 
-    $thead .= "
+    $thead .= <<<HTML
         </tr>
         <tr>
-            <th scope=\"col\" data-dt-order=\"disable\" class=\"\">
+            <th scope="col" data-dt-order="disable" class="">
             </th> <!-- Top-left empty cell, spans two rows -->
-            <th scope=\"col\" data-dt-order=\"disable\" class=\"\">
-                <span class=\"\">
+            <th scope="col" data-dt-order="disable" class="">
+                <span class="">
                     الحالة
                 </span>
             </th>
-    ";
+    HTML;
 
     // الصف الثاني من الرؤوس
     foreach ($first_rows as $gender) {
@@ -72,19 +72,19 @@ function make_thead($first_rows, $second_rows, $first_person, $dual, $display_mt
 
             $text = wdlink_2($col);
 
-            $thead .= "
-                <th scope=\"col\" class=\"\">
-                    <span class=\"\">
+            $thead .= <<<HTML
+                <th scope="col" class="">
+                    <span class="">
                         $text
                     </span>
                 </th>
-            ";
+            HTML;
         }
     }
 
-    $thead .= "
+    $thead .= <<<HTML
         </tr>
-    ";
+    HTML;
 
     return $thead;
 }
@@ -107,13 +107,13 @@ function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells)
             $rowspan -= 1;
         }
 
-        $add_th = "
-            <th rowspan=\"$rowspan\" class=\"table-light\" scope=\"row\">
-                <span class=\"\">
+        $add_th = <<<HTML
+            <th rowspan="$rowspan" class="table-light" scope="row">
+                <span class="">
                     $text
                 </span>
             </th>
-        ";
+        HTML;
 
         if (!$show_empty_cells && $number === "") $add_th = "";
 
@@ -122,13 +122,13 @@ function right_side_th($i, $number, $row, $row_Keys, $display_mt_cells)
 
     $text2 = wdlink_2($row);
 
-    $add_th2 = "
-        <th scope=\"row\" class=\"\">
-            <span class=\"\">
+    $add_th2 = <<<HTML
+        <th scope="row" class="">
+            <span class="">
                 $text2
             </span>
         </th>
-    ";
+    HTML;
 
     if (!$show_empty_cells && $row === "") $add_th2 = "";
 
@@ -174,13 +174,17 @@ function create_gender_tds($col_Keys, $gender, $show_empty_cells, $number_data, 
         }
 
         $span_a = $rowspan > 1 ? "rowspan=\"$rowspan\"" : "";
-        $td = "<td $span_a style=\"position:relative;\" class=\"\">";
+        $td = <<<HTML
+            <td $span_a style="position:relative;" class="">
+        HTML;
 
         foreach ($entries as $entry) {
             $td .= entryFormatterNew($entry) . "<br>";
         }
 
-        $td .= "</td>";
+        $td .= <<<HTML
+            </td>
+        HTML;
 
         $gender_tds .= $td;
     }
@@ -278,18 +282,18 @@ function _generateHtmlTable($tableData, $first_collumn, $second_collumn, $second
         </table>
     HTML;
 
-    $card = "
-        <div class=\"card mb-3\" align=\"center\">
-            <div class=\"card-header\">
-                <div class=\"card-title\">
+    $card = <<<HTML
+        <div class="card mb-3" align="center">
+            <div class="card-header">
+                <div class="card-title">
                     $title_header
                 </div>
             </div>
-            <div class=\"card-body\">
+            <div class="card-body">
             $html
             </div>
         </div>
-    ";
+    HTML;
 
     return $card;
 }

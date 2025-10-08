@@ -63,7 +63,9 @@ function wdlink_2($key, $add_qid = false)
         (($add_qid) ? $GLOBALS['keyLabels'][$qid] . " ($key)" : $GLOBALS['keyLabels'][$qid]) :
         $qid;
 
-    return "<a href=\"https://www.wikidata.org/entity/$qid\" target=\"_blank\" class=\"text-primary\">$label</a>";
+    return <<<HTML
+        <a href="https://www.wikidata.org/entity/$qid" target="_blank" class="text-primary">$label</a>
+    HTML;
 }
 
 
@@ -96,14 +98,18 @@ function entryFormatterNew($form)
         $valueArray = [];
         foreach ($form['representations'] as $r) {
             if (isset($r['value']) && $r['value']) {
-                $valueArray[] = "<span class=\"words fs-4\" word=\"{$r['value']}\">{$r['value']}</span>";
+                $valueArray[] = <<<HTML
+                    <span class="words fs-4" word="{$r['value']}">{$r['value']}</span>
+                HTML;
             }
         }
         $values = implode(" / ", $valueArray);
     }
 
     if (empty($values) && isset($form['form'])) {
-        $values = "<span class=\"words fs-4\" word=\"{$form['form']}\">{$form['form']}</span>";
+        $values = <<<HTML
+            <span class="words fs-4" word="{$form['form']}">{$form['form']}</span>
+        HTML;
     }
 
     $form_claims = $form['claims'] ?? [];
@@ -112,10 +118,11 @@ function entryFormatterNew($form)
     if (!empty($lemma_item)) {
         $lemma_id = $lemma_item[0]['mainsnak']['datavalue']['value']['id'] ?? null;
         if ($lemma_id) {
-            $values = "
-            <a href=\"https://www.wikidata.org/entity/$lemma_id\" target=\"_blank\">
-                $values
-            </a>&nbsp;";
+            $values = <<<HTML
+                <a href="https://www.wikidata.org/entity/$lemma_id" target="_blank">
+                    $values
+                </a>&nbsp;
+            HTML;
         }
     }
 
@@ -135,14 +142,15 @@ function entryFormatterNew($form)
     $td_id = implode("_", $sorted_feats);
     // return $attr2;
 
-    $link = "
-		$values <a title=\"$attr\" href=\"https://www.wikidata.org/entity/$formIdlink\" target=\"_blank\">
-			<small>($formId_number)</small>
-		</a>";
+    $link = <<<HTML
+        $values <a title="$attr" href="https://www.wikidata.org/entity/$formIdlink" target="_blank">
+        <small>($formId_number)</small>
+        </a>
+    HTML;
 
-    $td = "
+    $td = <<<HTML
         $link
-    ";
+    HTML;
 
     return $td;
 }

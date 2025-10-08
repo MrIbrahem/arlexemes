@@ -33,32 +33,32 @@ function fetchLexemeById($id, $entity)
 
     $forms_len = count($entity['forms']);
 
-    $header_main = "
-        <div class=\"col\">
-            <span class=\"h4\">المفردات:  $forms_len</span>
+    $header_main = <<<HTML
+        <div class="col">
+            <span class="h4">المفردات:  $forms_len</span>
         </div>
-    ";
+    HTML;
 
     // Assuming these elements don't exist in PHP context as they would in JS
     $lemma_link_tag = false;
     $lemma_link_en = false;
 
     if (!$lemma_link_tag && !$lemma_link_en) {
-        $header_main = "
-            <div class=\"col-md-4\">
-                <span class=\"mb-4 h1\" id=\"header_main\">
-                <a href=\"https://wikidata.org/entity/$id\" target=\"_blank\" class=\"text-primary font-sm\">$lemma</a>
+        $header_main = <<<HTML
+            <div class="col-md-4">
+                <span class="mb-4 h1" id="header_main">
+                <a href="https://wikidata.org/entity/$id" target="_blank" class="text-primary font-sm">$lemma</a>
                 </span>
-                <span class=\"h4\">المفردات: $forms_len</span>
+                <span class="h4">المفردات: $forms_len</span>
             </div>
-        ";
+        HTML;
     }
 
-    $html = "
-        <div class=\"row mb-4\">
+    $html = <<<HTML
+        <div class="row mb-4">
             $header_main
         </div>
-    ";
+    HTML;
 
     $table_html = "";
     if ($Category === "Q24905") {     // verbs
@@ -70,7 +70,9 @@ function fetchLexemeById($id, $entity)
     if ($table_html) {
         $html .= $table_html;
     } else {
-        $html .= "<div class='alert alert-warning'>لا يوجد بيانات</div>";
+        $html .= <<<HTML
+            <div class="alert alert-warning">لا يوجد بيانات</div>
+        HTML;
     }
 
     return $html;
@@ -82,7 +84,9 @@ function start_lexeme($id)
     $entity = fetch_wikidata_entity($id);
 
     if (empty($entity)) {
-        return "<div class='alert alert-danger'>لم يتم العثور على الكيان المطلوب.</div>";
+        return <<<HTML
+            <div class="alert alert-danger">لم يتم العثور على الكيان المطلوب.</div>
+        HTML;
     }
 
     $html = fetchLexemeById($id, $entity);
