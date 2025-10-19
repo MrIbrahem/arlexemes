@@ -18,9 +18,10 @@ jobs:
           script_stop: true
           key: ${{ secrets.KEY }}
           script: |
-            become arlexemes sh -c "
+            become arlexemes bash -lc "
               ~/sh/update_py.sh &&
+              toolforge-jobs run pipup --image python3.11 --command "~/sh/install_req.sh" --wait &&
               toolforge-webservice stop &&
               toolforge-webservice python3.11 start &&
-              echo 'done..'
+              echo \"Updated on: $(date '+%Y-%m-%d %H:%M:%S')\" > ~/update_from_github
             "

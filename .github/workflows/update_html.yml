@@ -18,4 +18,4 @@ jobs:
           script_stop: true
           key: ${{ secrets.KEY }}
           script: |
-            become arlexemes sh -c "~/sh/update_html.sh"
+            become arlexemes bash -lc "~/sh/update_html.sh"
