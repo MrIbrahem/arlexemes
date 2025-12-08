@@ -79,17 +79,6 @@
                 <div class="tab-content row list-group mt-3" id="myTabContent">
                 </div>
                 <p id="noResults" class="hidden text-center text-muted">لا توجد نتائج مطابقة للبحث.</p>
-                
-                <!-- Pagination Controls -->
-                <div id="pagination_controls" class="d-none justify-content-center align-items-center mt-4 gap-3">
-                    <button id="prev_page" class="btn btn-primary" onclick="previousPage()">
-                        السابق
-                    </button>
-                    <span id="page_info" class="fw-bold">الصفحة 1</span>
-                    <button id="next_page" class="btn btn-primary" onclick="nextPage()">
-                        التالي
-                    </button>
-                </div>
             </div>
         </div>
     </div>

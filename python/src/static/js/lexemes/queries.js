@@ -125,7 +125,7 @@ function new_ar_lexemes_query(data_source, limit) {
 }
 
 
-function list_lexemes_query(limit, data_source, offset) {
+function list_lexemes_query(limit, data_source) {
     // ---
     const sparqlQuery1 = `
         VALUES ?category {
@@ -144,14 +144,9 @@ function list_lexemes_query(limit, data_source, offset) {
     }
     // ---
     let limit_line = ` LIMIT 1000 `;
-    let offset_line = ``;
     // ---
     if (limit && isFinite(limit)) {
         limit_line = ` LIMIT ${limit} `;
-    }
-    // ---
-    if (offset && isFinite(offset) && offset > 0) {
-        offset_line = ` OFFSET ${offset} `;
     }
     // ---
     let sparqlQuery = `
@@ -172,7 +167,7 @@ function list_lexemes_query(limit, data_source, offset) {
                 ?item wikibase:lexicalCategory ?category.
                 }
                 # ORDER BY DESC (xsd:integer(STRAFTER(STR(?item), "/entity/L")))
-                ${limit_line}${offset_line}
+                ${limit_line}
             }
             OPTIONAL { ?item wikibase:lemma ?lemma1. }
             OPTIONAL { ?item ontolex:lexicalForm ?form. }
