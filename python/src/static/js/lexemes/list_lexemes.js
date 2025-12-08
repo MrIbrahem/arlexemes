@@ -149,7 +149,7 @@ function get_param_from_window_location(key, defaultvalue) {
     return urlParams.get(key) || defaultvalue;
 }
 
-function showLoading() {
+function Loading() {
 
     document.getElementById("myTab").innerHTML = `
         <li class="nav-item nav-link position-relative fw-bold">
@@ -434,7 +434,7 @@ async function fetchListData(data_source, limit, page) {
 
 function loadfetchData() {
 
-    showLoading();
+    Loading();
 
     let limit = parseInt(get_param_from_window_location("limit", 100));
     let data_source = get_param_from_window_location("data_source", "all");
@@ -511,7 +511,7 @@ function updatePaginationControls(page, limit, count) {
 function navigateToPage(page) {
     // update current state and fetch via AJAX
     currentPage = page;
-    showLoading();
+    Loading();
     fetchListData(currentDataSource, currentLimit, currentPage);
 }
 

@@ -174,13 +174,13 @@ def features_chart() -> str:
 @app.route("/list", methods=["GET"])
 def list_lexemes() -> str:
     """Page for listing lexemes"""
-    return render_template("list.html")
+    return render_template("list.html", title="قائمة المفردات", page_type="list")
 
 
 @app.route("/new", methods=["GET"])
 def new_lexemes() -> str:
     """Page for creating new lexemes"""
-    return render_template("new.html")
+    return render_template("list.html", title="أحدث المفردات", page_type="new")
 
 
 @app.route("/P11038", methods=["GET"])

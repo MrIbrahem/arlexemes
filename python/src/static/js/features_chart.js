@@ -328,6 +328,8 @@ function change_labels(data) {
 async function initializeCharts() {
     let title = ' إجمالي استخدامات الميزات النحوية في المفردات العربية <span id="all_lemmas_00"></span>';
     // ---
+    showLoading();
+    // ---
     let json = await loadsparqlQuery(queries.lexicalCategoriesArabic, true);
     // ---
     add_sparql_url(queries.lexicalCategoriesArabic);
