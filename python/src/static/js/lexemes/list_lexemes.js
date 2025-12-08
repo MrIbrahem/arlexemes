@@ -1,15 +1,19 @@
-
 let treeData = [];
 let currentPage = 1;
 let currentLimit = 1000;
 let currentDataSource = "all";
 
-async function make_wd_result_for_list(data_source, limit, offset) {
-
-    let sparqlQuery = list_lexemes_query(data_source, limit, offset);
-    // ---
+async function make_wd_result_for_list(data_source, limit, offset, page_type) {
+    let sparqlQuery;
+    if (page_type === "new") {
+        // Use the new lexemes query for the "new" page type
+        sparqlQuery = new_ar_lexemes_query(data_source, limit, offset);
+    } else {
+        // Use the list lexemes query for the "list" page type
+        sparqlQuery = list_lexemes_query(data_source, limit, offset);
+    }
     add_sparql_url(sparqlQuery);
-    // ---
+
     let result = await loadsparqlQuery(sparqlQuery);
 
     let wd_result = parse_results_group_by(result);
@@ -17,11 +21,11 @@ async function make_wd_result_for_list(data_source, limit, offset) {
     return wd_result;
 }
 
-async function fetchListData(data_source, limit, page) {
-    // ---
+async function fetchListData(data_source, limit, page, page_type) {
+
     let offset = (page - 1) * limit;
-    // ---
-    let treeMap = await make_wd_result_for_list(data_source, limit, offset);
+
+    let treeMap = await make_wd_result_for_list(data_source, limit, offset, page_type);
 
     treeMap = slice_data(treeMap);
 
@@ -38,32 +42,32 @@ async function fetchListData(data_source, limit, page) {
     updatePaginationControls(page, limit, count);
 }
 
-function loadfetchData() {
-    // ---
+function loadfetchData(page_type = "list") {
+
     showLoading();
-    // ---
+
     let limit = parseInt(get_param_from_window_location("limit", 100));
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
     let page = parseInt(get_param_from_window_location("page", 1));
-    // ---
+
     // document.getElementById('custom_data_source').value = custom_data_source;
-    // ---
+
     $("#limit").val(limit);
     $("#data_source").val(data_source);
-    // ---
+
     if (custom_data_source !== "" && data_source === "custom") {
         $("#custom_data_source").val(custom_data_source);
         data_source = custom_data_source;
         document.getElementById('custom_data_source').style.display = 'block';
     }
-    // ---
+
     // Store current state
     currentPage = page;
     currentLimit = limit;
     currentDataSource = data_source;
-    // ---
-    fetchListData(currentDataSource, currentLimit, currentPage);
+
+    fetchListData(currentDataSource, currentLimit, currentPage, page_type);
 }
 
 function toggleCustomInput() {
@@ -131,9 +135,13 @@ function nextPage() {
 }
 
 async function load_list() {
-    // ---
-    loadfetchData();
-    // ---
+    loadfetchData("list");
     toggleCustomInput();
-    // ---
+
+}
+
+async function load_new() {
+    loadfetchData("new");
+    toggleCustomInput();
+
 }

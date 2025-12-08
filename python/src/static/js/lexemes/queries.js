@@ -76,7 +76,7 @@ function wg_tree_query(data_source, to_group_by, limit) {
     return sparqlQuery;
 }
 
-function new_ar_lexemes_query(data_source, limit) {
+function new_ar_lexemes_query(data_source, limit, offset) {
     // ---
     let VALUES = ``;
     // ---
@@ -89,6 +89,10 @@ function new_ar_lexemes_query(data_source, limit) {
     // ---
     if (limit && isFinite(limit)) {
         limit_line = ` LIMIT ${limit} `;
+    }
+    // ---
+    if (offset && isFinite(offset)) {
+        limit_line += ` OFFSET ${offset} `;
     }
     // ---
     let sparqlQuery = `
