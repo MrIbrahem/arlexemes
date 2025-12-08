@@ -148,6 +148,12 @@
                             الميزات النحوية
                         </a>
                     </li>
+                    <!-- https://github.com/MrIbrahem/arlexemes/ -->
+                    <li class="nav-item col-6 col-lg-auto">
+                        <a class="nav-link" href="https://github.com/MrIbrahem/arlexemes/" target="_blank">
+                            <i class="bi bi-github me-1"></i>
+                        </a>
+                    </li>
                 </ul>
 
             </div>
