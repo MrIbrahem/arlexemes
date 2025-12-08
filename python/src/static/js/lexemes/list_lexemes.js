@@ -80,20 +80,22 @@ function updatePaginationControls(page, limit, count) {
     const paginationDiv = document.getElementById("pagination_controls");
     if (!paginationDiv) return;
 
+    const prevBtn = document.getElementById("prev_page");
+    const nextBtn = document.getElementById("next_page");
     // Only show pagination if we got results equal to limit (suggesting more pages exist)
     if (count < limit && page === 1) {
-        paginationDiv.classList.add('d-none');
+        prevBtn.classList.add('d-none');
+        nextBtn.classList.add('d-none');
         return;
     }
 
-    paginationDiv.classList.remove('d-none');
-    paginationDiv.classList.add('d-flex');
+    // paginationDiv.classList.remove('d-none');
+    // paginationDiv.classList.add('d-flex');
 
     // Update page info
     // document.getElementById("page_info").textContent = `الصفحة ${page}`;
 
     // Enable/disable previous button
-    const prevBtn = document.getElementById("prev_page");
     if (page <= 1) {
         prevBtn.classList.add('disabled');
         prevBtn.setAttribute('disabled', 'disabled');
@@ -103,7 +105,6 @@ function updatePaginationControls(page, limit, count) {
     }
 
     // Enable/disable next button based on whether we got full results
-    const nextBtn = document.getElementById("next_page");
     if (count < limit) {
         nextBtn.classList.add('disabled');
         nextBtn.setAttribute('disabled', 'disabled');
