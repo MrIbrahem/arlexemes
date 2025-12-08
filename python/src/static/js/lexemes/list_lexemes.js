@@ -36,10 +36,10 @@ function loadfetchData() {
     // ---
     showLoading();
     // ---
-    let page = get_param_from_window_location("page", 1);
-    let limit = get_param_from_window_location("limit", 100);
+    let limit = parseInt(get_param_from_window_location("limit", 100));
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
+    let page = parseInt(get_param_from_window_location("page", 1));
     // ---
     // document.getElementById('custom_data_source').value = custom_data_source;
     // ---
