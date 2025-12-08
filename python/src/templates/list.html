@@ -14,7 +14,8 @@
                         </div>
                         <div class="col-md-2 col-sm-6 mb-2 mb-md-0">
 
-                            <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled" role="button">
+                            <a href="#" target="_blank" id="sparql_url" class="btn btn-outline-primary disabled"
+                                role="button">
                                 <span class="d-flex text-center align-items-center">
                                     <span class="query"></span>&nbsp;
                                     استعلام
@@ -26,7 +27,8 @@
                         <div class="col-md-3 mb-2 mb-md-0">
                             <div class="input-group">
                                 <span class="input-group-text">التصنيف</span>
-                                <select name="data_source" id="data_source" class="form-select d-inline-block" onchange="toggleCustomInput()">
+                                <select name="data_source" id="data_source" class="form-select d-inline-block"
+                                    onchange="toggleCustomInput()">
                                     <option value="all">الكل</option>
                                     <option value="Q111029">جذر</option>
                                     <option value="Q24905">فعل</option>
@@ -45,18 +47,19 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="row">
                                 <div class="col-md-8 mb-2 mb-md-0">
-                                    <div class="d-flex justify-content-center align-items-center gap-2" id="pagination_controls">
+                                    <div class="d-flex justify-content-center align-items-center gap-2"
+                                        id="pagination_controls">
                                         <!-- Previous button -->
-                                        <button id="prev_page" type="button" class="btn btn-outline-primary" onclick="previousPage()">
+                                        <button id="prev_page" type="button" class="btn btn-outline-primary"
+                                            onclick="previousPage()">
                                             &lt;&lt;
                                         </button>
                                         <!-- Number input -->
-                                        <input type="number" id="limit" name="limit"
-                                            class="form-control text-center"
-                                            placeholder="عدد النتائج" value="1000"
-                                            style="max-width: 120px;">
+                                        <input type="number" id="limit" name="limit" class="form-control text-center"
+                                            placeholder="عدد النتائج" value="1000" style="max-width: 120px;">
                                         <!-- Next button -->
-                                        <button id="next_page" type="button" class="btn btn-outline-primary" onclick="nextPage()">
+                                        <button id="next_page" type="button" class="btn btn-outline-primary"
+                                            onclick="nextPage()">
                                             &gt;&gt;
                                         </button>
                                     </div>
@@ -64,7 +67,9 @@
                                 <div class="col-md-4 text-center mb-2 mb-md-0">
                                     <button type="submit" class="btn btn-primary">تحميل</button>
                                 </div>
-                                <input type="text" name="custom_data_source" id="custom_data_source" class="form-control mt-2" placeholder="أدخل القيمة يدويًا مثل Q12345" style="display: none;" pattern="^Q\d+$">
+                                <input type="text" name="custom_data_source" id="custom_data_source"
+                                    class="form-control mt-2" placeholder="أدخل القيمة يدويًا مثل Q12345"
+                                    style="display: none;" pattern="^Q\d+$">
                             </div>
                         </div>
                     </div>
@@ -74,7 +79,6 @@
                     <div class="spinner-border spinner-border-sm" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    جارٍ التحميل (بطيء)...<br>أي مقترح لتحسين الاستعلام مرحب به
                 </div>
                 <div id="error" class="hidden alert alert-danger p-4 rounded text-center">
                     <p id="errorMessage" class="text-danger"></p>
@@ -95,8 +99,6 @@
         </div>
     </div>
 </div>
-<script src="/static/js/lexemes/queries.js"></script>
-<script src="/static/js/lexemes/list_and_new.js"></script>
 <script src="/static/js/lexemes/list_lexemes.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {

@@ -4,9 +4,398 @@ let currentLimit = 1000;
 let currentDataSource = "all";
 let currentPageType = "list"; // track whether we're on 'list' or 'new'
 
-async function make_wd_result_for_list(data_source, limit, offset, page_type) {
+
+function slice_data(wd_result) {
+
+    // تحويل الكائن إلى مصفوفة وترتيبها حسب عدد العناصر في كل مجموعة
+    let grouped = Object.values(wd_result).sort((a, b) => b.items.length - a.items.length);
+
+    // أخذ أول 10 فقط
+    let top10 = grouped.slice(0, 10);
+
+    // الباقي
+    let others = grouped.slice(10);
+
+    // إعادة بناء الكائن الجديد
+    let new_wd_result = {};
+
+    // إدراج العشرة الأوائل
+    for (const group of top10) {
+        new_wd_result[group.group_by] = group;
+    }
+
+    // دمج الباقي في مجموعة "أخرى"
+    if (others.length > 0) {
+        new_wd_result["أخرى"] = {
+            group_by: "أخرى",
+            qid: "",
+            items: others.flatMap(group => group.items)
+        };
+    }
+
+    return new_wd_result;
+}
+
+function add_sparql_url(sparqlQuery) {
+    // ---
+    let sparql_url = $("#sparql_url");
+    // ---
+    if (sparql_url) {
+        var url1 = "https://query.wikidata.org/index.html#" + encodeURIComponent(sparqlQuery)
+        // ---
+        sparql_url.attr("href", url1);
+        // remove disabled from class
+        sparql_url.removeClass("disabled");
+    }
+    // ---
+}
+
+function parse_results_group_by(result) {
+    let wd_result = {};
+
+    for (const item of result) {
+        // console.table(item);
+        // { "item": "L1478434", "lemmas": "شَنْق", "category": "Q1084", "categoryLabel": "اسم", "P31": "", "P31Label": "", "count": "12" }
+        let to_group = item['categoryLabel'] || '!';
+
+        if (!wd_result[to_group]) {
+            // ---
+            wd_result[to_group] = {
+                group_by: to_group,
+                qid: item['category'],
+                items: []
+            };
+        }
+        // ---
+        wd_result[to_group].items.push(item);
+    }
+    // ---
+    wd_result = Object.fromEntries(Object.entries(wd_result).sort(([, a], [, b]) => b.items.length - a.items.length));
+    // ---
+    return wd_result;
+}
+
+function parse_sparql_results(result) {
+    let vars = result.head.vars;
+
+    const items = result.results.bindings;
+
+    let wd_result = [];
+
+    for (const item of items) {
+        // value of all item keys from vars
+        let new_item = {};
+        for (const key of vars) {
+            let value = item[key]?.value ?? '';
+            // if value has /entity/ then value = value.split("/").pop();
+            if (value.includes("/entity/")) {
+                value = value.split("/").pop();
+            }
+            new_item[key] = value;
+        }
+        // ---
+        wd_result.push(new_item);
+    }
+    // ---
+    return wd_result;
+}
+
+async function _loadsparqlQuery(sparqlQuery) {
+
+    const endpoint = 'https://query.wikidata.org/sparql';
+    const fullUrl = endpoint + '?format=json&query=' + encodeURIComponent(sparqlQuery);
+    const headers = { 'Accept': 'application/sparql-results+json' };
+    let data;
+    try {
+        const response = await fetch(fullUrl, { headers });
+        data = await response.json();
+    } catch (e) {
+        console.error(`catch: `, e);
+        return {};
+    }
+    if (typeof data === 'object' && data !== null) {
+        return data;
+    } else {
+        console.error(`loadsparqlQuery: `, data);
+        return {};
+    }
+}
+
+async function loadsparqlQuery(sparqlQuery, notime = false) {
+    // ---
+    let start_time = performance.now();
+    // ---
+    const data = await _loadsparqlQuery(sparqlQuery);
+    // ---
+    let end_time = performance.now();
+    // ---
+    let query_time = (end_time - start_time) / 1000;
+    // ---
+    if (!notime) {
+        $('#query_time').text('(' + query_time.toFixed(3) + ' ث)');
+    }
+    // ---
+    if (!data) {
+        return {};
+    }
+    // ---
+    return parse_sparql_results(data);
+
+}
+
+function get_param_from_window_location(key, defaultvalue) {
+    // ---
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(key) || defaultvalue;
+}
+
+function showLoading() {
+
+    document.getElementById("myTab").innerHTML = `
+        <li class="nav-item nav-link position-relative fw-bold">
+            <span id="total"></span>
+        </li>
+        `;
+    document.getElementById("myTabContent").innerHTML = "";
+    document.getElementById("tree").innerHTML = "";
+
+    document.getElementById("loading").classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
+    document.getElementById("error").classList.add("d-none");     // Bootstrap 5: use d-none for hidden
+    document.getElementById("noResults").classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+}
+
+
+function hideLoading() {
+    document.getElementById("loading").classList.add("d-none");
+}
+
+function HandelDataError(data) {
+    // ---
+    hideLoading();
+    // ---
+    let noResults = document.getElementById("noResults");
+    // ---
+    if (noResults) {
+        // ---
+        if (!data.length) {
+            noResults.classList.remove("d-none"); // Bootstrap 5: use d-none for hidden
+            return;
+        } else {
+            noResults.classList.add("d-none"); // Bootstrap 5: use d-none for hidden
+        }
+    }
+    // ---
+}
+
+function make_switch_nav(title, count, n) {
+    let active = n == 1 ? "active" : "";
+    // ---
+    let badge_explain = "";
+    let badge = "";
+    // ---
+    if (["اسم", "فعل", "صفة"].includes(title)) {
+        badge = `
+        <span class="position-absolute top-5 start-90 translate-middle p-1 bg-danger border border-light rounded-circle">
+            <span class="visually-hidden">New alerts</span>
+        </span>`;
+        badge_explain = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span class="visually-hidden">New alerts</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+             انقر على الكلمة لعرض جدول التصريفات
+        </div>
+        `
+    }
+    // ---
+    let li = `
+        <li class="nav-item" role="presentation">
+            <button class="nav-link ${active} position-relative" id="hometab_${n}" data-bs-toggle="tab"
+                data-bs-target="#home-tab-pane_${n}" type="button" role="tab" aria-controls="home-tab-pane_${n}"
+                aria-selected="true">
+                    ${title} (${count})
+                    ${badge}
+                </button>
+        </li>
+    `;
+    $("#myTab").append(li);
+
+    let div = `
+        <div class="tab-pane fade show ${active}" id="home-tab-pane_${n}" role="tabpanel"
+            aria-labelledby="hometab_${n}" tabindex="${n}">
+            ${badge_explain}
+            <div class="row" id="card_${n}">
+            </div>
+        </div>
+    `;
+    $("#myTabContent").append(div);
+    // ---
+    return "card_" + n
+}
+
+function renderTree(data) {
+    // ---
+    HandelDataError(data);
+    // ---
+    if (!data.length) {
+        return;
+    }
+    // ---
+    let cat_number = 0;
+
+    data.forEach(category => {
+        // ---
+        cat_number++;
+        // ---
+        var div_id = make_switch_nav(category.group_by, category.items.length, cat_number);
+        // ---
+        let to_lex = ["Q24905", "Q34698", "Q1084"];
+        // ---
+        if (!to_lex.includes(category.qid)) {
+            // sort items by arabic alphabet
+            category.items.sort(function (a, b) {
+                return a.lemma.localeCompare(b.lemma);
+            });
+        }
+        // ---
+        category.items.forEach(item => {
+            let href = `lex.php?lex=${item.item}`;
+            let lemma = `${item.lemma} (${item.count})`;
+            // ---
+            let P31Label = item?.P31Label || "";
+            // ---
+            if (!to_lex.includes(item.category)) {
+                href = `http://www.wikidata.org/entity/${item.item}`;
+                lemma = (P31Label != "") ? `${item.lemma} (${P31Label})` : item.lemma;
+            }
+            // ---
+            if (category.group_by == "أخرى") {
+                lemma = (item.categoryLabel != "") ? `${item.lemma} (${item.categoryLabel})` : item.lemma;
+            }
+            // ---
+            if (to_lex.includes(item.category) && P31Label != "") {
+                lemma = `<span title="P31: ${P31Label}">${lemma}</span>`;
+            }
+            // ---
+            let divcol = `
+                <div class="col-3">
+                    <a class="list-group-item text-decoration-none mb-2" href="${href}" target="_blank">
+                    ${lemma}
+                    </a>
+                </div>`
+            // ---
+            $("#" + div_id).append(divcol)
+
+        });
+    });
+}
+
+function new_ar_lexemes_query(data_source, limit, offset) {
+    // ---
+    let VALUES = ``;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
+    let limit_line = ` LIMIT 1000 `;
+    // ---
+    if (limit && isFinite(limit)) {
+        limit_line = ` LIMIT ${limit} `;
+    }
+    // ---
+    if (offset && isFinite(offset)) {
+        limit_line += ` OFFSET ${offset} `;
+    }
+    // ---
+    let sparqlQuery = `
+        SELECT
+            ?item
+            (GROUP_CONCAT(DISTINCT ?lemma1; SEPARATOR = " / ") AS ?lemma)
+            ?category
+            ?categoryLabel
+            (SAMPLE(?P31) AS ?P31)
+            (SAMPLE(?P31Label) AS ?P31Label)
+            (COUNT(?form) AS ?count)
+            WHERE {
+            {
+                SELECT *
+                WHERE {
+                    ${VALUES}
+                    ?item dct:language wd:Q13955.
+                    hint:Prior hint:rangeSafe "true"^^xsd:boolean.
+                    ?item wikibase:lexicalCategory ?category.
+                }
+                ORDER BY DESC (xsd:integer(STRAFTER(STR(?item), "/entity/L")))
+                ${limit_line}
+            }
+            OPTIONAL { ?item wikibase:lemma ?lemma1. }
+            OPTIONAL { ?item ontolex:lexicalForm ?form. }
+            OPTIONAL { ?item wdt:P31 ?P31. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+        }
+        GROUP BY ?item ?category ?categoryLabel
+        ORDER BY DESC (?item)
+    `;
+    // ---
+    return sparqlQuery;
+}
+
+
+function list_lexemes_query(data_source, limit, offset) {
+    // ---
+    let VALUES = ``;
+    // ---
+    // if data_source match Q\d+
+    if (data_source !== "" && data_source.match(/Q\d+/)) {
+        VALUES = `VALUES ?category { wd:${data_source} }`;
+    }
+    // ---
+    let limit_line = ` LIMIT 1000 `;
+    // ---
+    if (limit && isFinite(limit)) {
+        limit_line = ` LIMIT ${limit} `;
+    }
+    // ---
+    if (offset && isFinite(offset)) {
+        limit_line += ` OFFSET ${offset} `;
+    }
+    // ---
+    let sparqlQuery = `
+        SELECT
+            ?item
+            (GROUP_CONCAT(DISTINCT ?lemma1; SEPARATOR = " / ") AS ?lemma)
+            ?category
+            ?categoryLabel
+            ?P31Label
+            (COUNT(?form) AS ?count)
+            WHERE {
+            {
+                SELECT *
+                WHERE {
+                ${VALUES}
+                ?item dct:language wd:Q13955.
+                hint:Prior hint:rangeSafe "true"^^xsd:boolean.
+                ?item wikibase:lexicalCategory ?category.
+                }
+                # ORDER BY DESC (xsd:integer(STRAFTER(STR(?item), "/entity/L")))
+                ${limit_line}
+            }
+            OPTIONAL { ?item wikibase:lemma ?lemma1. }
+            OPTIONAL { ?item ontolex:lexicalForm ?form. }
+            OPTIONAL { ?item wdt:P31 ?P31. }
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            }
+            GROUP BY ?item ?category ?categoryLabel ?P31Label
+            ORDER BY DESC (?count)
+    `;
+    // ---
+    return sparqlQuery;
+}
+
+async function make_wd_result_for_list(data_source, limit, offset) {
     let sparqlQuery;
-    if (page_type === "new") {
+    if (currentPageType === "new") {
         // Use the new lexemes query for the "new" page type
         sparqlQuery = new_ar_lexemes_query(data_source, limit, offset);
     } else {
@@ -22,11 +411,11 @@ async function make_wd_result_for_list(data_source, limit, offset, page_type) {
     return wd_result;
 }
 
-async function fetchListData(data_source, limit, page, page_type) {
+async function fetchListData(data_source, limit, page) {
 
     let offset = (page - 1) * limit;
 
-    let treeMap = await make_wd_result_for_list(data_source, limit, offset, page_type);
+    let treeMap = await make_wd_result_for_list(data_source, limit, offset);
 
     treeMap = slice_data(treeMap);
 
@@ -43,7 +432,7 @@ async function fetchListData(data_source, limit, page, page_type) {
     updatePaginationControls(page, limit, count);
 }
 
-function loadfetchData(page_type = "list") {
+function loadfetchData() {
 
     showLoading();
 
@@ -67,9 +456,8 @@ function loadfetchData(page_type = "list") {
     currentPage = page;
     currentLimit = limit;
     currentDataSource = data_source;
-    currentPageType = page_type; // store whether this load is for 'list' or 'new'
 
-    fetchListData(currentDataSource, currentLimit, currentPage, page_type);
+    fetchListData(currentDataSource, currentLimit, currentPage);
 }
 
 function toggleCustomInput() {
@@ -121,45 +509,11 @@ function updatePaginationControls(page, limit, count) {
 }
 
 function navigateToPage(page) {
-    const urlParams = new URLSearchParams(window.location.search);
-    // preserve current page_type (list/new) if set, otherwise default to currentPageType
-    const page_type = urlParams.get('page_type') || currentPageType || 'list';
-    urlParams.set('page', page);
-    urlParams.set('page_type', page_type);
-    const newUrl = window.location.pathname + '?' + urlParams.toString();
-    // change URL without reloading the page
-    history.pushState({page, page_type}, '', newUrl);
-
     // update current state and fetch via AJAX
     currentPage = page;
-    currentPageType = page_type;
     showLoading();
-    fetchListData(currentDataSource, currentLimit, currentPage, currentPageType);
+    fetchListData(currentDataSource, currentLimit, currentPage);
 }
-
-// handle browser back/forward: read params from URL and load via AJAX
-window.addEventListener('popstate', (e) => {
-    const params = new URLSearchParams(window.location.search);
-    const page = parseInt(params.get('page') || 1);
-    const page_type = params.get('page_type') || 'list';
-
-    // derive data_source consistent with loadfetchData behavior
-    let data_source = get_param_from_window_location("data_source", "all");
-    let custom_data_source = get_param_from_window_location("custom_data_source", "");
-    if (custom_data_source !== "" && data_source === "custom") {
-        data_source = custom_data_source;
-        // show custom input if present
-        const customInputElem = document.getElementById('custom_data_source');
-        if (customInputElem) customInputElem.style.display = 'block';
-    }
-
-    currentPage = page;
-    currentPageType = page_type;
-    currentDataSource = data_source;
-
-    showLoading();
-    fetchListData(currentDataSource, currentLimit, currentPage, currentPageType);
-});
 
 function previousPage() {
     if (currentPage > 1) {
@@ -171,14 +525,9 @@ function nextPage() {
     navigateToPage(currentPage + 1);
 }
 
-async function load_list() {
-    loadfetchData("list");
-    toggleCustomInput();
-
-}
-
-async function load_new() {
-    loadfetchData("new");
+async function load_list(page_type = "list") {
+    currentPageType = page_type;
+    loadfetchData();
     toggleCustomInput();
 
 }

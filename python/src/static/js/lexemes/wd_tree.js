@@ -169,7 +169,7 @@ async function add_options_to_select(data_source, group_by) {
     $("#group_by").val(group_by);
 }
 
-async function loadfetchData() {
+async function loadfetchDataWdTree() {
     // ---
     treeContainer.innerHTML = "";
     showLoading();
@@ -222,7 +222,7 @@ async function load_tree() {
         render_wd_tree(filtered, true);
     });
     // ---
-    await loadfetchData();
+    await loadfetchDataWdTree();
     // ---
     toggleCustomInput();
     // ---
