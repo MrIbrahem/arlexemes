@@ -14,7 +14,9 @@ async function make_wd_result_for_list(data_source, limit, offset) {
     return wd_result;
 }
 
-async function fetchListData(data_source, limit, offset) {
+async function fetchListData(data_source, limit, page) {
+    // ---
+    let offset = (page - 1) * limit;
     // ---
     let treeMap = await make_wd_result_for_list(data_source, limit, offset);
 
@@ -35,7 +37,7 @@ function loadfetchData() {
     showLoading();
     // ---
     let page = get_param_from_window_location("page", 1);
-    let limit = get_param_from_window_location("limit", 1000);
+    let limit = get_param_from_window_location("limit", 100);
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
     // ---
@@ -50,9 +52,7 @@ function loadfetchData() {
         document.getElementById('custom_data_source').style.display = 'block';
     }
     // ---
-    let offset = (page - 1) * limit;
-    // ---
-    fetchListData(data_source, limit, offset);
+    fetchListData(data_source, limit, page);
 }
 
 function toggleCustomInput() {
