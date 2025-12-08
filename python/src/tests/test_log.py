@@ -3,7 +3,7 @@
 from pyx.logs_db.bot import select as _select
 from pyx.logs_db.insert import insert_lemma
 
-# python3 I:/milion/arlexemes/python/src/test.py
+# python3 D:/arlexemes/python/src/test.py
 # ---
 
 

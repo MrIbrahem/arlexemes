@@ -1,1 +1,1 @@
-python3 I:\milion\arlexemes\python\src\app.py debug
+python3 D:\arlexemes\python\src\app.py debug

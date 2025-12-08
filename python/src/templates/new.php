@@ -1,13 +1,13 @@
 {% extends "main.php" %}
 
 {% block content %}
-
-<div class="container my-4">
+<div class="container-fluid my-4">
     <div class="d-flex align-items-center justify-content-center">
         <div class="row col-md-10 border rounded">
-            <div class="max-w-3xl mx-auto rounded-lg shadow-md p-6 bg-light-subtle">
+            <div class="max-w-3xl mx-auto rounded-lg shadow-md bg-light-subtle">
+                <form method="GET">
                 <div class="row m-6 p-3"><!--  d-flex align-items-center justify-content-between -->
-                    <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
+                        <div class="col-md-3 col-sm-6 mb-2 mb-md-0">
                         <span class="text-2xl font-bold text-center h2">
                             أحدث المفردات:
                         </span>
@@ -23,10 +23,7 @@
                         <span id="query_time" class="ms-3"></span>
 
                     </div>
-                    <div class="col-md-6 col-sm-12">
-                        <form method="GET">
-                            <div class="row">
-                                <div class="col-md-6 mb-2 mb-md-0">
+                        <div class="col-md-3 mb-2 mb-md-0">
                                     <div class="input-group">
                                         <span class="input-group-text">التصنيف</span>
                                         <select name="data_source" id="data_source" class="form-select d-inline-block" onchange="toggleCustomInput()">
@@ -45,19 +42,33 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-3 text-center mb-2 mb-md-0">
-                                    <input type="number" id="limit" name="limit" class="form-control" placeholder="عدد النتائج" value="1000">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-8 mb-2 mb-md-0">
+                                    <div class="d-flex justify-content-center align-items-center gap-2" id="pagination_controls">
+                                        <!-- Previous button -->
+                                        <button id="prev_page" type="button" class="btn btn-outline-primary" onclick="previousPage()">
+                                            &lt;&lt;
+                                        </button>
+                                        <!-- Number input -->
+                                        <input type="number" id="limit" name="limit"
+                                            class="form-control text-center"
+                                            placeholder="عدد النتائج" value="1000"
+                                            style="max-width: 120px;">
+                                        <!-- Next button -->
+                                        <button id="next_page" type="button" class="btn btn-outline-primary" onclick="nextPage()">
+                                            &gt;&gt;
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-md-3 text-center mb-2 mb-md-0">
+                                <div class="col-md-4 text-center mb-2 mb-md-0">
                                     <button type="submit" class="btn btn-primary">تحميل</button>
                                 </div>
-
                                 <input type="text" name="custom_data_source" id="custom_data_source" class="form-control mt-2" placeholder="أدخل القيمة يدويًا مثل Q12345" style="display: none;" pattern="^Q\d+$">
                             </div>
-
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
                 <hr>
                 <div id="loading" class="text-center text- hidden">
                     <div class="spinner-border spinner-border-sm" role="status">
@@ -86,7 +97,7 @@
 </div>
 <script src="/static/js/lexemes/queries.js"></script>
 <script src="/static/js/lexemes/list_and_new.js"></script>
-<script src="/static/js/lexemes/new.js"></script>
+<script src="/static/js/lexemes/list_lexemes.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         load_new();

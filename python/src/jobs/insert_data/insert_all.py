@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-python3 I:/milion/arlexemes/python/src/jobs/insert_data/insert_all.py
+python3 D:/arlexemes/python/src/jobs/insert_data/insert_all.py
 
 This script inserts lemma data from JSON files into the database.
 """

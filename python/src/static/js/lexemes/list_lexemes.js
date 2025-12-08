@@ -1,12 +1,19 @@
-
 let treeData = [];
+let currentPage = 1;
+let currentLimit = 1000;
+let currentDataSource = "all";
 
-async function make_wd_result_for_list(limit, data_source) {
-
-    let sparqlQuery = list_lexemes_query(limit, data_source);
-    // ---
+async function make_wd_result_for_list(data_source, limit, offset, page_type) {
+    let sparqlQuery;
+    if (page_type === "new") {
+        // Use the new lexemes query for the "new" page type
+        sparqlQuery = new_ar_lexemes_query(data_source, limit, offset);
+    } else {
+        // Use the list lexemes query for the "list" page type
+        sparqlQuery = list_lexemes_query(data_source, limit, offset);
+    }
     add_sparql_url(sparqlQuery);
-    // ---
+
     let result = await loadsparqlQuery(sparqlQuery);
 
     let wd_result = parse_results_group_by(result);
@@ -14,9 +21,11 @@ async function make_wd_result_for_list(limit, data_source) {
     return wd_result;
 }
 
-async function fetchListData(limit, data_source) {
-    // ---
-    let treeMap = await make_wd_result_for_list(limit, data_source);
+async function fetchListData(data_source, limit, page, page_type) {
+
+    let offset = (page - 1) * limit;
+
+    let treeMap = await make_wd_result_for_list(data_source, limit, offset, page_type);
 
     treeMap = slice_data(treeMap);
 
@@ -28,28 +37,37 @@ async function fetchListData(limit, data_source) {
 
     treeData = Object.values(treeMap);
     renderTree(treeData);
+
+    // Update pagination controls
+    updatePaginationControls(page, limit, count);
 }
 
-function loadfetchData() {
-    // ---
+function loadfetchData(page_type = "list") {
+
     showLoading();
-    // ---
-    let limit = get_param_from_window_location("limit", 1000);
+
+    let limit = parseInt(get_param_from_window_location("limit", 100));
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
-    // ---
+    let page = parseInt(get_param_from_window_location("page", 1));
+
     // document.getElementById('custom_data_source').value = custom_data_source;
-    // ---
+
     $("#limit").val(limit);
     $("#data_source").val(data_source);
-    // ---
+
     if (custom_data_source !== "" && data_source === "custom") {
         $("#custom_data_source").val(custom_data_source);
         data_source = custom_data_source;
         document.getElementById('custom_data_source').style.display = 'block';
     }
-    // ---
-    fetchListData(limit, data_source);
+
+    // Store current state
+    currentPage = page;
+    currentLimit = limit;
+    currentDataSource = data_source;
+
+    fetchListData(currentDataSource, currentLimit, currentPage, page_type);
 }
 
 function toggleCustomInput() {
@@ -61,10 +79,69 @@ function toggleCustomInput() {
         customInput.style.display = 'none';
     }
 }
+function updatePaginationControls(page, limit, count) {
+    // Show or hide pagination based on whether we got full results
+    const paginationDiv = document.getElementById("pagination_controls");
+    if (!paginationDiv) return;
+
+    const prevBtn = document.getElementById("prev_page");
+    const nextBtn = document.getElementById("next_page");
+    // Only show pagination if we got results equal to limit (suggesting more pages exist)
+    if (count < limit && page === 1) {
+        prevBtn.classList.add('d-none');
+        nextBtn.classList.add('d-none');
+        return;
+    }
+
+    // paginationDiv.classList.remove('d-none');
+    // paginationDiv.classList.add('d-flex');
+
+    // Update page info
+    // document.getElementById("page_info").textContent = `الصفحة ${page}`;
+
+    // Enable/disable previous button
+    if (page <= 1) {
+        prevBtn.classList.add('disabled');
+        prevBtn.setAttribute('disabled', 'disabled');
+    } else {
+        prevBtn.classList.remove('disabled');
+        prevBtn.removeAttribute('disabled');
+    }
+
+    // Enable/disable next button based on whether we got full results
+    if (count < limit) {
+        nextBtn.classList.add('disabled');
+        nextBtn.setAttribute('disabled', 'disabled');
+    } else {
+        nextBtn.classList.remove('disabled');
+        nextBtn.removeAttribute('disabled');
+    }
+}
+
+function navigateToPage(page) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', page);
+    window.location.search = urlParams.toString();
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
+    }
+}
+
+function nextPage() {
+    navigateToPage(currentPage + 1);
+}
+
 async function load_list() {
-    // ---
-    loadfetchData();
-    // ---
+    loadfetchData("list");
     toggleCustomInput();
-    // ---
+
+}
+
+async function load_new() {
+    loadfetchData("new");
+    toggleCustomInput();
+
 }
