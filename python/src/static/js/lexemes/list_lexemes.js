@@ -2,6 +2,7 @@ let treeData = [];
 let currentPage = 1;
 let currentLimit = 1000;
 let currentDataSource = "all";
+let currentPageType = "list"; // track whether we're on 'list' or 'new'
 
 async function make_wd_result_for_list(data_source, limit, offset, page_type) {
     let sparqlQuery;
@@ -66,6 +67,7 @@ function loadfetchData(page_type = "list") {
     currentPage = page;
     currentLimit = limit;
     currentDataSource = data_source;
+    currentPageType = page_type; // store whether this load is for 'list' or 'new'
 
     fetchListData(currentDataSource, currentLimit, currentPage, page_type);
 }
@@ -120,9 +122,44 @@ function updatePaginationControls(page, limit, count) {
 
 function navigateToPage(page) {
     const urlParams = new URLSearchParams(window.location.search);
+    // preserve current page_type (list/new) if set, otherwise default to currentPageType
+    const page_type = urlParams.get('page_type') || currentPageType || 'list';
     urlParams.set('page', page);
-    window.location.search = urlParams.toString();
+    urlParams.set('page_type', page_type);
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    // change URL without reloading the page
+    history.pushState({page, page_type}, '', newUrl);
+
+    // update current state and fetch via AJAX
+    currentPage = page;
+    currentPageType = page_type;
+    showLoading();
+    fetchListData(currentDataSource, currentLimit, currentPage, currentPageType);
 }
+
+// handle browser back/forward: read params from URL and load via AJAX
+window.addEventListener('popstate', (e) => {
+    const params = new URLSearchParams(window.location.search);
+    const page = parseInt(params.get('page') || 1);
+    const page_type = params.get('page_type') || 'list';
+
+    // derive data_source consistent with loadfetchData behavior
+    let data_source = get_param_from_window_location("data_source", "all");
+    let custom_data_source = get_param_from_window_location("custom_data_source", "");
+    if (custom_data_source !== "" && data_source === "custom") {
+        data_source = custom_data_source;
+        // show custom input if present
+        const customInputElem = document.getElementById('custom_data_source');
+        if (customInputElem) customInputElem.style.display = 'block';
+    }
+
+    currentPage = page;
+    currentPageType = page_type;
+    currentDataSource = data_source;
+
+    showLoading();
+    fetchListData(currentDataSource, currentLimit, currentPage, currentPageType);
+});
 
 function previousPage() {
     if (currentPage > 1) {
@@ -134,8 +171,14 @@ function nextPage() {
     navigateToPage(currentPage + 1);
 }
 
-async function load_list(page_type) {
-    loadfetchData(page_type);
+async function load_list() {
+    loadfetchData("list");
+    toggleCustomInput();
+
+}
+
+async function load_new() {
+    loadfetchData("new");
     toggleCustomInput();
 
 }
