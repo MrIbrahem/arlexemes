@@ -41,10 +41,10 @@ function loadfetchData() {
     // ---
     showLoading();
     // ---
-    let limit = get_param_from_window_location("limit", 1000);
+    let limit = parseInt(get_param_from_window_location("limit", 1000));
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
-    let page = get_param_from_window_location("page", 1);
+    let page = parseInt(get_param_from_window_location("page", 1));
     // ---
     // document.getElementById('custom_data_source').value = custom_data_source;
     // ---
@@ -58,8 +58,8 @@ function loadfetchData() {
     }
     // ---
     // Store current state
-    currentPage = parseInt(page);
-    currentLimit = parseInt(limit);
+    currentPage = page;
+    currentLimit = limit;
     currentDataSource = data_source;
     // ---
     fetchListData(currentLimit, currentDataSource, currentPage);
