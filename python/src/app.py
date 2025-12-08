@@ -156,31 +156,31 @@ def view_logs_new() -> str:
     """Page for viewing logs with filtering"""
     result, db_exec_time = logs_bot_new.find_logs(request)
     time_tab = {"db_exec_time": db_exec_time}
-    return render_template("logs_new.php", result=result, time_tab=time_tab)
+    return render_template("logs_new.html", result=result, time_tab=time_tab)
 
 
-@app.route("/autocomplete.php", methods=["GET"])
+@app.route("/autocomplete", methods=["GET"])
 def autocomplete() -> Response:
     """Autocomplete endpoint for search functionality"""
     return sparql_bot.search(request.args)
 
 
-@app.route("/features_chart.php", methods=["GET"])
+@app.route("/features_chart", methods=["GET"])
 def features_chart() -> str:
     """Page for features chart"""
-    return render_template("features_chart.php")
+    return render_template("features_chart.html")
 
 
-@app.route("/list.php", methods=["GET"])
+@app.route("/list", methods=["GET"])
 def list_lexemes() -> str:
     """Page for listing lexemes"""
-    return render_template("list.php")
+    return render_template("list.html")
 
 
-@app.route("/new.php", methods=["GET"])
+@app.route("/new", methods=["GET"])
 def new_lexemes() -> str:
     """Page for creating new lexemes"""
-    return render_template("new.php")
+    return render_template("new.html")
 
 
 @app.route("/P11038", methods=["GET"])
@@ -253,54 +253,54 @@ def not_in_db1() -> str:
     return render_template("not_in_db.html", data={}, limit=0)
 
 
-@app.route("/lex_just_table.php", methods=["GET"])
+@app.route("/lex_just_table", methods=["GET"])
 def lex_just_table() -> str:
     """Page for lexeme table display"""
-    return render_template("lex_just_table.php")
+    return render_template("lex_just_table.html")
 
 
-@app.route("/chart.php", methods=["GET"])
+@app.route("/chart", methods=["GET"])
 def chart() -> str:
     """Page for chart visualization"""
-    return render_template("chart.php")
+    return render_template("chart.html")
 
 
-@app.route("/wd_tree.php", methods=["GET"])
+@app.route("/wd_tree", methods=["GET"])
 def wd_tree() -> str:
     """Page for Wikidata tree visualization"""
-    return render_template("wd_tree.php")
+    return render_template("wd_tree.html")
 
 
-@app.route("/compare.php", methods=["GET"])
+@app.route("/compare", methods=["GET"])
 def compare() -> str:
     """Page for comparing QIDs"""
     qids = [x.strip() for x in request.args.get('qids', '').split(",") if x.strip()]
-    return render_template("compare.php", qids=qids)
+    return render_template("compare.html", qids=qids)
 
 
-@app.route("/duplicate_lemmas.php", methods=["GET"])
+@app.route("/duplicate_lemmas", methods=["GET"])
 def duplicate_lemmas() -> str:
     """Page for duplicate lemmas display"""
-    return render_template("duplicate_lemmas.php")
+    return render_template("duplicate_lemmas.html")
 
 
-@app.route("/lex.php", methods=["GET"])
+@app.route("/lex", methods=["GET"])
 def lex() -> str:
     """Page for lexeme management"""
-    return render_template("lex.php")
+    return render_template("lex.html")
 
 
-@app.route("/lex2.php", methods=["GET"])
+@app.route("/lex2", methods=["GET"])
 def lex2() -> str:
     """Page for lexeme management (alternative view)"""
-    return render_template("lex2.php")
+    return render_template("lex2.html")
 
 
 @app.route("/", methods=["GET"])
 def index() -> str:
     """Home page"""
     username = session.get('username', None)
-    return render_template("index.php", username=username)
+    return render_template("index.html", username=username)
 
 
 @app.errorhandler(404)
