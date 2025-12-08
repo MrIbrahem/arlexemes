@@ -134,14 +134,8 @@ function nextPage() {
     navigateToPage(currentPage + 1);
 }
 
-async function load_list() {
-    loadfetchData("list");
-    toggleCustomInput();
-
-}
-
-async function load_new() {
-    loadfetchData("new");
+async function load_list(page_type) {
+    loadfetchData(page_type);
     toggleCustomInput();
 
 }
