@@ -171,6 +171,12 @@ def features_chart() -> str:
     return render_template("features_chart.html")
 
 
+@app.route("/features_chart2", methods=["GET"])
+def features_chart2() -> str:
+    """Page for features chart"""
+    return render_template("features_chart2.html")
+
+
 @app.route("/list", methods=["GET"])
 def list_lexemes() -> str:
     """Page for listing lexemes"""

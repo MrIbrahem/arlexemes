@@ -321,6 +321,11 @@ function make_card(index, title, height) {
     `;
 }
 
+
+function hideLoading() {
+    document.getElementById("loading").classList.add("d-none");
+}
+
 async function initializeCharts() {
     // ---
     const json = await loadsparqlQuery(queries.lexicalCategoriesArabic, true);
@@ -350,4 +355,6 @@ async function initializeCharts() {
         // ---
         await one_chart(index2, categoryData, maintainAspectRatio);
     }
+    // ---
+    hideLoading();
 }

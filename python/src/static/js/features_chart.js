@@ -325,10 +325,13 @@ function change_labels(data) {
     return data;
 }
 
+
+function hideLoading() {
+    document.getElementById("loading").classList.add("d-none");
+}
+
 async function initializeCharts() {
     let title = ' إجمالي استخدامات الميزات النحوية في المفردات العربية <span id="all_lemmas_00"></span>';
-    // ---
-    showLoading();
     // ---
     let json = await loadsparqlQuery(queries.lexicalCategoriesArabic, true);
     // ---
@@ -338,7 +341,6 @@ async function initializeCharts() {
     // ---
     let main_data = await make_main_data(json);
     // ---
-    let pos = (main_data.labels.length > 15) ? "bottom" : "right";
     let height = "320px"; //(main_data.labels.length > 15) ? "400px" : "220px";
     // ---
     $("#canvas_container").append(make_card(0, title, height));
@@ -366,4 +368,6 @@ async function initializeCharts() {
         // ---
         await one_chart(index2, categoryData, title, pos, false);
     }
+    // ---
+    hideLoading();
 }
