@@ -45,7 +45,7 @@
                         <form method="GET">
                             <div class="row">
                                 <div class="col-md-8 mb-2 mb-md-0">
-                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                    <div class="d-flex justify-content-center align-items-center gap-2" id="pagination_controls">
                                         <!-- Previous button -->
                                         <button id="prev_page" class="btn btn-outline-primary" onclick="previousPage()">
                                             &lt;&lt;

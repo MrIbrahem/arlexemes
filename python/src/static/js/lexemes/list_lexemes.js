@@ -1,5 +1,8 @@
 
 let treeData = [];
+let currentPage = 1;
+let currentLimit = 1000;
+let currentDataSource = "all";
 
 async function make_wd_result_for_list(data_source, limit, offset) {
 
@@ -30,6 +33,9 @@ async function fetchListData(data_source, limit, page) {
 
     treeData = Object.values(treeMap);
     renderTree(treeData);
+
+    // Update pagination controls
+    updatePaginationControls(page, limit, count);
 }
 
 function loadfetchData() {
@@ -52,7 +58,12 @@ function loadfetchData() {
         document.getElementById('custom_data_source').style.display = 'block';
     }
     // ---
-    fetchListData(data_source, limit, page);
+    // Store current state
+    currentPage = page;
+    currentLimit = limit;
+    currentDataSource = data_source;
+    // ---
+    fetchListData(currentDataSource, currentLimit, currentPage);
 }
 
 function toggleCustomInput() {
@@ -64,6 +75,60 @@ function toggleCustomInput() {
         customInput.style.display = 'none';
     }
 }
+function updatePaginationControls(page, limit, count) {
+    // Show or hide pagination based on whether we got full results
+    const paginationDiv = document.getElementById("pagination_controls");
+    if (!paginationDiv) return;
+
+    // Only show pagination if we got results equal to limit (suggesting more pages exist)
+    if (count < limit && page === 1) {
+        paginationDiv.classList.add('d-none');
+        return;
+    }
+
+    paginationDiv.classList.remove('d-none');
+    paginationDiv.classList.add('d-flex');
+
+    // Update page info
+    // document.getElementById("page_info").textContent = `الصفحة ${page}`;
+
+    // Enable/disable previous button
+    const prevBtn = document.getElementById("prev_page");
+    if (page <= 1) {
+        prevBtn.classList.add('disabled');
+        prevBtn.setAttribute('disabled', 'disabled');
+    } else {
+        prevBtn.classList.remove('disabled');
+        prevBtn.removeAttribute('disabled');
+    }
+
+    // Enable/disable next button based on whether we got full results
+    const nextBtn = document.getElementById("next_page");
+    if (count < limit) {
+        nextBtn.classList.add('disabled');
+        nextBtn.setAttribute('disabled', 'disabled');
+    } else {
+        nextBtn.classList.remove('disabled');
+        nextBtn.removeAttribute('disabled');
+    }
+}
+
+function navigateToPage(page) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', page);
+    window.location.search = urlParams.toString();
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
+    }
+}
+
+function nextPage() {
+    navigateToPage(currentPage + 1);
+}
+
 async function load_list() {
     // ---
     loadfetchData();
