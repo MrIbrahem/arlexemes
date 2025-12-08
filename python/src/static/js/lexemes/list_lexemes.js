@@ -81,11 +81,12 @@ function updatePaginationControls(page, limit, count) {
     
     // Only show pagination if we got results equal to limit (suggesting more pages exist)
     if (count < limit && page === 1) {
-        paginationDiv.style.display = 'none';
+        paginationDiv.classList.add('d-none');
         return;
     }
     
-    paginationDiv.style.display = 'flex';
+    paginationDiv.classList.remove('d-none');
+    paginationDiv.classList.add('d-flex');
     
     // Update page info
     document.getElementById("page_info").textContent = `الصفحة ${page}`;

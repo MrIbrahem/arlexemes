@@ -81,7 +81,7 @@
                 <p id="noResults" class="hidden text-center text-muted">لا توجد نتائج مطابقة للبحث.</p>
                 
                 <!-- Pagination Controls -->
-                <div id="pagination_controls" class="d-flex justify-content-center align-items-center mt-4 gap-3" style="display: none;">
+                <div id="pagination_controls" class="d-none justify-content-center align-items-center mt-4 gap-3">
                     <button id="prev_page" class="btn btn-primary" onclick="previousPage()">
                         السابق
                     </button>
