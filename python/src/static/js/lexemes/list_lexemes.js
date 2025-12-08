@@ -1,9 +1,12 @@
 
 let treeData = [];
+let currentPage = 1;
+let currentLimit = 1000;
+let currentDataSource = "all";
 
-async function make_wd_result_for_list(limit, data_source) {
+async function make_wd_result_for_list(limit, data_source, offset) {
 
-    let sparqlQuery = list_lexemes_query(limit, data_source);
+    let sparqlQuery = list_lexemes_query(limit, data_source, offset);
     // ---
     add_sparql_url(sparqlQuery);
     // ---
@@ -14,9 +17,10 @@ async function make_wd_result_for_list(limit, data_source) {
     return wd_result;
 }
 
-async function fetchListData(limit, data_source) {
+async function fetchListData(limit, data_source, page) {
     // ---
-    let treeMap = await make_wd_result_for_list(limit, data_source);
+    let offset = (page - 1) * limit;
+    let treeMap = await make_wd_result_for_list(limit, data_source, offset);
 
     treeMap = slice_data(treeMap);
 
@@ -28,6 +32,9 @@ async function fetchListData(limit, data_source) {
 
     treeData = Object.values(treeMap);
     renderTree(treeData);
+    
+    // Update pagination controls
+    updatePaginationControls(page, limit, count);
 }
 
 function loadfetchData() {
@@ -37,6 +44,7 @@ function loadfetchData() {
     let limit = get_param_from_window_location("limit", 1000);
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
+    let page = get_param_from_window_location("page", 1);
     // ---
     // document.getElementById('custom_data_source').value = custom_data_source;
     // ---
@@ -49,7 +57,12 @@ function loadfetchData() {
         document.getElementById('custom_data_source').style.display = 'block';
     }
     // ---
-    fetchListData(limit, data_source);
+    // Store current state
+    currentPage = parseInt(page);
+    currentLimit = parseInt(limit);
+    currentDataSource = data_source;
+    // ---
+    fetchListData(currentLimit, currentDataSource, currentPage);
 }
 
 function toggleCustomInput() {
@@ -61,6 +74,59 @@ function toggleCustomInput() {
         customInput.style.display = 'none';
     }
 }
+function updatePaginationControls(page, limit, count) {
+    // Show or hide pagination based on whether we got full results
+    const paginationDiv = document.getElementById("pagination_controls");
+    if (!paginationDiv) return;
+    
+    // Only show pagination if we got results equal to limit (suggesting more pages exist)
+    if (count < limit && page === 1) {
+        paginationDiv.style.display = 'none';
+        return;
+    }
+    
+    paginationDiv.style.display = 'flex';
+    
+    // Update page info
+    document.getElementById("page_info").textContent = `الصفحة ${page}`;
+    
+    // Enable/disable previous button
+    const prevBtn = document.getElementById("prev_page");
+    if (page <= 1) {
+        prevBtn.classList.add('disabled');
+        prevBtn.setAttribute('disabled', 'disabled');
+    } else {
+        prevBtn.classList.remove('disabled');
+        prevBtn.removeAttribute('disabled');
+    }
+    
+    // Enable/disable next button based on whether we got full results
+    const nextBtn = document.getElementById("next_page");
+    if (count < limit) {
+        nextBtn.classList.add('disabled');
+        nextBtn.setAttribute('disabled', 'disabled');
+    } else {
+        nextBtn.classList.remove('disabled');
+        nextBtn.removeAttribute('disabled');
+    }
+}
+
+function navigateToPage(page) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', page);
+    window.location.search = urlParams.toString();
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        navigateToPage(currentPage - 1);
+    }
+}
+
+function nextPage() {
+    navigateToPage(currentPage + 1);
+}
+
 async function load_list() {
     // ---
     loadfetchData();
