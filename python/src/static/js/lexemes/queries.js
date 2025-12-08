@@ -125,16 +125,7 @@ function new_ar_lexemes_query(data_source, limit) {
 }
 
 
-function list_lexemes_query(limit, data_source) {
-    // ---
-    const sparqlQuery1 = `
-        VALUES ?category {
-            wd:Q111029	# جذر
-            wd:Q1084	# اسم
-            wd:Q24905	# فعل
-            wd:Q34698	# صفة
-        }
-    `;
+function list_lexemes_query(data_source, limit, offset) {
     // ---
     let VALUES = ``;
     // ---
@@ -147,6 +138,10 @@ function list_lexemes_query(limit, data_source) {
     // ---
     if (limit && isFinite(limit)) {
         limit_line = ` LIMIT ${limit} `;
+    }
+    // ---
+    if (offset && isFinite(offset)) {
+        limit_line += ` OFFSET ${offset} `;
     }
     // ---
     let sparqlQuery = `

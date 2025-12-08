@@ -1,9 +1,9 @@
 
 let treeData = [];
 
-async function make_wd_result_for_list(limit, data_source) {
+async function make_wd_result_for_list(data_source, limit, offset) {
 
-    let sparqlQuery = list_lexemes_query(limit, data_source);
+    let sparqlQuery = list_lexemes_query(data_source, limit, offset);
     // ---
     add_sparql_url(sparqlQuery);
     // ---
@@ -14,9 +14,9 @@ async function make_wd_result_for_list(limit, data_source) {
     return wd_result;
 }
 
-async function fetchListData(limit, data_source) {
+async function fetchListData(data_source, limit, offset) {
     // ---
-    let treeMap = await make_wd_result_for_list(limit, data_source);
+    let treeMap = await make_wd_result_for_list(data_source, limit, offset);
 
     treeMap = slice_data(treeMap);
 
@@ -34,6 +34,7 @@ function loadfetchData() {
     // ---
     showLoading();
     // ---
+    let page = get_param_from_window_location("page", 1);
     let limit = get_param_from_window_location("limit", 1000);
     let data_source = get_param_from_window_location("data_source", "all");
     let custom_data_source = get_param_from_window_location("custom_data_source", "");
@@ -49,7 +50,9 @@ function loadfetchData() {
         document.getElementById('custom_data_source').style.display = 'block';
     }
     // ---
-    fetchListData(limit, data_source);
+    let offset = (page - 1) * limit;
+    // ---
+    fetchListData(data_source, limit, offset);
 }
 
 function toggleCustomInput() {
