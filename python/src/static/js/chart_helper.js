@@ -28,16 +28,10 @@ function createLegendHTML(labels, colors) {
     const totalItems = labels.length;
     let numColumns = 1;
 
-    if (totalItems === 10 || totalItems === 20) {
-        numColumns = 2;
-    }
-    else if ((totalItems >= 11 && totalItems <= 19) ||
-        (totalItems >= 20 && totalItems <= 29) ||
-        (totalItems >= 31 && totalItems <= 39)) {
-        numColumns = Math.ceil(totalItems / 10); // تقريبًا عمود لكل 10 عناصر
-
-    } else if ((totalItems > 10 && totalItems < 20) || (totalItems > 20 && totalItems < 30)) {
+    if (totalItems > 10) {
         numColumns = Math.ceil(totalItems / 10);
+    } else if (totalItems === 10) {
+        numColumns = 2;
     }
 
     const itemsPerColumn = Math.ceil(totalItems / numColumns);
