@@ -274,12 +274,12 @@ function make_card(index, title, height) {
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-md-7 col-sm-12">
                         <div id="legend${index}" class="ms-1 mt-1">
                             <!-- Legend سيضاف هنا -->
                         </div>
                     </div>
-                    <div class="col-5">
+                    <div class="col-md-5 col-sm-12">
                         <div class="position-relative" style="height: ${height}; width: 100%;">
                             <div id="loader${index}" class="loader">
                                 <div class="align-items-center">
