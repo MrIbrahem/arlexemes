@@ -22,19 +22,20 @@
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <label for="wd_id" class="form-label fw-bold mb-2">
                                             <i class="fas fa-link me-2"></i> ابحث عن مفردة
-                                            <div class="spinner-border spinner-border-sm" id="autocomplete-loader" role="status"
-                                                style="display: none;">
+                                            <div class="spinner-border spinner-border-sm" id="autocomplete-loader"
+                                                role="status" style="display: none;">
                                                 <span class="visually-hidden">تحميل...</span>
                                             </div>
                                         </label>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="randomCategory()">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                            onclick="randomCategory()">
                                             <i class="bi bi-shuffle me-1"></i> عشوائي
                                         </button>
                                     </div>
                                     <span id="wikidatasearch_label"></span>
                                     <div class="input-group input-group-lg">
-                                        <input type="text" id="wd_id" required name="wd_id" class="form-control input-group-input"
-                                            placeholder="كتب" value="">
+                                        <input type="text" id="wd_id" required name="wd_id"
+                                            class="form-control input-group-input" placeholder="كتب" value="">
                                     </div>
                                     <div id="autocomplete-results" class="autocomplete-results"></div>
                                 </div>
@@ -59,11 +60,33 @@
             <div class="card mb-2">
                 <div class="card-header">
                     <h2 class="card-title h4 fw-bold text-center">
-                         الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>
+                        الفئات المعجمية لمفردات اللغة العربية <span id="all_lemmas_1"></span>
                     </h2>
                 </div>
                 <div class="card-body">
-                    <div class="position-relative" style="max-height: 270px;">
+                    <div class="row">
+                        <div class="col-7">
+                            <div id="legend1" class="ms-1 mt-1">
+                                <!-- Legend سيضاف هنا -->
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="position-relative" style="height: 15rem; width: 100%;">
+                                <div id="loader1" class="loader">
+                                    <div class="align-items-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span class="ms-3 h5 fw-semibold text-secondary">جاري تحميل البيانات...</span>
+                                    </div>
+                                </div>
+                                <canvas id="chart1"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="card-body">
+                    <div class="position-relative" style="height: 15rem; width: 100%;">
                         <div id="loader1" class="loader">
                             <div class="d-flex align-items-center">
                                 <div class="spinner-border text-primary" role="status">
@@ -74,7 +97,7 @@
                         </div>
                         <canvas id="chart1"></canvas>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -90,7 +113,7 @@
     function setExample(lexeme) {
         $("#wd_id").val(lexeme);
     }
-    $(function() {
+    $(function () {
         load_search(setExample, 'wd_id', 'autocomplete-results');
     });
 </script>
