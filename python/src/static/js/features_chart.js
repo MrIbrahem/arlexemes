@@ -23,30 +23,6 @@ const queries = {
     `,
 };
 
-const baseColors = [
-    [54, 162, 235], [255, 99, 132],
-    [255, 206, 86], [75, 192, 192],
-    [153, 102, 255], [255, 159, 64],
-    [46, 204, 113], [231, 76, 60],
-    [52, 73, 94], [241, 196, 15]
-];
-
-function generateColor(index) {
-    const base = baseColors[index % baseColors.length];
-    const variation = Math.floor((index / baseColors.length) * 50); // فرق بسيط في اللون
-    const r = Math.min(base[0] + variation, 255);
-    const g = Math.min(base[1] + variation, 255);
-    const b = Math.min(base[2] + variation, 255);
-    return `rgba(${r}, ${g}, ${b}, 0.8)`;
-}
-
-function getChartColors(n) {
-    const colors = [];
-    for (let i = 0; i < n; i++) {
-        colors.push(generateColor(i));
-    }
-    return colors;
-}
 function createChart(ctx, { labels, data }, title, pos, maintainAspectRatio = true) {
     const chartColors = getChartColors(labels.length);
 
@@ -69,6 +45,7 @@ function createChart(ctx, { labels, data }, title, pos, maintainAspectRatio = tr
             aspectRatio: 2,
             plugins: {
                 legend: {
+                    display: false,
                     position: pos,
                     rtl: true,
                     textDirection: "rtl",
@@ -136,10 +113,8 @@ async function make_main_data(json) {
     const sortedFeatures = Array.from(featureMap.values())
         .sort((a, b) => b.count - a.count);
 
-    const featureArray = Array.from(sortedFeatures.values());
-    const uzz = aggregateOthers(featureArray, 21);
 
-    return uzz;
+    return aggregateOthers(sortedFeatures, 19);
 }
 
 async function make_category_feature_data(json) {
@@ -186,10 +161,12 @@ async function make_category_feature_data(json) {
     return result;
 }
 
-async function one_chart(n, char1Data, title, pos, maintainAspectRatio = true) {
+async function one_chart(n, char1Data, maintainAspectRatio) {
     // ---
     const loader = document.getElementById(`loader${n}`);
     let ctx = document.getElementById(`chart${n}`);
+    // ---
+    let pos = (char1Data.labels.length > 15) ? "bottom" : "right";
     // ---
     if (!ctx) return;
     // ---
@@ -197,21 +174,21 @@ async function one_chart(n, char1Data, title, pos, maintainAspectRatio = true) {
     // ---
     // رسم المخطط وإخفاء مؤشر التحميل الخاص به
     if (char1Data.labels.length > 0) {
-        createChart(ctx2d, char1Data, title, pos, maintainAspectRatio);
+        createChart(ctx2d, char1Data, "", pos, maintainAspectRatio);
         // ---
+        // إضافة الـ legend داخل card
+        const chartColors = getChartColors(char1Data.labels.length);
+        const legendContainer = document.getElementById(`legend${n}`);
+        if (legendContainer) {
+            legendContainer.innerHTML = createLegendHTML(char1Data.labels, chartColors);
+        }
     }
     // ---
     // تحديث إجمالي عدد المفردات
     const all_lemmas = document.getElementById(`all_lemmas_${n}`);
     // ---
     if (all_lemmas) {
-        // sum achar1Data.data
-        let total = char1Data.data.reduce((a, b) => a + b, 0);
-        // ---
-        // format total
-        total = total.toLocaleString();
-        // ---
-        all_lemmas.innerHTML = ` (${total}) `
+        all_lemmas.innerHTML = ` (${char1Data.labels.length.toLocaleString()}) `
     }
     // ---
     if (loader) {
@@ -229,16 +206,25 @@ function make_card(index, title, height) {
                 </h2>
             </div>
             <div class="card-body">
-                <div class="position-relative" style="min-height: ${height}; width: 100%;">
-                    <div id="loader${index}" class="loader">
-                        <div class="d-flex align-items-center">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <span class="ms-3 h5 fw-semibold text-secondary">جاري تحميل البيانات...</span>
+                <div class="row">
+                    <div class="col-md-7 col-sm-12">
+                        <div id="legend${index}" class="ms-1 mt-1">
+                            <!-- Legend سيضاف هنا -->
                         </div>
                     </div>
-                    <canvas id="chart${index}"></canvas>
+                    <div class="col-md-5 col-sm-12">
+                        <div class="position-relative" style="height: ${height}; width: 100%;">
+                            <div id="loader${index}" class="loader">
+                                <div class="align-items-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span class="ms-3 h5 fw-semibold text-secondary">جاري تحميل البيانات...</span>
+                                </div>
+                            </div>
+                            <canvas id="chart${index}"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -325,6 +311,11 @@ function change_labels(data) {
     return data;
 }
 
+
+function hideLoading() {
+    document.getElementById("loading").classList.add("d-none");
+}
+
 async function initializeCharts() {
     let title = ' إجمالي استخدامات الميزات النحوية في المفردات العربية <span id="all_lemmas_00"></span>';
     // ---
@@ -336,12 +327,11 @@ async function initializeCharts() {
     // ---
     let main_data = await make_main_data(json);
     // ---
-    let pos = (main_data.labels.length > 15) ? "bottom" : "right";
-    let height = "320px"; //(main_data.labels.length > 15) ? "400px" : "220px";
+    let height = "15rem"; //(main_data.labels.length > 15) ? "400px" : "220px";
     // ---
     $("#canvas_container").append(make_card(0, title, height));
     // ---
-    await one_chart(0, main_data, title, "right", false);
+    await one_chart(0, main_data, false);
     // ---
     let all_categories_data = await make_category_feature_data(json);
     // ---
@@ -356,12 +346,12 @@ async function initializeCharts() {
             <span id="all_lemmas_${index2}"></span>
             `;
         // ---
-        let pos = (categoryData.labels.length > 20) ? "bottom" : "right";
-        let height = (categoryData.labels.length > 20) ? "400px" : "220px";
-        let maintainAspectRatio = (categoryData.labels.length > 20) ? true : false;
+        let height = "15rem";
         // ---
         $("#canvas_container").append(make_card(index2, title, height));
         // ---
-        await one_chart(index2, categoryData, title, pos, false);
+        await one_chart(index2, categoryData, false);
     }
+    // ---
+    hideLoading();
 }

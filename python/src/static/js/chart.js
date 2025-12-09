@@ -130,6 +130,7 @@ function createChart(ctx, { labels, data }, title) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
+                    display: false,
                     position: 'right',
                     // fullSize: true,
                     rtl: true,
@@ -175,6 +176,12 @@ async function one_chart(n, query, labelKey, labelKey2, countKey) {
     // رسم المخطط وإخفاء مؤشر التحميل الخاص به
     if (char1Data.labels.length > 0) {
         createChart(ctx2d, char1Data, titles[n - 1]);
+        // إضافة الـ legend داخل card
+        const chartColors = getChartColors(char1Data.labels.length);
+        const legendContainer = document.getElementById(`legend${n}`);
+        if (legendContainer) {
+            legendContainer.innerHTML = createLegendHTML(char1Data.labels, chartColors);
+        }
     }
     // ---
     const all_lemmas = document.getElementById(`all_lemmas_${n}`);
