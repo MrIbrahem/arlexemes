@@ -178,10 +178,13 @@ def insert_multi_wd_data_P11038(data):
     # ---
     print(f"insert_multi_wd_data_P11038: {len(data_new)}")
     # ---
-    params = [(
-        x['wd_data_id'],
-        x['value'],
-    ) for x in data_new]
+    params = [
+        (
+            x["wd_data_id"],
+            x["value"],
+        )
+        for x in data_new
+    ]
     # ---
     result = db_commit(query, params, many=True)
     # ---

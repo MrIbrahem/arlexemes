@@ -3,6 +3,7 @@
 from pyx.sparql_bots.render import render_sparql_P11038_grouped
 
 """
+
 import re
 import copy
 from collections import defaultdict
@@ -18,7 +19,7 @@ categoryLabels = {
     "Q9788": "حرف",
     "Q36484": "حرف ربط",
     "Q468801": "ضمير شخصي",
-    "Q63116": "اسم عدد"
+    "Q63116": "اسم عدد",
 }
 # ---
 
@@ -29,16 +30,16 @@ def split_data_by_category_list(data):
     # ---
     for item in data:
         # ---
-        category = item['category']
+        category = item["category"]
         # ---
         if category not in split_by_category:
             split_by_category[category] = {
-                'category': category,
-                'categoryLabel': item['categoryLabel'],
-                'members': []
+                "category": category,
+                "categoryLabel": item["categoryLabel"],
+                "members": [],
             }
         # ---
-        members = split_by_category[category]['members']
+        members = split_by_category[category]["members"]
         # ---
         members.append(item)
     # ---
@@ -51,16 +52,17 @@ def split_data_by_category_dict(data):
     # ---
     for key, item in data.items():
         # ---
-        category = item['category']
+        category = item["category"]
         # ---
         if category not in split_by_category:
             split_by_category[category] = {
-                'category': category,
-                'categoryLabel': item.get('categoryLabel') or categoryLabels.get(category, ""),
-                'members': {}
+                "category": category,
+                "categoryLabel": item.get("categoryLabel")
+                or categoryLabels.get(category, ""),
+                "members": {},
             }
         # ---
-        split_by_category[category]['members'][key] = item
+        split_by_category[category]["members"][key] = item
     # ---
     return split_by_category
 
@@ -86,11 +88,13 @@ def render_sparql_P11038_grouped(limit=0, group_it=False):
             continue
         # ---
         if item not in tab_P11038:
-            tab_P11038[x['item']] = x
+            tab_P11038[x["item"]] = x
         else:
             dup += 1
     # ---
-    print(f"\t render_sparql_P11038_grouped: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}")
+    print(
+        f"\t render_sparql_P11038_grouped: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}"
+    )
     # ---
     if group_it:
         tab_P11038 = split_data_by_category_dict(tab_P11038)
@@ -106,7 +110,7 @@ def duplicates_work(members):
     # ---
     for qid, x in members.items():
         # ---
-        lemma = re.sub(r"[\u064B-\u065F\u066A-\u06EF]$", "", x['lemma'])
+        lemma = re.sub(r"[\u064B-\u065F\u066A-\u06EF]$", "", x["lemma"])
         # ---
         if x not in duplicates[lemma]:
             # ---
@@ -121,7 +125,7 @@ def render_duplicate_by_category(limit):
     # ---
     result, sparql_exec_time = sparql_bot.all_arabic(limit)
     # ---
-    result = {x['item']: x for x in result}
+    result = {x["item"]: x for x in result}
     # ---
     split_by_category = split_data_by_category_dict(result)
     # ---
@@ -152,21 +156,26 @@ def render_duplicate(limit=0):
     # { "lemma_fixed": "تذكير", "category": "Q1084", "items": "L1457168, L1457168", "lemmas": "تذكير, تَذْكِير" }
     for tab in result:
         # ---
-        new.setdefault(tab['lemma_fixed'], {
-            "lemma": tab['lemma_fixed'],
-            "category": tab['category'],
-            "categoryLabel": categoryLabels.get(tab['category'], ""),
-            'members' : []
-        })
+        new.setdefault(
+            tab["lemma_fixed"],
+            {
+                "lemma": tab["lemma_fixed"],
+                "category": tab["category"],
+                "categoryLabel": categoryLabels.get(tab["category"], ""),
+                "members": [],
+            },
+        )
         # ---
-        lemmas = tab['lemmas'].split(",")
-        items = tab['items'].split(",")
+        lemmas = tab["lemmas"].split(",")
+        items = tab["items"].split(",")
         # ---
         for lemma, item in zip(lemmas, items):
             # ---
-            new[tab['lemma_fixed']]['members'].append({
-                "lemma": lemma.strip(),
-                "item": item.strip(),
-            })
+            new[tab["lemma_fixed"]]["members"].append(
+                {
+                    "lemma": lemma.strip(),
+                    "item": item.strip(),
+                }
+            )
     # ---
     return new, sparql_exec_time

@@ -7,24 +7,23 @@ import logging
 from typing import Dict, Any, Tuple, List
 from dataclasses import dataclass
 from flask import Request
+
 # from types import SimpleNamespace
 
 from pyx.wd_data_bots.wd_data_P11038 import get_lemmas, count_all_p11038
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # POS category data (could be moved to config)
-POS_CAT_DATA = {
-    "اسم": 45168,
-    "فعل": 12815,
-    "كلمة وظيفية": 483
-}
+POS_CAT_DATA = {"اسم": 45168, "فعل": 12815, "كلمة وظيفية": 483}
 
 
 @dataclass
 class LogQueryParams:
     """Parameters for log queries"""
+
     page: int = 1
     per_page: int = 200
     order: str = "DESC"
@@ -46,8 +45,14 @@ class LogsBot:
 
     def __init__(self):
         self.valid_order_fields = [
-            "id", "lemma_id", "lemma", "pos", "pos_cat",
-            "sama_lemma_id", "sama_lemma", "lemma_id"
+            "id",
+            "lemma_id",
+            "lemma",
+            "pos",
+            "pos_cat",
+            "sama_lemma_id",
+            "sama_lemma",
+            "lemma_id",
         ]
         self.pos_cat_data = POS_CAT_DATA
 
@@ -64,13 +69,13 @@ class LogsBot:
             per_page=self._safe_int(request.args.get("per_page", 200), 200),
             order=request.args.get("order", "DESC"),
             order_by=request.args.get("order_by", "lemma_id"),
-            filter_data=request.args.get("filter_data", "with")
-
+            filter_data=request.args.get("filter_data", "with"),
         )
         return params
 
-    def create_pagination_data(self, params: LogQueryParams,
-                               total_logs: int) -> Dict[str, int]:
+    def create_pagination_data(
+        self, params: LogQueryParams, total_logs: int
+    ) -> Dict[str, int]:
         """Create pagination data based on request arguments and total logs"""
         total_pages = (total_logs + params.per_page - 1) // params.per_page
         start_log = (params.page - 1) * params.per_page + 1
@@ -97,10 +102,14 @@ class LogsBot:
         if order_by in self.valid_order_fields:
             return order_by
         else:
-            logger.warning(f"Invalid order_by field: {order_by}, using default 'lemma_id'")
+            logger.warning(
+                f"Invalid order_by field: {order_by}, using default 'lemma_id'"
+            )
             return "lemma_id"
 
-    def get_lemmas_with_params(self, params: LogQueryParams) -> Tuple[List[Dict[str, Any]], float]:
+    def get_lemmas_with_params(
+        self, params: LogQueryParams
+    ) -> Tuple[List[Dict[str, Any]], float]:
         """Get lemmas with specified parameters"""
         validated_order_by = self.validate_order_by(params.order_by)
 
@@ -109,7 +118,7 @@ class LogsBot:
             offset=(params.page - 1) * params.per_page,
             order=params.order,
             order_by=validated_order_by,
-            filter_data=params.filter_data
+            filter_data=params.filter_data,
         )
         return logs, db_exec_time
 

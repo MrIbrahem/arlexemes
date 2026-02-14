@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-
-"""
+""" """
 from .db_mysql import fetch_all
 
 
@@ -51,7 +49,14 @@ def count_all(table_name="lemmas_p11038"):
     return data
 
 
-def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="lemmas_p11038", filter_data="all"):
+def get_all(
+    per_page=0,
+    offset=0,
+    order="DESC",
+    order_by="id",
+    table_name="lemmas_p11038",
+    filter_data="all",
+):
     # ---
     query = f"SELECT * FROM {table_name} "
     # ---
@@ -62,14 +67,18 @@ def get_all(per_page=0, offset=0, order="DESC", order_by="id", table_name="lemma
     # ---
     params = []
     # ---
-    query, params = add_order_limit_offset(query, params, order_by, order, per_page, offset)
+    query, params = add_order_limit_offset(
+        query, params, order_by, order, per_page, offset
+    )
     # ---
     logs, db_exec_time = fetch_all(query, params)
     # ---
     return logs, db_exec_time
 
 
-def select(data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC", order_by="id"):
+def select(
+    data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC", order_by="id"
+):
     # ---
     query = f"SELECT * FROM {table_name} WHERE "
     # ---
@@ -104,7 +113,9 @@ def select(data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC",
     # ---
     query = query + " AND ".join(expend_query)
     # ---
-    query, params = add_order_limit_offset(query, params, order_by, order, limit, offset)
+    query, params = add_order_limit_offset(
+        query, params, order_by, order, limit, offset
+    )
     # ---
     logs, db_exec_time = fetch_all(query, params)
     # ---

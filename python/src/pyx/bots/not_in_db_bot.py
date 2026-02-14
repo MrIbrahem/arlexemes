@@ -5,6 +5,7 @@ from pyx.bots.not_in_db_bot import get_not_in_db
 # result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
 
 """
+
 import tqdm
 from .match_sparql import in_sql
 from ..sparql_bots.render import render_sparql_P11038_grouped
@@ -48,7 +49,9 @@ def get_wd_not_insql(tab_P11038, insql_lemma, insql_sama):
     print(f"has_data_multi: {has_data_multi}")
     # ---
     # sort result by len of P11038_values
-    no_data_tab = sorted(no_data_tab, key=lambda x: len(x['P11038_values']), reverse=True)
+    no_data_tab = sorted(
+        no_data_tab, key=lambda x: len(x["P11038_values"]), reverse=True
+    )
     # ---
     return no_data_tab
 

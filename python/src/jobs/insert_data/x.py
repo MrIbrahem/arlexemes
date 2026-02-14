@@ -3,6 +3,7 @@
 python D:/arlexemes/python/src/insert_data/x.py
 
 """
+
 from pathlib import Path
 import json
 
@@ -32,7 +33,9 @@ print(f"text_data_in_lemma: {len(text_data_in_lemma)}")
 text_data_in_sama = [x for x in text_data if x in sama_lemma_id_set]
 print(f"text_data_in_sama: {len(text_data_in_sama)}")
 
-new_sama = [x for x in text_data if x not in sama_lemma_id_set and x not in lemma_id_set]
+new_sama = [
+    x for x in text_data if x not in sama_lemma_id_set and x not in lemma_id_set
+]
 print(f"new_sama: {len(new_sama)}")
 
 

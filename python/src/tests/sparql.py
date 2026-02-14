@@ -1,4 +1,3 @@
-
 from pyx.sparql_bots.sparql_bot import get_results
 
 
