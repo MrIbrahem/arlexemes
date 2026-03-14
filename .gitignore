@@ -1,20 +1,19 @@
 *.lnk
 *.pyc
-/python/html
-python/auth.txt
+auth.txt
 **/old/**
-python/src/insert_data/ar-Q13955-P11038-nopos.txt
+src/insert_data/ar-Q13955-P11038-nopos.txt
 ar-Q13955-P11038-nopos.txt
 I--milion-arlexemes-python-new_logs-db.sql.gz
-python/src/insert_data/Qabas-dataset_with_SAMA1.json
-python/src/insert_data/Qabas-dataset_with_SAMA.json
-/python/src/insert_data
-/python/src/insert_data1
-python/src/no_data_tab1.json
-python/src/no_data_tab.json
-python/src/static/js/duplicate_lemmas2.js
-python/src/static/js/‏‏duplicate_lemmas - نسخة.js
-python/src/logs/errors.log
+src/insert_data/Qabas-dataset_with_SAMA1.json
+src/insert_data/Qabas-dataset_with_SAMA.json
+src/insert_data
+src/insert_data1
+src/no_data_tab1.json
+src/no_data_tab.json
+src/static/js/duplicate_lemmas2.js
+src/static/js/‏‏duplicate_lemmas - نسخة.js
+src/logs/errors.log
 logs/errors.log
 .claude/
 
