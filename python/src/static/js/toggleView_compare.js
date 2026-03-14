@@ -45,7 +45,7 @@ function openSplitView(ids) {
         iframe.style.width = "100%";
         iframe.style.height = "100%";
         iframe.style.border = "none";
-        iframe.src = "/lex_just_table.php?wd_id=" + id;
+        iframe.src = "/lex_just_table?wd_id=" + id;
 
         col.appendChild(iframe);
         container.appendChild(col);

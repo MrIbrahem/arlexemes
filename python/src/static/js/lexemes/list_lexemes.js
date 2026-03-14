@@ -258,7 +258,7 @@ function renderTree(data) {
         }
         // ---
         category.items.forEach(item => {
-            let href = `lex.php?lex=${item.item}`;
+            let href = `lex/lex=${item.item}`;
             let lemma = `${item.lemma} (${item.count})`;
             // ---
             let P31Label = item?.P31Label || "";
