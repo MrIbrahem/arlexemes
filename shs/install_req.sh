@@ -18,5 +18,5 @@ exit
 webservice python3.11 restart
 
 # toolforge-jobs run installreq --image python3.11 --command "$HOME/install_req.sh"
-# toolforge-jobs run installreq --image python3.11 --command "$HOME/sh/install_req.sh"
+# toolforge-jobs run installreq --image python3.11 --command "$HOME/shs/install_req.sh"
 

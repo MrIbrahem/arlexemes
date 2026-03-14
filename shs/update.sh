@@ -49,11 +49,11 @@ echo "______________________________"
 
 # ls -R "$CLONE_DIR"
 
-cp -rf "$CLONE_DIR/sh/"* "$HOME/sh/"
+cp -rf "$CLONE_DIR/shs/"* "$HOME/shs/"
 
 cp -f $CLONE_DIR/*.yaml "$HOME/"
 
-chmod -R 750 $HOME/sh
+chmod -R 750 $HOME/shs
 
 echo ">>> Update completed successfully."
 echo "webservice python3.11 restart"
