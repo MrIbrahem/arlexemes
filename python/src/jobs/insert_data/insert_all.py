@@ -6,17 +6,18 @@ This script inserts lemma data from JSON files into the database.
 """
 import json
 import re
-import tqdm
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+import tqdm
 
 path_1 = Path(__file__).parent.parent.parent
 
 sys.path.append(str(path_1))
 
-from pyx.logs_db.insert import insert_multi_lemmas
 from pyx.bots.match_sparql import in_sql
+from pyx.logs_db.insert import insert_multi_lemmas
 
 json_file = Path(__file__).parent / "Qabas-dataset_with_SAMA.json"
 json_file2 = Path(__file__).parent / "Qabas_data_2.json"

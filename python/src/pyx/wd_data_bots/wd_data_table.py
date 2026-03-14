@@ -9,7 +9,7 @@ from wd_data_bots import wd_data_table
 # wd_data_table.insert_multi_wd_data_P11038(data=[{"wd_data_id":"wd_data_id", "value":"value"}])
 
 """
-from ..logs_db.db_mysql import fetch_all, init_db, db_commit
+from ..logs_db.db_mysql import db_commit, fetch_all, init_db
 
 
 def add_order_limit_offset(query, params, order_by, order, limit, offset):

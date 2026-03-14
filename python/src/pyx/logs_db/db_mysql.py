@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import time
 import logging
+import time
 from contextlib import contextmanager
+from typing import Any, List, Optional, Sequence, Tuple, Union
+
 import pymysql
 from pymysql import MySQLError
-from typing import Optional, Tuple, List, Union, Sequence, Any
+
 from .config_db import load_db_config
 
 # Configure logging
@@ -17,11 +19,13 @@ DB_CONFIG = load_db_config()
 
 class DatabaseConnectionError(Exception):
     """Custom exception for database connection errors"""
+
     pass
 
 
 class DatabaseQueryError(Exception):
     """Custom exception for database query errors"""
+
     pass
 
 
@@ -87,7 +91,7 @@ def init_db() -> bool:
                 KEY `sama_lemma_id` (`sama_lemma_id`),
                 KEY `lemma_id` (`lemma_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            """
+            """,
         },
         {
             "name": "wd_data",
@@ -101,7 +105,7 @@ def init_db() -> bool:
                 UNIQUE KEY `wd_id2` (`wd_id`),
                 KEY `wd_id` (`wd_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            """
+            """,
         },
         {
             "name": "wd_data_p11038",
@@ -115,8 +119,8 @@ def init_db() -> bool:
                 KEY `wd_data_id_value` (`wd_data_id`,`value`),
                 CONSTRAINT `fk_wd_data` FOREIGN KEY (`wd_data_id`) REFERENCES `wd_data` (`wd_id`) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-            """
-        }
+            """,
+        },
     ]
 
     success_count = 0
@@ -130,7 +134,9 @@ def init_db() -> bool:
     return success_count == len(tables_queries)
 
 
-def _fetch_all(query: str, params: Optional[Tuple] = None, fetch_one: bool = False) -> Union[List[dict], dict, None]:
+def _fetch_all(
+    query: str, params: Optional[Tuple] = None, fetch_one: bool = False
+) -> Union[List[dict], dict, None]:
     """Execute query and fetch results from MySQL database"""
     if params is None:
         params = ()
@@ -152,7 +158,9 @@ def _fetch_all(query: str, params: Optional[Tuple] = None, fetch_one: bool = Fal
         return [] if not fetch_one else None
 
 
-def fetch_all(query: str, params: Optional[Tuple] = None, fetch_one: bool = False) -> Tuple[Union[List[dict], dict, None], float]:
+def fetch_all(
+    query: str, params: Optional[Tuple] = None, fetch_one: bool = False
+) -> Tuple[Union[List[dict], dict, None], float]:
     """Execute query and fetch results with execution time tracking"""
     # ---
     start_time = time.time()

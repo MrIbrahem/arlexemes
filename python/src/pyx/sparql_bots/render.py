@@ -4,9 +4,10 @@ from pyx.sparql_bots.render import render_sparql_P11038_grouped
 
 """
 
-import re
 import copy
+import re
 from collections import defaultdict
+
 from . import sparql_bot
 
 categoryLabels = {

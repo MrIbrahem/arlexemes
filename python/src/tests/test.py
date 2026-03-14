@@ -21,9 +21,9 @@ sys.path.append(str(project_root))
 
 # Import test modules
 
+import sparql
 import test_db
 import test_log
-import sparql
 
 
 def main() -> None:

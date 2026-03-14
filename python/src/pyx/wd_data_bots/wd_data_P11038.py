@@ -5,8 +5,9 @@ Provides database operations for lemmas and P11038 data
 """
 
 import logging
-from typing import Dict, List, Tuple, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
+
 from ..logs_db.db_mysql import fetch_all
 
 # Configure logging

@@ -3,7 +3,8 @@
 
 import sys
 import time
-from SPARQLWrapper import SPARQLWrapper, JSON
+
+from SPARQLWrapper import JSON, SPARQLWrapper
 
 endpoint_url = "https://query.wikidata.org/sparql"
 

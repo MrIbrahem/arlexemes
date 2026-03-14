@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyx.logs_db.db_mysql import init_db
 from pyx.logs_db.bot import count_all
+from pyx.logs_db.db_mysql import init_db
 
 
 def test():

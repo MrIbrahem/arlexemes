@@ -4,8 +4,8 @@ python D:/arlexemes/python/src/insert_data/x.py
 
 """
 
-from pathlib import Path
 import json
+from pathlib import Path
 
 text_path = Path(__file__).parent / "ar-Q13955-P11038-nopos.txt"
 text = text_path.read_text(encoding="utf-8")

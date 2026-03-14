@@ -7,8 +7,9 @@ from pyx.bots.not_in_db_bot import get_not_in_db
 """
 
 import tqdm
-from .match_sparql import in_sql
+
 from ..sparql_bots.render import render_sparql_P11038_grouped
+from .match_sparql import in_sql
 
 
 def get_wd_not_insql(tab_P11038, insql_lemma, insql_sama):

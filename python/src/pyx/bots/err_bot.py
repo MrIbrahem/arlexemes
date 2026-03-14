@@ -2,9 +2,10 @@
 import err_bot
 """
 
+import datetime
+
 # logs_bot_new.py
 import os
-import datetime
 
 LOGS_DIR = "logs"
 ERROR_LOG_FILE = os.path.join(LOGS_DIR, "errors.log")

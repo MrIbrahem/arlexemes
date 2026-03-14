@@ -1,5 +1,6 @@
-from pathlib import Path
 from configparser import ConfigParser
+from pathlib import Path
+
 from pymysql.cursors import DictCursor
 
 
