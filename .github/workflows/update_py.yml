@@ -1,14 +1,15 @@
-name: update_py.yml
+name: Auto Update Toolforge
+
 on:
     push:
         branches:
             - main
 jobs:
-    build:
+    update:
         runs-on: ubuntu-latest
         steps:
+            - name: Deploy on Toolforge
             - uses: actions/checkout@v6
-            - name: Deploy python to server
               uses: appleboy/ssh-action@v1.2.4
               with:
                   host: ${{ secrets.HOST }}
