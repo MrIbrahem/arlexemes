@@ -5,8 +5,9 @@ Provides database operations for lemmas and P11038 data
 """
 
 import logging
-from typing import Dict, List, Tuple, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
+
 from ..logs_db.db_mysql import fetch_all
 
 # Configure logging
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class QueryParams:
     """Parameters for database queries"""
+
     limit: int = 0
     offset: int = 0
     order: str = "DESC"
@@ -26,6 +28,7 @@ class QueryParams:
 
 class DataBotError(Exception):
     """Custom exception for data bot errors"""
+
     pass
 
 
@@ -34,8 +37,13 @@ class WDDataBot:
 
     def __init__(self):
         self.valid_order_fields = [
-            "id", "lemma_id", "lemma", "pos", "pos_cat",
-            "sama_lemma_id", "sama_lemma"
+            "id",
+            "lemma_id",
+            "lemma",
+            "pos",
+            "pos_cat",
+            "sama_lemma_id",
+            "sama_lemma",
         ]
 
     def _validate_order_params(self, order: str, order_by: str) -> Tuple[str, str]:
@@ -50,9 +58,15 @@ class WDDataBot:
             logger.warning(f"Invalid order_by field: {order_by}, using default 'id'")
             return order, "id"
 
-    def add_order_limit_offset(self, query: str, params: List,
-                               order_by: str, order: str,
-                               limit: int, offset: int) -> Tuple[str, List]:
+    def add_order_limit_offset(
+        self,
+        query: str,
+        params: List,
+        order_by: str,
+        order: str,
+        limit: int,
+        offset: int,
+    ) -> Tuple[str, List]:
         """Add ORDER BY, LIMIT, and OFFSET to query"""
         order, valid_order_by = self._validate_order_params(order, order_by)
 
@@ -136,13 +150,20 @@ class WDDataBot:
             "without": total_rows - count_has_value,
         }
 
-        logger.info(f"Counts - All: {total_rows}, With: {count_has_value}, Without: {data['without']}")
+        logger.info(
+            f"Counts - All: {total_rows}, With: {count_has_value}, Without: {data['without']}"
+        )
 
         return data, _db_exec_time
 
-    def get_lemmas(self, limit: int = 0, offset: int = 0,
-                   order: str = "DESC", order_by: str = "id",
-                   filter_data: str = "with") -> Tuple[List[Dict[str, Any]], float]:
+    def get_lemmas(
+        self,
+        limit: int = 0,
+        offset: int = 0,
+        order: str = "DESC",
+        order_by: str = "id",
+        filter_data: str = "with",
+    ) -> Tuple[List[Dict[str, Any]], float]:
         """Get lemmas with optional filtering and pagination"""
 
         # Base query for data with P11038 values

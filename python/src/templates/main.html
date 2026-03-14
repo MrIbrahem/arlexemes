@@ -112,44 +112,65 @@
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav navbar-default">
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/list' else '' }}">
-                        <a class="nav-link" href="/list"><i
-                                class="bi bi-journal-text me-1"></i>
-                            قائمة المفردات
+                    <li class="nav-item col-6 col-lg-auto dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="fixNestedDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            المفردات
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="fixNestedDropdown">
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="/list"><i class="bi bi-journal-text me-1"></i>
+                                    قائمة المفردات
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="/new">
+                                    <i class="bi bi-journal-text me-1"></i> أحدث المفردات
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="/duplicate_lemmas">
+                                    <i class="bi bi-journal-text me-1"></i> مفردات مكررة
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/new' else '' }}">
-                        <a class="nav-link" href="/new">
-                            <i class="bi bi-journal-text me-1"></i> أحدث المفردات
+                    <li class="nav-item col-6 col-lg-auto dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="fixNestedDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            مخططات
                         </a>
-                    </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/duplicate_lemmas' else '' }}">
-                        <a class="nav-link" href="/duplicate_lemmas">
-                            <i class="bi bi-journal-text me-1"></i> مفردات مكررة
-                        </a>
-                    </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/wd_tree' else '' }}">
-                        <a class="nav-link" href="/wd_tree">
-                            <i class="bi bi-tree me-1"></i> مخطط شجري
-                        </a>
-                    </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path == '/chart' else '' }}">
-                        <a class="nav-link" href="/chart"><i class="bi bi-bar-chart-line me-1"></i>
-                            مخطط بياني
-                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="fixNestedDropdown">
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="/wd_tree">
+                                    <i class="bi bi-tree me-1"></i> مخطط شجري
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="/chart">
+                                    <i class="bi bi-bar-chart-line me-1"></i> مخطط بياني
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
                         <a class="nav-link" href="/P11038">
                             <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/features_chart') else '' }}">
+                    <li
+                        class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/features_chart') else '' }}">
                         <a class="nav-link" href="/features_chart"><i class="bi bi-bar-chart-line me-1"></i>
                             الميزات النحوية
                         </a>
                     </li>
                     <!-- https://github.com/MrIbrahem/arlexemes/ -->
-                    <li class="nav-item col-6 col-lg-auto">
+                    <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
+                        <a class="nav-link" href="https://ar-senses.toolforge.org/" target="_blank">
+                            <i class="bi bi-ui-checks-grid"></i> أداة مراجعة معاني الأفعال العربية
+                        </a>
+                    </li>
+                    <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
                         <a class="nav-link" href="https://github.com/MrIbrahem/arlexemes/" target="_blank">
                             <i class="bi bi-github me-1"></i>
                         </a>

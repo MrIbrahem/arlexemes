@@ -4,14 +4,16 @@ SPARQL bot for interacting with Wikidata API
 Handles SPARQL queries with caching and error management
 """
 
+import logging
+import socket
 import sys
 import time
-import socket
 import urllib.error
-import logging
-from typing import Dict, List, Tuple, Optional, Any
-from SPARQLWrapper import SPARQLWrapper, JSON
+from typing import Any, Dict, List, Optional, Tuple
+
 from cachetools import TTLCache
+from SPARQLWrapper import JSON, SPARQLWrapper
+
 from ..bots import err_bot
 
 # Configure logging
@@ -22,7 +24,7 @@ logger = logging.getLogger(__name__)
 CACHE_TTL = 60 * 5  # 5 minutes
 CACHE_MAX_SIZE = 100
 TIMEOUT = 10
-ENDPOINT_URL = 'https://query.wikidata.org/sparql'
+ENDPOINT_URL = "https://query.wikidata.org/sparql"
 
 # Caches
 sparql_cache = TTLCache(maxsize=CACHE_MAX_SIZE, ttl=CACHE_TTL)
@@ -31,11 +33,13 @@ simple_cache = {}
 
 class SPARQLQueryError(Exception):
     """Custom exception for SPARQL query errors"""
+
     pass
 
 
 class SPARQLConnectionError(Exception):
     """Custom exception for SPARQL connection errors"""
+
     pass
 
 
@@ -43,10 +47,14 @@ class SPARQLBot:
     """SPARQL bot for Wikidata API interactions"""
 
     def __init__(self):
-        self.user_agent = f"WDQS-example Python/{sys.version_info[0]}.{sys.version_info[1]}"
+        self.user_agent = (
+            f"WDQS-example Python/{sys.version_info[0]}.{sys.version_info[1]}"
+        )
         self.cache_enabled = "nocache" not in sys.argv
 
-    def _create_sparql_wrapper(self, query: str, timeout: int = TIMEOUT) -> SPARQLWrapper:
+    def _create_sparql_wrapper(
+        self, query: str, timeout: int = TIMEOUT
+    ) -> SPARQLWrapper:
         """Create and configure SPARQLWrapper instance"""
         sparql = SPARQLWrapper(ENDPOINT_URL, agent=self.user_agent)
         sparql.setQuery(query)
@@ -81,12 +89,16 @@ class SPARQLBot:
             logger.error(error_msg)
             raise SPARQLQueryError(error_msg) from e
 
-    def safe_sparql_query(self, query: str, timeout: int = TIMEOUT) -> Tuple[Dict[str, Any], str]:
+    def safe_sparql_query(
+        self, query: str, timeout: int = TIMEOUT
+    ) -> Tuple[Dict[str, Any], str]:
         """Execute SPARQL query with caching and error handling"""
         # Check cache first
         if self.cache_enabled and query in sparql_cache:
             logger.info(f"Cache hit for query: {query[:100]}...")
-            err_bot.log_error("SPARQL Cache Hit", f"Query retrieved from cache: {query}")
+            err_bot.log_error(
+                "SPARQL Cache Hit", f"Query retrieved from cache: {query}"
+            )
             return sparql_cache[query], ""
 
         try:
@@ -97,7 +109,9 @@ class SPARQLBot:
             err_bot.log_error("SPARQL Error", str(e))
             return {}, str(e)
 
-    def get_results(self, query: str, timeout: int = TIMEOUT, get_err: bool = False) -> Tuple[List[Dict[str, Any]], float, Optional[str]]:
+    def get_results(
+        self, query: str, timeout: int = TIMEOUT, get_err: bool = False
+    ) -> Tuple[List[Dict[str, Any]], float, Optional[str]]:
         """Execute SPARQL query and format results"""
         start_time = time.time()
         data, err = self.safe_sparql_query(query, timeout=timeout)
@@ -132,8 +146,8 @@ class SPARQLBot:
 
     def search(self, args: Dict[str, str]) -> Dict[str, Any]:
         """Search for Arabic lexemes with caching"""
-        term = args.get('term', 'ا').strip()
-        data_source = args.get('data_source', '').strip()
+        term = args.get("term", "ا").strip()
+        data_source = args.get("data_source", "").strip()
 
         if not term:
             return {}
@@ -171,20 +185,16 @@ class SPARQLBot:
         # Format results
         result = {"search": []}
         for row in data:
-            item_id = row['item']
-            lemma = row['lemma']
-            category_label = row['categoryLabel']
-            count = int(row.get('count', 0))
+            item_id = row["item"]
+            lemma = row["lemma"]
+            category_label = row["categoryLabel"]
+            count = int(row.get("count", 0))
 
             label = f"{lemma} - {category_label}"
             if count and count > 1:
                 label += f" - ({count} كلمة)"
 
-            result['search'].append({
-                "label": label,
-                "value": lemma,
-                "id": item_id
-            })
+            result["search"].append({"label": label, "value": lemma, "id": item_id})
 
         # Cache result
         simple_cache[cache_key] = (result, current_time)
@@ -213,7 +223,9 @@ class SPARQLBot:
 
         return self.get_results(sparql_query)
 
-    def all_arabic_with_P11038_grouped(self, limit: int = 0) -> Tuple[List[Dict[str, Any]], float]:
+    def all_arabic_with_P11038_grouped(
+        self, limit: int = 0
+    ) -> Tuple[List[Dict[str, Any]], float]:
         """Get Arabic lexemes with P11038 values, grouped"""
         sparql_query = """
             SELECT DISTINCT ?item ?lemma ?category ?categoryLabel
@@ -254,10 +266,12 @@ class SPARQLBot:
         data, sparql_exec_time = self.get_results(sparql_query)
 
         if data:
-            return int(data[0]['count']), sparql_exec_time
+            return int(data[0]["count"]), sparql_exec_time
         return 0, sparql_exec_time
 
-    def find_duplicates(self, limit: int = 100) -> Tuple[List[Dict[str, Any]], float, str]:
+    def find_duplicates(
+        self, limit: int = 100
+    ) -> Tuple[List[Dict[str, Any]], float, str]:
         """Find duplicate lemmas"""
         sparql_query = """
             SELECT ?lemma_fixed ?category
@@ -267,7 +281,7 @@ class SPARQLBot:
                 ?item1 dct:language wd:Q13955;
                     wikibase:lemma ?lemma;
                     wikibase:lexicalCategory ?category.
-                BIND(REPLACE(STR(?lemma), "[\u064B-\u065F\u066A-\u06EF]$", "") AS ?lemma_fixed)
+                BIND(REPLACE(STR(?lemma), "[\u064b-\u065f\u066a-\u06ef]$", "") AS ?lemma_fixed)
             }
             GROUP BY ?lemma_fixed ?category
             HAVING(COUNT(?item1) > 1)

@@ -10,6 +10,7 @@ Usage:
 Example:
     python3 test.py sparql
 """
+
 import sys
 import types
 from pathlib import Path
@@ -20,9 +21,10 @@ sys.path.append(str(project_root))
 
 # Import test modules
 
+import sparql
 import test_db
 import test_log
-import sparql
+
 
 def main() -> None:
     """
@@ -44,7 +46,10 @@ def main() -> None:
         else:
             print(f"Warning: No 'test' function found in module {test_name}")
 
-def get_selected_tests(available_tests: dict[str, types.ModuleType]) -> dict[str, types.ModuleType]:
+
+def get_selected_tests(
+    available_tests: dict[str, types.ModuleType],
+) -> dict[str, types.ModuleType]:
     """
     Gets the selected tests based on command-line arguments.
     """
@@ -52,17 +57,14 @@ def get_selected_tests(available_tests: dict[str, types.ModuleType]) -> dict[str
     if not args:
         return available_tests
 
-    selected = {
-        arg: available_tests[arg]
-        for arg in args
-        if arg in available_tests
-    }
+    selected = {arg: available_tests[arg] for arg in args if arg in available_tests}
 
     if not selected:
         print("No valid tests selected. Running all tests.")
         return available_tests
 
     return selected
+
 
 if __name__ == "__main__":
     main()

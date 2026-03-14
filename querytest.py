@@ -3,13 +3,17 @@
 
 import sys
 import time
-from SPARQLWrapper import SPARQLWrapper, JSON
+
+from SPARQLWrapper import JSON, SPARQLWrapper
 
 endpoint_url = "https://query.wikidata.org/sparql"
 
 
 def get_results(endpoint_url, query):
-    user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
+    user_agent = "WDQS-example Python/%s.%s" % (
+        sys.version_info[0],
+        sys.version_info[1],
+    )
     sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
@@ -36,8 +40,7 @@ queries = [
         SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
         }
         ORDER BY DESC(?usage)
-    """
-    ,
+    """,
     """
             SELECT ?prop ?usage ?propLabel
         WHERE {
@@ -58,7 +61,7 @@ queries = [
         SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
         }
         ORDER BY DESC(?usage)
-    """
+    """,
 ]
 
 for query in queries:

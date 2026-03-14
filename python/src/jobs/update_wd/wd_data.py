@@ -43,7 +43,7 @@ def insert_new_items(in_wd_data, in_db):
 
 def update_wd():
     # ---
-    in_db = {z['wd_id'] : z for z in wd_data_table.get_all_wd()}
+    in_db = {z["wd_id"]: z for z in wd_data_table.get_all_wd()}
     # ---
     print(f"in_db: {len(in_db)}")
     # ---
@@ -75,7 +75,7 @@ def update_wd():
     # ---
     P11038_data = {h: list(set(o)) for h, o in P11038_data.items()}
     # ---
-    dup_P11038_by_id = {e : r for e, r in P11038_by_id.items() if len(r) > 1}
+    dup_P11038_by_id = {e: r for e, r in P11038_by_id.items() if len(r) > 1}
     # ---
     print(f"dup_P11038_by_id: {len(dup_P11038_by_id)}")
     # ---

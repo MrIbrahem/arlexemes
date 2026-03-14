@@ -1,5 +1,6 @@
-from pathlib import Path
 from configparser import ConfigParser
+from pathlib import Path
+
 from pymysql.cursors import DictCursor
 
 
@@ -19,7 +20,7 @@ def load_db_config():
             "password": password,
             "database": f"{user}__arlexemes",
             "charset": "utf8mb4",
-            "cursorclass": DictCursor
+            "cursorclass": DictCursor,
         }
 
     return {
@@ -28,5 +29,5 @@ def load_db_config():
         "password": "root11",
         "database": "arlexemes",
         "charset": "utf8mb4",
-        "cursorclass": DictCursor
+        "cursorclass": DictCursor,
     }

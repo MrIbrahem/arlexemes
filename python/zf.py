@@ -1,6 +1,6 @@
 import json
 
-data =[
+data = [
     {
         "lemma": "أنتما",
         "1_item": "L1462501",
@@ -12,7 +12,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -25,7 +25,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -38,7 +38,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -51,7 +51,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -64,7 +64,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -77,7 +77,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -90,7 +90,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -103,7 +103,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -116,7 +116,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -129,7 +129,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -142,7 +142,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -155,7 +155,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -168,7 +168,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -181,7 +181,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -194,7 +194,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -207,7 +207,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -220,7 +220,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -233,7 +233,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -246,7 +246,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -259,7 +259,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -272,7 +272,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -285,7 +285,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -298,7 +298,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -311,7 +311,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -324,7 +324,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -337,7 +337,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أنتما",
@@ -350,7 +350,7 @@ data =[
         "1_p_value": "L1462502",
         "1p_valueLabel": "",
         "2_p_value": "L1462501",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -363,7 +363,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -376,7 +376,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -389,7 +389,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -402,7 +402,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -415,7 +415,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -428,7 +428,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -441,7 +441,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -454,7 +454,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -467,7 +467,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -480,7 +480,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "3033220000",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -493,7 +493,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q499327",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -506,7 +506,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -519,7 +519,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -532,7 +532,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -545,7 +545,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -558,7 +558,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -571,7 +571,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -584,7 +584,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -597,7 +597,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتَ",
@@ -610,7 +610,7 @@ data =[
         "1_p_value": "Q47088290",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -623,7 +623,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -636,7 +636,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -649,7 +649,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -662,7 +662,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -675,7 +675,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -688,7 +688,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -701,7 +701,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -714,7 +714,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -727,7 +727,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -740,7 +740,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "202002945",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -753,7 +753,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q1775415",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -766,7 +766,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -779,7 +779,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -792,7 +792,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -805,7 +805,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -818,7 +818,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "Q51929049",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -831,7 +831,7 @@ data =[
         "1_p_value": "Q51929049",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -844,7 +844,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -857,7 +857,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "Q110786",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "أَنْتِ",
@@ -870,7 +870,7 @@ data =[
         "1_p_value": "Q47088293",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -883,7 +883,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -896,7 +896,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -909,7 +909,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -922,7 +922,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -935,7 +935,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -948,7 +948,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -961,7 +961,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -974,7 +974,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -987,7 +987,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1000,7 +1000,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1013,7 +1013,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1026,7 +1026,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1039,7 +1039,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1052,7 +1052,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1065,7 +1065,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1078,7 +1078,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1091,7 +1091,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1104,7 +1104,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1117,7 +1117,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1130,7 +1130,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "L1365061",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1143,7 +1143,7 @@ data =[
         "1_p_value": "L1365061",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1156,7 +1156,7 @@ data =[
         "1_p_value": "Q604984",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1169,7 +1169,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1182,7 +1182,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "390036618",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1195,7 +1195,7 @@ data =[
         "1_p_value": "302006922",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1208,7 +1208,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1221,7 +1221,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "L1329888",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "تَعْلِيمِيّ",
@@ -1234,7 +1234,7 @@ data =[
         "1_p_value": "L1329889",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1247,7 +1247,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1260,7 +1260,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1273,7 +1273,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1286,7 +1286,7 @@ data =[
         "1_p_value": "",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1299,7 +1299,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1312,7 +1312,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1325,7 +1325,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1338,7 +1338,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1351,7 +1351,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1364,7 +1364,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1377,7 +1377,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1390,7 +1390,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1403,7 +1403,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1416,7 +1416,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1429,7 +1429,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1442,7 +1442,7 @@ data =[
         "1_p_value": "Q110022",
         "1p_valueLabel": "",
         "2_p_value": "Q110022",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1455,7 +1455,7 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
+        "2p_valueLabel": "",
     },
     {
         "lemma": "هما",
@@ -1468,8 +1468,8 @@ data =[
         "1_p_value": "Q51929074",
         "1p_valueLabel": "",
         "2_p_value": "Q51929074",
-        "2p_valueLabel": ""
-    }
+        "2p_valueLabel": "",
+    },
 ]
 
 
@@ -1505,8 +1505,12 @@ def convert_data(data):
         if pLabel:
             new_data[lemma]["proplabels"].setdefault(p, pLabel)
         # ---
-        new_data[lemma]["items"][item1]["props"].setdefault(p, {"value": "", "valuelabel": ""})
-        new_data[lemma]["items"][item2]["props"].setdefault(p, {"value": "", "valuelabel": ""})
+        new_data[lemma]["items"][item1]["props"].setdefault(
+            p, {"value": "", "valuelabel": ""}
+        )
+        new_data[lemma]["items"][item2]["props"].setdefault(
+            p, {"value": "", "valuelabel": ""}
+        )
         # ---
         prop_value1 = x.get("1_p_value", "")
         prop_value1Label = x.get("1p_valueLabel", "")

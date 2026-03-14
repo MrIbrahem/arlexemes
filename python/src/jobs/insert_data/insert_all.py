@@ -6,16 +6,18 @@ This script inserts lemma data from JSON files into the database.
 """
 import json
 import re
-import tqdm
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
+import tqdm
+
 path_1 = Path(__file__).parent.parent.parent
 
 sys.path.append(str(path_1))
 
-from pyx.logs_db.insert import insert_multi_lemmas
 from pyx.bots.match_sparql import in_sql
+from pyx.logs_db.insert import insert_multi_lemmas
 
 json_file = Path(__file__).parent / "Qabas-dataset_with_SAMA.json"
 json_file2 = Path(__file__).parent / "Qabas_data_2.json"
@@ -44,11 +46,11 @@ def get_data() -> Dict[str, Dict[str, Any]]:
     all_lemma_data = json_data1 + json_data2
 
     lemma_data_map = {
-        item.get('lemma_id'): item
-        for item in all_lemma_data
-        if item.get('lemma_id')
+        item.get("lemma_id"): item for item in all_lemma_data if item.get("lemma_id")
     }
-    print(f"Total lemmas from JSON files: {len(all_lemma_data)}, Unique lemma IDs: {len(lemma_data_map)}")
+    print(
+        f"Total lemmas from JSON files: {len(all_lemma_data)}, Unique lemma IDs: {len(lemma_data_map)}"
+    )
 
     existing_lemma_ids, _, _ = in_sql()
 
@@ -59,9 +61,11 @@ def get_data() -> Dict[str, Dict[str, Any]]:
     ]
 
     # Sort by sama_lemma to process lemmas with SAMA data first
-    new_lemmas_list.sort(key=lambda item: (item.get('sama_lemma', "") or ""), reverse=True)
+    new_lemmas_list.sort(
+        key=lambda item: (item.get("sama_lemma", "") or ""), reverse=True
+    )
 
-    new_lemmas_map = {item.get('lemma_id'): item for item in new_lemmas_list}
+    new_lemmas_map = {item.get("lemma_id"): item for item in new_lemmas_list}
 
     print(f"Found {len(new_lemmas_map)} new lemmas to add.")
 
@@ -79,34 +83,38 @@ def start() -> None:
         lemmas_to_add = {
             lemma_id: lemma_data
             for lemma_id, lemma_data in lemmas_to_add.items()
-            if lemma_data.get('sama_lemma_id') and lemma_data.get('sama_lemma')
+            if lemma_data.get("sama_lemma_id") and lemma_data.get("sama_lemma")
         }
-        print(f"Filtered to lemmas with SAMA data. New count: {len(lemmas_to_add)}, "
-              f"diff: {original_lemma_count - len(lemmas_to_add)}")
+        print(
+            f"Filtered to lemmas with SAMA data. New count: {len(lemmas_to_add)}, "
+            f"diff: {original_lemma_count - len(lemmas_to_add)}"
+        )
     # ---
     lemma_sama_match_count = 0
     total_lemmas_sent = 0
     lemma_batch = []
     batch_size = 100
     # ---
-    for lemma_id, lemma_data in tqdm.tqdm(lemmas_to_add.items(), total=len(lemmas_to_add)):
+    for lemma_id, lemma_data in tqdm.tqdm(
+        lemmas_to_add.items(), total=len(lemmas_to_add)
+    ):
         # ---
         sama_lemma = lemma_data.get("sama_lemma", "") or ""
         # ---
         if sama_lemma:
             sama_lemma = sama_lemma.strip()
             # remove space and numbers from end
-            sama_lemma = re.sub(r'(\s+|\d+)$', '', sama_lemma)
+            sama_lemma = re.sub(r"(\s+|\d+)$", "", sama_lemma)
         # ---
-        if lemma_data.get('lemma', '').strip() == sama_lemma.strip():
+        if lemma_data.get("lemma", "").strip() == sama_lemma.strip():
             lemma_sama_match_count += 1
         # ---
         params = {
-            "lemma_id": lemma_data.get('lemma_id', ''),
-            "lemma": lemma_data.get('lemma', ''),
-            "pos_cat": lemma_data.get('pos_cat', '') or "",
-            "pos": lemma_data.get('pos', '') or "",
-            "sama_lemma_id": lemma_data.get('sama_lemma_id', '') or "",
+            "lemma_id": lemma_data.get("lemma_id", ""),
+            "lemma": lemma_data.get("lemma", ""),
+            "pos_cat": lemma_data.get("pos_cat", "") or "",
+            "pos": lemma_data.get("pos", "") or "",
+            "sama_lemma_id": lemma_data.get("sama_lemma_id", "") or "",
             "sama_lemma": sama_lemma,
         }
         # ---

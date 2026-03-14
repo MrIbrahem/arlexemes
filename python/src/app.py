@@ -4,24 +4,29 @@ Flask application for the Arabic lexemes project
 Main entry point for the web application
 """
 
+import json
 import sys
 import time
-from typing import Dict, Tuple, Any
 from dataclasses import dataclass
 from functools import wraps
-from flask import Flask, render_template, request, Response, session, g
-import json
+from typing import Any, Dict, Tuple
 
+from flask import Flask, Response, g, render_template, request, session
 from pyx import logs_bot_new
-from pyx.wd_data_bots.wd_data_P11038 import get_lemmas, count_all_p11038
-from pyx.sparql_bots import sparql_bot
-from pyx.sparql_bots.render import render_duplicate_by_category, render_duplicate, render_sparql_P11038_grouped
 from pyx.bots.not_in_db_bot import get_not_in_db
+from pyx.sparql_bots import sparql_bot
+from pyx.sparql_bots.render import (
+    render_duplicate,
+    render_duplicate_by_category,
+    render_sparql_P11038_grouped,
+)
+from pyx.wd_data_bots.wd_data_P11038 import count_all_p11038, get_lemmas
 
 
 @dataclass
 class RequestParams:
     """Data class for request parameters"""
+
     limit: int = 10000
     offset: int = 0
     order: str = "desc"
@@ -31,6 +36,7 @@ class RequestParams:
 
 class AppConfig:
     """Configuration constants for the application"""
+
     DEFAULT_LIMIT = 10000
     DEFAULT_OFFSET = 0
     DEFAULT_ORDER = "desc"
@@ -40,15 +46,17 @@ class AppConfig:
 
 def track_performance(func):
     """Decorator to track function execution time"""
+
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if hasattr(g, 'start_time'):
+        if hasattr(g, "start_time"):
             start_time = time.time()
             result = func(*args, **kwargs)
             execution_time = time.time() - start_time
             g.load_time = execution_time
             return result
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -65,7 +73,7 @@ def before_request() -> None:
 @app.after_request
 def after_request(response: Response) -> Response:
     """Add performance metrics to response"""
-    if hasattr(g, 'start_time'):
+    if hasattr(g, "start_time"):
         g.load_time = time.time() - g.start_time
     return response
 
@@ -73,25 +81,26 @@ def after_request(response: Response) -> Response:
 @app.context_processor
 def inject_load_time() -> Dict[str, float]:
     """Inject load time into template context"""
-    load_time = getattr(g, 'load_time', 0.0)
+    load_time = getattr(g, "load_time", 0.0)
     return dict(load_time=load_time)
 
 
 def jsonify(data: Dict[str, Any], **kwargs) -> Response:
     """Create JSON response with performance metrics"""
     execution_time = 0.0
-    if hasattr(g, 'start_time'):
+    if hasattr(g, "start_time"):
         execution_time = time.time() - g.start_time
 
-    result = {
-        'load_time': round(execution_time, 3),
-        'data': data
-    }
+    result = {"load_time": round(execution_time, 3), "data": data}
 
     result.update(kwargs)
 
-    response_json = json.dumps(result, ensure_ascii=False, indent=2, separators=(',', ':'))
-    return Response(response=response_json, content_type="application/json; charset=utf-8")
+    response_json = json.dumps(
+        result, ensure_ascii=False, indent=2, separators=(",", ":")
+    )
+    return Response(
+        response=response_json, content_type="application/json; charset=utf-8"
+    )
 
 
 # API Endpoints
@@ -117,11 +126,11 @@ def wd_data_api_count() -> Response:
 def wd_data_api() -> Response:
     """API endpoint for WD data with pagination"""
     params = RequestParams(
-        limit=int(request.args.get('limit', AppConfig.DEFAULT_LIMIT)),
-        offset=int(request.args.get('offset', AppConfig.DEFAULT_OFFSET)),
+        limit=int(request.args.get("limit", AppConfig.DEFAULT_LIMIT)),
+        offset=int(request.args.get("offset", AppConfig.DEFAULT_OFFSET)),
         order=request.args.get("order", AppConfig.DEFAULT_ORDER).upper(),
         order_by=request.args.get("order_by", AppConfig.DEFAULT_ORDER_BY),
-        filter_data=request.args.get("filter_data", AppConfig.DEFAULT_FILTER_DATA)
+        filter_data=request.args.get("filter_data", AppConfig.DEFAULT_FILTER_DATA),
     )
 
     all_result, db_exec_time = get_lemmas(
@@ -129,7 +138,7 @@ def wd_data_api() -> Response:
         offset=params.offset,
         order=params.order,
         order_by=params.order_by,
-        filter_data=params.filter_data
+        filter_data=params.filter_data,
     )
     return jsonify(all_result, db_exec_time=db_exec_time)
 
@@ -192,9 +201,11 @@ def P11038() -> str:
 @app.route("/P11038_wd", methods=["GET"])
 def P11038_wd() -> str:
     """Page for P11038 data with grouping"""
-    limit = int(request.args.get('limit', 100))
+    limit = int(request.args.get("limit", 100))
     wd_count, _ = sparql_bot.count_arabic_with_P11038()
-    split_by_cat, sparql_exec_time = render_sparql_P11038_grouped(limit=limit, group_it=True)
+    split_by_cat, sparql_exec_time = render_sparql_P11038_grouped(
+        limit=limit, group_it=True
+    )
 
     time_tab = {"sparql_exec_time": sparql_exec_time}
     return render_template(
@@ -209,7 +220,7 @@ def P11038_wd() -> str:
 @app.route("/duplicate2.html", methods=["GET"])
 def duplicate2() -> str:
     """Page for duplicate data display"""
-    limit = int(request.args.get('limit', AppConfig.DEFAULT_LIMIT))
+    limit = int(request.args.get("limit", AppConfig.DEFAULT_LIMIT))
     data, sparql_exec_time = render_duplicate(limit)
 
     time_tab = {"sparql_exec_time": sparql_exec_time}
@@ -223,7 +234,7 @@ def duplicate2() -> str:
 @app.route("/duplicate.html", methods=["GET"])
 def duplicate() -> str:
     """Page for duplicate data by category"""
-    limit = int(request.args.get('limit', 50000))
+    limit = int(request.args.get("limit", 50000))
     data, sparql_exec_time = render_duplicate_by_category(limit)
 
     time_tab = {"sparql_exec_time": sparql_exec_time}
@@ -237,14 +248,16 @@ def duplicate() -> str:
 @app.route("/not_in_db", methods=["GET"])
 def not_in_db() -> str:
     """Page for items not in database"""
-    limit = int(request.args.get('limit', 100))
+    limit = int(request.args.get("limit", 100))
     result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
 
     time_tab = {
         "db_exec_time": db_exec_time,
         "sparql_exec_time": sparql_exec_time,
     }
-    return render_template("not_in_db.html", data=result, limit=limit, time_tab=time_tab)
+    return render_template(
+        "not_in_db.html", data=result, limit=limit, time_tab=time_tab
+    )
 
 
 @app.route("/not_in_db1", methods=["GET"])
@@ -274,7 +287,7 @@ def wd_tree() -> str:
 @app.route("/compare", methods=["GET"])
 def compare() -> str:
     """Page for comparing QIDs"""
-    qids = [x.strip() for x in request.args.get('qids', '').split(",") if x.strip()]
+    qids = [x.strip() for x in request.args.get("qids", "").split(",") if x.strip()]
     return render_template("compare.html", qids=qids)
 
 
@@ -299,7 +312,7 @@ def lex2() -> str:
 @app.route("/", methods=["GET"])
 def index() -> str:
     """Home page"""
-    username = session.get('username', None)
+    username = session.get("username", None)
     return render_template("index.html", username=username)
 
 
@@ -321,8 +334,12 @@ if __name__ == "__main__":
 
     if debug:
         print("Debug mode enabled")
-        print("Adminer: http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=lemmas_p11038")
+        print(
+            "Adminer: http://localhost:3000/core/himo/public_html/s/u.php?sqlite=&username=&db=I%3A%5Cmilion%5Carlexemes%5Cpython%5Cnew_logs.db&table=lemmas_p11038"
+        )
         # ---
-        print("Sample: http://localhost:9001/adminer.php?server=localhost&username=root&db=arlexemes")
+        print(
+            "Sample: http://localhost:9001/adminer.php?server=localhost&username=root&db=arlexemes"
+        )
     # ---
     app.run(debug=debug)
