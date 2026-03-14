@@ -119,7 +119,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="fixNestedDropdown">
                             <li class="dropdown-item">
-                                <a class="nav-link" href="{{ url_for('list_lexemes') }}"><i class="bi bi-journal-text me-1"></i>
+                                <a class="nav-link" href="{{ url_for('list_lexemes') }}"><i
+                                        class="bi bi-journal-text me-1"></i>
                                     قائمة المفردات
                                 </a>
                             </li>
@@ -151,20 +152,37 @@
                                     <i class="bi bi-bar-chart-line me-1"></i> مخطط بياني
                                 </a>
                             </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="{{ url_for('features_chart') }}"><i
+                                        class="bi bi-bar-chart-line me-1"></i>
+                                    الميزات النحوية
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
-                        <a class="nav-link" href="{{ url_for('P11038') }}">
+                    <li class="nav-item col-6 col-lg-auto dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="fixNestedDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
                         </a>
+                        <ul class="dropdown-menu" aria-labelledby="fixNestedDropdown">
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="{{ url_for('P11038_wd') }}">
+                                    استخدام الخاصية في ويكي بيانات
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="{{ url_for('P11038_logs') }}">
+                                    تقرير الربط
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a class="nav-link" href="{{ url_for('not_in_db') }}">
+                                    بيانات غير موصولة
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li
-                        class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/features_chart') else '' }}">
-                        <a class="nav-link" href="{{ url_for('features_chart') }}"><i class="bi bi-bar-chart-line me-1"></i>
-                            الميزات النحوية
-                        </a>
-                    </li>
-                    <!-- https://github.com/MrIbrahem/arlexemes/ -->
                     <li class="nav-item col-lg-auto col-md-4 col-sm-6 col-6">
                         <a class="nav-link" href="https://ar-senses.toolforge.org/" target="_blank">
                             <i class="bi bi-ui-checks-grid"></i> أداة مراجعة معاني الأفعال العربية

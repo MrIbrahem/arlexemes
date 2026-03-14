@@ -103,7 +103,10 @@ def jsonify(data: Dict[str, Any], **kwargs) -> Response:
     )
 
 
-# API Endpoints
+# =================================
+# API Endpoints routes
+# =================================
+
 @app.route("/api/duplicate2", methods=["GET"])
 @track_performance
 def duplicate2_api() -> Response:
@@ -159,25 +162,14 @@ def logs_new_api() -> Response:
     return jsonify(result, db_exec_time=db_exec_time)
 
 
-# Page Routes
-@app.route("/logs_new", methods=["GET"])
-def view_logs_new() -> str:
-    """Page for viewing logs with filtering"""
-    result, db_exec_time = logs_bot_new.find_logs(request)
-    time_tab = {"db_exec_time": db_exec_time}
-    return render_template("logs_new.html", result=result, time_tab=time_tab)
-
+# =================================
+#
+# =================================
 
 @app.route("/autocomplete", methods=["GET"])
 def autocomplete() -> Response:
     """Autocomplete endpoint for search functionality"""
     return sparql_bot.search(request.args)
-
-
-@app.route("/features_chart", methods=["GET"])
-def features_chart() -> str:
-    """Page for features chart"""
-    return render_template("features_chart.html")
 
 
 @app.route("/list", methods=["GET"])
@@ -191,14 +183,20 @@ def new_lexemes() -> str:
     """Page for creating new lexemes"""
     return render_template("list.html", title="أحدث المفردات", page_type="new")
 
-
-@app.route("/P11038", methods=["GET"])
-def P11038() -> str:
-    """Page for P11038 data"""
-    return render_template("P11038.html")
+# =================================
+# P11038 routes
+# =================================
 
 
-@app.route("/P11038_wd", methods=["GET"])
+@app.route("/P11038/logs", methods=["GET"])
+def P11038_logs() -> str:
+    """Page for viewing logs with filtering"""
+    result, db_exec_time = logs_bot_new.find_logs(request)
+    time_tab = {"db_exec_time": db_exec_time}
+    return render_template("P11038/logs_new.html", result=result, time_tab=time_tab)
+
+
+@app.route("/P11038/wd", methods=["GET"])
 def P11038_wd() -> str:
     """Page for P11038 data with grouping"""
     limit = int(request.args.get("limit", 100))
@@ -209,12 +207,35 @@ def P11038_wd() -> str:
 
     time_tab = {"sparql_exec_time": sparql_exec_time}
     return render_template(
-        "P11038_wd.html",
+        "P11038/P11038_wd.html",
         limit=limit,
         result=split_by_cat,
         wd_count=wd_count,
         time_tab=time_tab,
     )
+
+
+@app.route("/P11038/not_in_db", methods=["GET"])
+def not_in_db() -> str:
+    """Page for items not in database"""
+    limit = int(request.args.get("limit", 100))
+    result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
+
+    time_tab = {
+        "db_exec_time": db_exec_time,
+        "sparql_exec_time": sparql_exec_time,
+    }
+    return render_template(
+        "P11038/not_in_db.html",
+        data=result,
+        limit=limit,
+        time_tab=time_tab
+    )
+
+
+# =================================
+# duplicate routes
+# =================================
 
 
 @app.route("/duplicate2.html", methods=["GET"])
@@ -245,31 +266,27 @@ def duplicate() -> str:
     )
 
 
-@app.route("/not_in_db", methods=["GET"])
-def not_in_db() -> str:
-    """Page for items not in database"""
-    limit = int(request.args.get("limit", 100))
-    result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
-
-    time_tab = {
-        "db_exec_time": db_exec_time,
-        "sparql_exec_time": sparql_exec_time,
-    }
-    return render_template(
-        "not_in_db.html", data=result, limit=limit, time_tab=time_tab
-    )
-
-
-@app.route("/not_in_db1", methods=["GET"])
-def not_in_db1() -> str:
-    """Page for items not in database (empty state)"""
-    return render_template("not_in_db.html", data={}, limit=0)
+@app.route("/duplicate_lemmas", methods=["GET"])
+def duplicate_lemmas() -> str:
+    """Page for duplicate lemmas display"""
+    return render_template("duplicate_lemmas.html")
 
 
 @app.route("/lex_just_table", methods=["GET"])
 def lex_just_table() -> str:
     """Page for lexeme table display"""
     return render_template("lex_just_table.html")
+
+
+# =================================
+# charts routes
+# =================================
+
+
+@app.route("/features_chart", methods=["GET"])
+def features_chart() -> str:
+    """Page for features chart"""
+    return render_template("features_chart.html")
 
 
 @app.route("/chart", methods=["GET"])
@@ -284,17 +301,15 @@ def wd_tree() -> str:
     return render_template("wd_tree.html")
 
 
+# =================================
+# main routes
+# =================================
+
 @app.route("/compare", methods=["GET"])
 def compare() -> str:
     """Page for comparing QIDs"""
     qids = [x.strip() for x in request.args.get("qids", "").split(",") if x.strip()]
     return render_template("compare.html", qids=qids)
-
-
-@app.route("/duplicate_lemmas", methods=["GET"])
-def duplicate_lemmas() -> str:
-    """Page for duplicate lemmas display"""
-    return render_template("duplicate_lemmas.html")
 
 
 @app.route("/lex", methods=["GET"])
