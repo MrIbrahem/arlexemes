@@ -13,13 +13,13 @@
         </div>
         <div class="card-body">
             <div class="list-group list-group-flush">
-                <a target="_blank" href="/P11038_wd" class="list-group-item list-group-item-action">
+                <a target="_blank" href="{{ url_for('P11038_wd') }}" class="list-group-item list-group-item-action">
                     استخدام الخاصية في ويكي بيانات
                 </a>
-                <a target="_blank" href="/logs_new" class="list-group-item list-group-item-action">
+                <a target="_blank" href="{{ url_for('view_logs_new') }}" class="list-group-item list-group-item-action">
                     تقرير الربط
                 </a>
-                <a target="_blank" href="/not_in_db" class="list-group-item list-group-item-action">
+                <a target="_blank" href="{{ url_for('not_in_db') }}" class="list-group-item list-group-item-action">
                     بيانات غير موصولة
                 </a>
             </div>

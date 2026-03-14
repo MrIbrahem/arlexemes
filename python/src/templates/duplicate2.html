@@ -55,7 +55,7 @@
                                 </div>
                             </td>
                             <td>
-                                <a href="/compare?qids={{ tab.members | map(attribute='item') | join(',') }}"
+                                <a href="{{ url_for('compare', qids=tab.members | map(attribute='item') | join(',')) }}"
                                     target="_blank">
                                     مقارنة
                                 </a>

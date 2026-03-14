@@ -63,9 +63,9 @@
     <link rel='stylesheet' href='{{ cdn_base }}/datatables.net-responsive-bs5/3.0.4/responsive.bootstrap5.min.css'>
     <link href="{{ cdn_base }}/bootstrap-select/1.14.0-beta3/css/bootstrap-select.css" rel='stylesheet' type='text/css'>
 
-    <link href="/static/css/style.css" rel="stylesheet">
-    <link href="/static/css/theme.css" rel="stylesheet">
-    <link href="/static/css/style2.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style2.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
@@ -119,17 +119,17 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="fixNestedDropdown">
                             <li class="dropdown-item">
-                                <a class="nav-link" href="/list"><i class="bi bi-journal-text me-1"></i>
+                                <a class="nav-link" href="{{ url_for('list_lexemes') }}"><i class="bi bi-journal-text me-1"></i>
                                     قائمة المفردات
                                 </a>
                             </li>
                             <li class="dropdown-item">
-                                <a class="nav-link" href="/new">
+                                <a class="nav-link" href="{{ url_for('new_lexemes') }}">
                                     <i class="bi bi-journal-text me-1"></i> أحدث المفردات
                                 </a>
                             </li>
                             <li class="dropdown-item">
-                                <a class="nav-link" href="/duplicate_lemmas">
+                                <a class="nav-link" href="{{ url_for('duplicate_lemmas') }}">
                                     <i class="bi bi-journal-text me-1"></i> مفردات مكررة
                                 </a>
                             </li>
@@ -142,25 +142,25 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="fixNestedDropdown">
                             <li class="dropdown-item">
-                                <a class="nav-link" href="/wd_tree">
+                                <a class="nav-link" href="{{ url_for('wd_tree') }}">
                                     <i class="bi bi-tree me-1"></i> مخطط شجري
                                 </a>
                             </li>
                             <li class="dropdown-item">
-                                <a class="nav-link" href="/chart">
+                                <a class="nav-link" href="{{ url_for('chart') }}">
                                     <i class="bi bi-bar-chart-line me-1"></i> مخطط بياني
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/P11038') else '' }}">
-                        <a class="nav-link" href="/P11038">
+                        <a class="nav-link" href="{{ url_for('P11038') }}">
                             <i class="bi bi-journal-text me-1"></i> الأنطولوجيا العربية
                         </a>
                     </li>
                     <li
                         class="nav-item col-6 col-lg-auto {{ 'active' if request.path.startswith('/features_chart') else '' }}">
-                        <a class="nav-link" href="/features_chart"><i class="bi bi-bar-chart-line me-1"></i>
+                        <a class="nav-link" href="{{ url_for('features_chart') }}"><i class="bi bi-bar-chart-line me-1"></i>
                             الميزات النحوية
                         </a>
                     </li>
