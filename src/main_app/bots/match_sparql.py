@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-from pyx.bots.match_sparql import in_sql
+from main_app.bots.match_sparql import in_sql
 """
 
 from ..logs_db.bot import get_all

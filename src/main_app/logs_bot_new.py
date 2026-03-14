@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Tuple
 
 from flask import Request
-from pyx.wd_data_bots.wd_data_P11038 import count_all_p11038, get_lemmas
+from main_app.wd_data_bots.wd_data_P11038 import count_all_p11038, get_lemmas
 
 # from types import SimpleNamespace
 

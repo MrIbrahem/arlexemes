@@ -1,4 +1,4 @@
-from src.pyx.sparql_bots.sparql_bot import get_results
+from src.main_app.sparql_bots.sparql_bot import get_results
 
 
 def test():

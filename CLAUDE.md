@@ -33,7 +33,7 @@ python3 python/src/jobs/insert_data/insert_all.py
 ### Backend Structure
 
 -   **Entry Point**: `python/src/app.py` - Flask application with all routes
--   **Core Modules**: `python/src/pyx/`
+-   **Core Modules**: `python/src/main_app/`
     -   `logs_db/` - MySQL database operations (db_mysql.py)
     -   `sparql_bots/` - Wikidata SPARQL query handling
     -   `wd_data_bots/` - Wikidata data operations

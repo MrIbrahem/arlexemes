@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from src.pyx.sparql_bots.render import render_duplicate_by_category
+from src.main_app.sparql_bots.render import render_duplicate_by_category
 
 data, sparql_exec_time = render_duplicate_by_category(500)
 

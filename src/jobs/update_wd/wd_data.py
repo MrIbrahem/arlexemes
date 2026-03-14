@@ -17,8 +17,8 @@ path_1 = Path(__file__).parent.parent.parent
 sys.path.append(str(path_1))
 
 import tqdm
-from pyx.sparql_bots.render import render_sparql_P11038_grouped
-from pyx.wd_data_bots import wd_data_table
+from main_app.sparql_bots.render import render_sparql_P11038_grouped
+from main_app.wd_data_bots import wd_data_table
 
 # wd_data_table.get_all_wd()
 # wd_data_table.insert_wd_id(wd_id="", wd_id_category="", lemma="")

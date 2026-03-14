@@ -16,8 +16,8 @@ path_1 = Path(__file__).parent.parent.parent
 
 sys.path.append(str(path_1))
 
-from pyx.bots.match_sparql import in_sql
-from pyx.logs_db.insert import insert_multi_lemmas
+from main_app.bots.match_sparql import in_sql
+from main_app.logs_db.insert import insert_multi_lemmas
 
 json_file = Path(__file__).parent / "Qabas-dataset_with_SAMA.json"
 json_file2 = Path(__file__).parent / "Qabas_data_2.json"

@@ -1,6 +1,6 @@
 """
 
-from pyx.sparql_bots.render import render_sparql_P11038_grouped
+from main_app.sparql_bots.render import render_sparql_P11038_grouped
 
 """
 

@@ -12,15 +12,15 @@ from functools import wraps
 from typing import Any, Dict, Tuple
 
 from flask import Flask, Response, g, render_template, request, session
-from pyx import logs_bot_new
-from pyx.bots.not_in_db_bot import get_not_in_db
-from pyx.sparql_bots import sparql_bot
-from pyx.sparql_bots.render import (
+from main_app import logs_bot_new
+from main_app.bots.not_in_db_bot import get_not_in_db
+from main_app.sparql_bots import sparql_bot
+from main_app.sparql_bots.render import (
     render_duplicate,
     render_duplicate_by_category,
     render_sparql_P11038_grouped,
 )
-from pyx.wd_data_bots.wd_data_P11038 import count_all_p11038, get_lemmas
+from main_app.wd_data_bots.wd_data_P11038 import count_all_p11038, get_lemmas
 
 
 @dataclass

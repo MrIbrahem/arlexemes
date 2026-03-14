@@ -1,6 +1,6 @@
 """
 
-from pyx.bots.not_in_db_bot import get_not_in_db
+from main_app.bots.not_in_db_bot import get_not_in_db
 
 # result, sparql_exec_time, db_exec_time = get_not_in_db(limit)
 
