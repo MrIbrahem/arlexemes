@@ -16,3 +16,4 @@ src/static/js/‏‏duplicate_lemmas - نسخة.js
 src/logs/errors.log
 logs/errors.log
 .claude/
+.coverage
