@@ -19,7 +19,7 @@ async function fetchWikidataSuggestions(query, callback) {
     let data_source = document.getElementById("data_source");
     data_source = data_source ? data_source.value.trim() : "";
     // ---
-    apiUrl = `/autocomplete.php?data_source=${data_source}&term=${encodeURIComponent(query)}`;
+    apiUrl = `/autocomplete?data_source=${data_source}&term=${encodeURIComponent(query)}`;
 
     try {
         const response = await fetch(apiUrl);
