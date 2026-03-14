@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyx.logs_db.bot import select as _select
-from pyx.logs_db.insert import insert_lemma
+from src.pyx.logs_db.bot import select as _select
+from src.pyx.logs_db.insert import insert_lemma
 
 # python3 D:/arlexemes/python/src/test.py
 # ---
