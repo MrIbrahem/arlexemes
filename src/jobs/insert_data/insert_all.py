@@ -45,25 +45,15 @@ def get_data() -> Dict[str, Dict[str, Any]]:
 
     all_lemma_data = json_data1 + json_data2
 
-    lemma_data_map = {
-        item.get("lemma_id"): item for item in all_lemma_data if item.get("lemma_id")
-    }
-    print(
-        f"Total lemmas from JSON files: {len(all_lemma_data)}, Unique lemma IDs: {len(lemma_data_map)}"
-    )
+    lemma_data_map = {item.get("lemma_id"): item for item in all_lemma_data if item.get("lemma_id")}
+    print(f"Total lemmas from JSON files: {len(all_lemma_data)}, Unique lemma IDs: {len(lemma_data_map)}")
 
     existing_lemma_ids, _, _ = in_sql()
 
-    new_lemmas_list = [
-        data
-        for lemma_id, data in lemma_data_map.items()
-        if str(lemma_id) not in existing_lemma_ids
-    ]
+    new_lemmas_list = [data for lemma_id, data in lemma_data_map.items() if str(lemma_id) not in existing_lemma_ids]
 
     # Sort by sama_lemma to process lemmas with SAMA data first
-    new_lemmas_list.sort(
-        key=lambda item: (item.get("sama_lemma", "") or ""), reverse=True
-    )
+    new_lemmas_list.sort(key=lambda item: (item.get("sama_lemma", "") or ""), reverse=True)
 
     new_lemmas_map = {item.get("lemma_id"): item for item in new_lemmas_list}
 
@@ -95,9 +85,7 @@ def start() -> None:
     lemma_batch = []
     batch_size = 100
     # ---
-    for lemma_id, lemma_data in tqdm.tqdm(
-        lemmas_to_add.items(), total=len(lemmas_to_add)
-    ):
+    for lemma_id, lemma_data in tqdm.tqdm(lemmas_to_add.items(), total=len(lemmas_to_add)):
         # ---
         sama_lemma = lemma_data.get("sama_lemma", "") or ""
         # ---

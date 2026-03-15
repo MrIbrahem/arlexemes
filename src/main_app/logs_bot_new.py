@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Tuple
 
 from flask import Request
+
 from main_app.wd_data_bots.wd_data_P11038 import count_all_p11038, get_lemmas
 
 # from types import SimpleNamespace
@@ -74,9 +75,7 @@ class LogsBot:
         )
         return params
 
-    def create_pagination_data(
-        self, params: LogQueryParams, total_logs: int
-    ) -> Dict[str, int]:
+    def create_pagination_data(self, params: LogQueryParams, total_logs: int) -> Dict[str, int]:
         """Create pagination data based on request arguments and total logs"""
         total_pages = (total_logs + params.per_page - 1) // params.per_page
         start_log = (params.page - 1) * params.per_page + 1
@@ -103,14 +102,10 @@ class LogsBot:
         if order_by in self.valid_order_fields:
             return order_by
         else:
-            logger.warning(
-                f"Invalid order_by field: {order_by}, using default 'lemma_id'"
-            )
+            logger.warning(f"Invalid order_by field: {order_by}, using default 'lemma_id'")
             return "lemma_id"
 
-    def get_lemmas_with_params(
-        self, params: LogQueryParams
-    ) -> Tuple[List[Dict[str, Any]], float]:
+    def get_lemmas_with_params(self, params: LogQueryParams) -> Tuple[List[Dict[str, Any]], float]:
         """Get lemmas with specified parameters"""
         validated_order_by = self.validate_order_by(params.order_by)
 

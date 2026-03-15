@@ -2,10 +2,11 @@
 Flask application for the Arabic lexemes project
 Main entry point for the web application
 """
-import sys
-from main_app import create_app
-from load_env import _env_file_path  # noqa: F401
 
+import sys
+
+from load_env import _env_file_path  # noqa: F401
+from main_app import create_app
 
 app = create_app()
 

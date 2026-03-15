@@ -36,9 +36,7 @@ def insert_lemma(
     """
     # ---
     if lemma.strip() == sama_lemma.strip():
-        print(
-            f"lemma.strip() == sama_lemma.strip(): {lemma.strip()} == {sama_lemma.strip()}"
-        )
+        print(f"lemma.strip() == sama_lemma.strip(): {lemma.strip()} == {sama_lemma.strip()}")
     # ---
     params = (
         lemma_id,

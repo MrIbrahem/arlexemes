@@ -47,14 +47,10 @@ class SPARQLBot:
     """SPARQL bot for Wikidata API interactions"""
 
     def __init__(self):
-        self.user_agent = (
-            f"WDQS-example Python/{sys.version_info[0]}.{sys.version_info[1]}"
-        )
+        self.user_agent = f"WDQS-example Python/{sys.version_info[0]}.{sys.version_info[1]}"
         self.cache_enabled = "nocache" not in sys.argv
 
-    def _create_sparql_wrapper(
-        self, query: str, timeout: int = TIMEOUT
-    ) -> SPARQLWrapper:
+    def _create_sparql_wrapper(self, query: str, timeout: int = TIMEOUT) -> SPARQLWrapper:
         """Create and configure SPARQLWrapper instance"""
         sparql = SPARQLWrapper(ENDPOINT_URL, agent=self.user_agent)
         sparql.setQuery(query)
@@ -89,16 +85,12 @@ class SPARQLBot:
             logger.error(error_msg)
             raise SPARQLQueryError(error_msg) from e
 
-    def safe_sparql_query(
-        self, query: str, timeout: int = TIMEOUT
-    ) -> Tuple[Dict[str, Any], str]:
+    def safe_sparql_query(self, query: str, timeout: int = TIMEOUT) -> Tuple[Dict[str, Any], str]:
         """Execute SPARQL query with caching and error handling"""
         # Check cache first
         if self.cache_enabled and query in sparql_cache:
             logger.info(f"Cache hit for query: {query[:100]}...")
-            err_bot.log_error(
-                "SPARQL Cache Hit", f"Query retrieved from cache: {query}"
-            )
+            err_bot.log_error("SPARQL Cache Hit", f"Query retrieved from cache: {query}")
             return sparql_cache[query], ""
 
         try:
@@ -223,9 +215,7 @@ class SPARQLBot:
 
         return self.get_results(sparql_query)
 
-    def all_arabic_with_P11038_grouped(
-        self, limit: int = 0
-    ) -> Tuple[List[Dict[str, Any]], float]:
+    def all_arabic_with_P11038_grouped(self, limit: int = 0) -> Tuple[List[Dict[str, Any]], float]:
         """Get Arabic lexemes with P11038 values, grouped"""
         sparql_query = """
             SELECT DISTINCT ?item ?lemma ?category ?categoryLabel
@@ -269,9 +259,7 @@ class SPARQLBot:
             return int(data[0]["count"]), sparql_exec_time
         return 0, sparql_exec_time
 
-    def find_duplicates(
-        self, limit: int = 100
-    ) -> Tuple[List[Dict[str, Any]], float, str]:
+    def find_duplicates(self, limit: int = 100) -> Tuple[List[Dict[str, Any]], float, str]:
         """Find duplicate lemmas"""
         sparql_query = """
             SELECT ?lemma_fixed ?category

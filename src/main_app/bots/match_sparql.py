@@ -15,8 +15,6 @@ def in_sql():
     # ---
     insql_sama = {str(x["sama_lemma_id"]): x for x in result if x["sama_lemma_id"]}
     # ---
-    print(
-        f"in_sql: result: {len(result)}, insql_lemma: {len(insql_lemma)}, insql_sama: {len(insql_sama)}"
-    )
+    print(f"in_sql: result: {len(result)}, insql_lemma: {len(insql_lemma)}, insql_sama: {len(insql_sama)}")
     # ---
     return insql_lemma, insql_sama, db_exec_time

@@ -58,8 +58,7 @@ def split_data_by_category_dict(data):
         if category not in split_by_category:
             split_by_category[category] = {
                 "category": category,
-                "categoryLabel": item.get("categoryLabel")
-                or categoryLabels.get(category, ""),
+                "categoryLabel": item.get("categoryLabel") or categoryLabels.get(category, ""),
                 "members": {},
             }
         # ---
@@ -93,9 +92,7 @@ def render_sparql_P11038_grouped(limit=0, group_it=False):
         else:
             dup += 1
     # ---
-    print(
-        f"\t render_sparql_P11038_grouped: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}"
-    )
+    print(f"\t render_sparql_P11038_grouped: result: {len(result)}, tab_P11038: {len(tab_P11038)}, dup: {dup}")
     # ---
     if group_it:
         tab_P11038 = split_data_by_category_dict(tab_P11038)

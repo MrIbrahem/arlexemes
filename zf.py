@@ -1505,12 +1505,8 @@ def convert_data(data):
         if pLabel:
             new_data[lemma]["proplabels"].setdefault(p, pLabel)
         # ---
-        new_data[lemma]["items"][item1]["props"].setdefault(
-            p, {"value": "", "valuelabel": ""}
-        )
-        new_data[lemma]["items"][item2]["props"].setdefault(
-            p, {"value": "", "valuelabel": ""}
-        )
+        new_data[lemma]["items"][item1]["props"].setdefault(p, {"value": "", "valuelabel": ""})
+        new_data[lemma]["items"][item2]["props"].setdefault(p, {"value": "", "valuelabel": ""})
         # ---
         prop_value1 = x.get("1_p_value", "")
         prop_value1Label = x.get("1p_valueLabel", "")

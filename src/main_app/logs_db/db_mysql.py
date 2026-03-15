@@ -1,4 +1,3 @@
-
 import logging
 import time
 from contextlib import contextmanager
@@ -133,9 +132,7 @@ def init_db() -> bool:
     return success_count == len(tables_queries)
 
 
-def _fetch_all(
-    query: str, params: Optional[Tuple] = None, fetch_one: bool = False
-) -> Union[List[dict], dict, None]:
+def _fetch_all(query: str, params: Optional[Tuple] = None, fetch_one: bool = False) -> Union[List[dict], dict, None]:
     """Execute query and fetch results from MySQL database"""
     if params is None:
         params = ()

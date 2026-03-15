@@ -150,9 +150,7 @@ class WDDataBot:
             "without": total_rows - count_has_value,
         }
 
-        logger.info(
-            f"Counts - All: {total_rows}, With: {count_has_value}, Without: {data['without']}"
-        )
+        logger.info(f"Counts - All: {total_rows}, With: {count_has_value}, Without: {data['without']}")
 
         return data, _db_exec_time
 
@@ -201,9 +199,7 @@ class WDDataBot:
         query = base_query if filter_data != "without" else query_without
 
         params = []
-        query, params = self.add_order_limit_offset(
-            query, params, order_by, order, limit, offset
-        )
+        query, params = self.add_order_limit_offset(query, params, order_by, order, limit, offset)
 
         logs, db_exec_time = fetch_all(query, params)
         logger.info(f"Retrieved {len(logs)} lemmas in {db_exec_time:.3f}s")

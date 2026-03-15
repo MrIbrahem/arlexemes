@@ -8,7 +8,9 @@ import time
 from dataclasses import dataclass
 from functools import wraps
 from typing import Any, Dict, Tuple
+
 from flask import Flask, Response, g, render_template, request, session
+
 from . import logs_bot_new
 from .bots.not_in_db_bot import get_not_in_db
 from .sparql_bots import sparql_bot
@@ -67,12 +69,8 @@ def jsonify(data: Dict[str, Any], **kwargs) -> Response:
 
     result.update(kwargs)
 
-    response_json = json.dumps(
-        result, ensure_ascii=False, indent=2, separators=(",", ":")
-    )
-    return Response(
-        response=response_json, content_type="application/json; charset=utf-8"
-    )
+    response_json = json.dumps(result, ensure_ascii=False, indent=2, separators=(",", ":"))
+    return Response(response=response_json, content_type="application/json; charset=utf-8")
 
 
 def create_app() -> Flask:
@@ -190,9 +188,7 @@ def create_app() -> Flask:
         """Page for P11038 data with grouping"""
         limit = int(request.args.get("limit", 100))
         wd_count, _ = sparql_bot.count_arabic_with_P11038()
-        split_by_cat, sparql_exec_time = render_sparql_P11038_grouped(
-            limit=limit, group_it=True
-        )
+        split_by_cat, sparql_exec_time = render_sparql_P11038_grouped(limit=limit, group_it=True)
 
         time_tab = {"sparql_exec_time": sparql_exec_time}
         return render_template(
@@ -213,12 +209,7 @@ def create_app() -> Flask:
             "db_exec_time": db_exec_time,
             "sparql_exec_time": sparql_exec_time,
         }
-        return render_template(
-            "P11038/not_in_db.html",
-            data=result,
-            limit=limit,
-            time_tab=time_tab
-        )
+        return render_template("P11038/not_in_db.html", data=result, limit=limit, time_tab=time_tab)
 
     # =================================
     # duplicate routes

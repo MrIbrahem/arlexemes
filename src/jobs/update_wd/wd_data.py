@@ -17,6 +17,7 @@ path_1 = Path(__file__).parent.parent.parent
 sys.path.append(str(path_1))
 
 import tqdm
+
 from main_app.sparql_bots.render import render_sparql_P11038_grouped
 from main_app.wd_data_bots import wd_data_table
 

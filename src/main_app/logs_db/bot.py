@@ -67,18 +67,14 @@ def get_all(
     # ---
     params = []
     # ---
-    query, params = add_order_limit_offset(
-        query, params, order_by, order, per_page, offset
-    )
+    query, params = add_order_limit_offset(query, params, order_by, order, per_page, offset)
     # ---
     logs, db_exec_time = fetch_all(query, params)
     # ---
     return logs, db_exec_time
 
 
-def select(
-    data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC", order_by="id"
-):
+def select(data={}, table_name="lemmas_p11038", limit=0, offset=0, order="DESC", order_by="id"):
     # ---
     query = f"SELECT * FROM {table_name} WHERE "
     # ---
@@ -113,9 +109,7 @@ def select(
     # ---
     query = query + " AND ".join(expend_query)
     # ---
-    query, params = add_order_limit_offset(
-        query, params, order_by, order, limit, offset
-    )
+    query, params = add_order_limit_offset(query, params, order_by, order, limit, offset)
     # ---
     logs, db_exec_time = fetch_all(query, params)
     # ---
