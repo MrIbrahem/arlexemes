@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 sys.argv.append("nocache")
-Dir_main = Path("www/python/venv/lib/python3.11/site-packages")
+Dir_main = Path("www/python/venv/lib/python3.13/site-packages")
 if Dir_main.exists():
     sys.path.append(str(Dir_main))
 

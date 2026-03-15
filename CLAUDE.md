@@ -71,7 +71,7 @@ python3 python/src/jobs/insert_data/insert_all.py
 -   **Platform**: Toolforge (Wikimedia Cloud Services)
 -   **Method**: GitHub Actions on push to main branch (`.github/workflows/`)
 -   **Manual deploy**: `~/shs/update.sh`
--   **After deploy**: `toolforge-webservice python3.11 restart`
+-   **After deploy**: `toolforge-webservice python3.13 restart`
 
 ## Scheduled Jobs
 

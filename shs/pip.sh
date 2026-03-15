@@ -8,7 +8,6 @@ source $HOME/www/python/venv/bin/activate
 
 pip install --upgrade pip
 pip install -r "$HOME/www/python/src/requirements.txt"
-pip install --upgrade CopySVGTranslation
 
 # toolforge-jobs run
-# toolforge-jobs run pipup --image python3.13 --command "~/web_sh/pip.sh" --wait
+# toolforge-jobs run pipup --image python3.13 --command "~/shs/pip.sh" --wait

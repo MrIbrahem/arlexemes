@@ -1,7 +1,7 @@
 
 # python3 www/python/src/update_wd/wd_data.py
 # toolforge-jobs load jobs.yaml
-# toolforge-jobs run sparql1 --image python3.11 --command "$HOME/shs/sparql.sh"
+# toolforge-jobs run sparql1 --image python3.13 --command "$HOME/shs/sparql.sh"
 
 - name: sparql
   command: "$HOME/shs/sparql.sh"

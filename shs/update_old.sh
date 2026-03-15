@@ -56,6 +56,6 @@ cp -f $CLONE_DIR/*.yaml "$HOME/"
 chmod -R 750 $HOME/shs
 
 echo ">>> Update completed successfully."
-echo "webservice python3.11 restart"
+echo "webservice python3.13 restart"
 
-webservice python3.11 restart
+webservice python3.13 restart
