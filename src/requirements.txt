@@ -4,3 +4,4 @@ sparqlwrapper
 tqdm
 pymysql
 cachetools
+python-dotenv
