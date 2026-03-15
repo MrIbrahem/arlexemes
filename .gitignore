@@ -17,3 +17,4 @@ src/logs/errors.log
 logs/errors.log
 .claude/
 .coverage
+src/.env
