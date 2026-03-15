@@ -69,5 +69,5 @@ rm -rf "$CLONE_DIR"
 # pip install -r $HOME/www/python/src/requirements.txt
 
 
-# toolforge-jobs run updatex --image python3.13 --command "$HOME/shs/update.sh webservice-sql" --wait
+# toolforge-jobs run updatex --image python3.13 --command "$HOME/shs/update.sh" --wait
 # toolforge-webservice python3.13 restart
