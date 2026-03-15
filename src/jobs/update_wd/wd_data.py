@@ -6,17 +6,16 @@ python3 www/python/src/jobs/update_wd/wd_data.py
 
 """
 import sys
+import tqdm
 from pathlib import Path
 
-sys.argv.append("nocache")
-Dir_main = Path("www/python/venv/lib/python3.13/site-packages")
-if Dir_main.exists():
-    sys.path.append(str(Dir_main))
-
-path_1 = Path(__file__).parent.parent.parent
-sys.path.append(str(path_1))
-
-import tqdm
+if path_1 := Path(__file__).parent.parent.parent:
+    sys.argv.append("nocache")
+    sys.path.append(str(path_1))
+    py_version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+    Dir_main = Path(f"www/python/venv/lib/{py_version}/site-packages")
+    if Dir_main.exists():
+        sys.path.append(str(Dir_main))
 
 from main_app.sparql_bots.render import render_sparql_P11038_grouped
 from main_app.wd_data_bots import wd_data_table
