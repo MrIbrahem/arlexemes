@@ -57,6 +57,24 @@ def track_performance(func):
     return wrapper
 
 
+def jsonify(data: Dict[str, Any], **kwargs) -> Response:
+    """Create JSON response with performance metrics"""
+    execution_time = 0.0
+    if hasattr(g, "start_time"):
+        execution_time = time.time() - g.start_time
+
+    result = {"load_time": round(execution_time, 3), "data": data}
+
+    result.update(kwargs)
+
+    response_json = json.dumps(
+        result, ensure_ascii=False, indent=2, separators=(",", ":")
+    )
+    return Response(
+        response=response_json, content_type="application/json; charset=utf-8"
+    )
+
+
 def create_app() -> Flask:
     app = Flask(
         __name__,
@@ -81,24 +99,7 @@ def create_app() -> Flask:
     def inject_load_time() -> Dict[str, float]:
         """Inject load time into template context"""
         load_time = getattr(g, "load_time", 0.0)
-        return dict(load_time=load_time)
-
-    def jsonify(data: Dict[str, Any], **kwargs) -> Response:
-        """Create JSON response with performance metrics"""
-        execution_time = 0.0
-        if hasattr(g, "start_time"):
-            execution_time = time.time() - g.start_time
-
-        result = {"load_time": round(execution_time, 3), "data": data}
-
-        result.update(kwargs)
-
-        response_json = json.dumps(
-            result, ensure_ascii=False, indent=2, separators=(",", ":")
-        )
-        return Response(
-            response=response_json, content_type="application/json; charset=utf-8"
-        )
+        return {"load_time": load_time}
 
     # =================================
     # API Endpoints routes
