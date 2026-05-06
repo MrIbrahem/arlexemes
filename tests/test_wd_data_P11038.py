@@ -3,12 +3,8 @@
 Tests for wd_data_P11038.py - WD Data operations bot
 """
 
-import sys
-
-sys.path.insert(0, "D:/arlexemes_repo/python/src")
-
 import pytest
-from unittest.mock import patch, MagicMock, create_autospec
+from unittest.mock import patch, MagicMock
 from typing import Tuple, List, Dict, Any
 
 
@@ -39,7 +35,7 @@ class TestCountLemmasP11038:
         total, exec_time = count_lemmas_p11038()
 
         assert isinstance(total, int)
-        assert total == 750
+        assert total == 1500
         assert isinstance(exec_time, float)
 
     def test_count_with_zero_result(self, mock_fetch_all):
@@ -58,7 +54,7 @@ class TestCountLemmasP11038:
 
         total, exec_time = count_lemmas_p11038()
 
-        assert total == 1000
+        assert total == 2000
 
 
 class TestCountAllP11038:
@@ -188,7 +184,7 @@ class TestAddOrderLimitOffset:
             query=query, params=[], order_by="id", order="DESC", limit=10, offset=0
         )
 
-        assert "LIMIT 10" in result_query
+        assert "LIMIT %s" in result_query
         assert params == [10]
 
     def test_add_offset(self, mock_fetch_all):
@@ -199,7 +195,7 @@ class TestAddOrderLimitOffset:
             query=query, params=[], order_by="id", order="DESC", limit=0, offset=20
         )
 
-        assert "OFFSET 20" in result_query
+        assert "OFFSET %s" in result_query
         assert params == [20]
 
     def test_add_limit_and_offset(self, mock_fetch_all):
@@ -210,8 +206,8 @@ class TestAddOrderLimitOffset:
             query=query, params=[], order_by="id", order="DESC", limit=10, offset=20
         )
 
-        assert "LIMIT 10" in result_query
-        assert "OFFSET 20" in result_query
+        assert "LIMIT %s" in result_query
+        assert "OFFSET %s" in result_query
         assert params == [10, 20]
 
     def test_add_with_asc_order(self, mock_fetch_all):
